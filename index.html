@@ -1,4 +1,4 @@
-٧<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* --- التنسيقات العامة (ستايل وألوان ستيتش الأزرق) --- */
+        /* --- التنسيقات العامة --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,7 +18,7 @@
         body {
             background-color: #e6f0fa;
             overflow-x: hidden;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         .screen {
@@ -31,6 +31,7 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.5s ease;
+            padding: 20px;
         }
 
         .hidden {
@@ -39,30 +40,31 @@
             display: none !important;
         }
 
-        /* --- تصميم عداد الأيام المكبر --- */
+        /* --- تصميم عداد الأيام المكبر (متجاوب) --- */
         .days-counter-box {
             position: absolute;
             top: 20px;
             right: 20px;
             background: rgba(43, 123, 185, 0.25);
             border: 3px solid #2b7bb9;
-            padding: 15px 25px;
+            padding: 12px 20px;
             border-radius: 15px;
             text-align: center;
             backdrop-filter: blur(8px);
             z-index: 5;
             box-shadow: 0 4px 15px rgba(43, 123, 185, 0.2);
+            max-width: 90%;
         }
 
         .counter-title {
-            font-size: 15px;
+            font-size: 13px;
             color: #1c5380;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .counter-timer {
-            font-size: 22px;
+            font-size: 18px;
             color: #1c5380;
             font-weight: 900;
             direction: ltr;
@@ -78,15 +80,18 @@
 
         .loader-content {
             text-align: center;
+            width: 100%;
+            max-width: 400px;
         }
 
         .duck-icon {
-            font-size: 80px;
+            font-size: 65px;
             animation: bounce 1s infinite alternate;
         }
 
         .progress-bar {
-            width: 250px;
+            width: 80%;
+            max-width: 250px;
             height: 8px;
             background-color: rgba(255, 255, 255, 0.3);
             border-radius: 5px;
@@ -102,16 +107,19 @@
         }
 
         .fade-in-text {
-            font-size: 24px;
+            font-size: 20px;
             margin-top: 15px;
             opacity: 0;
             animation: fadeIn 1s 0.8s forwards;
+            line-height: 1.5;
         }
 
         /* الشاشة الرئيسية */
         #main-screen {
             background: radial-gradient(circle, #ffffff 0%, #b3daf5 100%);
             flex-direction: column;
+            overflow-y: auto;
+            padding-top: 120px;
         }
 
         .main-container {
@@ -119,49 +127,52 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 90%;
-            max-width: 600px;
+            width: 100%;
+            max-width: 550px;
             background: white;
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(43, 123, 185, 0.15);
             text-align: center;
             position: relative;
+            margin: auto 0;
         }
 
         .big-title {
-            font-size: 36px;
+            font-size: 28px;
             color: #2b7bb9;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .sub-title {
-            font-size: 18px;
+            font-size: 16px;
             color: #444;
             margin-bottom: 20px;
             line-height: 1.6;
         }
 
         .buttons-group {
-            margin-top: 25px;
+            margin-top: 15px;
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 25px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
+            max-width: 100%;
         }
 
         .btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .btn-pink { background-color: #64b5f6; color: white; }
@@ -170,19 +181,19 @@
         .btn-back {
             background-color: #90a4ae;
             color: white;
-            padding: 8px 20px;
+            padding: 10px 24px;
             font-size: 14px;
             border-radius: 20px;
             border: none;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: background-color 0.2s;
         }
         .btn-back:hover { background-color: #78909c; }
 
         .duck-frame {
-            font-size: 90px;
-            margin-bottom: 15px;
+            font-size: 70px;
+            margin-bottom: 10px;
             position: relative;
             animation: float 2s infinite alternate;
         }
@@ -194,29 +205,34 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.5);
             display: flex; justify-content: center; align-items: center;
+            padding: 15px;
         }
 
         .modal-content {
             background-color: white;
-            padding: 30px;
+            padding: 35px 20px;
             border-radius: 15px;
-            max-width: 450px;
-            width: 90%;
+            max-width: 420px;
+            width: 100%;
             position: relative;
             text-align: center;
             border-top: 8px solid #2b7bb9;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             animation: popupScale 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes popupScale {
-            from { transform: scale(0.7); opacity: 0; }
+            from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         .close-btn {
             position: absolute; left: 15px; top: 10px;
-            font-size: 28px; cursor: pointer; color: #aaa;
+            font-size: 26px; cursor: pointer; color: #aaa;
+            transition: color 0.2s;
+            padding: 5px;
         }
         
         .close-btn:hover { color: #2b7bb9; }
@@ -227,11 +243,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .small-progress {
-            width: 150px;
+            width: 130px;
             height: 6px;
             background-color: #e0e0e0;
             border-radius: 5px;
@@ -243,20 +259,24 @@
             width: 0%;
             height: 100%;
             background-color: #2b7bb9;
-            animation: fillProgress 1.5s forwards ease-in-out;
+        }
+        
+        /* حركة الـ Animation المخصصة للتحميل الأول المبطأ والمؤخر */
+        .slow-fill {
+            animation: fillProgress 3.5s forwards ease-in-out;
         }
 
         /* أزرار الأسئلة التفاعلية */
         .game-btn-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
         }
 
         .game-btn {
-            padding: 10px 25px;
-            font-size: 16px;
+            padding: 10px 22px;
+            font-size: 15px;
             font-weight: bold;
             border: 2px solid #2b7bb9;
             background: white;
@@ -274,11 +294,45 @@
             color: #999;
         }
 
+        /* شاشة مغلف الرسائل الفردية */
+        #love-letter-screen {
+            background-color: #2b7bb9; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            justify-content: flex-start;
+            padding: 30px 15px;
+        }
+
         /* الحركات الأنيميشن */
-        @keyframes bounce { to { transform: translateY(-20px); } }
-        @keyframes float { to { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes bounce { to { transform: translateY(-15px); } }
+        @keyframes float { to { transform: translateY(-8px) rotate(3deg); } }
         @keyframes fadeIn { to { opacity: 1; } }
         @keyframes fillProgress { to { width: 100%; } }
+
+        /* الشاشات الصغيرة جداً والهواتف المحمولة */
+        @media (max-width: 480px) {
+            .days-counter-box {
+                position: absolute;
+                top: 15px;
+                right: 50%;
+                transform: translateX(50%);
+                width: 85%;
+                padding: 10px;
+            }
+            #main-screen {
+                padding-top: 140px;
+            }
+            .big-title {
+                font-size: 24px;
+            }
+            .sub-title {
+                font-size: 15px;
+            }
+            .btn {
+                width: 100%;
+                padding: 12px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -287,86 +341,87 @@
         <div class="loader-content">
             <div class="duck-icon">💙🐥</div>
             <div class="progress-bar"><div class="progress-fill"></div></div>
-            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 32px; font-weight: bold;">بطتي 💙</span></h1>
+            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 28px; font-weight: bold;">بطتي 💙</span></h1>
         </div>
     </div>
 
     <div id="main-screen" class="screen hidden">
         <div class="days-counter-box">
             <div class="counter-title">لا ده عداد أيامنا ملناش دعوة بيه😂😂</div>
-            <div id="live-counter" class="counter-timer"> 00   00:00:00</div>
+            <div id="live-counter" class="counter-timer">00 يوم و 00:00:00</div>
         </div>
 
         <div class="main-container">
             <div class="duck-frame">🐥💙</div>
             <h1 class="big-title">أنا آسف يا بطتي..</h1>
-            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك  ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
+            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
             
             <div class="buttons-group">
                 <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول بس😉 </button>
-                <button id="btn-next" class="btn btn-red">افتحي الملف يلا شطورة🤭  💌</button>
+                <button id="btn-next" class="btn btn-red">افتحي الملف يلا شطورة🤭 💌</button>
             </div>
         </div>
     </div>
 
     <div id="message-modal" class="modal hidden">
         <div class="modal-content">
+            <span class="close-btn" id="close-message-btn">&times;</span>
             <div id="modal-loading-zone" class="modal-loader">
                 <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">⏳</div>
                 <p style="color: #555; margin-top: 10px;">شطورة ي بطه🫦 جاري فتح الرسالة يا بطتي...</p>
-                <div class="small-progress"><div class="small-progress-fill"></div></div>
+                <div class="small-progress"><div class="small-progress-fill slow-fill"></div></div>
             </div>
 
             <div id="modal-text-zone" class="hidden">
-                <span class="close-btn">&times;</span>
                 <h2 style="color: #2b7bb9; margin-bottom: 15px;">إلى بطتي الجميلة 💙</h2>
-                <p style="line-height: 1.6; color: #444; font-size: 16px;">
-                     حقك عليا يا أغلى حاجة في حياتي.. التفكير في إني زعلتك ومصالحتكيش علطول بيوجعني انا والله . <br><br>
+                <p style="line-height: 1.6; color: #444; font-size: 15px;">
+                     حقك عليا يا أغلى حاجة in حياتي.. التفكير في إني زعلتك ومصالحتكيش علطول بيوجعني انا والله . <br><br>
                     😉سامحيني ي بطه هااااا وخلينا ننسى الزعل، مكانك في قلبي زي ما هو وميقلش أبداً. اضحكي بقى عشان ضحكتك هي اللي بتنور يومي! 🥰
                 </p>
             </div>
         </div>
     </div>
 
-    <div id="love-letter-screen" class="screen hidden" style="background-color: #2b7bb9; flex-direction:column; overflow-y:auto; padding: 40px 0;">
-        <h1 style="margin-bottom:20px; font-size: 28px; color: white;">ملف الاعتذار والحب الي مش من مقامك والله  💙</h1>
+    <div id="love-letter-screen" class="screen hidden">
+        <h1 style="margin-bottom:20px; font-size: 24px; color: white; text-align: center;">ملف الاعتذار والحب الي مش من مقامك والله 💙</h1>
         
-        <div id="envelope" style="background:#fff; color:#333; padding:40px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:90%; max-width:380px; position: relative;">
+        <div id="envelope" style="background:#fff; color:#333; padding:35px 20px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:100%; max-width:380px; position: relative; margin-bottom: 15px;">
             
             <div id="envelope-loading" class="modal-loader" style="display: none;">
-                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">🫦🫦</div>
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">✉️</div>
                 <p style="color: #555; margin-top: 11px;">جاري تحضير الكلمات احمم احمم🙃🙃...</p>
                 <div class="small-progress"><div class="small-progress-fill" id="envelope-progress-fill" style="animation: none; width: 0%;"></div></div>
             </div>
 
             <div id="envelope-ready">
-                <div style="font-size:60px; animation: bounce 1s infinite alternate;">🫦</div>
-                <p style="font-weight:bold; margin-top:15px; font-size: 18px; color: #555;">خاص لـ بطتي 🫦🐥</p>
-                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 35px; border-radius:25px; margin-top:20px; font-size:16px; font-weight:bold; cursor:pointer;">افتحي الرسالة ي عسل</button>
+                <div style="font-size:50px; animation: bounce 1s infinite alternate;">🫦</div>
+                <p style="font-weight:bold; margin-top:15px; font-size: 17px; color: #555;">خاص لـ بطتي 🫦🐥</p>
+                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 30px; border-radius:25px; margin-top:20px; font-size:15px; font-weight:bold; cursor:pointer; width: 100%;">افتحي الرسالة ي عسل</button>
             </div>
         </div>
         
-        <div id="letters-container" style="width:90%; max-width:450px; margin-top: 10px; display:none;"></div>
+        <div id="letters-container" style="width:100%; max-width:450px; margin-top: 10px; display:none;"></div>
         <button id="btn-back-to-main" class="btn-back">رجوع للخلف لو عاوزة 👈👉</button>
     </div>
 
     <div id="comedy-notice-modal" class="modal hidden">
         <div class="modal-content" style="border-top: 8px solid #64b5f6;">
+            <span class="close-btn" id="close-comedy-btn">&times;</span>
             <div style="font-size: 40px; margin-bottom: 10px;">🤨🤚</div>
             <h2 style="color: #2b7bb9; margin-bottom: 15px;">رايحة فين!</h2>
-            <p style="line-height: 1.6; color: #444; font-size: 16px; font-weight: bold; margin-bottom: 20px;">
+            <p style="line-height: 1.6; color: #444; font-size: 15px; font-weight: bold; margin-bottom: 20px;">
                 خدي هنا راحة فين لسا في سؤال واحد فقط.. <br>
                  اضغطي على الزرار الي بيتنطط تحت ده الي لونه بمبي ده ااايوا هو ده 👇👀
             </p>
-            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer;">(ماشي)قبل ما تدوسي ي بطه اقري الرسايل</button>
+            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 11px 30px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px;">(ماشي) قبل ما تدوسي ي بطه اقري الرسايل</button>
         </div>
     </div>
 
     <div id="game-modal" class="modal hidden">
         <div class="modal-content" style="border-top: 8px solid #ff4d6d;">
             <span class="close-btn" id="close-game-btn">&times;</span>
-            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px;">مين فينا بيحب التاني اكتر؟ 🤔</h2>
-            <p id="game-response" style="color: #555; font-size: 16px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
+            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px; font-size: 20px;">مين فينا بيحب التاني اكتر؟ 🤔</h2>
+            <p id="game-response" style="color: #555; font-size: 15px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
             
             <div class="game-btn-container">
                 <button id="btn-love-me" class="game-btn"> لا أنا 🙋‍♀️</button>
@@ -376,11 +431,11 @@
     </div>
 
     <div id="final-success-modal" class="modal hidden">
-        <div class="modal-content" style="border-top: 8px solid #4caf50; max-width: 400px;">
+        <div class="modal-content" style="border-top: 8px solid #4caf50;">
             <span class="close-btn" id="close-success-btn">&times;</span>
-            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙</div>
+            <div style="font-size: 45px; margin-bottom: 10px;">🎉💙</div>
             <h2 style="color: #2b7bb9; margin-bottom: 15px;">صافي يا لبن!</h2>
-            <p style="font-size: 17px; color: #333; line-height: 1.6; font-weight: bold;">
+            <p style="font-size: 16px; color: #333; line-height: 1.6; font-weight: bold;">
                 😉خلاص صافي يا لبن وحليب يا قشطة! <br>
                 بعشقك يا أحلى وأجمل بطة في الدنيا والله🫦💋 💙🐥
             </p>
@@ -394,7 +449,7 @@
             const btnPopup = document.getElementById("btn-popup");
             const btnNext = document.getElementById("btn-next");
             const modal = document.getElementById("message-modal");
-            const closeModal = document.querySelector(".close-btn");
+            const closeMessageBtn = document.getElementById("close-message-btn");
             
             const modalLoadingZone = document.getElementById("modal-loading-zone");
             const modalTextZone = document.getElementById("modal-text-zone");
@@ -410,6 +465,7 @@
 
             const comedyNoticeModal = document.getElementById("comedy-notice-modal");
             const btnComedyOk = document.getElementById("btn-comedy-ok");
+            const closeComedyBtn = document.getElementById("close-comedy-btn");
 
             const gameModal = document.getElementById("game-modal");
             const btnLoveMe = document.getElementById("btn-love-me");
@@ -458,7 +514,7 @@
                 }());
             }
 
-            // --- 3. فتح النافذة المنبثقة الأولى مع شاشة تحميل مصغرة ---
+            // --- 3. فتح النافذة المنبثقة الأولى (تم زيادة مدة التحميل هنا إلى 3.5 ثانية) ---
             btnPopup.addEventListener("click", () => {
                 modalLoadingZone.style.display = "flex";
                 modalTextZone.classList.add("hidden");
@@ -467,10 +523,11 @@
                 setTimeout(() => {
                     modalLoadingZone.style.display = "none";
                     modalTextZone.classList.remove("hidden");
-                }, 1600);
+                }, 3500); // 3500 مللي ثانية = 3.5 ثانية (متأخر عن التحميل السابق)
             });
 
-            closeModal.addEventListener("click", () => { modal.classList.add("hidden"); });
+            // تفعيل زر الإغلاق لرسالة البوب اب الأولى
+            closeMessageBtn.addEventListener("click", () => { modal.classList.add("hidden"); });
 
             // --- 4. الدخول إلى شاشة المغلف والرسائل المتتالية ---
             btnNext.addEventListener("click", () => {
@@ -502,15 +559,15 @@
                 const messages = [
                     "من أول ما عرفت منك انك زعلك كبير ومش زي اي مرة قولت والله ما يقف قدامك ياد حاول لا تيأس. 😔",
                     "عارف إني قصرت لما اتأخرت عليكي ومجيتش صالحتك بسرعة، بس والله غلطت وكنت هصالحك والله وانتي عارفة غلاوتك ومكانتك عندي عاملة إزاي. 🫀",
-                    " مقدرش أشوفك زعلانة واسكت ومقدرش أعدي يومي وإحنا متغيرين على بعض..انا اسف ي بطتي انا اسف مرة واتنين وتلاته إنتي بطتي الحنينة والله اللي متعودش منها تبقي زعلانه مني  كتير 🐥💙",
-                    "صافي يا لبن🫦؟ حليب يا قشطة؟ خلاص خلاص ماشي لالا يلا اضحكي بقى ي بطه خلي قلبك ابيض امال ي لمبي😂 بهزر معاكي  وسيبي الزعل ده على جنب خالص خالص ماشي ويطلع من قلبك دي اهم حاجه والله وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. بحبك ي بت🫦😉 😻🤭"
+                    "مقدرش أشوفك زعلانة واسكت ومقدرش أعدي يومي وإحنا متغيرين على بعض..انا اسف ي بطتي انا اسف مرة واتنين وتلاته إنتي بطتي الحنينة والله اللي متعودش منها تبقي زعلانه مني كتير 🐥💙",
+                    "صافي يا لبن🫦؟ حليب يا قشطة؟ خلاص خلاص ماشي لالا يلا اضحكي بقى ي بطه خلي قلبك ابيض امال ي لمبي😂 بهزر معاكي وسيبي الزعل ده على جنب خالص خالص ماشي ويطلع من قلبك دي اهم حاجه والله وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. بحبك ي بت🫦😉 😻🤭"
                 ];
 
                 messages.forEach((msg, index) => {
                     setTimeout(() => {
                         const card = document.createElement("div");
-                        card.style.cssText = "background:white; color:#333; padding:22px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 16px; line-height: 1.6; border-right: 5px solid #64b5f6;";
-                        card.innerHTML = `<p style="text-align: right;">"${msg}"</p>`;
+                        card.style.cssText = "background:white; color:#333; padding:20px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 15px; line-height: 1.6; border-right: 5px solid #64b5f6; width:100%; text-align: right;";
+                        card.innerHTML = `<p>"${msg}"</p>`;
                         lettersContainer.appendChild(card);
                         
                         setTimeout(() => {
@@ -524,12 +581,12 @@
                             setTimeout(() => {
                                 const loveBtn = document.createElement("button");
                                 loveBtn.innerText = " حليب يا قشطة وبوسة 😘💋";
-                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate;";
+                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate; max-width:100%; width: 280px;";
                                 
                                 // فتح النافذة المنبثقة التفاعلية للسؤال عند الضغط عليه
                                 loveBtn.addEventListener("click", () => {
                                     gameResponse.innerText = "";
-                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ اكيد انا طبعا 🤔";
+                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر? اكيد انا طبعا 🤔";
                                     btnLoveYou.disabled = true;
                                     btnLoveMe.disabled = false;
                                     gameModal.classList.remove("hidden");
@@ -548,10 +605,9 @@
                 });
             }
 
-            // إغلاق الرسالة الكوميدية التنبيهية عند الضغط على زر "ماشي"
-            btnComedyOk.addEventListener("click", () => {
-                comedyNoticeModal.classList.add("hidden");
-            });
+            // إغلاق الرسالة الكوميدية التنبيهية (تم تفعيل زر الـ X والزر العادي بدون إغلاق تلقائي)
+            btnComedyOk.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
+            closeComedyBtn.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
 
             // --- 5. منطق اللعبة التفاعلية (مين بيحب التاني اكتر) ---
             btnLoveMe.addEventListener("click", () => {
@@ -568,21 +624,21 @@
                 
                 btnLoveYou.disabled = true;
 
-                // إطلاق احتفالات خارقة
+                // إطلاق احتفالات خارقة فورية ومستمرة
                 triggerCelebration(5);
                 confetti({ particleCount: 200, spread: 100, origin: { y: 0.4 } });
                 
                 setTimeout(() => { confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } }); }, 200);
                 setTimeout(() => { confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } }); }, 400);
 
-                // إغلاق نافذة اللعبة تلقائياً وتظهر نافذة النجاح
+                // إغلاق نافذة اللعبة وظهور نافذة النجاح متأخرة بعد 5 ثوانٍ كاملة (5000 مللي ثانية)
                 setTimeout(() => {
                     gameModal.classList.add("hidden");
                     finalSuccessModal.classList.remove("hidden");
-                }, 2000);
+                }, 5000); 
             });
 
-            // إغلاق النوافذ
+            // إغلاق النوافذ يدوياً عبر زر الـ X فقط ولن يغلقوا تلقائياً
             closeGameBtn.addEventListener("click", () => { gameModal.classList.add("hidden"); });
             closeSuccessBtn.addEventListener("click", () => { finalSuccessModal.classList.add("hidden"); });
 

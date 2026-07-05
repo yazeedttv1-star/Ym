@@ -1,782 +1,578 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>يا بطتي — رسالة اعتذار وعهد</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أنا آسف يا بطتي 💙</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* --- التنسيقات العامة (ستايل وألوان ستيتش الأزرق) --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<!-- ============================================================ -->
-<!-- خطوط عربية فاخرة من Google Fonts: عنوان عرضي (Aref Ruqaa) + نص أساسي (Tajawal) -->
-<!-- ============================================================ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+        body {
+            background-color: #e6f0fa;
+            overflow-x: hidden;
+            height: 100vh;
+        }
 
-<!-- Tailwind CSS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.4.1/tailwind.min.js"></script>
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
 
-<!-- Lucide Icons -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-static/0.399.0/umd/lucide.min.js"></script>
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none !important;
+        }
 
-<style>
-  :root{
-    --wine:#5c0618;
-    --wine-deep:#3f0410;
-    --rose:#ff4d6d;
-    --rose-soft:#ffb3c1;
-    --champagne:#fff0f3;
-    --ink:#0f172a;
-    --gold:#d9a441;
-  }
+        /* --- تصميم عداد الأيام المكبر --- */
+        .days-counter-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(43, 123, 185, 0.25);
+            border: 3px solid #2b7bb9;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(43, 123, 185, 0.2);
+        }
 
-  *{
-    box-sizing:border-box;
-  }
+        .counter-title {
+            font-size: 15px;
+            color: #1c5380;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
 
-  html{
-    scroll-behavior:smooth;
-  }
+        .counter-timer {
+            font-size: 22px;
+            color: #1c5380;
+            font-weight: 900;
+            direction: ltr;
+            letter-spacing: 1px;
+        }
 
-  body{
-    font-family:'Tajawal', sans-serif;
-    background:var(--champagne);
-    color:var(--ink);
-    overflow-x:hidden;
-    margin:0;
-  }
+        /* شاشة التحميل الأولى */
+        #loader-screen {
+            background-color: #2b7bb9;
+            color: white;
+            z-index: 10;
+        }
 
-  .font-display{
-    font-family:'Aref Ruqaa', serif;
-  }
+        .loader-content {
+            text-align: center;
+        }
 
-  /* ============================================================ */
-  /* خلفية سينمائية: جزيئات ضوء عائمة (Bokeh) بواسطة Canvas       */
-  /* ============================================================ */
-  #bokeh-canvas{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:0;
-    pointer-events:none;
-  }
+        .duck-icon {
+            font-size: 80px;
+            animation: bounce 1s infinite alternate;
+        }
 
-  /* ============================================================ */
-  /* الزجاج الضبابي الفاخر                                        */
-  /* ============================================================ */
-  .glass{
-    background:rgba(255,255,255,0.35);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    border:1px solid rgba(255,255,255,0.55);
-    box-shadow:0 8px 40px rgba(92,6,24,0.15);
-  }
+        .progress-bar {
+            width: 250px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
 
-  .glass-dark{
-    background:rgba(63,4,16,0.45);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    border:1px solid rgba(255,255,255,0.18);
-    box-shadow:0 8px 40px rgba(0,0,0,0.35);
-  }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #8ed8ff;
+            animation: fillProgress 2.5s forwards ease-in-out;
+        }
 
-  section{
-    position:relative;
-    z-index:1;
-  }
+        .fade-in-text {
+            font-size: 24px;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
 
-  /* عداد الزمن */
-  .counter-box{
-    transition:transform .45s cubic-bezier(.34,1.56,.64,1), box-shadow .45s ease;
-  }
-  .counter-box:hover{
-    transform:translateY(-6px) scale(1.015);
-    box-shadow:0 18px 60px rgba(92,6,24,0.28);
-  }
-  .counter-digit{
-    font-variant-numeric:tabular-nums;
-    font-family:'Aref Ruqaa', serif;
-  }
+        /* الشاشة الرئيسية */
+        #main-screen {
+            background: radial-gradient(circle, #ffffff 0%, #b3daf5 100%);
+            flex-direction: column;
+        }
 
-  /* كروت الذكريات - تأثير الميلان ثلاثي الأبعاد */
-  .memory-card{
-    transform-style:preserve-3d;
-    perspective:1000px;
-    transition:transform .12s ease-out, box-shadow .35s ease;
-    will-change:transform;
-  }
-  .memory-card:hover{
-    box-shadow:0 25px 50px -12px rgba(92,6,24,.35);
-  }
-  .memory-card-inner{
-    transform-style:preserve-3d;
-  }
-  .memory-image-wrap{
-    transform:translateZ(30px);
-  }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(43, 123, 185, 0.15);
+            text-align: center;
+            position: relative;
+        }
 
-  /* المظاريف */
-  .envelope{
-    cursor:pointer;
-    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
-  }
-  .envelope:hover{
-    transform:translateY(-10px) rotate(-1.5deg);
-  }
-  .envelope-flap{
-    transform-origin:top center;
-    transition:transform .7s cubic-bezier(.68,-0.4,.27,1.4);
-    transform-style:preserve-3d;
-  }
-  .envelope.opened .envelope-flap{
-    transform:rotateX(180deg);
-    z-index:5;
-  }
-  .envelope-letter{
-    transition:transform .8s cubic-bezier(.22,1,.36,1), opacity .6s ease;
-    transform:translateY(0%) scale(.85);
-    opacity:0;
-    pointer-events:none;
-  }
-  .envelope.opened .envelope-letter{
-    transform:translateY(-78%) scale(1);
-    opacity:1;
-    pointer-events:auto;
-  }
+        .big-title {
+            font-size: 36px;
+            color: #2b7bb9;
+            margin-bottom: 10px;
+        }
 
-  /* زر الهروب */
-  #no-btn{
-    transition:transform .18s cubic-bezier(.34,1.56,.64,1);
-    position:relative;
-  }
+        .sub-title {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
 
-  /* مشغل الموسيقى العائم */
-  .disc-spin{
-    animation:spin 4s linear infinite;
-    animation-play-state:paused;
-  }
-  .disc-spin.playing{
-    animation-play-state:running;
-  }
-  @keyframes spin{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-  }
+        .buttons-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-  /* تلاشي للأعلى عند التمرير */
-  .reveal{
-    opacity:0;
-    transform:translateY(40px);
-    transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
-  }
-  .reveal.visible{
-    opacity:1;
-    transform:translateY(0);
-  }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
 
-  /* شاشة الاحتفال */
-  #celebration-canvas{
-    position:fixed;
-    inset:0;
-    z-index:60;
-    pointer-events:none;
-    display:none;
-  }
+        .btn:hover {
+            transform: scale(1.05);
+        }
 
-  ::-webkit-scrollbar{width:10px;}
-  ::-webkit-scrollbar-track{background:var(--champagne);}
-  ::-webkit-scrollbar-thumb{background:var(--rose); border-radius:10px;}
+        .btn-pink { background-color: #64b5f6; color: white; }
+        .btn-red { background-color: #2b7bb9; color: white; }
+        
+        .btn-back {
+            background-color: #90a4ae;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+        .btn-back:hover { background-color: #78909c; }
 
-  .btn-shine{
-    position:relative;
-    overflow:hidden;
-  }
-  .btn-shine::after{
-    content:'';
-    position:absolute;
-    top:0; left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
-    transform:skewX(-20deg);
-    transition:left .7s ease;
-  }
-  .btn-shine:hover::after{
-    left:130%;
-  }
-</style>
+        .duck-frame {
+            font-size: 90px;
+            margin-bottom: 15px;
+            position: relative;
+            animation: float 2s infinite alternate;
+        }
+
+        /* النوافذ المنبثقة المخصصة (جميلة ومصممة بدلاً من نوافذ المتصفح) */
+        .modal {
+            position: fixed;
+            z-index: 20;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+            border-top: 8px solid #2b7bb9;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: popupScale 0.3s ease-out;
+        }
+
+        @keyframes popupScale {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute; left: 15px; top: 10px;
+            font-size: 28px; cursor: pointer; color: #aaa;
+        }
+        
+        .close-btn:hover { color: #2b7bb9; }
+
+        /* شاشات التحميل المصغرة داخل النوافذ */
+        .modal-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .small-progress {
+            width: 150px;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .small-progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #2b7bb9;
+            animation: fillProgress 1.5s forwards ease-in-out;
+        }
+
+        /* أزرار الأسئلة التفاعلية */
+        .game-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .game-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #2b7bb9;
+            background: white;
+            color: #2b7bb9;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+            border-color: #ccc;
+            color: #999;
+        }
+
+        /* الحركات الأنيميشن */
+        @keyframes bounce { to { transform: translateY(-20px); } }
+        @keyframes float { to { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fillProgress { to { width: 100%; } }
+    </style>
 </head>
 <body>
 
-<!-- خلفية البوكيه العائمة على مستوى الصفحة كلها -->
-<canvas id="bokeh-canvas"></canvas>
-
-<!-- كانفاس الاحتفال (قلوب/ورود متساقطة) -->
-<canvas id="celebration-canvas"></canvas>
-
-<!-- ============================================================ -->
-<!-- مشغل الموسيقى العائم                                          -->
-<!-- ============================================================ -->
-<div class="fixed bottom-5 left-5 z-50 glass rounded-full flex items-center gap-3 px-4 py-3 select-none" style="border-color:rgba(255,77,109,.4)">
-  <!--
-    ملاحظة هامة للتعديل:
-    ضع ملف الأغنية باسم "song.mp3" بجانب ملف index.html
-    أو استبدل قيمة src بالأسفل برابط مباشر لأي ملف صوتي، مثال:
-    <source src="https://example.com/my-song.mp3" type="audio/mpeg">
-  -->
-  <audio id="bg-audio" loop preload="none">
-    <source src="song.mp3" type="audio/mpeg">
-  </audio>
-  <button id="play-toggle" class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md" style="background:var(--wine)">
-    <i id="play-icon" data-lucide="play" class="w-4 h-4"></i>
-  </button>
-  <div class="w-8 h-8 rounded-full flex items-center justify-center disc-spin" id="disc" style="background:radial-gradient(circle at 35% 35%, var(--rose-soft), var(--wine))">
-    <div class="w-2 h-2 rounded-full bg-white/80"></div>
-  </div>
-  <span class="text-xs font-medium pl-1" style="color:var(--wine-deep)" id="song-label">لحن بطتي</span>
-</div>
-
-<!-- ============================================================ -->
-<!-- القسم الأول: المقدمة السينمائية والعداد                      -->
-<!-- ============================================================ -->
-<section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 py-24 relative">
-  <div class="max-w-3xl mx-auto reveal visible">
-    <p class="tracking-[0.35em] text-xs md:text-sm mb-6 font-medium" style="color:var(--rose)">إلى صاحبة القلب الذي أعرفه أكثر من قلبي، يا بطتي</p>
-    <h1 class="font-display text-4xl md:text-6xl leading-[1.4] mb-8" style="color:var(--wine)">
-      لو خيّروني بين كل قلوب الدنيا يا بطتي،<br class="hidden md:block"> لاخترتُ قلبكِ في كل مرة
-    </h1>
-    <p class="text-base md:text-lg leading-loose max-w-xl mx-auto mb-14" style="color:var(--ink)">
-      أعلم أنني أخطأت في حقّكِ يا بطتي، وأعلم أن الكلمات وحدها لا تكفي لترميم ما تصدّع.
-      لكنني هنا، بكل ما تبقّى فيّ من صدق، أطرق باب قلبكِ من جديد، لأقول: أنا آسف، وأنتِ الأهمّ يا بطتي.
-    </p>
-
-    <!--
-      تعليق برمجي هام: لتعديل تاريخ بداية علاقتكما، غيّر القيمة أدناه
-      بصيغة "YYYY-MM-DDTHH:MM:SS" (سنة-شهر-يوم T ساعة:دقيقة:ثانية)
-      مثال: إذا بدأت العلاقة في 14 فبراير 2021 الساعة 8 مساءً:
-      const relationshipStart = new Date("2010-01-01T00:00:00");
-    -->
-    <div class="glass counter-box rounded-3xl px-6 py-8 md:px-12 md:py-10 inline-block mx-auto">
-      <p class="text-xs md:text-sm mb-5 tracking-widest" style="color:var(--wine)">منذ أن أصبح قلبانا واحداً، يا بطتي</p>
-      <div class="grid grid-cols-4 gap-4 md:gap-8">
-        <div class="flex flex-col items-center">
-          <span id="days" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
-          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">يوماً</span>
+    <div id="loader-screen" class="screen">
+        <div class="loader-content">
+            <div class="duck-icon">💙🐥</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 32px; font-weight: bold;">بطتي 💙</span></h1>
         </div>
-        <div class="flex flex-col items-center">
-          <span id="hours" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
-          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">ساعة</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span id="minutes" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
-          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">دقيقة</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span id="seconds" class="counter-digit text-3xl md:text-5xl" style="color:var(--rose)">0</span>
-          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">ثانية</span>
-        </div>
-      </div>
     </div>
 
-    <div class="mt-16 animate-bounce">
-      <i data-lucide="chevron-down" class="w-7 h-7 mx-auto" style="color:var(--wine)"></i>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ -->
-<!-- القسم الثاني: خزنة الذكريات ثلاثية الأبعاد                    -->
-<!-- ============================================================ -->
-<section id="memories" class="py-24 px-6 relative">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <p class="tracking-[0.35em] text-xs md:text-sm mb-4 font-medium" style="color:var(--rose)">خزنة لا يفتحها إلا نحن، يا بطتي</p>
-      <h2 class="font-display text-3xl md:text-5xl" style="color:var(--wine)">محطات كتبناها معاً</h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-      <!-- كارت ذكرى 1 -->
-      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5">
-        <div class="memory-card-inner">
-          <!-- لتعديل الصورة: استبدل رابط الـ src بصورتكما الحقيقية -->
-          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
-            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&q=80"
-                 alt="أول لقاء" class="w-full h-full object-cover" loading="lazy">
-          </div>
-          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">اللحظة الأولى</h3>
-          <p class="text-sm leading-relaxed" style="color:var(--ink)">
-            أتذكر أول مرة التقت فيها عيوننا يا بطتي، كيف توقف الزمن لثانية، وكيف شعرتُ أن قصة جميلة توشك أن تبدأ.
-          </p>
+    <div id="main-screen" class="screen hidden">
+        <div class="days-counter-box">
+            <div class="counter-title">لا ده عداد أيامنا ملناش دعوة بيه😂</div>
+            <div id="live-counter" class="counter-timer">00 يوم و 00:00:00</div>
         </div>
-      </div>
 
-      <!-- كارت ذكرى 2 -->
-      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5" style="transition-delay:.1s">
-        <div class="memory-card-inner">
-          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
-            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&q=80"
-                 alt="ضحكة مشتركة" class="w-full h-full object-cover" loading="lazy">
-          </div>
-          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">ضحكتنا الطويلة</h3>
-          <p class="text-sm leading-relaxed" style="color:var(--ink)">
-            تلك الليلة التي ضحكنا فيها حتى دمعت أعيننا، ونسينا العالم كله. كانت من أجمل أوقات حياتي معكِ يا بطتي.
-          </p>
+        <div class="main-container">
+            <div class="duck-frame">🩵🫂</div>
+            <h1 class="big-title">أنا آسف يا بطتي..</h1>
+            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا والله ومقدرش عليه. البيت من غيرك ملهوش أي طعم وإنتي زعلانة مني. 😂😂🥺</p>
+            
+            <div class="buttons-group">
+                <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول يعم 💥</button>
+                <button id="btn-next" class="btn btn-red">افتحي الملف ده بس ي بطه كده 💌</button>
+            </div>
         </div>
-      </div>
-
-      <!-- كارت ذكرى 3 -->
-      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5" style="transition-delay:.2s">
-        <div class="memory-card-inner">
-          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
-            <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=600&q=80"
-                 alt="وعد" class="w-full h-full object-cover" loading="lazy">
-          </div>
-          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">الوعد الصامت</h3>
-          <p class="text-sm leading-relaxed" style="color:var(--ink)">
-            يوم نظرنا لبعض بلا كلام يا بطتي، وفهمنا أن هذه العلاقة تستحق أن نحاربَ من أجلها، مهما بدرت منّا الأخطاء.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ -->
-<!-- القسم الثالث: المظاريف التفاعلية                              -->
-<!-- ============================================================ -->
-<section id="letters" class="py-24 px-6 relative" style="background:linear-gradient(180deg, transparent, rgba(92,6,24,0.04), transparent)">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-20 reveal">
-      <p class="tracking-[0.35em] text-xs md:text-sm mb-4 font-medium" style="color:var(--rose)">رسائل لم أجرؤ على قولها بصوت عالٍ، يا بطتي</p>
-      <h2 class="font-display text-3xl md:text-5xl" style="color:var(--wine)">افتحي المظاريف بقلبكِ</h2>
-      <p class="text-sm mt-4" style="color:var(--ink)">اضغطي على أي مظروف لتقرئي ما بداخله</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-10">
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content">
+            <div id="modal-loading-zone" class="modal-loader">
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">⏳</div>
+                <p style="color: #555; margin-top: 10px;">جاري فتح الرسالة يا بطتي...🤌</p>
+                <div class="small-progress"><div class="small-progress-fill"></div></div>
+            </div>
 
-      <!-- مظروف 1 -->
-      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px;">
-        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
-        <div class="absolute inset-0 rounded-lg overflow-visible">
-          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
-          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
+            <div id="modal-text-zone" class="hidden">
+                <span class="close-btn">&times;</span>
+                <h2 style="color: #2b7bb9; margin-bottom: 15px;">إلى بطتي الجميلة 💙</h2>
+                <p style="line-height: 1.6; color: #444; font-size: 16px;">
+                     حقك عليا يا أغلى حاجة في حياتي.. التفكير في إني زعلتك ومصالحتكيش علطول بيوجعني.انا والله <br><br>
+                    😉سامحيني هااااا وخلينا ننسى الزعل، مكانك في قلبي زي ما هو وميقلش أبداً. اضحكي بقى عشان ضحكتك هي اللي بتنور يومي! 🥰
+                </p>
+            </div>
         </div>
-        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
-          <i data-lucide="heart" class="w-4 h-4 text-white"></i>
-        </div>
-        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
-          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">اعتراف بالخطأ</h4>
-          <p class="text-xs leading-loose" style="color:var(--ink)">
-            كنتُ أنانياً حين أهملتُ شعوركِ يا بطتي، وكنتُ غافلاً حين ظننتُ أن حبّكِ سيبقى صامداً مهما قصّرت.
-            اليوم أعترف أمامكِ بصدق: أخطأتُ، وأنتِ تستحقين اعتذاراً من القلب لا من اللسان فقط.
-          </p>
-        </div>
-      </div>
-
-      <!-- مظروف 2 -->
-      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px; transition-delay:.1s">
-        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
-        <div class="absolute inset-0 rounded-lg overflow-visible">
-          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
-          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
-        </div>
-        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
-          <i data-lucide="mail" class="w-4 h-4 text-white"></i>
-        </div>
-        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
-          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">عهد صادق</h4>
-          <p class="text-xs leading-loose" style="color:var(--ink)">
-            أعاهدكِ يا بطتي أن أكون أكثر حضوراً، أكثر إنصاتاً، وأكثر رفقاً بمشاعركِ.
-            أعاهدكِ أن يدي التي جرحتكِ يوماً، ستكون من الآن سنداً لكِ لا وجعاً.
-          </p>
-        </div>
-      </div>
-
-      <!-- مظروف 3 -->
-      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px; transition-delay:.2s">
-        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
-        <div class="absolute inset-0 rounded-lg overflow-visible">
-          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
-          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
-        </div>
-        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
-          <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
-        </div>
-        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
-          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">أمنية المستقبل</h4>
-          <p class="text-xs leading-loose" style="color:var(--ink)">
-            أريد أن أكتب معكِ فصولاً كثيرة أخرى يا بطتي، أن نهرم معاً ونحن ما زلنا نضحك كما في أول يوم.
-            أنتِ لستِ فصلاً في حياتي، بل أنتِ القصة كلها.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ -->
-<!-- القسم الرابع: القرار النهائي                                  -->
-<!-- ============================================================ -->
-<section id="decision" class="min-h-screen flex items-center justify-center px-6 py-24 relative overflow-hidden">
-  <div id="decision-box" class="glass-dark rounded-[2.5rem] px-8 py-16 md:px-20 md:py-20 text-center max-w-2xl mx-auto reveal relative" style="min-height:420px;">
-
-    <div id="question-content">
-      <i data-lucide="heart-crack" class="w-10 h-10 mx-auto mb-6" style="color:var(--rose)"></i>
-      <h2 class="font-display text-2xl md:text-4xl mb-6 text-white leading-relaxed">
-        هل تمنحينني فرصة أخرى يا بطتي<br> لأثبت لكِ أنكِ الاختيار الصحيح؟
-      </h2>
-      <p class="text-white/80 text-sm md:text-base mb-14 leading-loose">
-        لا أطلب منكِ نسيان الجرح، بل أطلب فرصة كي أُثبت أن قلبي ما زال بيتكِ الآمن.
-      </p>
-
-      <div class="relative flex flex-col md:flex-row items-center justify-center gap-6" style="min-height:120px;">
-        <button id="yes-btn" class="btn-shine px-10 py-4 rounded-full font-bold text-lg text-white shadow-2xl transition-transform hover:scale-105 active:scale-95" style="background:linear-gradient(135deg, var(--rose), #e0405b);">
-          نعم، سامحتك ❤
-        </button>
-        <button id="no-btn" class="px-10 py-4 rounded-full font-bold text-lg" style="background:rgba(255,255,255,0.12); color:white; border:1px solid rgba(255,255,255,.3);">
-          لا
-        </button>
-      </div>
     </div>
 
-    <div id="celebration-message" class="hidden">
-      <i data-lucide="party-popper" class="w-12 h-12 mx-auto mb-6" style="color:var(--gold)"></i>
-      <h2 class="font-display text-3xl md:text-5xl mb-6 text-white">قلبانا معاً من جديد</h2>
-      <p class="text-white/90 text-base md:text-lg leading-loose max-w-md mx-auto">
-        شكراً لأنكِ منحتِني فرصة أخرى يا بطتي. أعدكِ أن أكون عند حسن ظنّكِ، وأن أجعل من كل يوم قادم فصلاً أجمل من سابقه.
-        أحبكِ، اليوم وغداً وكل الأيام.
-      </p>
+    <div id="love-letter-screen" class="screen hidden" style="background-color: #2b7bb9; flex-direction:column; overflow-y:auto; padding: 40px 0;">
+        <h1 style="margin-bottom:20px; font-size: 28px; color: white;">ملف الاعتذار والحب حاجه بسيطه مش من مقامك والله مقامك اكتر من كده 💙</h1>
+        
+        <div id="envelope" style="background:#fff; color:#333; padding:40px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:90%; max-width:380px; position: relative;">
+            
+            <div id="envelope-loading" class="modal-loader" style="display: none;">
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">✉️</div>
+                <p style="color: #555; margin-top: 10px;">جاري تحضير الكلمات احممم...</p>
+                <div class="small-progress"><div class="small-progress-fill" id="envelope-progress-fill" style="animation: none; width: 0%;"></div></div>
+            </div>
+
+            <div id="envelope-ready">
+                <div style="font-size:60px; animation: bounce 1s infinite alternate;">✉️</div>
+                <p style="font-weight:bold; margin-top:15px; font-size: 18px; color: #555;">خاص لـ بطتي 😻🐥</p>
+                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 35px; border-radius:25px; margin-top:20px; font-size:16px; font-weight:bold; cursor:pointer;">افتحي الرسالة</button>
+            </div>
+        </div>
+        
+        <div id="letters-container" style="display:none; width:90%; max-width:450px; margin-top: 10px;"></div>
+        <button id="btn-back-to-main" class="btn-back">رجوع للخلف لو عاوزة😂 👉👈</button>
     </div>
 
-  </div>
-</section>
+    <div id="game-modal" class="modal hidden">
+        <div class="modal-content" style="border-top: 8px solid #ff4d6d;">
+            <span class="close-btn" id="close-game-btn">&times;</span>
+            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px;">مين فينا بيحب التاني اكتر هااا؟ 🤔</h2>
+            <p id="game-response" style="color: #555; font-size: 16px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
+            
+            <div class="game-btn-container">
+                <button id="btn-love-me" class="game-btn">أنا 🙋‍♀️</button>
+                <button id="btn-love-you" class="game-btn" disabled>إنت 🙋‍♂️</button>
+            </div>
+        </div>
+    </div>
 
-<footer class="text-center py-10 text-xs relative z-10" style="color:var(--wine)">
-  صُنع بحب لا ينتهي، من قلبٍ يعرف طريقه إليكِ دائماً يا بطتي 🤍
-</footer>
+    <div id="final-success-modal" class="modal hidden">
+        <div class="modal-content" style="border-top: 8px solid #4caf50; max-width: 400px;">
+            <span class="close-btn" id="close-success-btn">&times;</span>
+            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙✨</div>
+            <h2 style="color: #2b7bb9; margin-bottom: 15px;">صافي يا لبن!</h2>
+            <p style="font-size: 17px; color: #333; line-height: 1.6; font-weight: bold;">
+                خلاص صافي يا لبن وحليب يا قشطة! <br>
+                بعشقك يا أحلى وأجمل بطة في الدنيا 💙🐥
+            </p>
+        </div>
+    </div>
 
-<script>
-/* ============================================================ */
-/*  1) خلفية البوكيه المتحركة (جزيئات ضوء / قلوب ضبابية)          */
-/* ============================================================ */
-(function bokehBackground(){
-  const canvas = document.getElementById('bokeh-canvas');
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loaderScreen = document.getElementById("loader-screen");
+            const mainScreen = document.getElementById("main-screen");
+            const btnPopup = document.getElementById("btn-popup");
+            const btnNext = document.getElementById("btn-next");
+            const modal = document.getElementById("message-modal");
+            const closeModal = document.querySelector(".close-btn");
+            
+            const modalLoadingZone = document.getElementById("modal-loading-zone");
+            const modalTextZone = document.getElementById("modal-text-zone");
 
-  function resize(){
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+            const loveLetterScreen = document.getElementById("love-letter-screen");
+            const btnBackToMain = document.getElementById("btn-back-to-main");
+            const openEnvelopeBtn = document.getElementById("open-envelope-btn");
+            const envelopeReady = document.getElementById("envelope-ready");
+            const envelopeLoading = document.getElementById("envelope-loading");
+            const envelopeProgressFill = document.getElementById("envelope-progress-fill");
+            const lettersContainer = document.getElementById("letters-container");
+            const envelopeBox = document.getElementById("envelope");
 
-  const colors = ['rgba(255,77,109,0.25)', 'rgba(255,179,193,0.22)', 'rgba(92,6,24,0.12)', 'rgba(217,164,65,0.15)'];
+            const gameModal = document.getElementById("game-modal");
+            const btnLoveMe = document.getElementById("btn-love-me");
+            const btnLoveYou = document.getElementById("btn-love-you");
+            const gameResponse = document.getElementById("game-response");
+            const gameTitle = document.getElementById("game-title");
+            const closeGameBtn = document.getElementById("close-game-btn");
 
-  function createParticles(){
-    const count = Math.min(28, Math.floor((w*h)/45000));
-    particles = [];
-    for(let i=0;i<count;i++){
-      particles.push({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        r: 30 + Math.random()*90,
-        color: colors[Math.floor(Math.random()*colors.length)],
-        speedX: (Math.random()-0.5)*0.15,
-        speedY: (Math.random()-0.5)*0.15,
-        pulse: Math.random()*Math.PI*2
-      });
-    }
-  }
-  createParticles();
-  window.addEventListener('resize', createParticles);
+            const finalSuccessModal = document.getElementById("final-success-modal");
+            const closeSuccessBtn = document.getElementById("close-success-btn");
 
-  function animate(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p=>{
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.pulse += 0.01;
+            // --- 1. حساب العداد المباشر (تاريخ 1/1/2026) ---
+            const startDate = new Date("2026-01-01T00:00:00").getTime();
+            
+            function updateLiveCounter() {
+                const now = new Date().getTime();
+                const difference = now - startDate;
 
-      if(p.x < -p.r) p.x = w + p.r;
-      if(p.x > w + p.r) p.x = -p.r;
-      if(p.y < -p.r) p.y = h + p.r;
-      if(p.y > h + p.r) p.y = -p.r;
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-      const currentR = p.r + Math.sin(p.pulse)*8;
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentR);
-      grad.addColorStop(0, p.color);
-      grad.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, currentR, 0, Math.PI*2);
-      ctx.fill();
-    });
-    requestAnimationFrame(animate);
-  }
-  animate();
-})();
+                const displayHours = hours < 10 ? "0" + hours : hours;
+                const displayMinutes = minutes < 10 ? "0" + minutes : minutes;
+                const displaySeconds = seconds < 10 ? "0" + seconds : seconds;
 
-/* ============================================================ */
-/*  2) العداد الزمني الدقيق                                       */
-/* ============================================================ */
-/*
-  تعليق للتعديل: غيّر تاريخ بداية العلاقة هنا (نفس التاريخ الظاهر في القسم الأول)
-*/
-const relationshipStart = new Date("2010-01-01T00:00:00");
+                document.getElementById("live-counter").innerText = `${days} يوم و ${displayHours}:${displayMinutes}:${displaySeconds}`;
+            }
+            setInterval(updateLiveCounter, 1000);
+            updateLiveCounter();
 
-function updateCounter(){
-  const now = new Date();
-  let diff = now - relationshipStart;
-  if(diff < 0) diff = 0;
+            // --- 2. الانتقال من شاشة التحميل الأولى للشاشة الرئيسية ---
+            setTimeout(() => {
+                loaderScreen.classList.add("hidden");
+                mainScreen.classList.remove("hidden");
+                triggerCelebration(2);
+            }, 2600);
 
-  const days = Math.floor(diff / (1000*60*60*24));
-  const hours = Math.floor((diff / (1000*60*60)) % 24);
-  const minutes = Math.floor((diff / (1000*60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
+            function triggerCelebration(secondsDuration) {
+                var end = Date.now() + (secondsDuration * 1000);
+                (function frame() {
+                  confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2b7bb9', '#64b5f6', '#8ed8ff', '#ffffff'] });
+                  confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2b7bb9', '#64b5f6', '#8ed8ff', '#ffffff'] });
+                  if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            }
 
-  document.getElementById('days').textContent = days.toLocaleString('ar-EG');
-  document.getElementById('hours').textContent = hours.toString().padStart(2,'0');
-  document.getElementById('minutes').textContent = minutes.toString().padStart(2,'0');
-  document.getElementById('seconds').textContent = seconds.toString().padStart(2,'0');
-}
-updateCounter();
-setInterval(updateCounter, 1000);
+            // --- 3. فتح النافذة المنبثقة الأولى مع شاشة تحميل مصغرة ---
+            btnPopup.addEventListener("click", () => {
+                modalLoadingZone.style.display = "flex";
+                modalTextZone.classList.add("hidden");
+                modal.classList.remove("hidden");
 
-/* ============================================================ */
-/*  3) ظهور تدريجي عند التمرير                                    */
-/* ============================================================ */
-const revealEls = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-}, {threshold:0.15});
-revealEls.forEach(el=>io.observe(el));
+                setTimeout(() => {
+                    modalLoadingZone.style.display = "none";
+                    modalTextZone.classList.remove("hidden");
+                }, 1600);
+            });
 
-/* ============================================================ */
-/*  4) تأثير الميلان ثلاثي الأبعاد على كروت الذكريات               */
-/* ============================================================ */
-document.querySelectorAll('.memory-card').forEach(card=>{
-  card.addEventListener('mousemove', (e)=>{
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width/2;
-    const centerY = rect.height/2;
-    const rotateX = ((y - centerY)/centerY) * -8;
-    const rotateY = ((x - centerX)/centerX) * 8;
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1.02)`;
-  });
-  card.addEventListener('mouseleave', ()=>{
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-  });
-});
+            closeModal.addEventListener("click", () => { modal.classList.add("hidden"); });
 
-/* ============================================================ */
-/*  5) المظاريف التفاعلية                                         */
-/* ============================================================ */
-document.querySelectorAll('[data-envelope]').forEach(env=>{
-  env.addEventListener('click', ()=>{
-    env.classList.toggle('opened');
-  });
-});
+            // --- 4. الدخول إلى شاشة المغلف والرسائل المتتالية ---
+            btnNext.addEventListener("click", () => {
+                mainScreen.classList.add("hidden");
+                loveLetterScreen.classList.remove("hidden");
+            });
 
-/* ============================================================ */
-/*  6) خوارزمية هروب زر "لا" الذكية                                */
-/* ============================================================ */
-(function evasiveButton(){
-  const noBtn = document.getElementById('no-btn');
-  const box = document.getElementById('decision-box');
-  let lastMouseX = null, lastMouseY = null, escapeCount = 0;
+            openEnvelopeBtn.addEventListener("click", () => {
+                envelopeReady.style.display = "none";
+                envelopeLoading.style.display = "flex";
+                
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        envelopeBox.style.display = "none";
+                        showSuccessiveLetters();
+                    } else {
+                        width += 5;
+                        envelopeProgressFill.style.width = width + "%";
+                    }
+                }, 80);
+            });
 
-  function moveButtonAwayFrom(cursorX, cursorY){
-    const boxRect = box.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
+            function showSuccessiveLetters() {
+                lettersContainer.innerHTML = ""; 
+                lettersContainer.style.display = "block";
 
-    const padding = 20;
-    const maxX = boxRect.width - btnRect.width - padding;
-    const maxY = boxRect.height - btnRect.height - padding;
+                const messages = [
+                    "الدور ده عرفت انو زعل اكبر من اللي فات بس قولت والله ما هيقف قبالي. 😔",
+                    "عارف إني قصرت لما اتأخرت عليكي ومجتش صالحتك بسرعة، بس والله ي بطه كنت هالحكي  وانتي عارفة غلاوتك ومكانتك عندي عاملة إزاي. 🫀",
+                    "مقدرش أشوفك زعلانة ومقدرش أعدي يومي وإحنا متغيرين على بعض.. إنتي بطتي الحنينة اللي متعودتش منها تبقي زعلانه كتير . 🐥💙",
+                    "💋🫦صافي يا لبن؟ حليب يا قشطة؟ خلاص خلاص ماشي اتفقنا😂 يلا اضحكي ي بطه بقى وطلعي الزعل ده على جنب ومن قلبك اهم حاجه وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. 🥰✨"
+                ];
 
-    let newX, newY, attempts = 0;
-    do{
-      newX = padding + Math.random() * Math.max(0, maxX - padding);
-      newY = padding + Math.random() * Math.max(0, maxY - padding);
-      attempts++;
-    } while(
-      attempts < 8 &&
-      cursorX !== null &&
-      Math.hypot((newX + btnRect.width/2) - (cursorX - boxRect.left), (newY + btnRect.height/2) - (cursorY - boxRect.top)) < 140
-    );
+                messages.forEach((msg, index) => {
+                    setTimeout(() => {
+                        const card = document.createElement("div");
+                        card.style.cssText = "background:white; color:#333; padding:22px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 16px; line-height: 1.6; border-right: 5px solid #64b5f6;";
+                        card.innerHTML = `<p style="text-align: right;">"${msg}"</p>`;
+                        lettersContainer.appendChild(card);
+                        
+                        setTimeout(() => {
+                            card.style.opacity = "1";
+                            card.style.transform = "translateY(0)";
+                            confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#64b5f6', '#8ed8ff'] });
+                        }, 50);
 
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
-    noBtn.style.transform = `scale(0.92) rotate(${(Math.random()*20-10).toFixed(1)}deg)`;
-    setTimeout(()=>{ noBtn.style.transform = 'scale(1) rotate(0deg)'; }, 200);
-  }
+                        // عند الوصول للرسالة الأخيرة يظهر زر اللعبة التفاعلية
+                        if (index === messages.length - 1) {
+                            setTimeout(() => {
+                                const loveBtn = document.createElement("button");
+                                loveBtn.innerText = "حليب يا قشطة وبوسة 😘💋";
+                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate;";
+                                
+                                // فتح النافذة المنبثقة التفاعلية للسؤال
+                                loveBtn.addEventListener("click", () => {
+                                    gameResponse.innerText = "";
+                                    gameTitle.innerText = "مين فينا بيحب التاني اكتر؟ 🤔";
+                                    btnLoveYou.disabled = true;
+                                    btnLoveMe.disabled = false;
+                                    gameModal.classList.remove("hidden");
+                                });
+                                
+                                lettersContainer.appendChild(loveBtn);
+                            }, 1000);
+                        }
+                    }, index * 2200); 
+                });
+            }
 
-  function proximityCheck(e){
-    const btnRect = noBtn.getBoundingClientRect();
-    const btnCenterX = btnRect.left + btnRect.width/2;
-    const btnCenterY = btnRect.top + btnRect.height/2;
-    const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+            // --- 5. منطق اللعبة التفاعلية (مين بيحب التاني اكتر) ---
+            btnLoveMe.addEventListener("click", () => {
+                gameResponse.style.color = "red";
+                gameResponse.innerText = "اده كمان بتناقشيني؟ انا كنت عارف احساسي صح 🤨";
+                btnLoveYou.disabled = false;
+                btnLoveMe.disabled = true;
+            });
 
-    if(dist < 110){
-      moveButtonAwayFrom(e.clientX, e.clientY);
-      escapeCount++;
-      if(escapeCount === 4){
-        noBtn.textContent = 'حاولي مرة أخرى 😅';
-      } else if(escapeCount === 8){
-        noBtn.textContent = 'مستحيل تمسكيني 🏃‍♂️';
-      } else if(escapeCount >= 12){
-        noBtn.textContent = 'قلبي مغلق أمام كلمة لا 🔒';
-      }
-    }
-  }
+            btnLoveYou.addEventListener("click", () => {
+                gameTitle.innerText = "كنت عارف انو انا 🙈💙";
+                gameResponse.style.color = "#2b7bb9";
+                gameResponse.innerText = "اده كمان مش عاوزة تناقشيني؟ لا لا خلاص بهزر والله 😂🤷‍♂️";
+                
+                btnLoveYou.disabled = true;
 
-  document.addEventListener('mousemove', proximityCheck);
-  noBtn.addEventListener('mouseenter', (e)=>{ moveButtonAwayFrom(e.clientX, e.clientY); });
-  noBtn.addEventListener('click', (e)=>{
-    e.preventDefault();
-    moveButtonAwayFrom(e.clientX, e.clientY);
-  });
-  noBtn.addEventListener('touchstart', (e)=>{
-    e.preventDefault();
-    const t = e.touches[0];
-    moveButtonAwayFrom(t.clientX, t.clientY);
-  }, {passive:false});
-})();
+                // إطلاق احتفالات خارقة
+                triggerCelebration(5);
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.4 } });
+                
+                setTimeout(() => { confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } }); }, 200);
+                setTimeout(() => { confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } }); }, 400);
 
-/* ============================================================ */
-/*  7) الاحتفال عند الضغط على "نعم"                                */
-/* ============================================================ */
-const yesBtn = document.getElementById('yes-btn');
-const questionContent = document.getElementById('question-content');
-const celebrationMessage = document.getElementById('celebration-message');
-const celebrationCanvas = document.getElementById('celebration-canvas');
-const cctx = celebrationCanvas.getContext('2d');
+                // إغلاق نافذة اللعبة تلقائياً بعد ثانيتين وتظهر نافذة النجاح المصممة والجميلة بدلاً من الـ alert
+                setTimeout(() => {
+                    gameModal.classList.add("hidden");
+                    finalSuccessModal.classList.remove("hidden");
+                }, 4000);
+            });
 
-function resizeCelebration(){
-  celebrationCanvas.width = window.innerWidth;
-  celebrationCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCelebration);
-resizeCelebration();
+            // إغلاق النوافذ
+            closeGameBtn.addEventListener("click", () => { gameModal.classList.add("hidden"); });
+            closeSuccessBtn.addEventListener("click", () => { finalSuccessModal.classList.add("hidden"); });
 
-yesBtn.addEventListener('click', ()=>{
-  questionContent.style.transition = 'opacity .4s ease';
-  questionContent.style.opacity = '0';
-  setTimeout(()=>{
-    questionContent.classList.add('hidden');
-    celebrationMessage.classList.remove('hidden');
-    celebrationMessage.style.opacity = '0';
-    requestAnimationFrame(()=>{
-      celebrationMessage.style.transition = 'opacity .8s ease';
-      celebrationMessage.style.opacity = '1';
-    });
-  }, 400);
-
-  launchCelebration();
-});
-
-function launchCelebration(){
-  celebrationCanvas.style.display = 'block';
-  const shapes = [];
-  const emojis = ['❤️','💖','🌹','✨','💕'];
-  const count = 140;
-
-  for(let i=0;i<count;i++){
-    shapes.push({
-      x: Math.random()*celebrationCanvas.width,
-      y: -20 - Math.random()*celebrationCanvas.height*0.5,
-      size: 16 + Math.random()*22,
-      speedY: 2 + Math.random()*3.5,
-      speedX: (Math.random()-0.5)*2,
-      rotation: Math.random()*360,
-      rotSpeed: (Math.random()-0.5)*6,
-      emoji: emojis[Math.floor(Math.random()*emojis.length)],
-      opacity: 1
-    });
-  }
-
-  let frame = 0;
-  const totalFrames = 480;
-
-  function animateCelebration(){
-    cctx.clearRect(0,0,celebrationCanvas.width, celebrationCanvas.height);
-    frame++;
-
-    shapes.forEach(s=>{
-      s.y += s.speedY;
-      s.x += s.speedX;
-      s.rotation += s.rotSpeed;
-
-      if(frame > totalFrames - 90){
-        s.opacity = Math.max(0, s.opacity - 0.02);
-      }
-
-      cctx.save();
-      cctx.globalAlpha = s.opacity;
-      cctx.translate(s.x, s.y);
-      cctx.rotate(s.rotation * Math.PI/180);
-      cctx.font = s.size + 'px serif';
-      cctx.textAlign = 'center';
-      cctx.textBaseline = 'middle';
-      cctx.fillText(s.emoji, 0, 0);
-      cctx.restore();
-
-      if(s.y > celebrationCanvas.height + 40){
-        s.y = -20;
-        s.x = Math.random()*celebrationCanvas.width;
-      }
-    });
-
-    if(frame < totalFrames){
-      requestAnimationFrame(animateCelebration);
-    } else {
-      celebrationCanvas.style.display = 'none';
-      cctx.clearRect(0,0,celebrationCanvas.width, celebrationCanvas.height);
-    }
-  }
-  animateCelebration();
-}
-
-/* ============================================================ */
-/*  8) مشغل الموسيقى العائم                                       */
-/* ============================================================ */
-(function audioPlayer(){
-  const audio = document.getElementById('bg-audio');
-  const toggleBtn = document.getElementById('play-toggle');
-  const playIcon = document.getElementById('play-icon');
-  const disc = document.getElementById('disc');
-  let isPlaying = false;
-
-  toggleBtn.addEventListener('click', ()=>{
-    if(!isPlaying){
-      audio.play().catch(()=>{
-        console.log('تعذر تشغيل الصوت تلقائياً، تأكد من وجود ملف song.mp3 بجانب index.html');
-      });
-      isPlaying = true;
-      disc.classList.add('playing');
-      playIcon.setAttribute('data-lucide', 'pause');
-    } else {
-      audio.pause();
-      isPlaying = false;
-      disc.classList.remove('playing');
-      playIcon.setAttribute('data-lucide', 'play');
-    }
-    lucide.createIcons();
-  });
-})();
-
-/* تهيئة أيقونات Lucide */
-lucide.createIcons();
-</script>
+            // --- 6. زر الرجوع للخلف ---
+            btnBackToMain.addEventListener("click", () => {
+                loveLetterScreen.classList.add("hidden");
+                mainScreen.classList.remove("hidden");
+                
+                envelopeBox.style.display = "block";
+                envelopeReady.style.display = "block";
+                envelopeLoading.style.display = "none";
+                envelopeProgressFill.style.width = "0%";
+                lettersContainer.style.display = "none";
+                lettersContainer.innerHTML = "";
+            });
+        });
+    </script>
 </body>
 </html>

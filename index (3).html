@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>يا بطتي — رسالة اعتذار وعهد</title>
+
+<!-- ============================================================ -->
+<!-- خطوط عربية فاخرة من Google Fonts: عنوان عرضي (Aref Ruqaa) + نص أساسي (Tajawal) -->
+<!-- ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.4.1/tailwind.min.js"></script>
+
+<!-- Lucide Icons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-static/0.399.0/umd/lucide.min.js"></script>
+
+<style>
+  :root{
+    --wine:#5c0618;
+    --wine-deep:#3f0410;
+    --rose:#ff4d6d;
+    --rose-soft:#ffb3c1;
+    --champagne:#fff0f3;
+    --ink:#0f172a;
+    --gold:#d9a441;
+  }
+
+  *{
+    box-sizing:border-box;
+  }
+
+  html{
+    scroll-behavior:smooth;
+  }
+
+  body{
+    font-family:'Tajawal', sans-serif;
+    background:var(--champagne);
+    color:var(--ink);
+    overflow-x:hidden;
+    margin:0;
+  }
+
+  .font-display{
+    font-family:'Aref Ruqaa', serif;
+  }
+
+  /* ============================================================ */
+  /* خلفية سينمائية: جزيئات ضوء عائمة (Bokeh) بواسطة Canvas       */
+  /* ============================================================ */
+  #bokeh-canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+  }
+
+  /* ============================================================ */
+  /* الزجاج الضبابي الفاخر                                        */
+  /* ============================================================ */
+  .glass{
+    background:rgba(255,255,255,0.35);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.55);
+    box-shadow:0 8px 40px rgba(92,6,24,0.15);
+  }
+
+  .glass-dark{
+    background:rgba(63,4,16,0.45);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.18);
+    box-shadow:0 8px 40px rgba(0,0,0,0.35);
+  }
+
+  section{
+    position:relative;
+    z-index:1;
+  }
+
+  /* عداد الزمن */
+  .counter-box{
+    transition:transform .45s cubic-bezier(.34,1.56,.64,1), box-shadow .45s ease;
+  }
+  .counter-box:hover{
+    transform:translateY(-6px) scale(1.015);
+    box-shadow:0 18px 60px rgba(92,6,24,0.28);
+  }
+  .counter-digit{
+    font-variant-numeric:tabular-nums;
+    font-family:'Aref Ruqaa', serif;
+  }
+
+  /* كروت الذكريات - تأثير الميلان ثلاثي الأبعاد */
+  .memory-card{
+    transform-style:preserve-3d;
+    perspective:1000px;
+    transition:transform .12s ease-out, box-shadow .35s ease;
+    will-change:transform;
+  }
+  .memory-card:hover{
+    box-shadow:0 25px 50px -12px rgba(92,6,24,.35);
+  }
+  .memory-card-inner{
+    transform-style:preserve-3d;
+  }
+  .memory-image-wrap{
+    transform:translateZ(30px);
+  }
+
+  /* المظاريف */
+  .envelope{
+    cursor:pointer;
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .envelope:hover{
+    transform:translateY(-10px) rotate(-1.5deg);
+  }
+  .envelope-flap{
+    transform-origin:top center;
+    transition:transform .7s cubic-bezier(.68,-0.4,.27,1.4);
+    transform-style:preserve-3d;
+  }
+  .envelope.opened .envelope-flap{
+    transform:rotateX(180deg);
+    z-index:5;
+  }
+  .envelope-letter{
+    transition:transform .8s cubic-bezier(.22,1,.36,1), opacity .6s ease;
+    transform:translateY(0%) scale(.85);
+    opacity:0;
+    pointer-events:none;
+  }
+  .envelope.opened .envelope-letter{
+    transform:translateY(-78%) scale(1);
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  /* زر الهروب */
+  #no-btn{
+    transition:transform .18s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+  }
+
+  /* مشغل الموسيقى العائم */
+  .disc-spin{
+    animation:spin 4s linear infinite;
+    animation-play-state:paused;
+  }
+  .disc-spin.playing{
+    animation-play-state:running;
+  }
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+
+  /* تلاشي للأعلى عند التمرير */
+  .reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* شاشة الاحتفال */
+  #celebration-canvas{
+    position:fixed;
+    inset:0;
+    z-index:60;
+    pointer-events:none;
+    display:none;
+  }
+
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--champagne);}
+  ::-webkit-scrollbar-thumb{background:var(--rose); border-radius:10px;}
+
+  .btn-shine{
+    position:relative;
+    overflow:hidden;
+  }
+  .btn-shine::after{
+    content:'';
+    position:absolute;
+    top:0; left:-120%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:skewX(-20deg);
+    transition:left .7s ease;
+  }
+  .btn-shine:hover::after{
+    left:130%;
+  }
+</style>
+</head>
+<body>
+
+<!-- خلفية البوكيه العائمة على مستوى الصفحة كلها -->
+<canvas id="bokeh-canvas"></canvas>
+
+<!-- كانفاس الاحتفال (قلوب/ورود متساقطة) -->
+<canvas id="celebration-canvas"></canvas>
+
+<!-- ============================================================ -->
+<!-- مشغل الموسيقى العائم                                          -->
+<!-- ============================================================ -->
+<div class="fixed bottom-5 left-5 z-50 glass rounded-full flex items-center gap-3 px-4 py-3 select-none" style="border-color:rgba(255,77,109,.4)">
+  <!--
+    ملاحظة هامة للتعديل:
+    ضع ملف الأغنية باسم "song.mp3" بجانب ملف index.html
+    أو استبدل قيمة src بالأسفل برابط مباشر لأي ملف صوتي، مثال:
+    <source src="https://example.com/my-song.mp3" type="audio/mpeg">
+  -->
+  <audio id="bg-audio" loop preload="none">
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+  <button id="play-toggle" class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md" style="background:var(--wine)">
+    <i id="play-icon" data-lucide="play" class="w-4 h-4"></i>
+  </button>
+  <div class="w-8 h-8 rounded-full flex items-center justify-center disc-spin" id="disc" style="background:radial-gradient(circle at 35% 35%, var(--rose-soft), var(--wine))">
+    <div class="w-2 h-2 rounded-full bg-white/80"></div>
+  </div>
+  <span class="text-xs font-medium pl-1" style="color:var(--wine-deep)" id="song-label">لحن بطتي</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- القسم الأول: المقدمة السينمائية والعداد                      -->
+<!-- ============================================================ -->
+<section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 py-24 relative">
+  <div class="max-w-3xl mx-auto reveal visible">
+    <p class="tracking-[0.35em] text-xs md:text-sm mb-6 font-medium" style="color:var(--rose)">إلى صاحبة القلب الذي أعرفه أكثر من قلبي، يا بطتي</p>
+    <h1 class="font-display text-4xl md:text-6xl leading-[1.4] mb-8" style="color:var(--wine)">
+      لو خيّروني بين كل قلوب الدنيا يا بطتي،<br class="hidden md:block"> لاخترتُ قلبكِ في كل مرة
+    </h1>
+    <p class="text-base md:text-lg leading-loose max-w-xl mx-auto mb-14" style="color:var(--ink)">
+      أعلم أنني أخطأت في حقّكِ يا بطتي، وأعلم أن الكلمات وحدها لا تكفي لترميم ما تصدّع.
+      لكنني هنا، بكل ما تبقّى فيّ من صدق، أطرق باب قلبكِ من جديد، لأقول: أنا آسف، وأنتِ الأهمّ يا بطتي.
+    </p>
+
+    <!--
+      تعليق برمجي هام: لتعديل تاريخ بداية علاقتكما، غيّر القيمة أدناه
+      بصيغة "YYYY-MM-DDTHH:MM:SS" (سنة-شهر-يوم T ساعة:دقيقة:ثانية)
+      مثال: إذا بدأت العلاقة في 14 فبراير 2021 الساعة 8 مساءً:
+      const relationshipStart = new Date("2010-01-01T00:00:00");
+    -->
+    <div class="glass counter-box rounded-3xl px-6 py-8 md:px-12 md:py-10 inline-block mx-auto">
+      <p class="text-xs md:text-sm mb-5 tracking-widest" style="color:var(--wine)">منذ أن أصبح قلبانا واحداً، يا بطتي</p>
+      <div class="grid grid-cols-4 gap-4 md:gap-8">
+        <div class="flex flex-col items-center">
+          <span id="days" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
+          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">يوماً</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span id="hours" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
+          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">ساعة</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span id="minutes" class="counter-digit text-3xl md:text-5xl" style="color:var(--wine-deep)">0</span>
+          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">دقيقة</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span id="seconds" class="counter-digit text-3xl md:text-5xl" style="color:var(--rose)">0</span>
+          <span class="text-[10px] md:text-xs mt-2" style="color:var(--ink)">ثانية</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 animate-bounce">
+      <i data-lucide="chevron-down" class="w-7 h-7 mx-auto" style="color:var(--wine)"></i>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- القسم الثاني: خزنة الذكريات ثلاثية الأبعاد                    -->
+<!-- ============================================================ -->
+<section id="memories" class="py-24 px-6 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="tracking-[0.35em] text-xs md:text-sm mb-4 font-medium" style="color:var(--rose)">خزنة لا يفتحها إلا نحن، يا بطتي</p>
+      <h2 class="font-display text-3xl md:text-5xl" style="color:var(--wine)">محطات كتبناها معاً</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- كارت ذكرى 1 -->
+      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5">
+        <div class="memory-card-inner">
+          <!-- لتعديل الصورة: استبدل رابط الـ src بصورتكما الحقيقية -->
+          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&q=80"
+                 alt="أول لقاء" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">اللحظة الأولى</h3>
+          <p class="text-sm leading-relaxed" style="color:var(--ink)">
+            أتذكر أول مرة التقت فيها عيوننا يا بطتي، كيف توقف الزمن لثانية، وكيف شعرتُ أن قصة جميلة توشك أن تبدأ.
+          </p>
+        </div>
+      </div>
+
+      <!-- كارت ذكرى 2 -->
+      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5" style="transition-delay:.1s">
+        <div class="memory-card-inner">
+          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
+            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&q=80"
+                 alt="ضحكة مشتركة" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">ضحكتنا الطويلة</h3>
+          <p class="text-sm leading-relaxed" style="color:var(--ink)">
+            تلك الليلة التي ضحكنا فيها حتى دمعت أعيننا، ونسينا العالم كله. كانت من أجمل أوقات حياتي معكِ يا بطتي.
+          </p>
+        </div>
+      </div>
+
+      <!-- كارت ذكرى 3 -->
+      <div class="memory-card reveal rounded-3xl overflow-hidden glass p-5" style="transition-delay:.2s">
+        <div class="memory-card-inner">
+          <div class="memory-image-wrap rounded-2xl overflow-hidden mb-5 aspect-[4/5]">
+            <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=600&q=80"
+                 alt="وعد" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <h3 class="font-display text-xl mb-2" style="color:var(--wine-deep)">الوعد الصامت</h3>
+          <p class="text-sm leading-relaxed" style="color:var(--ink)">
+            يوم نظرنا لبعض بلا كلام يا بطتي، وفهمنا أن هذه العلاقة تستحق أن نحاربَ من أجلها، مهما بدرت منّا الأخطاء.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- القسم الثالث: المظاريف التفاعلية                              -->
+<!-- ============================================================ -->
+<section id="letters" class="py-24 px-6 relative" style="background:linear-gradient(180deg, transparent, rgba(92,6,24,0.04), transparent)">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-20 reveal">
+      <p class="tracking-[0.35em] text-xs md:text-sm mb-4 font-medium" style="color:var(--rose)">رسائل لم أجرؤ على قولها بصوت عالٍ، يا بطتي</p>
+      <h2 class="font-display text-3xl md:text-5xl" style="color:var(--wine)">افتحي المظاريف بقلبكِ</h2>
+      <p class="text-sm mt-4" style="color:var(--ink)">اضغطي على أي مظروف لتقرئي ما بداخله</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-10">
+
+      <!-- مظروف 1 -->
+      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px;">
+        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
+        <div class="absolute inset-0 rounded-lg overflow-visible">
+          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
+          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
+        </div>
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
+          <i data-lucide="heart" class="w-4 h-4 text-white"></i>
+        </div>
+        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
+          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">اعتراف بالخطأ</h4>
+          <p class="text-xs leading-loose" style="color:var(--ink)">
+            كنتُ أنانياً حين أهملتُ شعوركِ يا بطتي، وكنتُ غافلاً حين ظننتُ أن حبّكِ سيبقى صامداً مهما قصّرت.
+            اليوم أعترف أمامكِ بصدق: أخطأتُ، وأنتِ تستحقين اعتذاراً من القلب لا من اللسان فقط.
+          </p>
+        </div>
+      </div>
+
+      <!-- مظروف 2 -->
+      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px; transition-delay:.1s">
+        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
+        <div class="absolute inset-0 rounded-lg overflow-visible">
+          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
+          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
+        </div>
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
+          <i data-lucide="mail" class="w-4 h-4 text-white"></i>
+        </div>
+        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
+          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">عهد صادق</h4>
+          <p class="text-xs leading-loose" style="color:var(--ink)">
+            أعاهدكِ يا بطتي أن أكون أكثر حضوراً، أكثر إنصاتاً، وأكثر رفقاً بمشاعركِ.
+            أعاهدكِ أن يدي التي جرحتكِ يوماً، ستكون من الآن سنداً لكِ لا وجعاً.
+          </p>
+        </div>
+      </div>
+
+      <!-- مظروف 3 -->
+      <div class="envelope reveal relative mx-auto" data-envelope style="width:260px; height:180px; perspective:1200px; transition-delay:.2s">
+        <div class="absolute inset-0 rounded-lg" style="background:var(--wine); box-shadow:0 20px 40px rgba(92,6,24,.3)"></div>
+        <div class="absolute inset-0 rounded-lg overflow-visible">
+          <div class="envelope-flap absolute top-0 left-0 w-full h-1/2" style="background:linear-gradient(135deg, var(--wine-deep), var(--wine)); clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:3;"></div>
+          <div class="absolute bottom-0 left-0 w-full h-2/3" style="background:var(--wine-deep); clip-path:polygon(0 100%, 100% 100%, 100% 20%, 50% 55%, 0 20%); z-index:2;"></div>
+        </div>
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full flex items-center justify-center z-10" style="background:var(--rose); box-shadow:0 4px 12px rgba(0,0,0,.25)">
+          <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+        </div>
+        <div class="envelope-letter absolute left-1/2 -translate-x-1/2 top-full w-[280px] glass rounded-2xl p-6 text-right" style="z-index:1;">
+          <h4 class="font-display text-lg mb-3" style="color:var(--wine-deep)">أمنية المستقبل</h4>
+          <p class="text-xs leading-loose" style="color:var(--ink)">
+            أريد أن أكتب معكِ فصولاً كثيرة أخرى يا بطتي، أن نهرم معاً ونحن ما زلنا نضحك كما في أول يوم.
+            أنتِ لستِ فصلاً في حياتي، بل أنتِ القصة كلها.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- القسم الرابع: القرار النهائي                                  -->
+<!-- ============================================================ -->
+<section id="decision" class="min-h-screen flex items-center justify-center px-6 py-24 relative overflow-hidden">
+  <div id="decision-box" class="glass-dark rounded-[2.5rem] px-8 py-16 md:px-20 md:py-20 text-center max-w-2xl mx-auto reveal relative" style="min-height:420px;">
+
+    <div id="question-content">
+      <i data-lucide="heart-crack" class="w-10 h-10 mx-auto mb-6" style="color:var(--rose)"></i>
+      <h2 class="font-display text-2xl md:text-4xl mb-6 text-white leading-relaxed">
+        هل تمنحينني فرصة أخرى يا بطتي<br> لأثبت لكِ أنكِ الاختيار الصحيح؟
+      </h2>
+      <p class="text-white/80 text-sm md:text-base mb-14 leading-loose">
+        لا أطلب منكِ نسيان الجرح، بل أطلب فرصة كي أُثبت أن قلبي ما زال بيتكِ الآمن.
+      </p>
+
+      <div class="relative flex flex-col md:flex-row items-center justify-center gap-6" style="min-height:120px;">
+        <button id="yes-btn" class="btn-shine px-10 py-4 rounded-full font-bold text-lg text-white shadow-2xl transition-transform hover:scale-105 active:scale-95" style="background:linear-gradient(135deg, var(--rose), #e0405b);">
+          نعم، سامحتك ❤
+        </button>
+        <button id="no-btn" class="px-10 py-4 rounded-full font-bold text-lg" style="background:rgba(255,255,255,0.12); color:white; border:1px solid rgba(255,255,255,.3);">
+          لا
+        </button>
+      </div>
+    </div>
+
+    <div id="celebration-message" class="hidden">
+      <i data-lucide="party-popper" class="w-12 h-12 mx-auto mb-6" style="color:var(--gold)"></i>
+      <h2 class="font-display text-3xl md:text-5xl mb-6 text-white">قلبانا معاً من جديد</h2>
+      <p class="text-white/90 text-base md:text-lg leading-loose max-w-md mx-auto">
+        شكراً لأنكِ منحتِني فرصة أخرى يا بطتي. أعدكِ أن أكون عند حسن ظنّكِ، وأن أجعل من كل يوم قادم فصلاً أجمل من سابقه.
+        أحبكِ، اليوم وغداً وكل الأيام.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="text-center py-10 text-xs relative z-10" style="color:var(--wine)">
+  صُنع بحب لا ينتهي، من قلبٍ يعرف طريقه إليكِ دائماً يا بطتي 🤍
+</footer>
+
+<script>
+/* ============================================================ */
+/*  1) خلفية البوكيه المتحركة (جزيئات ضوء / قلوب ضبابية)          */
+/* ============================================================ */
+(function bokehBackground(){
+  const canvas = document.getElementById('bokeh-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const colors = ['rgba(255,77,109,0.25)', 'rgba(255,179,193,0.22)', 'rgba(92,6,24,0.12)', 'rgba(217,164,65,0.15)'];
+
+  function createParticles(){
+    const count = Math.min(28, Math.floor((w*h)/45000));
+    particles = [];
+    for(let i=0;i<count;i++){
+      particles.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: 30 + Math.random()*90,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        speedX: (Math.random()-0.5)*0.15,
+        speedY: (Math.random()-0.5)*0.15,
+        pulse: Math.random()*Math.PI*2
+      });
+    }
+  }
+  createParticles();
+  window.addEventListener('resize', createParticles);
+
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.pulse += 0.01;
+
+      if(p.x < -p.r) p.x = w + p.r;
+      if(p.x > w + p.r) p.x = -p.r;
+      if(p.y < -p.r) p.y = h + p.r;
+      if(p.y > h + p.r) p.y = -p.r;
+
+      const currentR = p.r + Math.sin(p.pulse)*8;
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentR);
+      grad.addColorStop(0, p.color);
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, currentR, 0, Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ============================================================ */
+/*  2) العداد الزمني الدقيق                                       */
+/* ============================================================ */
+/*
+  تعليق للتعديل: غيّر تاريخ بداية العلاقة هنا (نفس التاريخ الظاهر في القسم الأول)
+*/
+const relationshipStart = new Date("2010-01-01T00:00:00");
+
+function updateCounter(){
+  const now = new Date();
+  let diff = now - relationshipStart;
+  if(diff < 0) diff = 0;
+
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById('days').textContent = days.toLocaleString('ar-EG');
+  document.getElementById('hours').textContent = hours.toString().padStart(2,'0');
+  document.getElementById('minutes').textContent = minutes.toString().padStart(2,'0');
+  document.getElementById('seconds').textContent = seconds.toString().padStart(2,'0');
+}
+updateCounter();
+setInterval(updateCounter, 1000);
+
+/* ============================================================ */
+/*  3) ظهور تدريجي عند التمرير                                    */
+/* ============================================================ */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold:0.15});
+revealEls.forEach(el=>io.observe(el));
+
+/* ============================================================ */
+/*  4) تأثير الميلان ثلاثي الأبعاد على كروت الذكريات               */
+/* ============================================================ */
+document.querySelectorAll('.memory-card').forEach(card=>{
+  card.addEventListener('mousemove', (e)=>{
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width/2;
+    const centerY = rect.height/2;
+    const rotateX = ((y - centerY)/centerY) * -8;
+    const rotateY = ((x - centerX)/centerX) * 8;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1.02)`;
+  });
+  card.addEventListener('mouseleave', ()=>{
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+  });
+});
+
+/* ============================================================ */
+/*  5) المظاريف التفاعلية                                         */
+/* ============================================================ */
+document.querySelectorAll('[data-envelope]').forEach(env=>{
+  env.addEventListener('click', ()=>{
+    env.classList.toggle('opened');
+  });
+});
+
+/* ============================================================ */
+/*  6) خوارزمية هروب زر "لا" الذكية                                */
+/* ============================================================ */
+(function evasiveButton(){
+  const noBtn = document.getElementById('no-btn');
+  const box = document.getElementById('decision-box');
+  let lastMouseX = null, lastMouseY = null, escapeCount = 0;
+
+  function moveButtonAwayFrom(cursorX, cursorY){
+    const boxRect = box.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const padding = 20;
+    const maxX = boxRect.width - btnRect.width - padding;
+    const maxY = boxRect.height - btnRect.height - padding;
+
+    let newX, newY, attempts = 0;
+    do{
+      newX = padding + Math.random() * Math.max(0, maxX - padding);
+      newY = padding + Math.random() * Math.max(0, maxY - padding);
+      attempts++;
+    } while(
+      attempts < 8 &&
+      cursorX !== null &&
+      Math.hypot((newX + btnRect.width/2) - (cursorX - boxRect.left), (newY + btnRect.height/2) - (cursorY - boxRect.top)) < 140
+    );
+
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = newX + 'px';
+    noBtn.style.top = newY + 'px';
+    noBtn.style.transform = `scale(0.92) rotate(${(Math.random()*20-10).toFixed(1)}deg)`;
+    setTimeout(()=>{ noBtn.style.transform = 'scale(1) rotate(0deg)'; }, 200);
+  }
+
+  function proximityCheck(e){
+    const btnRect = noBtn.getBoundingClientRect();
+    const btnCenterX = btnRect.left + btnRect.width/2;
+    const btnCenterY = btnRect.top + btnRect.height/2;
+    const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+
+    if(dist < 110){
+      moveButtonAwayFrom(e.clientX, e.clientY);
+      escapeCount++;
+      if(escapeCount === 4){
+        noBtn.textContent = 'حاولي مرة أخرى 😅';
+      } else if(escapeCount === 8){
+        noBtn.textContent = 'مستحيل تمسكيني 🏃‍♂️';
+      } else if(escapeCount >= 12){
+        noBtn.textContent = 'قلبي مغلق أمام كلمة لا 🔒';
+      }
+    }
+  }
+
+  document.addEventListener('mousemove', proximityCheck);
+  noBtn.addEventListener('mouseenter', (e)=>{ moveButtonAwayFrom(e.clientX, e.clientY); });
+  noBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    moveButtonAwayFrom(e.clientX, e.clientY);
+  });
+  noBtn.addEventListener('touchstart', (e)=>{
+    e.preventDefault();
+    const t = e.touches[0];
+    moveButtonAwayFrom(t.clientX, t.clientY);
+  }, {passive:false});
+})();
+
+/* ============================================================ */
+/*  7) الاحتفال عند الضغط على "نعم"                                */
+/* ============================================================ */
+const yesBtn = document.getElementById('yes-btn');
+const questionContent = document.getElementById('question-content');
+const celebrationMessage = document.getElementById('celebration-message');
+const celebrationCanvas = document.getElementById('celebration-canvas');
+const cctx = celebrationCanvas.getContext('2d');
+
+function resizeCelebration(){
+  celebrationCanvas.width = window.innerWidth;
+  celebrationCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCelebration);
+resizeCelebration();
+
+yesBtn.addEventListener('click', ()=>{
+  questionContent.style.transition = 'opacity .4s ease';
+  questionContent.style.opacity = '0';
+  setTimeout(()=>{
+    questionContent.classList.add('hidden');
+    celebrationMessage.classList.remove('hidden');
+    celebrationMessage.style.opacity = '0';
+    requestAnimationFrame(()=>{
+      celebrationMessage.style.transition = 'opacity .8s ease';
+      celebrationMessage.style.opacity = '1';
+    });
+  }, 400);
+
+  launchCelebration();
+});
+
+function launchCelebration(){
+  celebrationCanvas.style.display = 'block';
+  const shapes = [];
+  const emojis = ['❤️','💖','🌹','✨','💕'];
+  const count = 140;
+
+  for(let i=0;i<count;i++){
+    shapes.push({
+      x: Math.random()*celebrationCanvas.width,
+      y: -20 - Math.random()*celebrationCanvas.height*0.5,
+      size: 16 + Math.random()*22,
+      speedY: 2 + Math.random()*3.5,
+      speedX: (Math.random()-0.5)*2,
+      rotation: Math.random()*360,
+      rotSpeed: (Math.random()-0.5)*6,
+      emoji: emojis[Math.floor(Math.random()*emojis.length)],
+      opacity: 1
+    });
+  }
+
+  let frame = 0;
+  const totalFrames = 480;
+
+  function animateCelebration(){
+    cctx.clearRect(0,0,celebrationCanvas.width, celebrationCanvas.height);
+    frame++;
+
+    shapes.forEach(s=>{
+      s.y += s.speedY;
+      s.x += s.speedX;
+      s.rotation += s.rotSpeed;
+
+      if(frame > totalFrames - 90){
+        s.opacity = Math.max(0, s.opacity - 0.02);
+      }
+
+      cctx.save();
+      cctx.globalAlpha = s.opacity;
+      cctx.translate(s.x, s.y);
+      cctx.rotate(s.rotation * Math.PI/180);
+      cctx.font = s.size + 'px serif';
+      cctx.textAlign = 'center';
+      cctx.textBaseline = 'middle';
+      cctx.fillText(s.emoji, 0, 0);
+      cctx.restore();
+
+      if(s.y > celebrationCanvas.height + 40){
+        s.y = -20;
+        s.x = Math.random()*celebrationCanvas.width;
+      }
+    });
+
+    if(frame < totalFrames){
+      requestAnimationFrame(animateCelebration);
+    } else {
+      celebrationCanvas.style.display = 'none';
+      cctx.clearRect(0,0,celebrationCanvas.width, celebrationCanvas.height);
+    }
+  }
+  animateCelebration();
+}
+
+/* ============================================================ */
+/*  8) مشغل الموسيقى العائم                                       */
+/* ============================================================ */
+(function audioPlayer(){
+  const audio = document.getElementById('bg-audio');
+  const toggleBtn = document.getElementById('play-toggle');
+  const playIcon = document.getElementById('play-icon');
+  const disc = document.getElementById('disc');
+  let isPlaying = false;
+
+  toggleBtn.addEventListener('click', ()=>{
+    if(!isPlaying){
+      audio.play().catch(()=>{
+        console.log('تعذر تشغيل الصوت تلقائياً، تأكد من وجود ملف song.mp3 بجانب index.html');
+      });
+      isPlaying = true;
+      disc.classList.add('playing');
+      playIcon.setAttribute('data-lucide', 'pause');
+    } else {
+      audio.pause();
+      isPlaying = false;
+      disc.classList.remove('playing');
+      playIcon.setAttribute('data-lucide', 'play');
+    }
+    lucide.createIcons();
+  });
+})();
+
+/* تهيئة أيقونات Lucide */
+lucide.createIcons();
+</script>
+</body>
+</html>

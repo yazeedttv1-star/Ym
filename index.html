@@ -358,7 +358,7 @@
                 خدي هنا راحة فين لسا في سؤال واحد فقط.. <br>
                  اضغطي على الزرار الي بيتنطط تحت ده الي لونه بمبي ده ااايوا هو ده 👇👀
             </p>
-            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer;">ماشي</button>
+            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer;">(ماشي)قبل ما تدوسي ي بطه اقري الرسايل</button>
         </div>
     </div>
 
@@ -529,7 +529,7 @@
                                 // فتح النافذة المنبثقة التفاعلية للسؤال عند الضغط عليه
                                 loveBtn.addEventListener("click", () => {
                                     gameResponse.innerText = "";
-                                    gameTitle.innerText = "مين فينا بيحب التاني اكتر؟ 🤔";
+                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ 🤔";
                                     btnLoveYou.disabled = true;
                                     btnLoveMe.disabled = false;
                                     gameModal.classList.remove("hidden");
@@ -540,11 +540,11 @@
                                 // ظهور الرسالة الكوميدية التنبيهية تلقائياً بعد ظهور الزر الأخير بثوانٍ بسيطة
                                 setTimeout(() => {
                                     comedyNoticeModal.classList.remove("hidden");
-                                }, 600);
+                                }, 2000);
 
-                            }, 1000);
+                            }, 2000);
                         }
-                    }, index * 2200); 
+                    }, index * 2300); 
                 });
             }
 

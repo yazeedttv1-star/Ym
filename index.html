@@ -300,7 +300,7 @@
         <div class="main-container">
             <div class="duck-frame">🐥💙</div>
             <h1 class="big-title">أنا آسف يا بطتي..</h1>
-            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتيش في وقتها، وزعلك غالي عليا ومقدرش عليه. البيت من غيرك  ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
+            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك  ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
             
             <div class="buttons-group">
                 <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول بس😉 </button>
@@ -369,8 +369,8 @@
             <p id="game-response" style="color: #555; font-size: 16px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
             
             <div class="game-btn-container">
-                <button id="btn-love-me" class="game-btn">أنا 🙋‍♀️</button>
-                <button id="btn-love-you" class="game-btn" disabled>إنت 🙋‍♂️</button>
+                <button id="btn-love-me" class="game-btn"> لا أنا 🙋‍♀️</button>
+                <button id="btn-love-you" class="game-btn" disabled> خلاص إنت 🙋‍♂️</button>
             </div>
         </div>
     </div>
@@ -378,7 +378,7 @@
     <div id="final-success-modal" class="modal hidden">
         <div class="modal-content" style="border-top: 8px solid #4caf50; max-width: 400px;">
             <span class="close-btn" id="close-success-btn">&times;</span>
-            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙✨</div>
+            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙</div>
             <h2 style="color: #2b7bb9; margin-bottom: 15px;">صافي يا لبن!</h2>
             <p style="font-size: 17px; color: #333; line-height: 1.6; font-weight: bold;">
                 😉خلاص صافي يا لبن وحليب يا قشطة! <br>
@@ -492,7 +492,7 @@
                         width += 5;
                         envelopeProgressFill.style.width = width + "%";
                     }
-                }, 80);
+                }, 90);
             });
 
             function showSuccessiveLetters() {
@@ -529,7 +529,7 @@
                                 // فتح النافذة المنبثقة التفاعلية للسؤال عند الضغط عليه
                                 loveBtn.addEventListener("click", () => {
                                     gameResponse.innerText = "";
-                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ 🤔";
+                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ اكيد انا طبعا 🤔";
                                     btnLoveYou.disabled = true;
                                     btnLoveMe.disabled = false;
                                     gameModal.classList.remove("hidden");

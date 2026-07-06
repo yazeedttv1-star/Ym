@@ -6,6 +6,9 @@
     <title>أنا آسف يا بطتي 💙</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         /* --- التنسيقات العامة --- */
         * {
@@ -103,14 +106,14 @@
             width: 0%;
             height: 100%;
             background-color: #8ed8ff;
-            animation: fillProgress 5.5s forwards ease-in-out; /* تم إبطاء التحميل الرئيسي إلى 5.5 ثانية */
+            animation: fillProgress 2.5s forwards ease-in-out;
         }
 
         .fade-in-text {
             font-size: 20px;
             margin-top: 15px;
             opacity: 0;
-            animation: fadeIn 1s 1.5s forwards;
+            animation: fadeIn 1s 0.8s forwards;
             line-height: 1.5;
         }
 
@@ -259,11 +262,7 @@
             width: 0%;
             height: 100%;
             background-color: #2b7bb9;
-        }
-        
-        /* تأثير الحركة للتحميل الأول المبطأ جداً */
-        .slow-fill {
-            animation: fillProgress 5s forwards ease-in-out; /* تم تعديله إلى 5 ثوانٍ كاملة */
+            animation: fillProgress 1.5s forwards ease-in-out;
         }
 
         /* أزرار الأسئلة التفاعلية */
@@ -303,13 +302,20 @@
             padding: 30px 15px;
         }
 
-        /* الحركات الأنيميشن */
+        /* التحكم الفوري الخارجي (شاشة تنبيه عاجلة تقلب باللون الأحمر) */
+        #remote-alert-screen {
+            background-color: #b71c1c;
+            color: white;
+            z-index: 100;
+            flex-direction: column;
+            text-align: center;
+        }
+
         @keyframes bounce { to { transform: translateY(-15px); } }
         @keyframes float { to { transform: translateY(-8px) rotate(3deg); } }
         @keyframes fadeIn { to { opacity: 1; } }
         @keyframes fillProgress { to { width: 100%; } }
 
-        /* الشاشات الصغيرة جداً والهواتف المحمولة */
         @media (max-width: 480px) {
             .days-counter-box {
                 position: absolute;
@@ -319,23 +325,22 @@
                 width: 85%;
                 padding: 10px;
             }
-            #main-screen {
-                padding-top: 140px;
-            }
-            .big-title {
-                font-size: 24px;
-            }
-            .sub-title {
-                font-size: 15px;
-            }
-            .btn {
-                width: 100%;
-                padding: 12px 15px;
-            }
+            #main-screen { padding-top: 140px; }
+            .big-title { font-size: 24px; }
+            .sub-title { font-size: 15px; }
+            .btn { width: 100%; padding: 12px 15px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="remote-alert-screen" class="screen hidden">
+        <div style="max-width: 500px; padding: 20px; background: rgba(0,0,0,0.4); border-radius: 15px;">
+            <div style="font-size: 60px; margin-bottom: 15px;">📢</div>
+            <h1 id="remote-title" style="font-size: 26px; margin-bottom: 10px;">رسالة عاجلة</h1>
+            <p id="remote-text" style="font-size: 17px; line-height: 1.6;"></p>
+        </div>
+    </div>
 
     <div id="loader-screen" class="screen">
         <div class="loader-content">
@@ -353,8 +358,8 @@
 
         <div class="main-container">
             <div class="duck-frame">🐥💙</div>
-            <h1 class="big-title">أنا آسف يا بطتي..</h1>
-            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
+            <h1 class="big-title" id="main-big-title">أنا آسف يا بطتي..</h1>
+            <p class="sub-title" id="main-sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
             
             <div class="buttons-group">
                 <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول بس😉 </button>
@@ -369,7 +374,7 @@
             <div id="modal-loading-zone" class="modal-loader">
                 <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">⏳</div>
                 <p style="color: #555; margin-top: 10px;">شطورة ي بطه🫦 جاري فتح الرسالة يا بطتي...</p>
-                <div class="small-progress"><div class="small-progress-fill slow-fill"></div></div>
+                <div class="small-progress"><div class="small-progress-fill"></div></div>
             </div>
 
             <div id="modal-text-zone" class="hidden">
@@ -388,13 +393,13 @@
         <div id="envelope" style="background:#fff; color:#333; padding:35px 20px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:100%; max-width:380px; position: relative; margin-bottom: 15px;">
             
             <div id="envelope-loading" class="modal-loader" style="display: none;">
-                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">🫦🫦</div>
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">✉️</div>
                 <p style="color: #555; margin-top: 11px;">جاري تحضير الكلمات احمم احمم🙃🙃...</p>
                 <div class="small-progress"><div class="small-progress-fill" id="envelope-progress-fill" style="animation: none; width: 0%;"></div></div>
             </div>
 
             <div id="envelope-ready">
-                <div style="font-size:50px; animation: bounce 1s infinite alternate;">🫦🫦</div>
+                <div style="font-size:50px; animation: bounce 1s infinite alternate;">🫦</div>
                 <p style="font-weight:bold; margin-top:15px; font-size: 17px; color: #555;">خاص لـ بطتي 🫦🐥</p>
                 <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 30px; border-radius:25px; margin-top:20px; font-size:15px; font-weight:bold; cursor:pointer; width: 100%;">افتحي الرسالة ي عسل</button>
             </div>
@@ -443,6 +448,22 @@
     </div>
 
     <script>
+        // ربط معلومات الفايربيس الحقيقية الخاصة بمشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyB5jFiYrMnH_tvaJAq5QmATI43Pu3F0Yaw",
+            authDomain: "my-project-f00cd.firebaseapp.com",
+            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com",
+            projectId: "my-project-f00cd",
+            storageBucket: "my-project-f00cd.firebasestorage.app",
+            messagingSenderId: "346249386295",
+            appId: "1:346249386295:web:5652b6b2309b795c89a2b2",
+            measurementId: "G-0XL21X43PR"
+        };
+        
+        // تشغيل الفايربيس
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         document.addEventListener("DOMContentLoaded", () => {
             const loaderScreen = document.getElementById("loader-screen");
             const mainScreen = document.getElementById("main-screen");
@@ -477,7 +498,30 @@
             const finalSuccessModal = document.getElementById("final-success-modal");
             const closeSuccessBtn = document.getElementById("close-success-btn");
 
-            // --- 1. حساب العداد المباشر من تاريخ 1/1/2026 ---
+            // --- مستقبل التحكم الفوري المباشر لايف ---
+            database.ref('remoteControl').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    // وضع التنبيه العاجل (الشاشة الحمراء)
+                    if (data.showAlert === true) {
+                        document.getElementById("remote-title").innerText = data.alertTitle || "تنبيه عاجل";
+                        document.getElementById("remote-text").innerText = data.alertText || "";
+                        document.getElementById("remote-alert-screen").classList.remove("hidden");
+                    } else {
+                        document.getElementById("remote-alert-screen").classList.add("hidden");
+                    }
+
+                    // تغيير العناوين الرئيسية فورياً
+                    if (data.changeTitle) {
+                        document.getElementById("main-big-title").innerText = data.changeTitle;
+                    }
+                    if (data.changeSubTitle) {
+                        document.getElementById("main-sub-title").innerText = data.changeSubTitle;
+                    }
+                }
+            });
+
+            // --- حساب العداد المباشر من تاريخ 1/1/2026 ---
             const startDate = new Date("2026-01-01T00:00:00").getTime();
             
             function updateLiveCounter() {
@@ -498,12 +542,12 @@
             setInterval(updateLiveCounter, 1000);
             updateLiveCounter();
 
-            // --- 2. الانتقال من شاشة التحميل الأولى للشاشة الرئيسية (تم تأخير الإغلاق إلى 5.5 ثانية) ---
+            // --- الانتقال من شاشة التحميل الأولى للشاشة الرئيسية ---
             setTimeout(() => {
                 loaderScreen.classList.add("hidden");
                 mainScreen.classList.remove("hidden");
                 triggerCelebration(2);
-            }, 5500); // 5500 مللي ثانية = 5.5 ثانية
+            }, 2600); 
 
             function triggerCelebration(secondsDuration) {
                 var end = Date.now() + (secondsDuration * 1000);
@@ -514,7 +558,7 @@
                 }());
             }
 
-            // --- 3. فتح النافذة المنبثقة الأولى (تم تأخير تحميلها إلى 5 ثوانٍ كاملة) ---
+            // --- فتح النافذة المنبثقة الأولى ---
             btnPopup.addEventListener("click", () => {
                 modalLoadingZone.style.display = "flex";
                 modalTextZone.classList.add("hidden");
@@ -523,18 +567,17 @@
                 setTimeout(() => {
                     modalLoadingZone.style.display = "none";
                     modalTextZone.classList.remove("hidden");
-                }, 5000); // 5000 مللي ثانية = 5 ثوانٍ كاملة
+                }, 1600); 
             });
 
             closeMessageBtn.addEventListener("click", () => { modal.classList.add("hidden"); });
 
-            // --- 4. الدخول إلى شاشة المغلف والرسائل المتتالية ---
+            // --- الدخول إلى شاشة المغلف والرسائل المتتالية ---
             btnNext.addEventListener("click", () => {
                 mainScreen.classList.add("hidden");
                 loveLetterScreen.classList.remove("hidden");
             });
 
-            // تم إبطاء شريط تحميل المغلف ليعمل تدريجياً ويأخذ حوالي 4.5 ثانية
             openEnvelopeBtn.addEventListener("click", () => {
                 envelopeReady.style.display = "none";
                 envelopeLoading.style.display = "flex";
@@ -546,10 +589,10 @@
                         envelopeBox.style.display = "none";
                         showSuccessiveLetters();
                     } else {
-                        width += 2; // تم تقليل القيمة المضافة لزيادة مدة التحليل والانتظار
+                        width += 5; 
                         envelopeProgressFill.style.width = width + "%";
                     }
-                }, 90); // 90 * 50 خطوة = 4500 مللي ثانية (4.5 ثانية)
+                }, 90); 
             });
 
             function showSuccessiveLetters() {
@@ -576,7 +619,6 @@
                             confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#64b5f6', '#8ed8ff'] });
                         }, 50);
 
-                        // عند الوصول للرسالة الأخيرة يظهر زر اللعبة التفاعلية + إطلاق التنبيه الكوميدي التلقائي
                         if (index === messages.length - 1) {
                             setTimeout(() => {
                                 const loveBtn = document.createElement("button");
@@ -606,7 +648,7 @@
             btnComedyOk.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
             closeComedyBtn.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
 
-            // --- 5. منطق اللعبة التفاعلية ---
+            // --- منطق اللعبة التفاعلية ---
             btnLoveMe.addEventListener("click", () => {
                 gameResponse.style.color = "red";
                 gameResponse.innerText = "اده كمان بتناقشيني؟ انا كنت عارف والمشكله كمان بطلع عارف 🤨";
@@ -627,17 +669,15 @@
                 setTimeout(() => { confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } }); }, 200);
                 setTimeout(() => { confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } }); }, 400);
 
-                // تظهر نافذة النجاح متأخرة بعد 5 ثوانٍ كاملة ولا تغلق النوافذ تلقائياً
                 setTimeout(() => {
                     gameModal.classList.add("hidden");
                     finalSuccessModal.classList.remove("hidden");
-                }, 5000); 
+                }, 2000); 
             });
 
             closeGameBtn.addEventListener("click", () => { gameModal.classList.add("hidden"); });
             closeSuccessBtn.addEventListener("click", () => { finalSuccessModal.classList.add("hidden"); });
 
-            // --- 6. زر الرجوع للخلف ---
             btnBackToMain.addEventListener("click", () => {
                 loveLetterScreen.classList.add("hidden");
                 mainScreen.classList.remove("hidden");

@@ -24,7 +24,34 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Aref Ruqaa', serif; /* تطبيق خط الرقعة على كامل الصفحة */
+        }
+
+        /* شاشة الوسط الرئيسية التوضيحية */
+        .center-container {
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        .center-container .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        /* الاسم والجملة في منتصف الشاشة بخط كبير */
+        .main-title {
+            font-size: 42px;
+            color: #f1c40f; /* لون ذهبي مميز للاسم */
+            text-shadow: 2px 2px 10px rgba(241, 196, 15, 0.3);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            color: #aaa;
+            font-size: 22px;
         }
 
         /* حاوية شريط الأخبار السفلي التلفزيوني */
@@ -39,10 +66,10 @@
             display: flex;
             align-items: center;
             height: 65px;
-            border-top: 3px solid #f1c40f; /* خط ذهبي فوق الشريط لمظهر احترافي */
+            border-top: 3px solid #f1c40f;
         }
 
-        /* كلمة عاجل أو تنبيه الثابتة في الجانب */
+        /* كلمة عاجل الثابتة في الجانب */
         .ticker-title {
             background-color: #f1c40f;
             color: #111;
@@ -51,7 +78,7 @@
             display: flex;
             align-items: center;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
             z-index: 5;
             box-shadow: 5px 0 10px rgba(0,0,0,0.3);
         }
@@ -68,15 +95,14 @@
         /* حركة النص المستمرة (شريط الأخبار) */
         .ticker-text {
             display: inline-block;
-            padding-right: 100%; /* يبدأ الحركة بعد انتهاء الشاشة */
-            font-family: 'Aref Ruqaa', serif; /* تطبيق خط الرقعة */
+            padding-right: 100%; 
             font-size: 26px;
             color: #ffffff;
             letter-spacing: 1px;
-            animation: marquee 18s linear infinite; /* سرعة مرور الشريط */
+            animation: marquee 18s linear infinite; /* سرعة مرور شريط الأخبار */
         }
 
-        /* تأثير الأنيميشن لتحريك الشريط من اليسار إلى اليمين (للاتجاه العربي) */
+        /* تأثير الأنيميشن لتحريك شريط الأخبار تلفزيونياً */
         @keyframes marquee {
             0% {
                 transform: translate3d(100%, 0, 0);
@@ -86,33 +112,22 @@
             }
         }
 
-        /* شاشة الوسط التوضيحية */
-        .center-message {
-            text-align: center;
-            opacity: 0.8;
-        }
-
-        .center-message .icon {
-            font-size: 70px;
-            margin-bottom: 15px;
-            animation: pulse 2s infinite alternate;
-        }
-
         @keyframes pulse {
             from { transform: scale(1); }
-            to { transform: scale(1.1); }
+            to { transform: scale(1.08); }
         }
     </style>
 </head>
 <body>
 
-    <div class="center-message">
+    <div class="center-container">
         <div class="icon">⚙️</div>
-        <h2 style="color: #aaa; font-size: 20px;">تحديثات وتقنيات جارية...</h2>
+        <h1 class="main-title">مع تحياتي يزيد أحمد</h1>
+        <p class="sub-title">الموقع سوف يشتغل قريباً انتظروني...</p>
     </div>
 
     <div class="ticker-wrapper">
-        <div class="ticker-title">تنويه</div>
+        <div class="ticker-title">تنويه عاجل</div>
         <div class="ticker-text-container">
             <div class="ticker-text">
                 الموقع سوف يشتغل قريباً انتظروني مع تحياتي يزيد أحمد... ✨ الموقع سوف يشتغل قريباً انتظروني مع تحياتي يزيد أحمد... ✨

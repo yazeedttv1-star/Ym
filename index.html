@@ -3,202 +3,512 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي الـ X-O الاحترافي مع حفظ النتائج 🎮</title>
+    <title>إصدار ببجي موبايل 2026 الأسطوري - النسخة الخربانة المحدثة 🔥🎮</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
+        /* ==========================================
+           1. التنسيقات العامة والأساسية (Global CSS)
+           ========================================== */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
 
         body {
-            background: linear-gradient(135deg, #e6f0fa 0%, #b3daf5 100%);
-            height: 100vh;
+            background: radial-gradient(circle at center, #1e272e 0%, #0f1418 100%);
+            color: #fff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
+            padding: 20px 0;
         }
 
-        .game-container {
-            background: white;
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(43, 123, 185, 0.2);
+        /* حاوية اللعبة الرئيسية الصخرية */
+        .pubg-master-container {
+            background: #151d24;
+            border: 4px solid #f39c12;
+            border-radius: 30px;
+            width: 95%;
+            max-width: 750px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(243, 156, 18, 0.25), inset 0 0 20px rgba(0,0,0,0.6);
+            position: relative;
+            border-image: linear-gradient(to bottom, #f39c12, #d35400, #c0392b) 1;
+        }
+
+        /* رأس اللعبة (Header) */
+        .pubg-header {
             text-align: center;
-            max-width: 420px;
-            width: 92%;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed #34495e;
+            padding-bottom: 15px;
         }
 
-        h1 {
-            color: #2b7bb9;
-            margin-bottom: 5px;
-            font-size: 24px;
-        }
-
-        /* لوحة النتائج المحفوظة لايف */
-        .scoreboard {
-            display: flex;
-            justify-content: space-around;
-            background-color: #f0f7fc;
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #b3daf5;
-        }
-
-        .score-box {
-            text-align: center;
-        }
-
-        .score-box p {
-            font-size: 14px;
-            color: #555;
-            font-weight: bold;
-        }
-
-        .score-num {
-            font-size: 22px;
+        .pubg-header h1 {
+            color: #f39c12;
+            font-size: 36px;
             font-weight: 900;
-            color: #2b7bb9;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0px #000;
+            animation: titlePulse 2s infinite alternate;
         }
 
-        .score-num.o-score { color: #ff4d6d; }
-        .score-num.tie-score { color: #78909c; }
-
-        .status-text {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 15px;
+        .pubg-header .version-tag {
+            background: #e74c3c;
+            color: #fff;
+            font-size: 11px;
             font-weight: bold;
-            min-height: 27px;
-        }
-
-        /* شبكة اللعبة */
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .cell {
-            background-color: #fafdfm;
-            border: 3px solid #2b7bb9;
-            height: 85px;
-            border-radius: 15px;
-            font-size: 38px;
-            font-weight: 900;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .cell:hover {
-            background-color: #e1f0fa;
-            transform: scale(1.02);
-        }
-
-        .cell.x { color: #2b7bb9; }
-        .cell.o { color: #ff4d6d; }
-
-        .btn-reset {
-            background-color: #2b7bb9;
-            color: white;
-            border: none;
-            padding: 10px 25px;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
+            display: inline-block;
+            margin-top: 5px;
+            letter-spacing: 1px;
         }
 
-        .btn-reset:hover { background-color: #1c5380; }
+        /* ==========================================
+           2. لوحة إحصائيات الفايربيس (Live Stats)
+           ========================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
 
-        /* شاشة التنبيهات والرسائل الفورية عن بعد */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(43, 123, 185, 0.95);
-            color: white;
+        .stat-card {
+            background: #0d1216;
+            border: 2px solid #2c3e50;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: #f39c12;
+            transform: translateY(-3px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: #f39c12;
+        }
+
+        .stat-card.death::before { background: #e74c3c; }
+        .stat-card.bp::before { background: #2ecc71; }
+        .stat-card.rank::before { background: #9b59b6; }
+
+        .stat-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-counter {
+            font-size: 24px;
+            font-weight: 900;
+            color: #f1c40f;
+            text-shadow: 1px 1px #000;
+        }
+
+        .stat-counter.death-color { color: #e74c3c; }
+        .stat-counter.bp-color { color: #2ecc71; }
+        .stat-counter.rank-color { color: #9b59b6; }
+
+        /* ==========================================
+           3. شاشة العرض البصرية (Visual Sandbox)
+           ========================================== */
+        .main-display-window {
+            background: #090d10;
+            border: 2px solid #34495e;
+            border-radius: 20px;
+            padding: 25px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 10;
+            position: relative;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+            overflow: hidden;
+        }
+
+        .visual-actor {
+            font-size: 85px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .glitch-effect {
+            animation: textGlitch 0.15s infinite;
+        }
+
+        .ticker-log-box {
+            background: rgba(21, 29, 36, 0.85);
+            border-right: 4px solid #f39c12;
+            padding: 12px 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 550px;
             text-align: center;
-            padding: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #ecf0f1;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        .overlay-content {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 35px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.2);
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        /* تأثير بيئة الطيران الخلفية */
+        .sky-cloud-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
         }
 
-        .hidden { display: none !important; }
+        /* ==========================================
+           4. نظام الشات التفاعلي للسكواد (Squad Chat)
+           ========================================== */
+        .squad-chat-panel {
+            background: #11171c;
+            border: 1px solid #2c3e50;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            height: 130px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .chat-line {
+            font-size: 13px;
+            line-height: 1.4;
+            animation: chatSlideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-sender-number-1 { color: #e74c3c; font-weight: bold; }
+        .chat-sender-number-2 { color: #3498db; font-weight: bold; }
+        .chat-sender-number-3 { color: #2ecc71; font-weight: bold; }
+        .chat-sender-number-4 { color: #f1c40f; font-weight: bold; }
+
+        /* ==========================================
+           5. متجر الأسلحة والسكنات (Loot Shop)
+           ========================================== */
+        .shop-section-title {
+            color: #f1c40f;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inventory-shop-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .shop-item-card {
+            background: #18222a;
+            border: 2px solid #34495e;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .shop-item-card:hover {
+            border-color: #2ecc71;
+            background: #1c2a35;
+            transform: scale(1.03);
+        }
+
+        .shop-item-card.active-weapon {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .item-icon { font-size: 30px; margin-bottom: 5px; }
+        .item-title { font-size: 12px; font-weight: bold; color: #fff; }
+        .item-cost { font-size: 11px; color: #2ecc71; margin-top: 3px; font-weight: bold; }
+
+        /* ==========================================
+           6. لوحة التحكم بالأزرار (Action Console)
+           ========================================== */
+        .control-console-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .pubg-action-btn {
+            background: linear-gradient(to bottom, #f39c12 0%, #d35400 100%);
+            border: none;
+            color: #fff;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 0px #a04000;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            transition: all 0.1s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pubg-action-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px #000;
+        }
+
+        .pubg-action-btn.btn-blue {
+            background: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
+            box-shadow: 0 4px 0px #1a5276;
+        }
+
+        .pubg-action-btn.btn-purple {
+            background: linear-gradient(to bottom, #9b59b6 0%, #8e44ad 100%);
+            box-shadow: 0 4px 0px #5b2c6f;
+        }
+
+        .pubg-action-btn.btn-red {
+            background: linear-gradient(to bottom, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 4px 0px #7b241c;
+        }
+
+        .pubg-action-btn.btn-green {
+            background: linear-gradient(to bottom, #2ecc71 0%, #27ae60 100%);
+            box-shadow: 0 4px 0px #196f3d;
+        }
+
+        /* زر إعادة التصفير الكبير السفلي */
+        .system-footer-reset-btn {
+            background: #11171d;
+            border: 1px solid #c0392b;
+            color: #e74c3c;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .system-footer-reset-btn:hover {
+            background: #c0392b;
+            color: white;
+        }
+
+        /* ==========================================
+           7. النوافذ المنبثقة والقلتشات الفورية (Overlays)
+           ========================================== */
+        .fullscreen-glitch-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(192, 41, 43, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .glitch-container-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px double #f1c40f;
+            max-width: 500px;
+            width: 90%;
+            animation: extremeShake 0.2s infinite;
+        }
+
+        /* ==========================================
+           8. مؤثرات الحركة والأنيميشن (Animations)
+           ========================================== */
+        @keyframes titlePulse {
+            0% { transform: scale(1); text-shadow: 2px 2px 0px #000; }
+            100% { transform: scale(1.03); text-shadow: 4px 4px 10px #f39c12; }
+        }
+
+        @keyframes textGlitch {
+            0% { transform: translate(1px, 1px) skewX(0deg); opacity: 0.9; }
+            50% { transform: translate(-1px, -1px) skewX(3deg); color: #ff4d6d; opacity: 1; }
+            100% { transform: translate(2px, -1px) skewX(-3deg); color: #8ed8ff; opacity: 0.9; }
+        }
+
+        @keyframes chatSlideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes extremeShake {
+            0% { transform: translate(3px, 5px) rotate(0deg); }
+            20% { transform: translate(-3px, -5px) rotate(-2deg); }
+            40% { transform: translate(-5px, 3px) rotate(1deg); }
+            60% { transform: translate(5px, -3px) rotate(2deg); }
+            80% { transform: translate(-2px, 4px) rotate(-1deg); }
+            100% { transform: translate(4px, -2px) rotate(0deg); }
+        }
+
+        /* نمط خلايا السحاب المتحركة الفيك */
+        .fictional-cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: cloudMove 8s linear infinite;
+        }
+
+        @keyframes cloudMove {
+            from { transform: translateX(600px); }
+            to { transform: translateX(-200px); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="message-overlay" class="overlay hidden">
-        <div class="overlay-content">
-            <div style="font-size: 60px; margin-bottom: 15px; animation: bounce 0.8s infinite alternate;">💌✨</div>
-            <h1 id="overlay-title" style="color: white; font-size: 28px; margin-bottom: 15px;">تنبيه من الإدارة!</h1>
-            <p id="overlay-text" style="font-size: 18px; line-height: 1.6; font-weight: bold;"></p>
+    <div id="master-glitch-layer" class="fullscreen-glitch-layer hidden">
+        <div class="glitch-container-box">
+            <div style="font-size: 90px; margin-bottom: 15px;">👾⚠️🕹️</div>
+            <h1 id="glitch-layer-title" style="color: #fff; font-size: 34px; font-weight: 900;">خطأ فادح في خوادم ببجي!</h1>
+            <p id="glitch-layer-text" style="font-size: 20px; font-weight: bold; margin-top: 15px; color: #f1c40f; line-height: 1.6;"></p>
         </div>
     </div>
 
-    <div class="game-container">
-        <h1>تحدي الـ X-O الاحترافي 🎮</h1>
+    <div class="pubg-master-container">
         
-        <div class="scoreboard">
-            <div class="score-box">
-                <p>فوز (X)</p>
-                <div class="score-num" id="x-wins-display">0</div>
+        <div class="pubg-header">
+            <h1>PUBG MOBILE ULTRA</h1>
+            <div class="version-tag">إصدار 2026 الخربان v99.9</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">🔥 عدد الكيلات</div>
+                <div class="stat-counter" id="total-kills-display">0</div>
             </div>
-            <div class="score-box">
-                <p>التعادلات</p>
-                <div class="score-num tie-score" id="ties-display">0</div>
+            <div class="stat-card death">
+                <div class="stat-label">☠️ موتات غبية</div>
+                <div class="stat-counter death-color" id="total-deaths-display">0</div>
             </div>
-            <div class="score-box">
-                <p>فوز (O)</p>
-                <div class="score-num o-score" id="o-wins-display">0</div>
+            <div class="stat-card bp">
+                <div class="stat-label">🪙 عملات BP فاشلة</div>
+                <div class="stat-counter bp-color" id="total-bp-display">0</div>
+            </div>
+            <div class="stat-card rank">
+                <div class="stat-label">🏆 الترتيب الحالي</div>
+                <div class="stat-counter rank-color" id="total-rank-display">#99</div>
             </div>
         </div>
 
-        <div class="status-text" id="status">جاري الاتصال بالملعب... ⏳</div>
-        
-        <div class="board" id="board">
-            <div class="cell" data-index="0"></div>
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
+        <div class="main-display-window" id="display-window">
+            <div class="sky-cloud-back" id="cloud-container"></div>
+            <div class="visual-actor" id="visual-emoji">🛩️</div>
+            <div class="ticker-log-box" id="system-log-text">
+                أهلاً بك في خوادم اللعبة الخربانة! اضغط على زر "القفز التكتيكي" لتبدأ أولى الكوارث البرمجية! 🛠️
+            </div>
         </div>
 
-        <button class="btn-reset" id="reset-btn">جولة جديدة 🔄</button>
+        <div class="shop-section-title">💬 راديو السكواد الخربان (شات مباشر):</div>
+        <div class="squad-chat-panel" id="squad-chat-box">
+            <div class="chat-line"><span class="chat-sender-number-2">رقم 2:</span> يسطا انزل بوشينكي بسرعة اللوت هناك ملوش حل! 🔥</div>
+            <div class="chat-line"><span class="chat-sender-number-3">رقم 3:</span> يا جماعة اللعبة مهنجة عندي وأنا بسبح تحت الأرض حالياً ومفيش مية! 😂</div>
+        </div>
+
+        <div class="shop-section-title">🛒 متجر المعدات والأسلحة الاستراتيجية الفاشلة:</div>
+        <div class="inventory-shop-grid">
+            <div class="shop-item-card active-weapon" id="shop-item-1" onclick="selectWeapon(1, 'صوت الفراخ المذعورة 🐔', '🍌', 0)">
+                <div class="item-icon">🍌</div>
+                <div class="item-title">قاذف قشر الموز</div>
+                <div class="item-cost">متاح مجاناً</div>
+            </div>
+            <div class="shop-item-card" id="shop-item-2" onclick="selectWeapon(2, 'ضربة طاسة القلي الحديدية 🍳', '🍳', 5)">
+                <div class="item-icon">🍳</div>
+                <div class="item-title">الطاسة الخارقة</div>
+                <div class="item-cost">يتطلب 5 كيلات</div>
+            </div>
+            <div class="shop-item-card" id="shop-item-3" onclick="selectWeapon(3, 'ليزر فضائي أخضر ⚡', '⚡', 15)">
+                <div class="item-icon">⚡</div>
+                <div class="item-title">سلاح ليزر الفضاء</div>
+                <div class="item-cost">يتطلب 15 كيل</div>
+            </div>
+        </div>
+
+        <div class="control-console-layout">
+            <button class="pubg-action-btn" onclick="triggerAction('drop')">
+                <span>🪂</span> القفز من الطيارة
+            </button>
+            <button class="pubg-action-btn btn-blue" onclick="triggerAction('fire')">
+                <span>🎯</span> إطلاق النار الأسطوري
+            </button>
+            <button class="pubg-action-btn btn-purple" onclick="triggerAction('vehicle')">
+                <span>🚗</span> ركوب سيارة الداسيا
+            </button>
+            <button class="pubg-action-btn btn-green" onclick="triggerAction('loot')">
+                <span>📦</span> فتح صندوق الإيردروب
+            </button>
+            <button class="pubg-action-btn" onclick="triggerAction('heal')">
+                <span>💉</span> ضرب حقنة الأدرينالين
+            </button>
+            <button class="pubg-action-btn btn-red" onclick="triggerAction('glitch')">
+                <span>🌀</span> تفعيل ثقب جلتش فوري
+            </button>
+        </div>
+
+        <button class="system-footer-reset-btn" onclick="resetAllScoresOnFirebase()">
+            ⚠️ إعادة تعيين وتصفير كافة السجلات المحفوظة في فايربيس 🔄
+        </button>
+
     </div>
 
     <script>
-        // --- إعدادات ربط الفايربيس بمشروعك الحالي ---
+        // ==========================================
+        // 9. تهيئة خوادم قاعدة البيانات (Firebase Engine)
+        // ==========================================
         const firebaseConfig = {
             databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com/"
         };
@@ -208,159 +518,286 @@
         }
         const database = firebase.database();
 
-        // عناصر واجهة المستخدم
-        const cells = document.querySelectorAll(".cell");
-        const statusText = document.getElementById("status");
-        const resetBtn = document.getElementById("reset-btn");
-        const messageOverlay = document.getElementById("message-overlay");
-        const overlayTitle = document.getElementById("overlay-title");
-        const overlayText = document.getElementById("overlay-text");
+        // متغيرات الحالة التشغيلية للعبة
+        let currentKills = 0;
+        let currentDeaths = 0;
+        let currentBp = 0;
+        let currentRank = 99;
+        let selectedWeaponIndex = 1;
+        let selectedWeaponName = "قاذف قشر الموز";
+        let selectedWeaponEmoji = "🍌";
 
-        // شاشات عرض السكور
-        const xWinsDisplay = document.getElementById("x-wins-display");
-        const oWinsDisplay = document.getElementById("o-wins-display");
-        const tiesDisplay = document.getElementById("ties-display");
-
-        // متغيرات اللعبة المحلية
-        let boardState = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X";
-        let isGameActive = true;
-        
-        // المتغيرات المحفوظة لايف في الفايربيس
-        let scores = { xWins: 0, oWins: 0, ties: 0 };
-
-        const winningConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
+        // بنك العبارات العشوائية لشات السكواد المضحك
+        const squadChatPhrases = [
+            { sender: 2, name: "رقم 2", txt: "مين معاه طلق أخضر يا جماعة؟ السلاح اللي معايا بيضرب بسلة! 🫛" },
+            { sender: 4, name: "رقم 4", txt: "الحقوني الزون قفلت عليا وأنا لسه بشتري كريب من على أول خريطة إرانغل! 😭" },
+            { sender: 3, name: "رقم 3", txt: "أنا لقيت جلتش بيخلي العربية تمشي فوق السحاب! حد يركب معايا؟ 🛸" },
+            { sender: 2, name: "رقم 2", txt: "البوت اللي قدامي رقصلي سامبا وسرق الخوذة بتاعتي ليفل 3 وجري! 🕺" },
+            { sender: 4, name: "رقم 4", txt: "أنا رميت قنبلة على التيم التاني.. القنبلة طلعت بتغني بابا فين! 🎤" },
+            { sender: 3, name: "رقم 3", txt: "يا جدعان النت عندي بنج 4000، أنا شايف نفسي بلعب في الماتش اللي فات!" }
         ];
 
-        // 1. الاستماع للفايربيس (قراءة النتائج + التحكم عن بعد)
+        // ميكانيكية توليد أصوات برمجية مضحكة عبر كرت الصوت الداخلي للمتصفح (Web Audio API Synth)
+        function playGlitchSound(frequency, type, duration) {
+            try {
+                let context = new (window.AudioContext || window.webkitAudioContext)();
+                let oscillator = context.createOscillator();
+                let gainNode = context.createGain();
+                
+                oscillator.type = type || 'sine';
+                oscillator.frequency.value = frequency || 440;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                oscillator.start();
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + (duration || 0.3));
+                
+                setTimeout(() => { oscillator.stop(); context.close(); }, (duration || 0.3) * 1000);
+            } catch (e) {
+                console.log("Audio not supported yet.");
+            }
+        }
+
+        // ==========================================
+        // 10. ربط البيانات وقراءتها حياً من فايربيس (Live Listener)
+        // ==========================================
         database.ref('remoteControl').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // التحكم بالرسالة المنبثقة الطارئة لو showAlert = true
+                // التحكم بمصفوفة القلتش الخارجي والأمر الفوري (showAlert)
                 if (data.showAlert === true || data.showAlert === "true") {
-                    if (data.alertTitle) overlayTitle.innerText = data.alertTitle;
-                    if (data.alertText) overlayText.innerText = data.alertText;
-                    messageOverlay.classList.remove("hidden");
+                    if (data.alertTitle) document.getElementById("glitch-layer-title").innerText = data.alertTitle;
+                    if (data.alertText) document.getElementById("glitch-layer-text").innerText = data.alertText;
+                    document.getElementById("master-glitch-layer").classList.remove("hidden");
+                    playGlitchSound(120, 'sawtooth', 1.5);
                 } else {
-                    messageOverlay.classList.add("hidden");
+                    document.getElementById("master-glitch-layer").classList.add("hidden");
                 }
 
-                // تصفير الجولة الحالية فقط عن بعد لو تم تفعيل حقل resetGame
+                // استقبال ومعالجة أوامر التصفير عن بعد لشاشة ببجي
                 if (data.resetGame === true || data.resetGame === "true") {
-                    clearBoard();
-                    database.ref('remoteControl').update({ resetGame: false });
-                }
-
-                // مسح وتصفير السكور والنتائج المحفوظة كلها عن بعد لو كتبت حقل resetScores وقيمته true
-                if (data.resetScores === true || data.resetScores === "true") {
+                    localResetUI();
                     database.ref('remoteControl').update({
-                        xWins: 0, oWins: 0, ties: 0, resetScores: false
+                        pubgKills: 0, pubgDeaths: 0, pubgBp: 0, pubgRank: 99, resetGame: false
                     });
+                    return;
                 }
 
-                // تحديث لوحة النتائج على الشاشة من القيم المحفوظة في الفايربيس
-                scores.xWins = data.xWins || 0;
-                scores.oWins = data.oWins || 0;
-                scores.ties = data.ties || 0;
+                // سحب الأرقام المحدثة وحقنها في الـ HTML
+                currentKills = data.pubgKills || 0;
+                currentDeaths = data.pubgDeaths || 0;
+                currentBp = data.pubgBp || 0;
+                currentRank = data.pubgRank !== undefined ? data.pubgRank : 99;
 
-                xWinsDisplay.innerText = scores.xWins;
-                oWinsDisplay.innerText = scores.oWins;
-                tiesDisplay.innerText = scores.ties;
-
-                if(isGameActive) {
-                    statusText.innerText = `دور اللاعب الحالي: ${currentPlayer}`;
-                }
+                document.getElementById("total-kills-display").innerText = currentKills;
+                document.getElementById("total-deaths-display").innerText = currentDeaths;
+                document.getElementById("total-bp-display").innerText = currentBp;
+                document.getElementById("total-rank-display").innerText = "#" + currentRank;
             } else {
-                // إنشاء قيم افتراضية بالفايربيس لو كانت فاضية أول مرة
-                database.ref('remoteControl').update({ xWins: 0, oWins: 0, ties: 0, showAlert: false });
+                // إذا كانت الذاكرة السحابية فارغة يتم تأسيسها بالقيم التالية
+                database.ref('remoteControl').update({
+                    pubgKills: 0, pubgDeaths: 0, pubgBp: 0, pubgRank: 99, showAlert: false
+                });
             }
         });
 
-        // تشغيل النقر على المربعات وزر جولة جديدة
-        cells.forEach(cell => cell.addEventListener("click", handleCellClick));
-        resetBtn.addEventListener("click", clearBoard);
+        // ==========================================
+        // 11. نظام إدارة المعارك والقرارات (Game Actions)
+        // ==========================================
+        function triggerAction(actionType) {
+            const logText = document.getElementById("system-log-text");
+            const visualEmoji = document.getElementById("visual-emoji");
+            const windowBg = document.getElementById("display-window");
 
-        function handleCellClick(e) {
-            const clickedCell = e.target;
-            const clickedCellIndex = parseInt(clickedCell.getAttribute("data-index"));
+            // نزع كلاسات القلتش القديمة لإعادة تشغيل الأنيميشن
+            visualEmoji.classList.remove("glitch-effect");
 
-            if (boardState[clickedCellIndex] !== "" || !isGameActive) return;
+            if (actionType === 'drop') {
+                visualEmoji.innerText = "🤸‍♂️";
+                logText.innerText = "لقد قفزت من الطيارة التكتيكية! ولكن المظلة تعطلت تماماً وفتحت مظلة لحم الخروف الكبيرة! هبطت فوق رأس حاوية شحن غاضبة في بوشينكي وخسرت الجولة ميتًا!";
+                playGlitchSound(180, 'triangle', 0.6);
+                
+                database.ref('remoteControl').update({
+                    pubgDeaths: currentDeaths + 1,
+                    pubgRank: Math.max(1, currentRank - 5)
+                });
+                triggerBloodFlash();
 
-            // تحديث المربع محلياً
-            boardState[clickedCellIndex] = currentPlayer;
-            clickedCell.innerText = currentPlayer;
-            clickedCell.classList.add(currentPlayer.toLowerCase());
-
-            checkResult();
-        }
-
-        function checkResult() {
-            let roundWon = false;
-            for (let i = 0; i < winningConditions.length; i++) {
-                const winCondition = winningConditions[i];
-                let a = boardState[winCondition[0]];
-                let b = boardState[winCondition[1]];
-                let c = boardState[winCondition[2]];
-                if (a === "" || b === "" || c === "") continue;
-                if (a === b && a === c) {
-                    roundWon = true;
-                    break;
+            } else if (actionType === 'fire') {
+                if (selectedWeaponIndex === 2 && currentKills < 5) {
+                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مغلق! تحتاج على الأقل إلى 5 كيلات لفتحه ومطاردة الأعداء به!`;
+                    return;
                 }
-            }
+                if (selectedWeaponIndex === 3 && currentKills < 15) {
+                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مقفل بإحكام! تحتاج إلى 15 كيلاً لتوليد طاقة الليزر السديمية!`;
+                    return;
+                }
 
-            // في حالة الفوز
-            if (roundWon) {
-                statusText.innerText = `الفائز في هذه الجولة هو: ${currentPlayer} 🎉`;
-                isGameActive = false;
-                triggerWinCelebration();
+                visualEmoji.innerText = selectedWeaponEmoji;
+                playGlitchSound(600, 'square', 0.15);
 
-                // تحديث وحفظ النتيجة الجديدة في الفايربيس فوراً
-                if (currentPlayer === "X") {
-                    database.ref('remoteControl').update({ xWins: scores.xWins + 1 });
+                let chance = Math.random();
+                if (chance > 0.4) {
+                    let newKills = currentKills + 1;
+                    let earnedBp = currentBp + 150;
+                    logText.innerText = `استخدمت [${selectedWeaponName}]. أطلقت النار وخرجت دجاجة مشوية طارت باتجاه رأس بوت محترف كان يختبئ خلف الشجرة ومات في الحال! +1 كيل.`;
+                    confetti({ particleCount: 35, spread: 50, colors: ['#f39c12', '#ffffff'] });
+                    
+                    database.ref('remoteControl').update({
+                        pubgKills: newKills,
+                        pubgBp: earnedBp
+                    });
                 } else {
-                    database.ref('remoteControl').update({ oWins: scores.oWins + 1 });
+                    logText.innerText = `أطلقت النار بواسطة [${selectedWeaponName}].. السلاح ارتد للخلف بقوة خارقة مما جعل شخصيتك تدور حول نفسها كالدوامة وتطلق النار على قدميها وتفقد الوعي!`;
+                    database.ref('remoteControl').update({ pubgDeaths: currentDeaths + 1 });
+                    triggerBloodFlash();
                 }
-                return;
-            }
 
-            // في حالة التعادل
-            let roundDraw = !boardState.includes("");
-            if (roundDraw) {
-                statusText.innerText = "النتيجة تعادل! جربوا تاني 🤝";
-                isGameActive = false;
-                // حفظ التعادل في الفايربيس فوراً
-                database.ref('remoteControl').update({ ties: scores.ties + 1 });
-                return;
-            }
+            } else if (actionType === 'vehicle') {
+                visualEmoji.innerText = "🚀🚗";
+                logText.innerText = "ركبت سيارة الداسيا وانطلقت بسرعة 200 كم/س! فجأة لمست حجرًا صغيرًا في الطريق، طارت السيارة في الفضاء الخارجي واخترقت الغلاف الجوي ودخلت كوكب زحل!";
+                playGlitchSound(90, 'sawtooth', 0.8);
+                
+                database.ref('remoteControl').update({
+                    pubgDeaths: currentDeaths + 1,
+                    pubgBp: currentBp + 50
+                });
 
-            // تبديل الأدوار
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            statusText.innerText = `دور اللاعب الحالي: ${currentPlayer}`;
+            } else if (actionType === 'loot') {
+                visualEmoji.innerText = "🎁";
+                logText.innerText = "اقتربت من صندوق الإيردروب بحذر.. فتحت الصندوق بلهفة ولم تجد أسلحة ليفل 3! بل وجدت بدلة رقص شرقي ملوّنة وجوز هند طازج! أخذتهم وحصلت على مكافأة عملات!";
+                playGlitchSound(800, 'sine', 0.4);
+                
+                database.ref('remoteControl').update({
+                    pubgBp: currentBp + 600
+                });
+                confetti({ particleCount: 50, angle: 90, spread: 80 });
+
+            } else if (actionType === 'heal') {
+                visualEmoji.innerText = "🧪🥴";
+                logText.innerText = "قمت بحقن نفسك بالأدرينالين لرفع الطاقة والسرعة.. ولكن الجرعة كانت خربانة ومغشوشة! تضخمت رأس شخصيتك وأصبحت بحجم سيارة جيب وأصبحت هدفاً سهلاً للقناصة!";
+                playGlitchSound(320, 'triangle', 0.4);
+                
+                database.ref('remoteControl').update({
+                    pubgRank: Math.min(99, currentRank + 12)
+                });
+
+            } else if (actionType === 'glitch') {
+                visualEmoji.innerText = "👾🌀";
+                visualEmoji.classList.add("glitch-effect");
+                logText.innerText = "تحذير نظامي! قمت بتفعيل ثقب أسود من القلتشات البرمجية.. الألوان تداخلت، التضاريس اختفت، وأصبح جميع اللاعبين في الجيم يمشون على أيديهم ويرتدون قبعات طباخين!";
+                playGlitchSound(50, 'sawtooth', 1.2);
+                
+                database.ref('remoteControl').update({
+                    pubgKills: currentKills + 2,
+                    pubgDeaths: currentDeaths + 2
+                });
+            }
         }
 
-        // مسح المربعات وبدء جولة جديدة
-        function clearBoard() {
-            boardState = ["", "", "", "", "", "", "", "", ""];
-            isGameActive = true;
-            currentPlayer = "X";
-            statusText.innerText = "دور اللاعب الحالي: X";
-            cells.forEach(cell => {
-                cell.innerText = "";
-                cell.classList.remove("x", "o");
+        // ==========================================
+        // 12. متجر التجهيزات وترقية العتاد (Shop Management)
+        // ==========================================
+        function selectWeapon(itemId, name, emoji, requiredKills) {
+            if (currentKills < requiredKills) {
+                document.getElementById("system-log-text").innerText = `فشل التجهيز! السلاح مقفل. يتطلب الحصول على ${requiredKills} كيلات، بينما تمتلك حالياً ${currentKills} كيل فقط!`;
+                playGlitchSound(150, 'square', 0.3);
+                return;
+            }
+
+            // إزالة الكلاس النشط من جميع العناصر
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`shop-item-${i}`).classList.remove("active-weapon");
+            }
+
+            // إضافة التفعيل للمنتج المختار
+            document.getElementById(`shop-item-${itemId}`).classList.add("active-weapon");
+            selectedWeaponIndex = itemId;
+            selectedWeaponName = name;
+            selectedWeaponEmoji = emoji;
+
+            document.getElementById("system-log-text").innerText = `تم بنجاح تجهيز وتلقيم [${name}] في حقيبة ظهرك الخربانة! جاهز للمعارك المضحكة الآن. 🏹`;
+            playGlitchSound(520, 'sine', 0.2);
+        }
+
+        // تفجير محاكاة خلايا الدم الحمراء عند الموت (UI Feedback)
+        function triggerBloodFlash() {
+            const windowBg = document.getElementById("display-window");
+            windowBg.style.backgroundColor = "rgba(192, 41, 43, 0.4)";
+            setTimeout(() => {
+                windowBg.style.backgroundColor = "#090d10";
+            }, 300);
+        }
+
+        // ==========================================
+        // 13. نظام الشات الدوري والبيئة السحابية (Loops)
+        // ==========================================
+        setInterval(() => {
+            const chatBox = document.getElementById("squad-chat-box");
+            const randomLine = squadChatPhrases[Math.floor(Math.random() * squadChatPhrases.length)];
+            
+            const newLineDiv = document.createElement("div");
+            newLineDiv.className = "chat-line";
+            newLineDiv.innerHTML = `<span class="chat-sender-number-${randomLine.sender}">${randomLine.name}:</span> ${randomLine.txt}`;
+            
+            chatBox.appendChild(newLineDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // مسح الأسطر القديمة جداً للحفاظ على الأداء وسرعة المتصفح
+            if (chatBox.children.length > 20) {
+                chatBox.removeChild(chatBox.children[0]);
+            }
+        }, 4500);
+
+        // إنشاء وتوليد سحب وهمية متحركة بالخلفية لإعطاء شعور الطيران بببجي
+        function createFictionalClouds() {
+            const container = document.getElementById("cloud-container");
+            for (let i = 0; i < 4; i++) {
+                let cloud = document.createElement("div");
+                cloud.className = "fictional-cloud";
+                let size = Math.random() * 60 + 30;
+                cloud.style.width = size + "px";
+                cloud.style.height = size / 1.5 + "px";
+                cloud.style.top = Math.random() * 80 + "%";
+                cloud.style.animationDelay = (Math.random() * 5) + "s";
+                container.appendChild(cloud);
+            }
+        }
+        createFictionalClouds();
+
+        // ==========================================
+        // 14. التصفير وإعادة الضبط الشامل (Reset Engine)
+        // ==========================================
+        function localResetUI() {
+            document.getElementById("total-kills-display").innerText = "0";
+            document.getElementById("total-deaths-display").innerText = "0";
+            document.getElementById("total-bp-display").innerText = "0";
+            document.getElementById("total-rank-display").innerText = "#99";
+            document.getElementById("visual-emoji").innerText = "🛩️";
+            document.getElementById("system-log-text").innerText = "تم تصفير خوادم اللعبة كلياً وبدء طائرة جديدة! 🔄";
+            
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`shop-item-${i}`).classList.remove("active-weapon");
+            }
+            document.getElementById(`shop-item-1`).classList.add("active-weapon");
+            selectedWeaponIndex = 1;
+            selectedWeaponName = "قاذف قشر الموز";
+            selectedWeaponEmoji = "🍌";
+        }
+
+        function resetAllScoresOnFirebase() {
+            localResetUI();
+            database.ref('remoteControl').update({
+                pubgKills: 0,
+                pubgDeaths: 0,
+                pubgBp: 0,
+                pubgRank: 99,
+                resetGame: false,
+                showAlert: false
             });
-        }
-
-        function triggerWinCelebration() {
-            var duration = 2.5 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2b7bb9', '#ff4d6d'] });
-                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2b7bb9', '#ff4d6d'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
+            playGlitchSound(200, 'sine', 0.5);
         }
     </script>
 </body>

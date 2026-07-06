@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي الـ X-O السحري 🎮</title>
+    <title>تحدي الـ X-O الاحترافي مع حفظ النتائج 🎮</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -28,48 +28,78 @@
 
         .game-container {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 25px;
             box-shadow: 0 15px 35px rgba(43, 123, 185, 0.2);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 420px;
+            width: 92%;
         }
 
         h1 {
             color: #2b7bb9;
-            margin-bottom: 10px;
-            font-size: 26px;
+            margin-bottom: 5px;
+            font-size: 24px;
         }
 
-        .status-text {
-            font-size: 18px;
+        /* لوحة النتائج المحفوظة لايف */
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f0f7fc;
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #b3daf5;
+        }
+
+        .score-box {
+            text-align: center;
+        }
+
+        .score-box p {
+            font-size: 14px;
             color: #555;
-            margin-bottom: 20px;
             font-weight: bold;
         }
 
-        /* شبكة لعبة اكس او */
+        .score-num {
+            font-size: 22px;
+            font-weight: 900;
+            color: #2b7bb9;
+        }
+
+        .score-num.o-score { color: #ff4d6d; }
+        .score-num.tie-score { color: #78909c; }
+
+        .status-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+            min-height: 27px;
+        }
+
+        /* شبكة اللعبة */
         .board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .cell {
-            background-color: #f0f7fc;
+            background-color: #fafdfm;
             border: 3px solid #2b7bb9;
-            height: 90px;
+            height: 85px;
             border-radius: 15px;
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 900;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             transition: all 0.2s;
-            color: #1c5380;
         }
 
         .cell:hover {
@@ -84,30 +114,27 @@
             background-color: #2b7bb9;
             color: white;
             border: none;
-            padding: 10px 30px;
+            padding: 10px 25px;
             border-radius: 20px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
         }
 
-        .btn-reset:hover {
-            background-color: #1c5380;
-        }
+        .btn-reset:hover { background-color: #1c5380; }
 
-        /* شاشة التحكم والرسائل الطارئة لايف */
+        /* شاشة التنبيهات والرسائل الفورية عن بعد */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(43, 123, 185, 0.9);
+            background: rgba(43, 123, 185, 0.95);
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            transition: opacity 0.3s ease;
             text-align: center;
             padding: 20px;
         }
@@ -129,15 +156,31 @@
 
     <div id="message-overlay" class="overlay hidden">
         <div class="overlay-content">
-            <div style="font-size: 60px; margin-bottom: 15px; animation: float 1s infinite alternate;">💌✨</div>
-            <h1 id="overlay-title" style="color: white; font-size: 30px; margin-bottom: 15px;">رسالة من المحكم!</h1>
+            <div style="font-size: 60px; margin-bottom: 15px; animation: bounce 0.8s infinite alternate;">💌✨</div>
+            <h1 id="overlay-title" style="color: white; font-size: 28px; margin-bottom: 15px;">تنبيه من الإدارة!</h1>
             <p id="overlay-text" style="font-size: 18px; line-height: 1.6; font-weight: bold;"></p>
         </div>
     </div>
 
     <div class="game-container">
-        <h1>تحدي الـ X-O السحري 🎮</h1>
-        <div class="status-text" id="status">دور اللاعب: X</div>
+        <h1>تحدي الـ X-O الاحترافي 🎮</h1>
+        
+        <div class="scoreboard">
+            <div class="score-box">
+                <p>فوز (X)</p>
+                <div class="score-num" id="x-wins-display">0</div>
+            </div>
+            <div class="score-box">
+                <p>التعادلات</p>
+                <div class="score-num tie-score" id="ties-display">0</div>
+            </div>
+            <div class="score-box">
+                <p>فوز (O)</p>
+                <div class="score-num o-score" id="o-wins-display">0</div>
+            </div>
+        </div>
+
+        <div class="status-text" id="status">جاري الاتصال بالملعب... ⏳</div>
         
         <div class="board" id="board">
             <div class="cell" data-index="0"></div>
@@ -151,11 +194,11 @@
             <div class="cell" data-index="8"></div>
         </div>
 
-        <button class="btn-reset" id="reset-btn">إعادة اللعب 🔄</button>
+        <button class="btn-reset" id="reset-btn">جولة جديدة 🔄</button>
     </div>
 
     <script>
-        // --- إعدادات الفايربيس الخاصة بمشروعك ---
+        // --- إعدادات ربط الفايربيس بمشروعك الحالي ---
         const firebaseConfig = {
             databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com/"
         };
@@ -165,7 +208,7 @@
         }
         const database = firebase.database();
 
-        // عناصر الصفحة
+        // عناصر واجهة المستخدم
         const cells = document.querySelectorAll(".cell");
         const statusText = document.getElementById("status");
         const resetBtn = document.getElementById("reset-btn");
@@ -173,43 +216,72 @@
         const overlayTitle = document.getElementById("overlay-title");
         const overlayText = document.getElementById("overlay-text");
 
+        // شاشات عرض السكور
+        const xWinsDisplay = document.getElementById("x-wins-display");
+        const oWinsDisplay = document.getElementById("o-wins-display");
+        const tiesDisplay = document.getElementById("ties-display");
+
+        // متغيرات اللعبة المحلية
         let boardState = ["", "", "", "", "", "", "", "", ""];
         let currentPlayer = "X";
         let isGameActive = true;
+        
+        // المتغيرات المحفوظة لايف في الفايربيس
+        let scores = { xWins: 0, oWins: 0, ties: 0 };
 
         const winningConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // صفوف
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // أعمدة
-            [0, 4, 8], [2, 4, 6]             // أقطار
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
         ];
 
-        // الاستماع المباشر للفايربيس للتحكم باللعبة والرسائل
+        // 1. الاستماع للفايربيس (قراءة النتائج + التحكم عن بعد)
         database.ref('remoteControl').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // 1. التحكم في إظهار رسالة صلح منبثقة فوق اللعبة
+                // التحكم بالرسالة المنبثقة الطارئة لو showAlert = true
                 if (data.showAlert === true || data.showAlert === "true") {
                     if (data.alertTitle) overlayTitle.innerText = data.alertTitle;
                     if (data.alertText) overlayText.innerText = data.alertText;
                     messageOverlay.classList.remove("hidden");
-                    // عمل تأثير احتفالي لو ظهرت الرسالة
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                 } else {
                     messageOverlay.classList.add("hidden");
                 }
 
-                // 2. التحكم في تصفير اللعبة عن بعد لو كتبت في الفايربيس حقل باسم resetGame وقيمته true
+                // تصفير الجولة الحالية فقط عن بعد لو تم تفعيل حقل resetGame
                 if (data.resetGame === true || data.resetGame === "true") {
-                    resetGame();
-                    // رجعها لـ false تلقائياً في الفايربيس علشان متفضلش معلقة
+                    clearBoard();
                     database.ref('remoteControl').update({ resetGame: false });
                 }
+
+                // مسح وتصفير السكور والنتائج المحفوظة كلها عن بعد لو كتبت حقل resetScores وقيمته true
+                if (data.resetScores === true || data.resetScores === "true") {
+                    database.ref('remoteControl').update({
+                        xWins: 0, oWins: 0, ties: 0, resetScores: false
+                    });
+                }
+
+                // تحديث لوحة النتائج على الشاشة من القيم المحفوظة في الفايربيس
+                scores.xWins = data.xWins || 0;
+                scores.oWins = data.oWins || 0;
+                scores.ties = data.ties || 0;
+
+                xWinsDisplay.innerText = scores.xWins;
+                oWinsDisplay.innerText = scores.oWins;
+                tiesDisplay.innerText = scores.ties;
+
+                if(isGameActive) {
+                    statusText.innerText = `دور اللاعب الحالي: ${currentPlayer}`;
+                }
+            } else {
+                // إنشاء قيم افتراضية بالفايربيس لو كانت فاضية أول مرة
+                database.ref('remoteControl').update({ xWins: 0, oWins: 0, ties: 0, showAlert: false });
             }
         });
 
-        // لقطات اللعب
+        // تشغيل النقر على المربعات وزر جولة جديدة
         cells.forEach(cell => cell.addEventListener("click", handleCellClick));
-        resetBtn.addEventListener("click", resetGame);
+        resetBtn.addEventListener("click", clearBoard);
 
         function handleCellClick(e) {
             const clickedCell = e.target;
@@ -217,14 +289,12 @@
 
             if (boardState[clickedCellIndex] !== "" || !isGameActive) return;
 
-            updateCell(clickedCell, clickedCellIndex);
-            checkResult();
-        }
+            // تحديث المربع محلياً
+            boardState[clickedCellIndex] = currentPlayer;
+            clickedCell.innerText = currentPlayer;
+            clickedCell.classList.add(currentPlayer.toLowerCase());
 
-        function updateCell(cell, index) {
-            boardState[index] = currentPlayer;
-            cell.innerText = currentPlayer;
-            cell.classList.add(currentPlayer.toLowerCase());
+            checkResult();
         }
 
         function checkResult() {
@@ -241,33 +311,42 @@
                 }
             }
 
+            // في حالة الفوز
             if (roundWon) {
-                statusText.innerText = `مبروووك! الفائز هو الكابتن ${currentPlayer} 🎉`;
-                statusText.style.color = "#4caf50";
-                triggerWinCelebration();
+                statusText.innerText = `الفائز في هذه الجولة هو: ${currentPlayer} 🎉`;
                 isGameActive = false;
+                triggerWinCelebration();
+
+                // تحديث وحفظ النتيجة الجديدة في الفايربيس فوراً
+                if (currentPlayer === "X") {
+                    database.ref('remoteControl').update({ xWins: scores.xWins + 1 });
+                } else {
+                    database.ref('remoteControl').update({ oWins: scores.oWins + 1 });
+                }
                 return;
             }
 
+            // في حالة التعادل
             let roundDraw = !boardState.includes("");
             if (roundDraw) {
-                statusText.innerText = "تعادل! العبوا تاني 🤝";
-                statusText.style.color = "#ff9800";
+                statusText.innerText = "النتيجة تعادل! جربوا تاني 🤝";
                 isGameActive = false;
+                // حفظ التعادل في الفايربيس فوراً
+                database.ref('remoteControl').update({ ties: scores.ties + 1 });
                 return;
             }
 
-            // تبديل الدور
+            // تبديل الأدوار
             currentPlayer = currentPlayer === "X" ? "O" : "X";
-            statusText.innerText = `دور اللاعب: ${currentPlayer}`;
+            statusText.innerText = `دور اللاعب الحالي: ${currentPlayer}`;
         }
 
-        function resetGame() {
+        // مسح المربعات وبدء جولة جديدة
+        function clearBoard() {
             boardState = ["", "", "", "", "", "", "", "", ""];
             isGameActive = true;
             currentPlayer = "X";
-            statusText.innerText = "دور اللاعب: X";
-            statusText.style.color = "#555";
+            statusText.innerText = "دور اللاعب الحالي: X";
             cells.forEach(cell => {
                 cell.innerText = "";
                 cell.classList.remove("x", "o");
@@ -275,12 +354,11 @@
         }
 
         function triggerWinCelebration() {
-            var duration = 3 * 1000;
+            var duration = 2.5 * 1000;
             var end = Date.now() + duration;
-
             (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2b7bb9', '#ff4d6d'] });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2b7bb9', '#ff4d6d'] });
                 if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }

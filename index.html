@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أنا آسف يا بطتي 💙</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        /* --- التنسيقات العامة (ستايل وألوان ستيتش الأزرق) --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e6f0fa;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none !important;
+        }
+
+        /* ستايل الشاشة الحمراء الطارئة للتحكم المباشر */
+        #emergency-screen {
+            background-color: #d32f2f;
+            color: white;
+            z-index: 9999;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .emergency-content {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: popupScale 0.4s ease-out;
+        }
+
+        /* --- تصميم عداد الأيام المكبر --- */
+        .days-counter-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(43, 123, 185, 0.25);
+            border: 3px solid #2b7bb9;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(43, 123, 185, 0.2);
+        }
+
+        .counter-title {
+            font-size: 15px;
+            color: #1c5380;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .counter-timer {
+            font-size: 22px;
+            color: #1c5380;
+            font-weight: 900;
+            direction: ltr;
+            letter-spacing: 1px;
+        }
+
+        #loader-screen {
+            background-color: #2b7bb9;
+            color: white;
+            z-index: 10;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .duck-icon {
+            font-size: 80px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .progress-bar {
+            width: 250px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #8ed8ff;
+            animation: fillProgress 2.5s forwards ease-in-out;
+        }
+
+        .fade-in-text {
+            font-size: 24px;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
+
+        #main-screen {
+            background: radial-gradient(circle, #ffffff 0%, #b3daf5 100%);
+            flex-direction: column;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(43, 123, 185, 0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        .big-title {
+            font-size: 36px;
+            color: #2b7bb9;
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .buttons-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn:hover { transform: scale(1.05); }
+        .btn-pink { background-color: #64b5f6; color: white; }
+        .btn-red { background-color: #2b7bb9; color: white; }
+        
+        .btn-back {
+            background-color: #90a4ae;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+        .btn-back:hover { background-color: #78909c; }
+
+        .duck-frame {
+            font-size: 90px;
+            margin-bottom: 15px;
+            position: relative;
+            animation: float 2s infinite alternate;
+        }
+
+        .modal {
+            position: fixed;
+            z-index: 20;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+            border-top: 8px solid #2b7bb9;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: popupScale 0.3s ease-out;
+        }
+
+        @keyframes popupScale {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute; left: 15px; top: 10px;
+            font-size: 28px; cursor: pointer; color: #aaa;
+        }
+        .close-btn:hover { color: #2b7bb9; }
+
+        .modal-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .small-progress {
+            width: 150px;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .small-progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #2b7bb9;
+            animation: fillProgress 1.5s forwards ease-in-out;
+        }
+
+        .game-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .game-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #2b7bb9;
+            background: white;
+            color: #2b7bb9;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+            border-color: #ccc;
+            color: #999;
+        }
+
+        @keyframes bounce { to { transform: translateY(-20px); } }
+        @keyframes float { to { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fillProgress { to { width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div id="emergency-screen" class="screen hidden">
+        <div class="emergency-content">
+            <div style="font-size: 70px; animation: bounce 0.6s infinite alternate; margin-bottom: 15px;">🚨🙋‍♂️</div>
+            <h1 id="emergency-title" style="font-size: 32px; font-weight: 900; margin-bottom: 15px;">تنبيه فوري!</h1>
+            <p id="emergency-text" style="font-size: 20px; line-height: 1.6; font-weight: bold;">هناك رسالة عاجلة لك الآن.</p>
+        </div>
+    </div>
+
+    <div id="loader-screen" class="screen">
+        <div class="loader-content">
+            <div class="duck-icon">💙🐥</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 32px; font-weight: bold;">بطتي 💙</span></h1>
+        </div>
+    </div>
+
+    <div id="main-screen" class="screen hidden">
+        <div class="days-counter-box">
+            <div class="counter-title">لا ده عداد أيامنا ملناش دعوة بيه😂😂</div>
+            <div id="live-counter" class="counter-timer"> 00   00:00:00</div>
+        </div>
+
+        <div class="main-container">
+            <div class="duck-frame">🐥💙</div>
+            <h1 class="big-title">أنا آسف يا بطتي..</h1>
+            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك  ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
+            
+            <div class="buttons-group">
+                <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول بس😉 </button>
+                <button id="btn-next" class="btn btn-red">افتحي الملف يلا شطورة🤭  💌</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content">
+            <div id="modal-loading-zone" class="modal-loader">
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">⏳</div>
+                <p style="color: #555; margin-top: 10px;">شطورة ي بطه🫦 جاري فتح الرسالة يا بطتي...</p>
+                <div class="small-progress"><div class="small-progress-fill"></div></div>
+            </div>
+
+            <div id="modal-text-zone" class="hidden">
+                <span class="close-btn">&times;</span>
+                <h2 style="color: #2b7bb9; margin-bottom: 15px;">إلى بطتي الجميلة 💙</h2>
+                <p style="line-height: 1.6; color: #444; font-size: 16px;">
+                     حقك عليا يا أغلى حاجة في حياتي.. التفكير في إني زعلتك ومصالحتكيش علطول بيوجعني انا والله . <br><br>
+                    😉سامحيني ي بطه هااااا وخلينا ننسى الزعل، مكانك في قلبي زي ما هو وميقلش أبداً. اضحكي بقى عشان ضحكتك هي اللي بتنور يومي! 🥰
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="love-letter-screen" class="screen hidden" style="background-color: #2b7bb9; flex-direction:column; overflow-y:auto; padding: 40px 0;">
+        <h1 style="margin-bottom:20px; font-size: 28px; color: white;">ملف الاعتذار والحب الي مش من مقامك والله  💙</h1>
+        
+        <div id="envelope" style="background:#fff; color:#333; padding:40px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:90%; max-width:380px; position: relative;">
+            
+            <div id="envelope-loading" class="modal-loader" style="display: none;">
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">🫦🫦</div>
+                <p style="color: #555; margin-top: 11px;">جاري تحضير الكلمات احمم احمم🙃🙃...</p>
+                <div class="small-progress"><div class="small-progress-fill" id="envelope-progress-fill" style="animation: none; width: 0%;"></div></div>
+            </div>
+
+            <div id="envelope-ready">
+                <div style="font-size:60px; animation: bounce 1s infinite alternate;">🫦</div>
+                <p style="font-weight:bold; margin-top:15px; font-size: 18px; color: #555;">خاص لـ بطتي 🫦🐥</p>
+                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 35px; border-radius:25px; margin-top:20px; font-size:16px; font-weight:bold; cursor:pointer;">افتحي الرسالة ي عسل</button>
+            </div>
+        </div>
+        
+        <div id="letters-container" style="width:90%; max-width:450px; margin-top: 10px; display:none;"></div>
+        <button id="btn-back-to-main" class="btn-back">رجوع للخلف لو عاوزة 👈👉</button>
+    </div>
+
+    <div id="comedy-notice-modal" class="modal hidden">
+        <div class="modal-content" style="border-top: 8px solid #64b5f6;">
+            <div style="font-size: 40px; margin-bottom: 10px;">🤨🤚</div>
+            <h2 style="color: #2b7bb9; margin-bottom: 15px;">رايحة فين!</h2>
+            <p style="line-height: 1.6; color: #444; font-size: 16px; font-weight: bold; margin-bottom: 20px;">
+                خدي هنا راحة فين لسا في سؤال واحد فقط.. <br>
+                 اضغطي على الزرار الي بيتنطط تحت ده الي لونه بمبي ده ااايوا هو ده 👇👀
+            </p>
+            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer;">(ماشي)قبل ما تدوسي ي بطه اقري الرسايل</button>
+        </div>
+    </div>
+
+    <div id="game-modal" class="modal hidden">
+        <div class="modal-content" style="border-top: 8px solid #ff4d6d;">
+            <span class="close-btn" id="close-game-btn">&times;</span>
+            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px;">مين فينا بيحب التاني اكتر؟ 🤔</h2>
+            <p id="game-response" style="color: #555; font-size: 16px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
+            
+            <div class="game-btn-container">
+                <button id="btn-love-me" class="game-btn"> لا أنا 🙋‍♀️</button>
+                <button id="btn-love-you" class="game-btn" disabled> خلاص إنت 🙋‍♂️</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-success-modal" class="modal hidden">
+        <div class="modal-content" style="border-top: 8px solid #4caf50; max-width: 400px;">
+            <span class="close-btn" id="close-success-btn">&times;</span>
+            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙</div>
+            <h2 style="color: #2b7bb9; margin-bottom: 15px;">صافي يا لبن!</h2>
+            <p style="font-size: 17px; color: #333; line-height: 1.6; font-weight: bold;">
+                😉خلاص صافي يا لبن وحليب يا قشطة! <br>
+                بعشقك يا أحلى وأجمل بطة في الدنيا والله🫦💋 💙🐥
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // --- إعدادات ربط الفايربيس بمشروعك الفريد ---
+        const firebaseConfig = {
+            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com/"
+        };
+        
+        // تشغيل وتهيئة الفايربيس
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loaderScreen = document.getElementById("loader-screen");
+            const mainScreen = document.getElementById("main-screen");
+            const btnPopup = document.getElementById("btn-popup");
+            const btnNext = document.getElementById("btn-next");
+            const modal = document.getElementById("message-modal");
+            const closeModal = document.querySelector(".close-btn");
+            
+            const modalLoadingZone = document.getElementById("modal-loading-zone");
+            const modalTextZone = document.getElementById("modal-text-zone");
+
+            const loveLetterScreen = document.getElementById("love-letter-screen");
+            const btnBackToMain = document.getElementById("btn-back-to-main");
+            const openEnvelopeBtn = document.getElementById("open-envelope-btn");
+            const envelopeReady = document.getElementById("envelope-ready");
+            const envelopeLoading = document.getElementById("envelope-loading");
+            const envelopeProgressFill = document.getElementById("envelope-progress-fill");
+            const lettersContainer = document.getElementById("letters-container");
+            const envelopeBox = document.getElementById("envelope");
+
+            const comedyNoticeModal = document.getElementById("comedy-notice-modal");
+            const btnComedyOk = document.getElementById("btn-comedy-ok");
+
+            const gameModal = document.getElementById("game-modal");
+            const btnLoveMe = document.getElementById("btn-love-me");
+            const btnLoveYou = document.getElementById("btn-love-you");
+            const gameResponse = document.getElementById("game-response");
+            const gameTitle = document.getElementById("game-title");
+            const closeGameBtn = document.getElementById("close-game-btn");
+
+            const finalSuccessModal = document.getElementById("final-success-modal");
+            const closeSuccessBtn = document.getElementById("close-success-btn");
+
+            const emergencyScreen = document.getElementById("emergency-screen");
+            const emergencyTitle = document.getElementById("emergency-title");
+            const emergencyText = document.getElementById("emergency-text");
+
+            // --- 💡 كود الاستماع المباشر لقاعدة البيانات الفايربيس لايف ---
+            database.ref('remoteControl').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    // إذا كانت قيمة showAlert تساوي true، أظهر الشاشة الحمراء الطارئة فوراً
+                    if(data.showAlert === true || data.showAlert === "true") {
+                        if(data.alertTitle) emergencyTitle.innerText = data.alertTitle;
+                        if(data.alertText) emergencyText.innerText = data.alertText;
+                        emergencyScreen.classList.remove("hidden");
+                    } else {
+                        // إذا تم كتابة false، أخفِ الشاشة الحمراء وارجع للموقع الطبيعي
+                        emergencyScreen.classList.add("hidden");
+                    }
+                }
+            });
+
+            // --- 1. حساب العداد المباشر من تاريخ 1/1/2026 ---
+            const startDate = new Date("2026-01-01T00:00:00").getTime();
+            
+            function updateLiveCounter() {
+                const now = new Date().getTime();
+                const difference = now - startDate;
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                const displayHours = hours < 10 ? "0" + hours : hours;
+                const displayMinutes = minutes < 10 ? "0" + minutes : minutes;
+                const displaySeconds = seconds < 10 ? "0" + seconds : seconds;
+
+                document.getElementById("live-counter").innerText = `${days} يوم و ${displayHours}:${displayMinutes}:${displaySeconds}`;
+            }
+            setInterval(updateLiveCounter, 1000);
+            updateLiveCounter();
+
+            // --- 2. الانتقال من شاشة التحميل الأولى للشاشة الرئيسية ---
+            setTimeout(() => {
+                loaderScreen.classList.add("hidden");
+                mainScreen.classList.remove("hidden");
+                triggerCelebration(2);
+            }, 2600);
+
+            function triggerCelebration(secondsDuration) {
+                var end = Date.now() + (secondsDuration * 1000);
+                (function frame() {
+                  confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2b7bb9', '#64b5f6', '#8ed8ff', '#ffffff'] });
+                  confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#2b7bb9', '#64b5f6', '#8ed8ff', '#ffffff'] });
+                  if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            }
+
+            // --- 3. فتح النافذة المنبثقة الأولى مع شاشة تحميل مصغرة ---
+            btnPopup.addEventListener("click", () => {
+                modalLoadingZone.style.display = "flex";
+                modalTextZone.classList.add("hidden");
+                modal.classList.remove("hidden");
+
+                setTimeout(() => {
+                    modalLoadingZone.style.display = "none";
+                    modalTextZone.classList.remove("hidden");
+                }, 1600);
+            });
+
+            closeModal.addEventListener("click", () => { modal.classList.add("hidden"); });
+
+            // --- 4. الدخول إلى شاشة المغلف والرسائل المتتالية ---
+            btnNext.addEventListener("click", () => {
+                mainScreen.classList.add("hidden");
+                loveLetterScreen.classList.remove("hidden");
+            });
+
+            openEnvelopeBtn.addEventListener("click", () => {
+                envelopeReady.style.display = "none";
+                envelopeLoading.style.display = "flex";
+                
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        envelopeBox.style.display = "none";
+                        showSuccessiveLetters();
+                    } else {
+                        width += 5;
+                        envelopeProgressFill.style.width = width + "%";
+                    }
+                }, 90);
+            });
+
+            function showSuccessiveLetters() {
+                lettersContainer.innerHTML = ""; 
+                lettersContainer.style.display = "block";
+
+                const messages = [
+                    "من أول ما عرفت منك انك زعلك كبير ومش زي اي مرة قولت والله ما يقف قدامك ياد حاول لا تيأس. 😔",
+                    "عارف إني قصرت لما اتأخرت عليكي ومجيتش صالحتك بسرعة، بس والله غلطت وكنت هصالحك والله وانتي عارفة غلاوتك ومكانتك عندي عاملة إزاي. 🫀",
+                    " مقدرش أشوفك زعلانة واسكت ومقدرش أعدي يومي وإحنا متغيرين على بعض..انا اسف ي بطتي انا اسف مرة واتنين وتلاته إنتي بطتي الحنينة والله اللي متعودش منها تبقي زعلانه مني  كتير 🐥💙",
+                    "صافي يا لبن🫦؟ حليب يا قشطة؟ خلاص خلاص ماشي لالا يلا اضحكي بقى ي بطه خلي قلبك ابيض امال ي لمبي😂 بهزر معاكي  وسيبي الزعل ده على جنب خالص خالص ماشي ويطلع من قلبك دي اهم حاجه والله وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. بحبك ي بت🫦😉 😻🤭"
+                ];
+
+                messages.forEach((msg, index) => {
+                    setTimeout(() => {
+                        const card = document.createElement("div");
+                        card.style.cssText = "background:white; color:#333; padding:22px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 16px; line-height: 1.6; border-right: 5px solid #64b5f6;";
+                        card.innerHTML = `<p style="text-align: right;">"${msg}"</p>`;
+                        lettersContainer.appendChild(card);
+                        
+                        setTimeout(() => {
+                            card.style.opacity = "1";
+                            card.style.transform = "translateY(0)";
+                            confetti({ particleCount: 15, spread: 40, origin: { y: 0.8 }, colors: ['#64b5f6', '#8ed8ff'] });
+                        }, 50);
+
+                        if (index === messages.length - 1) {
+                            setTimeout(() => {
+                                const loveBtn = document.createElement("button");
+                                loveBtn.innerText = " حليب يا قشطة وبوسة 😘💋";
+                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate;";
+                                
+                                loveBtn.addEventListener("click", () => {
+                                    gameResponse.innerText = "";
+                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ اكيد انا طبعا 🤔";
+                                    btnLoveYou.disabled = true;
+                                    btnLoveMe.disabled = false;
+                                    gameModal.classList.remove("hidden");
+                                });
+                                
+                                lettersContainer.appendChild(loveBtn);
+
+                                setTimeout(() => {
+                                    comedyNoticeModal.classList.remove("hidden");
+                                }, 2000);
+
+                            }, 2000);
+                        }
+                    }, index * 2300); 
+                });
+            }
+
+            btnComedyOk.addEventListener("click", () => {
+                comedyNoticeModal.classList.add("hidden");
+            });
+
+            btnLoveMe.addEventListener("click", () => {
+                gameResponse.style.color = "red";
+                gameResponse.innerText = "اده كمان بتناقشيني؟ انا كنت عارف والمشكله كمان بطلع عارف 🤨";
+                btnLoveYou.disabled = false;
+                btnLoveMe.disabled = true;
+            });
+
+            btnLoveYou.addEventListener("click", () => {
+                gameTitle.innerText = "كنت عارف انو انا 🙈💙";
+                gameResponse.style.color = "#2b7bb9";
+                gameResponse.innerText = "اده كمان مش عاوزة تناقشيني؟ 😂🤷‍♂️";
+                
+                btnLoveYou.disabled = true;
+
+                triggerCelebration(5);
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.4 } });
+                
+                setTimeout(() => { confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } }); }, 200);
+                setTimeout(() => { confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } }); }, 400);
+
+                setTimeout(() => {
+                    gameModal.classList.add("hidden");
+                    finalSuccessModal.classList.remove("hidden");
+                }, 2000);
+            });
+
+            closeGameBtn.addEventListener("click", () => { gameModal.classList.add("hidden"); });
+            closeSuccessBtn.addEventListener("click", () => { finalSuccessModal.classList.add("hidden"); });
+
+            btnBackToMain.addEventListener("click", () => {
+                loveLetterScreen.classList.add("hidden");
+                mainScreen.classList.remove("hidden");
+                
+                envelopeBox.style.display = "block";
+                envelopeReady.style.display = "block";
+                envelopeLoading.style.display = "none";
+                envelopeProgressFill.style.width = "0%";
+                lettersContainer.style.display = "none";
+                lettersContainer.innerHTML = "";
+            });
+        });
+    </script>
+</body>
+</html>

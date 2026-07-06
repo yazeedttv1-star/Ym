@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إصدار ببجي موبايل 2026 الأسطوري - النسخة الخربانة المحدثة 🔥🎮</title>
+    <title>إصدار ببجي موبايل 2026 الأسطوري - النسخة المحدثة 🔥🎮</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
@@ -33,7 +33,7 @@
             padding: 20px 0;
         }
 
-        /* حاوية اللعبة الرئيسية الصخرية */
+        /* حاوية اللعبة الرئيسية */
         .pubg-master-container {
             background: #151d24;
             border: 4px solid #f39c12;
@@ -46,7 +46,7 @@
             border-image: linear-gradient(to bottom, #f39c12, #d35400, #c0392b) 1;
         }
 
-        /* رأس اللعبة (Header) */
+        /* رأس اللعبة */
         .pubg-header {
             text-align: center;
             margin-bottom: 25px;
@@ -179,7 +179,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* تأثير بيئة الطيران الخلفية */
         .sky-cloud-back {
             position: absolute;
             width: 100%;
@@ -321,7 +320,6 @@
             box-shadow: 0 4px 0px #196f3d;
         }
 
-        /* زر إعادة التصفير الكبير السفلي */
         .system-footer-reset-btn {
             background: #11171d;
             border: 1px solid #c0392b;
@@ -342,33 +340,7 @@
         }
 
         /* ==========================================
-           7. النوافذ المنبثقة والقلتشات الفورية (Overlays)
-           ========================================== */
-        .fullscreen-glitch-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(192, 41, 43, 0.98);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 25px;
-        }
-
-        .glitch-container-box {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 40px;
-            border-radius: 25px;
-            border: 3px double #f1c40f;
-            max-width: 500px;
-            width: 90%;
-            animation: extremeShake 0.2s infinite;
-        }
-
-        /* ==========================================
-           8. مؤثرات الحركة والأنيميشن (Animations)
+           7. المؤثرات الحركية (Animations)
            ========================================== */
         @keyframes titlePulse {
             0% { transform: scale(1); text-shadow: 2px 2px 0px #000; }
@@ -386,16 +358,6 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        @keyframes extremeShake {
-            0% { transform: translate(3px, 5px) rotate(0deg); }
-            20% { transform: translate(-3px, -5px) rotate(-2deg); }
-            40% { transform: translate(-5px, 3px) rotate(1deg); }
-            60% { transform: translate(5px, -3px) rotate(2deg); }
-            80% { transform: translate(-2px, 4px) rotate(-1deg); }
-            100% { transform: translate(4px, -2px) rotate(0deg); }
-        }
-
-        /* نمط خلايا السحاب المتحركة الفيك */
         .fictional-cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.2);
@@ -411,19 +373,11 @@
 </head>
 <body>
 
-    <div id="master-glitch-layer" class="fullscreen-glitch-layer hidden">
-        <div class="glitch-container-box">
-            <div style="font-size: 90px; margin-bottom: 15px;">👾⚠️🕹️</div>
-            <h1 id="glitch-layer-title" style="color: #fff; font-size: 34px; font-weight: 900;">خطأ فادح في خوادم ببجي!</h1>
-            <p id="glitch-layer-text" style="font-size: 20px; font-weight: bold; margin-top: 15px; color: #f1c40f; line-height: 1.6;"></p>
-        </div>
-    </div>
-
     <div class="pubg-master-container">
         
         <div class="pubg-header">
             <h1>PUBG MOBILE ULTRA</h1>
-            <div class="version-tag">إصدار 2026 الخربان v99.9</div>
+            <div class="version-tag">إصدار 2026 المحسن v100.0</div>
         </div>
 
         <div class="stats-grid">
@@ -449,17 +403,17 @@
             <div class="sky-cloud-back" id="cloud-container"></div>
             <div class="visual-actor" id="visual-emoji">🛩️</div>
             <div class="ticker-log-box" id="system-log-text">
-                أهلاً بك في خوادم اللعبة الخربانة! اضغط على زر "القفز التكتيكي" لتبدأ أولى الكوارث البرمجية! 🛠️
+                أهلاً بك في خوادم اللعبة! اضغط على زر "القفز من الطيارة" لتبدأ المعارك التكتيكية! 🛠️
             </div>
         </div>
 
-        <div class="shop-section-title">💬 راديو السكواد الخربان (شات مباشر):</div>
+        <div class="shop-section-title">💬 راديو السكواد (شات مباشر):</div>
         <div class="squad-chat-panel" id="squad-chat-box">
             <div class="chat-line"><span class="chat-sender-number-2">رقم 2:</span> يسطا انزل بوشينكي بسرعة اللوت هناك ملوش حل! 🔥</div>
             <div class="chat-line"><span class="chat-sender-number-3">رقم 3:</span> يا جماعة اللعبة مهنجة عندي وأنا بسبح تحت الأرض حالياً ومفيش مية! 😂</div>
         </div>
 
-        <div class="shop-section-title">🛒 متجر المعدات والأسلحة الاستراتيجية الفاشلة:</div>
+        <div class="shop-section-title">🛒 متجر المعدات والأسلحة الاستراتيجية:</div>
         <div class="inventory-shop-grid">
             <div class="shop-item-card active-weapon" id="shop-item-1" onclick="selectWeapon(1, 'صوت الفراخ المذعورة 🐔', '🍌', 0)">
                 <div class="item-icon">🍌</div>
@@ -507,7 +461,7 @@
 
     <script>
         // ==========================================
-        // 9. تهيئة خوادم قاعدة البيانات (Firebase Engine)
+        // تهيئة خوادم قاعدة البيانات (Firebase Engine)
         // ==========================================
         const firebaseConfig = {
             databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com/"
@@ -518,7 +472,6 @@
         }
         const database = firebase.database();
 
-        // متغيرات الحالة التشغيلية للعبة
         let currentKills = 0;
         let currentDeaths = 0;
         let currentBp = 0;
@@ -527,7 +480,6 @@
         let selectedWeaponName = "قاذف قشر الموز";
         let selectedWeaponEmoji = "🍌";
 
-        // بنك العبارات العشوائية لشات السكواد المضحك
         const squadChatPhrases = [
             { sender: 2, name: "رقم 2", txt: "مين معاه طلق أخضر يا جماعة؟ السلاح اللي معايا بيضرب بسلة! 🫛" },
             { sender: 4, name: "رقم 4", txt: "الحقوني الزون قفلت عليا وأنا لسه بشتري كريب من على أول خريطة إرانغل! 😭" },
@@ -537,7 +489,6 @@
             { sender: 3, name: "رقم 3", txt: "يا جدعان النت عندي بنج 4000، أنا شايف نفسي بلعب في الماتش اللي فات!" }
         ];
 
-        // ميكانيكية توليد أصوات برمجية مضحكة عبر كرت الصوت الداخلي للمتصفح (Web Audio API Synth)
         function playGlitchSound(frequency, type, duration) {
             try {
                 let context = new (window.AudioContext || window.webkitAudioContext)();
@@ -556,27 +507,17 @@
                 
                 setTimeout(() => { oscillator.stop(); context.close(); }, (duration || 0.3) * 1000);
             } catch (e) {
-                console.log("Audio not supported yet.");
+                console.log("Audio not supported.");
             }
         }
 
         // ==========================================
-        // 10. ربط البيانات وقراءتها حياً من فايربيس (Live Listener)
+        // ربط البيانات وقراءتها حياً من فايربيس
         // ==========================================
         database.ref('remoteControl').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // التحكم بمصفوفة القلتش الخارجي والأمر الفوري (showAlert)
-                if (data.showAlert === true || data.showAlert === "true") {
-                    if (data.alertTitle) document.getElementById("glitch-layer-title").innerText = data.alertTitle;
-                    if (data.alertText) document.getElementById("glitch-layer-text").innerText = data.alertText;
-                    document.getElementById("master-glitch-layer").classList.remove("hidden");
-                    playGlitchSound(120, 'sawtooth', 1.5);
-                } else {
-                    document.getElementById("master-glitch-layer").classList.add("hidden");
-                }
-
-                // استقبال ومعالجة أوامر التصفير عن بعد لشاشة ببجي
+                // شاشة القلتش الكبيرة تم إيقاف تفعيلها بناءً على طلبك
                 if (data.resetGame === true || data.resetGame === "true") {
                     localResetUI();
                     database.ref('remoteControl').update({
@@ -585,7 +526,6 @@
                     return;
                 }
 
-                // سحب الأرقام المحدثة وحقنها في الـ HTML
                 currentKills = data.pubgKills || 0;
                 currentDeaths = data.pubgDeaths || 0;
                 currentBp = data.pubgBp || 0;
@@ -596,7 +536,6 @@
                 document.getElementById("total-bp-display").innerText = currentBp;
                 document.getElementById("total-rank-display").innerText = "#" + currentRank;
             } else {
-                // إذا كانت الذاكرة السحابية فارغة يتم تأسيسها بالقيم التالية
                 database.ref('remoteControl').update({
                     pubgKills: 0, pubgDeaths: 0, pubgBp: 0, pubgRank: 99, showAlert: false
                 });
@@ -604,14 +543,12 @@
         });
 
         // ==========================================
-        // 11. نظام إدارة المعارك والقرارات (Game Actions)
+        // نظام إدارة المعارك والقرارات
         // ==========================================
         function triggerAction(actionType) {
             const logText = document.getElementById("system-log-text");
             const visualEmoji = document.getElementById("visual-emoji");
-            const windowBg = document.getElementById("display-window");
 
-            // نزع كلاسات القلتش القديمة لإعادة تشغيل الأنيميشن
             visualEmoji.classList.remove("glitch-effect");
 
             if (actionType === 'drop') {
@@ -627,11 +564,11 @@
 
             } else if (actionType === 'fire') {
                 if (selectedWeaponIndex === 2 && currentKills < 5) {
-                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مغلق! تحتاج على الأقل إلى 5 كيلات لفتحه ومطاردة الأعداء به!`;
+                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مغلق! تحتاج على الأقل إلى 5 كيلات لفتحه!`;
                     return;
                 }
                 if (selectedWeaponIndex === 3 && currentKills < 15) {
-                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مقفل بإحكام! تحتاج إلى 15 كيلاً لتوليد طاقة الليزر السديمية!`;
+                    logText.innerText = `عذراً! سلاح [${selectedWeaponName}] مقفل بإحكام! تحتاج إلى 15 كيلاً لتوليد طاقة الليزر!`;
                     return;
                 }
 
@@ -697,32 +634,26 @@
             }
         }
 
-        // ==========================================
-        // 12. متجر التجهيزات وترقية العتاد (Shop Management)
-        // ==========================================
         function selectWeapon(itemId, name, emoji, requiredKills) {
             if (currentKills < requiredKills) {
-                document.getElementById("system-log-text").innerText = `فشل التجهيز! السلاح مقفل. يتطلب الحصول على ${requiredKills} كيلات، بينما تمتلك حالياً ${currentKills} كيل فقط!`;
+                document.getElementById("system-log-text").innerText = `فشل التجهيز! السلاح مقفل. يتطلب الحصول على ${requiredKills} كيلات!`;
                 playGlitchSound(150, 'square', 0.3);
                 return;
             }
 
-            // إزالة الكلاس النشط من جميع العناصر
             for (let i = 1; i <= 3; i++) {
                 document.getElementById(`shop-item-${i}`).classList.remove("active-weapon");
             }
 
-            // إضافة التفعيل للمنتج المختار
             document.getElementById(`shop-item-${itemId}`).classList.add("active-weapon");
             selectedWeaponIndex = itemId;
             selectedWeaponName = name;
             selectedWeaponEmoji = emoji;
 
-            document.getElementById("system-log-text").innerText = `تم بنجاح تجهيز وتلقيم [${name}] في حقيبة ظهرك الخربانة! جاهز للمعارك المضحكة الآن. 🏹`;
+            document.getElementById("system-log-text").innerText = `تم بنجاح تجهيز وتلقيم [${name}] في حقيبة ظهرك! جاهز للمعارك الآن. 🏹`;
             playGlitchSound(520, 'sine', 0.2);
         }
 
-        // تفجير محاكاة خلايا الدم الحمراء عند الموت (UI Feedback)
         function triggerBloodFlash() {
             const windowBg = document.getElementById("display-window");
             windowBg.style.backgroundColor = "rgba(192, 41, 43, 0.4)";
@@ -731,9 +662,6 @@
             }, 300);
         }
 
-        // ==========================================
-        // 13. نظام الشات الدوري والبيئة السحابية (Loops)
-        // ==========================================
         setInterval(() => {
             const chatBox = document.getElementById("squad-chat-box");
             const randomLine = squadChatPhrases[Math.floor(Math.random() * squadChatPhrases.length)];
@@ -745,13 +673,11 @@
             chatBox.appendChild(newLineDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // مسح الأسطر القديمة جداً للحفاظ على الأداء وسرعة المتصفح
             if (chatBox.children.length > 20) {
                 chatBox.removeChild(chatBox.children[0]);
             }
         }, 4500);
 
-        // إنشاء وتوليد سحب وهمية متحركة بالخلفية لإعطاء شعور الطيران بببجي
         function createFictionalClouds() {
             const container = document.getElementById("cloud-container");
             for (let i = 0; i < 4; i++) {
@@ -767,9 +693,6 @@
         }
         createFictionalClouds();
 
-        // ==========================================
-        // 14. التصفير وإعادة الضبط الشامل (Reset Engine)
-        // ==========================================
         function localResetUI() {
             document.getElementById("total-kills-display").innerText = "0";
             document.getElementById("total-deaths-display").innerText = "0";

@@ -10,7 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* --- التنسيقات العامة --- */
+        /* --- التنسيقات العامة (ستايل وألوان ستيتش الأزرق) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,7 +21,7 @@
         body {
             background-color: #e6f0fa;
             overflow-x: hidden;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         .screen {
@@ -34,7 +34,6 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.5s ease;
-            padding: 20px;
         }
 
         .hidden {
@@ -43,38 +42,58 @@
             display: none !important;
         }
 
-        /* --- تصميم عداد الأيام المكبر (متجاوب) --- */
+        /* ستايل الشاشة الحمراء الطارئة للتحكم المباشر */
+        #emergency-screen {
+            background-color: #d32f2f;
+            color: white;
+            z-index: 9999;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .emergency-content {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: popupScale 0.4s ease-out;
+        }
+
+        /* --- تصميم عداد الأيام المكبر --- */
         .days-counter-box {
             position: absolute;
             top: 20px;
             right: 20px;
             background: rgba(43, 123, 185, 0.25);
             border: 3px solid #2b7bb9;
-            padding: 12px 20px;
+            padding: 15px 25px;
             border-radius: 15px;
             text-align: center;
             backdrop-filter: blur(8px);
             z-index: 5;
             box-shadow: 0 4px 15px rgba(43, 123, 185, 0.2);
-            max-width: 90%;
         }
 
         .counter-title {
-            font-size: 13px;
+            font-size: 15px;
             color: #1c5380;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .counter-timer {
-            font-size: 18px;
+            font-size: 22px;
             color: #1c5380;
             font-weight: 900;
             direction: ltr;
             letter-spacing: 1px;
         }
 
-        /* شاشة التحميل الأولى */
         #loader-screen {
             background-color: #2b7bb9;
             color: white;
@@ -83,18 +102,15 @@
 
         .loader-content {
             text-align: center;
-            width: 100%;
-            max-width: 400px;
         }
 
         .duck-icon {
-            font-size: 65px;
+            font-size: 80px;
             animation: bounce 1s infinite alternate;
         }
 
         .progress-bar {
-            width: 80%;
-            max-width: 250px;
+            width: 250px;
             height: 8px;
             background-color: rgba(255, 255, 255, 0.3);
             border-radius: 5px;
@@ -110,19 +126,15 @@
         }
 
         .fade-in-text {
-            font-size: 20px;
+            font-size: 24px;
             margin-top: 15px;
             opacity: 0;
             animation: fadeIn 1s 0.8s forwards;
-            line-height: 1.5;
         }
 
-        /* الشاشة الرئيسية */
         #main-screen {
             background: radial-gradient(circle, #ffffff 0%, #b3daf5 100%);
             flex-direction: column;
-            overflow-y: auto;
-            padding-top: 120px;
         }
 
         .main-container {
@@ -130,127 +142,113 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            max-width: 550px;
+            width: 90%;
+            max-width: 600px;
             background: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(43, 123, 185, 0.15);
             text-align: center;
             position: relative;
-            margin: auto 0;
         }
 
         .big-title {
-            font-size: 28px;
+            font-size: 36px;
             color: #2b7bb9;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .sub-title {
-            font-size: 16px;
+            font-size: 18px;
             color: #444;
             margin-bottom: 20px;
             line-height: 1.6;
         }
 
         .buttons-group {
-            margin-top: 15px;
+            margin-top: 25px;
             display: flex;
-            gap: 12px;
+            gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
-            width: 100%;
         }
 
         .btn {
-            padding: 12px 25px;
+            padding: 12px 30px;
             border: none;
             border-radius: 25px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
-            max-width: 100%;
         }
 
-        .btn:hover {
-            transform: scale(1.03);
-        }
-
+        .btn:hover { transform: scale(1.05); }
         .btn-pink { background-color: #64b5f6; color: white; }
         .btn-red { background-color: #2b7bb9; color: white; }
         
         .btn-back {
             background-color: #90a4ae;
             color: white;
-            padding: 10px 24px;
+            padding: 8px 20px;
             font-size: 14px;
             border-radius: 20px;
             border: none;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 15px;
             transition: background-color 0.2s;
         }
         .btn-back:hover { background-color: #78909c; }
 
         .duck-frame {
-            font-size: 70px;
-            margin-bottom: 10px;
+            font-size: 90px;
+            margin-bottom: 15px;
             position: relative;
             animation: float 2s infinite alternate;
         }
 
-        /* النوافذ المنبثقة المخصصة */
         .modal {
             position: fixed;
             z-index: 20;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.5);
             display: flex; justify-content: center; align-items: center;
-            padding: 15px;
         }
 
         .modal-content {
             background-color: white;
-            padding: 35px 20px;
+            padding: 30px;
             border-radius: 15px;
-            max-width: 420px;
-            width: 100%;
+            max-width: 450px;
+            width: 90%;
             position: relative;
             text-align: center;
             border-top: 8px solid #2b7bb9;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             animation: popupScale 0.3s ease-out;
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         @keyframes popupScale {
-            from { transform: scale(0.8); opacity: 0; }
+            from { transform: scale(0.7); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         .close-btn {
             position: absolute; left: 15px; top: 10px;
-            font-size: 26px; cursor: pointer; color: #aaa;
-            transition: color 0.2s;
-            padding: 5px;
+            font-size: 28px; cursor: pointer; color: #aaa;
         }
-        
         .close-btn:hover { color: #2b7bb9; }
 
-        /* شاشات التحميل المصغرة داخل النوافذ */
         .modal-loader {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 20px;
         }
 
         .small-progress {
-            width: 130px;
+            width: 150px;
             height: 6px;
             background-color: #e0e0e0;
             border-radius: 5px;
@@ -265,17 +263,16 @@
             animation: fillProgress 1.5s forwards ease-in-out;
         }
 
-        /* أزرار الأسئلة التفاعلية */
         .game-btn-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             margin-top: 20px;
         }
 
         .game-btn {
-            padding: 10px 22px;
-            font-size: 15px;
+            padding: 10px 25px;
+            font-size: 16px;
             font-weight: bold;
             border: 2px solid #2b7bb9;
             background: white;
@@ -293,52 +290,19 @@
             color: #999;
         }
 
-        /* شاشة مغلف الرسائل الفردية */
-        #love-letter-screen {
-            background-color: #2b7bb9; 
-            flex-direction: column; 
-            overflow-y: auto; 
-            justify-content: flex-start;
-            padding: 30px 15px;
-        }
-
-        /* التحكم الفوري الخارجي (شاشة تنبيه عاجلة تقلب باللون الأحمر) */
-        #remote-alert-screen {
-            background-color: #b71c1c;
-            color: white;
-            z-index: 100;
-            flex-direction: column;
-            text-align: center;
-        }
-
-        @keyframes bounce { to { transform: translateY(-15px); } }
-        @keyframes float { to { transform: translateY(-8px) rotate(3deg); } }
+        @keyframes bounce { to { transform: translateY(-20px); } }
+        @keyframes float { to { transform: translateY(-10px) rotate(5deg); } }
         @keyframes fadeIn { to { opacity: 1; } }
         @keyframes fillProgress { to { width: 100%; } }
-
-        @media (max-width: 480px) {
-            .days-counter-box {
-                position: absolute;
-                top: 15px;
-                right: 50%;
-                transform: translateX(50%);
-                width: 85%;
-                padding: 10px;
-            }
-            #main-screen { padding-top: 140px; }
-            .big-title { font-size: 24px; }
-            .sub-title { font-size: 15px; }
-            .btn { width: 100%; padding: 12px 15px; }
-        }
     </style>
 </head>
 <body>
 
-    <div id="remote-alert-screen" class="screen hidden">
-        <div style="max-width: 500px; padding: 20px; background: rgba(0,0,0,0.4); border-radius: 15px;">
-            <div style="font-size: 60px; margin-bottom: 15px;">📢</div>
-            <h1 id="remote-title" style="font-size: 26px; margin-bottom: 10px;">رسالة عاجلة</h1>
-            <p id="remote-text" style="font-size: 17px; line-height: 1.6;"></p>
+    <div id="emergency-screen" class="screen hidden">
+        <div class="emergency-content">
+            <div style="font-size: 70px; animation: bounce 0.6s infinite alternate; margin-bottom: 15px;">🚨🙋‍♂️</div>
+            <h1 id="emergency-title" style="font-size: 32px; font-weight: 900; margin-bottom: 15px;">تنبيه فوري!</h1>
+            <p id="emergency-text" style="font-size: 20px; line-height: 1.6; font-weight: bold;">هناك رسالة عاجلة لك الآن.</p>
         </div>
     </div>
 
@@ -346,31 +310,30 @@
         <div class="loader-content">
             <div class="duck-icon">💙🐥</div>
             <div class="progress-bar"><div class="progress-fill"></div></div>
-            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 28px; font-weight: bold;">بطتي 💙</span></h1>
+            <h1 class="fade-in-text">رسالة خاصة جداً لـ <br><span style="font-size: 32px; font-weight: bold;">بطتي 💙</span></h1>
         </div>
     </div>
 
     <div id="main-screen" class="screen hidden">
         <div class="days-counter-box">
             <div class="counter-title">لا ده عداد أيامنا ملناش دعوة بيه😂😂</div>
-            <div id="live-counter" class="counter-timer">00 يوم و 00:00:00</div>
+            <div id="live-counter" class="counter-timer"> 00   00:00:00</div>
         </div>
 
         <div class="main-container">
             <div class="duck-frame">🐥💙</div>
-            <h1 class="big-title" id="main-big-title">أنا آسف يا بطتي..</h1>
-            <p class="sub-title" id="main-sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
+            <h1 class="big-title">أنا آسف يا بطتي..</h1>
+            <p class="sub-title">عارف إني اتأخرت عليكي ومصالحتكيش في وقتها، وزعلك غالي عليا ومقدرش عليه والله. البيت من غيرك  ملهوش أي طعم وإنتي زعلانة مني ي مرتي 😂😂🥺</p>
             
             <div class="buttons-group">
                 <button id="btn-popup" class="btn btn-pink">اضغطي هنا الأول بس😉 </button>
-                <button id="btn-next" class="btn btn-red">افتحي الملف يلا شطورة🤭 💌</button>
+                <button id="btn-next" class="btn btn-red">افتحي الملف يلا شطورة🤭  💌</button>
             </div>
         </div>
     </div>
 
     <div id="message-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-btn" id="close-message-btn">&times;</span>
             <div id="modal-loading-zone" class="modal-loader">
                 <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">⏳</div>
                 <p style="color: #555; margin-top: 10px;">شطورة ي بطه🫦 جاري فتح الرسالة يا بطتي...</p>
@@ -378,8 +341,9 @@
             </div>
 
             <div id="modal-text-zone" class="hidden">
+                <span class="close-btn">&times;</span>
                 <h2 style="color: #2b7bb9; margin-bottom: 15px;">إلى بطتي الجميلة 💙</h2>
-                <p style="line-height: 1.6; color: #444; font-size: 15px;">
+                <p style="line-height: 1.6; color: #444; font-size: 16px;">
                      حقك عليا يا أغلى حاجة في حياتي.. التفكير في إني زعلتك ومصالحتكيش علطول بيوجعني انا والله . <br><br>
                     😉سامحيني ي بطه هااااا وخلينا ننسى الزعل، مكانك في قلبي زي ما هو وميقلش أبداً. اضحكي بقى عشان ضحكتك هي اللي بتنور يومي! 🥰
                 </p>
@@ -387,46 +351,45 @@
         </div>
     </div>
 
-    <div id="love-letter-screen" class="screen hidden">
-        <h1 style="margin-bottom:20px; font-size: 24px; color: white; text-align: center;">ملف الاعتذار والحب الي مش من مقامك والله 💙</h1>
+    <div id="love-letter-screen" class="screen hidden" style="background-color: #2b7bb9; flex-direction:column; overflow-y:auto; padding: 40px 0;">
+        <h1 style="margin-bottom:20px; font-size: 28px; color: white;">ملف الاعتذار والحب الي مش من مقامك والله  💙</h1>
         
-        <div id="envelope" style="background:#fff; color:#333; padding:35px 20px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:100%; max-width:380px; position: relative; margin-bottom: 15px;">
+        <div id="envelope" style="background:#fff; color:#333; padding:40px; border-radius:15px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:90%; max-width:380px; position: relative;">
             
             <div id="envelope-loading" class="modal-loader" style="display: none;">
-                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">✉️</div>
+                <div style="font-size: 40px; animation: bounce 0.6s infinite alternate;">🫦🫦</div>
                 <p style="color: #555; margin-top: 11px;">جاري تحضير الكلمات احمم احمم🙃🙃...</p>
                 <div class="small-progress"><div class="small-progress-fill" id="envelope-progress-fill" style="animation: none; width: 0%;"></div></div>
             </div>
 
             <div id="envelope-ready">
-                <div style="font-size:50px; animation: bounce 1s infinite alternate;">🫦</div>
-                <p style="font-weight:bold; margin-top:15px; font-size: 17px; color: #555;">خاص لـ بطتي 🫦🐥</p>
-                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 30px; border-radius:25px; margin-top:20px; font-size:15px; font-weight:bold; cursor:pointer; width: 100%;">افتحي الرسالة ي عسل</button>
+                <div style="font-size:60px; animation: bounce 1s infinite alternate;">🫦</div>
+                <p style="font-weight:bold; margin-top:15px; font-size: 18px; color: #555;">خاص لـ بطتي 🫦🐥</p>
+                <button id="open-envelope-btn" style="background:#2b7bb9; color:white; border:none; padding:12px 35px; border-radius:25px; margin-top:20px; font-size:16px; font-weight:bold; cursor:pointer;">افتحي الرسالة ي عسل</button>
             </div>
         </div>
         
-        <div id="letters-container" style="width:100%; max-width:450px; margin-top: 10px; display:none;"></div>
+        <div id="letters-container" style="width:90%; max-width:450px; margin-top: 10px; display:none;"></div>
         <button id="btn-back-to-main" class="btn-back">رجوع للخلف لو عاوزة 👈👉</button>
     </div>
 
     <div id="comedy-notice-modal" class="modal hidden">
         <div class="modal-content" style="border-top: 8px solid #64b5f6;">
-            <span class="close-btn" id="close-comedy-btn">&times;</span>
             <div style="font-size: 40px; margin-bottom: 10px;">🤨🤚</div>
             <h2 style="color: #2b7bb9; margin-bottom: 15px;">رايحة فين!</h2>
-            <p style="line-height: 1.6; color: #444; font-size: 15px; font-weight: bold; margin-bottom: 20px;">
+            <p style="line-height: 1.6; color: #444; font-size: 16px; font-weight: bold; margin-bottom: 20px;">
                 خدي هنا راحة فين لسا في سؤال واحد فقط.. <br>
                  اضغطي على الزرار الي بيتنطط تحت ده الي لونه بمبي ده ااايوا هو ده 👇👀
             </p>
-            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 11px 30px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; max-width: 250px;">(ماشي) قبل ما تدوسي ي بطه اقري الرسايل</button>
+            <button id="btn-comedy-ok" style="background-color: #2b7bb9; color: white; border: none; padding: 10px 30px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer;">(ماشي)قبل ما تدوسي ي بطه اقري الرسايل</button>
         </div>
     </div>
 
     <div id="game-modal" class="modal hidden">
         <div class="modal-content" style="border-top: 8px solid #ff4d6d;">
             <span class="close-btn" id="close-game-btn">&times;</span>
-            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px; font-size: 20px;">مين فينا بيحب التاني اكتر؟ 🤔</h2>
-            <p id="game-response" style="color: #555; font-size: 15px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
+            <h2 id="game-title" style="color: #2b7bb9; margin-bottom: 15px;">مين فينا بيحب التاني اكتر؟ 🤔</h2>
+            <p id="game-response" style="color: #555; font-size: 16px; min-height: 40px; line-height: 1.6; font-weight: bold;"></p>
             
             <div class="game-btn-container">
                 <button id="btn-love-me" class="game-btn"> لا أنا 🙋‍♀️</button>
@@ -436,11 +399,11 @@
     </div>
 
     <div id="final-success-modal" class="modal hidden">
-        <div class="modal-content" style="border-top: 8px solid #4caf50;">
+        <div class="modal-content" style="border-top: 8px solid #4caf50; max-width: 400px;">
             <span class="close-btn" id="close-success-btn">&times;</span>
-            <div style="font-size: 45px; margin-bottom: 10px;">🎉💙</div>
+            <div style="font-size: 50px; margin-bottom: 10px;">🎉💙</div>
             <h2 style="color: #2b7bb9; margin-bottom: 15px;">صافي يا لبن!</h2>
-            <p style="font-size: 16px; color: #333; line-height: 1.6; font-weight: bold;">
+            <p style="font-size: 17px; color: #333; line-height: 1.6; font-weight: bold;">
                 😉خلاص صافي يا لبن وحليب يا قشطة! <br>
                 بعشقك يا أحلى وأجمل بطة في الدنيا والله🫦💋 💙🐥
             </p>
@@ -448,20 +411,15 @@
     </div>
 
     <script>
-        // ربط معلومات الفايربيس الحقيقية الخاصة بمشروعك
+        // --- إعدادات ربط الفايربيس بمشروعك الفريد ---
         const firebaseConfig = {
-            apiKey: "AIzaSyB5jFiYrMnH_tvaJAq5QmATI43Pu3F0Yaw",
-            authDomain: "my-project-f00cd.firebaseapp.com",
-            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com",
-            projectId: "my-project-f00cd",
-            storageBucket: "my-project-f00cd.firebasestorage.app",
-            messagingSenderId: "346249386295",
-            appId: "1:346249386295:web:5652b6b2309b795c89a2b2",
-            measurementId: "G-0XL21X43PR"
+            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com/"
         };
         
-        // تشغيل الفايربيس
-        firebase.initializeApp(firebaseConfig);
+        // تشغيل وتهيئة الفايربيس
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const database = firebase.database();
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -470,7 +428,7 @@
             const btnPopup = document.getElementById("btn-popup");
             const btnNext = document.getElementById("btn-next");
             const modal = document.getElementById("message-modal");
-            const closeMessageBtn = document.getElementById("close-message-btn");
+            const closeModal = document.querySelector(".close-btn");
             
             const modalLoadingZone = document.getElementById("modal-loading-zone");
             const modalTextZone = document.getElementById("modal-text-zone");
@@ -486,7 +444,6 @@
 
             const comedyNoticeModal = document.getElementById("comedy-notice-modal");
             const btnComedyOk = document.getElementById("btn-comedy-ok");
-            const closeComedyBtn = document.getElementById("close-comedy-btn");
 
             const gameModal = document.getElementById("game-modal");
             const btnLoveMe = document.getElementById("btn-love-me");
@@ -498,30 +455,27 @@
             const finalSuccessModal = document.getElementById("final-success-modal");
             const closeSuccessBtn = document.getElementById("close-success-btn");
 
-            // --- مستقبل التحكم الفوري المباشر لايف ---
+            const emergencyScreen = document.getElementById("emergency-screen");
+            const emergencyTitle = document.getElementById("emergency-title");
+            const emergencyText = document.getElementById("emergency-text");
+
+            // --- 💡 كود الاستماع المباشر لقاعدة البيانات الفايربيس لايف ---
             database.ref('remoteControl').on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    // وضع التنبيه العاجل (الشاشة الحمراء)
-                    if (data.showAlert === true) {
-                        document.getElementById("remote-title").innerText = data.alertTitle || "تنبيه عاجل";
-                        document.getElementById("remote-text").innerText = data.alertText || "";
-                        document.getElementById("remote-alert-screen").classList.remove("hidden");
+                if(data) {
+                    // إذا كانت قيمة showAlert تساوي true، أظهر الشاشة الحمراء الطارئة فوراً
+                    if(data.showAlert === true || data.showAlert === "true") {
+                        if(data.alertTitle) emergencyTitle.innerText = data.alertTitle;
+                        if(data.alertText) emergencyText.innerText = data.alertText;
+                        emergencyScreen.classList.remove("hidden");
                     } else {
-                        document.getElementById("remote-alert-screen").classList.add("hidden");
-                    }
-
-                    // تغيير العناوين الرئيسية فورياً
-                    if (data.changeTitle) {
-                        document.getElementById("main-big-title").innerText = data.changeTitle;
-                    }
-                    if (data.changeSubTitle) {
-                        document.getElementById("main-sub-title").innerText = data.changeSubTitle;
+                        // إذا تم كتابة false، أخفِ الشاشة الحمراء وارجع للموقع الطبيعي
+                        emergencyScreen.classList.add("hidden");
                     }
                 }
             });
 
-            // --- حساب العداد المباشر من تاريخ 1/1/2026 ---
+            // --- 1. حساب العداد المباشر من تاريخ 1/1/2026 ---
             const startDate = new Date("2026-01-01T00:00:00").getTime();
             
             function updateLiveCounter() {
@@ -542,12 +496,12 @@
             setInterval(updateLiveCounter, 1000);
             updateLiveCounter();
 
-            // --- الانتقال من شاشة التحميل الأولى للشاشة الرئيسية ---
+            // --- 2. الانتقال من شاشة التحميل الأولى للشاشة الرئيسية ---
             setTimeout(() => {
                 loaderScreen.classList.add("hidden");
                 mainScreen.classList.remove("hidden");
                 triggerCelebration(2);
-            }, 2600); 
+            }, 2600);
 
             function triggerCelebration(secondsDuration) {
                 var end = Date.now() + (secondsDuration * 1000);
@@ -558,7 +512,7 @@
                 }());
             }
 
-            // --- فتح النافذة المنبثقة الأولى ---
+            // --- 3. فتح النافذة المنبثقة الأولى مع شاشة تحميل مصغرة ---
             btnPopup.addEventListener("click", () => {
                 modalLoadingZone.style.display = "flex";
                 modalTextZone.classList.add("hidden");
@@ -567,12 +521,12 @@
                 setTimeout(() => {
                     modalLoadingZone.style.display = "none";
                     modalTextZone.classList.remove("hidden");
-                }, 1600); 
+                }, 1600);
             });
 
-            closeMessageBtn.addEventListener("click", () => { modal.classList.add("hidden"); });
+            closeModal.addEventListener("click", () => { modal.classList.add("hidden"); });
 
-            // --- الدخول إلى شاشة المغلف والرسائل المتتالية ---
+            // --- 4. الدخول إلى شاشة المغلف والرسائل المتتالية ---
             btnNext.addEventListener("click", () => {
                 mainScreen.classList.add("hidden");
                 loveLetterScreen.classList.remove("hidden");
@@ -589,10 +543,10 @@
                         envelopeBox.style.display = "none";
                         showSuccessiveLetters();
                     } else {
-                        width += 5; 
+                        width += 5;
                         envelopeProgressFill.style.width = width + "%";
                     }
-                }, 90); 
+                }, 90);
             });
 
             function showSuccessiveLetters() {
@@ -602,15 +556,15 @@
                 const messages = [
                     "من أول ما عرفت منك انك زعلك كبير ومش زي اي مرة قولت والله ما يقف قدامك ياد حاول لا تيأس. 😔",
                     "عارف إني قصرت لما اتأخرت عليكي ومجيتش صالحتك بسرعة، بس والله غلطت وكنت هصالحك والله وانتي عارفة غلاوتك ومكانتك عندي عاملة إزاي. 🫀",
-                    "مقدرش أشوفك زعلانة واسكت ومقدرش أعدي يومي وإحنا متغيرين على بعض..انا اسف ي بطتي انا اسف مرة واتنين وتلاته إنتي بطتي الحنينة والله اللي متعودش منها تبقي زعلانه مني كتير 🐥💙",
-                    "صافي يا لبن🫦؟ حليب يا قشطة؟ خلاص خلاص ماشي لالا يلا اضحكي بقى ي بطه خلي قلبك ابيض امال ي لمبي😂 بهزر معاكي وسيبي الزعل ده على جنب خالص خالص ماشي ويطلع من قلبك دي اهم حاجه والله وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. بحبك ي بت🫦😉 😻🤭"
+                    " مقدرش أشوفك زعلانة واسكت ومقدرش أعدي يومي وإحنا متغيرين على بعض..انا اسف ي بطتي انا اسف مرة واتنين وتلاته إنتي بطتي الحنينة والله اللي متعودش منها تبقي زعلانه مني  كتير 🐥💙",
+                    "صافي يا لبن🫦؟ حليب يا قشطة؟ خلاص خلاص ماشي لالا يلا اضحكي بقى ي بطه خلي قلبك ابيض امال ي لمبي😂 بهزر معاكي  وسيبي الزعل ده على جنب خالص خالص ماشي ويطلع من قلبك دي اهم حاجه والله وخلينا نرجع أحسن من الأول.. بحبك يا بطتي. بحبك ي بت🫦😉 😻🤭"
                 ];
 
                 messages.forEach((msg, index) => {
                     setTimeout(() => {
                         const card = document.createElement("div");
-                        card.style.cssText = "background:white; color:#333; padding:20px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 15px; line-height: 1.6; border-right: 5px solid #64b5f6; width:100%; text-align: right;";
-                        card.innerHTML = `<p>"${msg}"</p>`;
+                        card.style.cssText = "background:white; color:#333; padding:22px; margin-bottom:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px); transition: all 0.6s ease-out; font-size: 16px; line-height: 1.6; border-right: 5px solid #64b5f6;";
+                        card.innerHTML = `<p style="text-align: right;">"${msg}"</p>`;
                         lettersContainer.appendChild(card);
                         
                         setTimeout(() => {
@@ -623,11 +577,11 @@
                             setTimeout(() => {
                                 const loveBtn = document.createElement("button");
                                 loveBtn.innerText = " حليب يا قشطة وبوسة 😘💋";
-                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate; max-width:100%; width: 280px;";
+                                loveBtn.style.cssText = "display:block; margin: 25px auto 10px auto; background-color: #ff4d6d; color: white; border: none; padding: 14px 35px; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); animation: bounce 0.8s infinite alternate;";
                                 
                                 loveBtn.addEventListener("click", () => {
                                     gameResponse.innerText = "";
-                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر? اكيد انا طبعا 🤔";
+                                    gameTitle.innerText = " ي ترى مين فينا بيحب التاني اكتر؟ اكيد انا طبعا 🤔";
                                     btnLoveYou.disabled = true;
                                     btnLoveMe.disabled = false;
                                     gameModal.classList.remove("hidden");
@@ -645,10 +599,10 @@
                 });
             }
 
-            btnComedyOk.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
-            closeComedyBtn.addEventListener("click", () => { comedyNoticeModal.classList.add("hidden"); });
+            btnComedyOk.addEventListener("click", () => {
+                comedyNoticeModal.classList.add("hidden");
+            });
 
-            // --- منطق اللعبة التفاعلية ---
             btnLoveMe.addEventListener("click", () => {
                 gameResponse.style.color = "red";
                 gameResponse.innerText = "اده كمان بتناقشيني؟ انا كنت عارف والمشكله كمان بطلع عارف 🤨";
@@ -672,7 +626,7 @@
                 setTimeout(() => {
                     gameModal.classList.add("hidden");
                     finalSuccessModal.classList.remove("hidden");
-                }, 2000); 
+                }, 2000);
             });
 
             closeGameBtn.addEventListener("click", () => { gameModal.classList.add("hidden"); });

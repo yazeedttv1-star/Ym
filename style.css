@@ -1,13 +1,12 @@
 :root {
-    --primary-teal: #008069;
-    --dark-teal: #005e4b;
-    --bubble-sent: #dcf8c6;
-    --bubble-received: #ffffff;
-    --app-bg-dark: #111b21;
-    --window-bg: #efeae2;
-    --input-fill: #f0f2f5;
-    --text-primary: #111b21;
-    --text-muted: #667781;
+    --wa-teal: #008069;
+    --wa-dark: #111b21;
+    --wa-gray-bg: #efeae2;
+    --wa-header: #f0f2f5;
+    --bubble-me: #dcf8c6;
+    --bubble-other: #ffffff;
+    --text-main: #111b21;
+    --text-sub: #667781;
 }
 
 * {
@@ -18,51 +17,57 @@
 }
 
 body {
-    background-color: var(--app-bg-dark);
-    background-image: linear-gradient(180deg, #00a884 0%, var(--app-bg-dark) 100%);
+    background-color: var(--wa-dark);
+    background-image: linear-gradient(180deg, #00a884 0%, var(--wa-dark) 100%);
     background-size: 100% 120px;
     background-repeat: no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
+    width: 100vw;
 }
 
 .app-container {
     background: #fff;
     width: 100%;
-    max-width: 480px;
+    max-width: 450px;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-    position: relative;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    overflow: hidden;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 480px) {
     .app-container {
-        height: 90vh;
+        height: 92vh;
         border-radius: 10px;
     }
 }
 
-/* إدارة الشاشات التفاعلية */
+/* إدارة ظهور الشاشات */
 .screen {
     display: none;
     flex-direction: column;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 .screen.active {
     display: flex;
 }
 
-/* استايل صندوق تسجيل الدخول */
-.auth-box {
-    padding: 40px 25px;
+/* واجهة الدخول النضيفة */
+.auth-wrapper {
+    padding: 30px 20px;
     overflow-y: auto;
+    background: #fff;
     justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
 }
 
 .auth-header {
@@ -70,354 +75,305 @@ body {
     margin-bottom: 25px;
 }
 
-.auth-header .brand-icon {
-    font-size: 65px;
+.whatsapp-icon {
+    font-size: 55px;
     color: #25D366;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .auth-header h2 {
-    color: var(--text-primary);
-    font-size: 24px;
-    font-weight: 700;
+    color: var(--text-main);
+    font-size: 22px;
 }
 
 .auth-header p {
-    color: var(--text-muted);
-    font-size: 13.5px;
+    color: var(--text-sub);
+    font-size: 13px;
     margin-top: 5px;
 }
 
-.form-group {
-    width: 100%;
+.auth-section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
-.input-wrapper {
+.input-field {
     display: flex;
     align-items: center;
-    background: var(--input-fill);
-    border-radius: 10px;
-    padding: 6px 14px;
-    border: 1px solid transparent;
+    background: var(--wa-header);
+    border-radius: 8px;
+    padding: 4px 12px;
 }
 
-.input-wrapper:focus-within {
-    border-color: var(--primary-teal);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(0, 128, 105, 0.1);
+.input-field i {
+    color: var(--text-sub);
+    font-size: 15px;
+    margin-left: 10px;
 }
 
-.input-wrapper i {
-    color: var(--text-muted);
-    font-size: 16px;
-    margin-left: 12px;
-}
-
-.input-wrapper input {
+.input-field input {
     flex: 1;
     border: none;
     background: transparent;
     padding: 10px 0;
-    font-size: 14.5px;
+    font-size: 14px;
     outline: none;
-    color: var(--text-primary);
+    color: var(--text-main);
 }
 
-.country-code {
-    font-size: 15px;
+.country-prefix {
+    font-size: 14px;
     font-weight: bold;
-    color: var(--text-primary);
     border-left: 1px solid #ccc;
-    padding-left: 10px;
-    margin-left: 10px;
+    padding-left: 8px;
+    margin-left: 8px;
 }
 
-.btn {
+.main-btn {
     width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    font-size: 15.5px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.2s;
+    color: white;
 }
 
-.btn-teal { background: var(--primary-teal); color: #fff; }
-.btn-teal:hover { background: var(--dark-teal); }
-.btn-green { background: #25D366; color: #fff; }
-.btn-green:hover { background: #20ba5a; }
+.teal-btn { background: var(--wa-teal); }
+.green-btn { background: #25D366; }
 
-.separator {
+.text-divider {
     display: flex;
     align-items: center;
     text-align: center;
-    color: var(--text-muted);
-    font-size: 12px;
-    margin: 20px 0;
+    color: var(--text-sub);
+    font-size: 11px;
+    margin: 15px 0;
 }
-.separator::before, .separator::after {
+.text-divider::before, .text-divider::after {
     content: '';
     flex: 1;
     border-bottom: 1px solid #e9edef;
 }
-.separator::before { margin-left: 1em; }
-.separator::after { margin-right: 1em; }
+.text-divider::before { margin-left: 1em; }
+.text-divider::after { margin-right: 1em; }
 
-.quick-auth-grid {
+.social-auth-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
-.btn-outline {
+.grid-btn {
     background: #fff;
     border: 1px solid #e9edef;
-    color: var(--text-primary);
-    font-size: 13.5px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
 }
-.btn-outline:hover { background: var(--input-fill); }
-.btn-google i { color: #ea4335; }
-.btn-anon i { color: #555; }
+.google-btn i { color: #ea4335; }
+.anon-btn i { color: #555; }
 
-/* واجهة الشات وتفاصيلها المحترفة */
-.chat-window {
-    background: var(--window-bg);
+/* واجهة الشات المحترفة */
+.chat-wrapper {
+    background: var(--wa-gray-bg);
 }
 
-.main-header {
-    background: var(--input-fill);
-    padding: 12px 16px;
+.app-header {
+    background: var(--wa-header);
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e9edef;
 }
 
-.profile-section {
+.user-profile {
     display: flex;
     align-items: center;
-    gap: 12px;
-    max-width: 85%;
+    gap: 10px;
+    max-width: 80%;
 }
 
-.user-avatar {
-    width: 42px;
-    height: 42px;
-    background: var(--primary-teal);
-    color: #fff;
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background: var(--wa-teal);
+    color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
 }
 
-.user-details {
+.profile-meta {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
-.user-details h3 {
-    font-size: 15px;
-    color: var(--text-primary);
+.profile-meta h3 {
+    font-size: 14px;
+    color: var(--text-main);
     font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.uid-copy-container {
+.uid-box {
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-top: 2px;
-}
-
-.uid-label {
     font-size: 10px;
-    color: var(--text-muted);
+    color: var(--text-sub);
 }
 
-.user-details input {
-    font-size: 11px;
-    color: var(--primary-teal);
+.uid-box input {
     border: none;
     background: transparent;
+    font-size: 10px;
     font-weight: bold;
+    color: var(--wa-teal);
     outline: none;
-    width: 190px;
+    width: 150px;
 }
 
-.logout-trigger {
+.logout-btn {
     background: transparent;
     border: none;
-    color: var(--text-muted);
-    font-size: 18px;
+    color: var(--text-sub);
+    font-size: 16px;
     cursor: pointer;
-    padding: 6px;
 }
-.logout-trigger:hover { color: #ea4335; }
+.logout-btn:hover { color: #ea4335; }
 
-.connection-bar {
+.connect-holder {
     background: #fff;
-    padding: 10px 14px;
+    padding: 8px 12px;
     display: flex;
-    gap: 8px;
+    gap: 6px;
     border-bottom: 1px solid #e9edef;
 }
 
-.search-box {
+.search-bar {
     flex: 1;
     display: flex;
     align-items: center;
-    background: var(--input-fill);
-    border-radius: 20px;
-    padding: 0 14px;
+    background: var(--wa-header);
+    border-radius: 15px;
+    padding: 0 10px;
 }
 
-.search-box i {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-left: 8px;
+.search-bar i {
+    color: var(--text-sub);
+    font-size: 13px;
+    margin-left: 6px;
 }
 
-.search-box input {
+.search-bar input {
     flex: 1;
     border: none;
     background: transparent;
-    padding: 8px 0;
-    font-size: 13px;
+    padding: 6px 0;
+    font-size: 12px;
     outline: none;
 }
 
-.connect-action {
-    background: var(--primary-teal);
+.action-connect {
+    background: var(--wa-teal);
     color: white;
     border: none;
-    padding: 0 16px;
-    border-radius: 20px;
-    font-size: 12.5px;
+    padding: 0 12px;
+    border-radius: 15px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
 }
 
-/* منطقة بناء المحادثة والفقاعات */
-.chat-viewport {
+/* ساحة العرض والفقاعات */
+.chat-area {
     flex: 1;
-    padding: 20px 16px;
+    padding: 15px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
 }
 
-.system-welcome-message {
+.welcome-box {
     text-align: center;
     background: #fff;
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid #e9edef;
-    max-width: 90%;
+    max-width: 85%;
     margin: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
+.welcome-box i { font-size: 20px; color: var(--wa-teal); margin-bottom: 6px; }
+.welcome-box p { font-size: 12px; color: var(--text-sub); line-height: 1.4; }
 
-.system-welcome-message i {
-    font-size: 24px;
-    color: var(--primary-teal);
-    margin-bottom: 8px;
-}
-
-.system-welcome-message p {
-    font-size: 12.5px;
-    color: var(--text-muted);
-    line-height: 1.5;
-}
-
-.msg-row {
+.msg-line {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     max-width: 75%;
-    animation: popIn 0.2s ease-out;
 }
-@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.msg-line.sent { align-self: flex-end; }
+.msg-line.received { align-self: flex-start; }
 
-.msg-row.sent { align-self: flex-end; }
-.msg-row.received { align-self: flex-start; }
-
-.bubble {
-    padding: 8px 12px;
+.bubble-wrap {
+    padding: 6px 10px;
     border-radius: 8px;
-    font-size: 14px;
-    color: var(--text-primary);
-    box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+    font-size: 13.5px;
+    color: var(--text-main);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     word-break: break-word;
 }
-.sent .bubble { background: var(--bubble-sent); }
-.received .bubble { background: var(--bubble-received); }
+.sent .bubble-wrap { background: var(--bubble-me); }
+.received .bubble-wrap { background: var(--bubble-other); }
 
-.bubble-sender {
-    font-size: 11px;
-    font-weight: bold;
-    color: #35a57f;
-    margin-bottom: 3px;
-    display: block;
-}
+.b-sender { font-size: 10.5px; font-weight: bold; color: #35a57f; margin-bottom: 2px; display: block; }
+.b-time { font-size: 8.5px; color: var(--text-sub); text-align: left; display: block; margin-top: 3px; }
 
-.bubble-time {
-    font-size: 9px;
-    color: var(--text-muted);
-    text-align: left;
-    display: block;
-    margin-top: 4px;
-}
-
-/* بار الإدخال السفلي */
-.messaging-footer {
-    padding: 10px 14px;
-    background: var(--input-fill);
+/* بار الإرسال السفلي */
+.chat-footer {
+    padding: 8px 12px;
+    background: var(--wa-header);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.input-container {
+.type-area {
     flex: 1;
     background: #fff;
-    border-radius: 22px;
-    padding: 0 16px;
+    border-radius: 20px;
+    padding: 2px 14px;
 }
 
-.input-container input {
+.type-area input {
     width: 100%;
     border: none;
     background: transparent;
-    padding: 10px 0;
-    font-size: 14.5px;
+    padding: 8px 0;
+    font-size: 14px;
     outline: none;
 }
 
-.send-trigger {
-    background: var(--primary-teal);
+.send-btn {
+    background: var(--wa-teal);
     color: white;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
-}
-.send-trigger:hover { background: var(--dark-teal); }
+    font-size: 14px;
+    }

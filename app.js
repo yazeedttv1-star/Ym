@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,72 +21,68 @@ const chatMessages = document.getElementById('chat-messages');
 const chatInput = document.getElementById('chat-input');
 const inputFooterArea = document.getElementById('input-footer-area');
 
-let confirmationResult = null;
 let currentRoomId = null;
 let unsubscribeChat = null;
+let shortUid = "";
 
-window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
-
+// 1. الدخول بجوجل
 document.getElementById('btn-google-login').addEventListener('click', () => { signInWithPopup(auth, new GoogleAuthProvider()); });
+
+// 2. الدخول المجهول
 document.getElementById('btn-anon-login').addEventListener('click', () => { signInAnonymously(auth); });
 
+// 3. الدخول أو التسجيل بالبريد
 document.getElementById('btn-email-auth').addEventListener('click', () => {
     const email = document.getElementById('email-login').value.trim();
     const password = document.getElementById('password-login').value;
-    if(!email || !password) return alert("املا البيانات!");
+    if(!email || !password) return alert("يرجى كتابة البريد وكلمة المرور!");
     signInWithEmailAndPassword(auth, email, password).catch(() => {
         createUserWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
     });
 });
 
-const btnPhoneAction = document.getElementById('btn-phone-action');
-btnPhoneAction.addEventListener('click', () => {
-    if (!confirmationResult) {
-        let rawNumber = document.getElementById('phone-number').value.trim();
-        if(rawNumber.startsWith('0')) rawNumber = rawNumber.substring(1);
-        if(!rawNumber) return alert("اكتب رقم صح!");
-        signInWithPhoneNumber(auth, "+20" + rawNumber, window.recaptchaVerifier)
-            .then((res) => {
-                confirmationResult = res;
-                document.getElementById('phone-field-area').style.display = 'none';
-                document.getElementById('otp-area').style.display = 'flex';
-                btnPhoneAction.innerText = 'تأكيد الرمز';
-            }).catch(err => alert(err.message));
-    } else {
-        confirmationResult.confirm(document.getElementById('verification-code').value.trim()).catch(err => alert(err.message));
-    }
-});
-
+// مراقبة الجلسة والتعامل مع الـ ID المصغر
 onAuthStateChanged(auth, (user) => {
     if (user) {
         screenAuth.classList.remove('active');
         screenApp.classList.add('active');
-        let name = user.displayName || (user.email ? user.email.split('@')[0] : (user.phoneNumber ? user.phoneNumber : "مستخدم مجهول"));
+        
+        let name = user.displayName || (user.email ? user.email.split('@')[0] : "مستخدم مجهول");
         document.getElementById('user-display-name').innerText = name;
-        document.getElementById('user-uid-input').value = user.uid;
+        
+        // تحويل الـ UID لـ ID قصير من 6 أرقام وحروف لسهولة التبادل
+        shortUid = user.uid.substring(0, 6);
+        const uidInput = document.getElementById('user-uid-input');
+        uidInput.value = shortUid;
+        
+        // ميزة إضافية: عند الضغط على خانة الـ ID يتم النسخ تلقائياً للحافظة
+        uidInput.onclick = () => {
+            navigator.clipboard.writeText(shortUid);
+            alert("تم نسخ الـ ID المصغر الخاص بك بنجاح! 📋");
+        };
+
         document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
     } else {
         screenAuth.classList.add('active');
         screenApp.classList.remove('active');
-        confirmationResult = null;
-        document.getElementById('phone-field-area').style.display = 'flex';
-        document.getElementById('otp-area').style.display = 'none';
-        btnPhoneAction.innerText = 'إرسال كود التحقق';
         if (unsubscribeChat) unsubscribeChat();
     }
 });
 
+// تسجيل الخروج
 document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); });
 
+// ربط الغرف باستخدام الـ ID المصغر للطرفين
 document.getElementById('btn-connect-room').addEventListener('click', () => {
-    const myUid = auth.currentUser.uid;
     const targetUid = document.getElementById('target-identifier').value.trim();
-    if(!targetUid || myUid === targetUid) return alert("ادخل الـ ID الخاص بصديقك صح!");
-    currentRoomId = [myUid, targetUid].sort().join("_");
+    if(!targetUid || shortUid === targetUid) return alert("أدخل الـ ID المصغر الصحيح المكون من 6 أرقام الخاص بصديقك!");
+    
+    currentRoomId = [shortUid, targetUid].sort().join("_");
     inputFooterArea.style.display = 'flex';
     loadLiveMessages(currentRoomId);
 });
 
+// إرسال الرسائل
 async function sendMessage() {
     const text = chatInput.value.trim();
     if (text && auth.currentUser && currentRoomId) {
@@ -94,7 +90,7 @@ async function sendMessage() {
         await addDoc(collection(db, "whatsapp_verified_chats"), {
             roomId: currentRoomId,
             text: text,
-            senderId: auth.currentUser.uid,
+            senderId: shortUid,
             senderName: auth.currentUser.displayName || (auth.currentUser.email ? auth.currentUser.email.split('@')[0] : "صديقك"),
             timestamp: new Date()
         });
@@ -104,19 +100,29 @@ async function sendMessage() {
 document.getElementById('btn-send-message').addEventListener('click', sendMessage);
 chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 
+// جلب وتحديث الشات لحظياً
 function loadLiveMessages(roomId) {
     if (unsubscribeChat) unsubscribeChat();
     const q = query(collection(db, "whatsapp_verified_chats"), where("roomId", "==", roomId), orderBy("timestamp", "asc"));
+    
     unsubscribeChat = onSnapshot(q, (snapshot) => {
         chatMessages.innerHTML = '';
         snapshot.forEach((doc) => {
             const data = doc.data();
-            const isMe = data.senderId === auth.currentUser.uid;
+            const isMe = data.senderId === shortUid;
             const msgLine = document.createElement('div');
             msgLine.className = `msg-line ${isMe ? 'sent' : 'received'}`;
+            
             let t = "الآن";
             if(data.timestamp) t = data.timestamp.toDate().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            msgLine.innerHTML = `<div class="bubble-wrap">${!isMe ? `<span class="b-sender">${data.senderName}</span>` : ''}<span class="b-text">${data.text}</span><span class="b-time">${t}</span></div>`;
+            
+            msgLine.innerHTML = `
+                <div class="bubble-wrap">
+                    ${!isMe ? `<span class="b-sender">${data.senderName}</span>` : ''}
+                    <span class="b-text">${data.text}</span>
+                    <span class="b-time">${t}</span>
+                </div>
+            `;
             chatMessages.appendChild(msgLine);
         });
         chatMessages.scrollTop = chatMessages.scrollHeight;

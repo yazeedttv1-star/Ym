@@ -15,6 +15,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// جلب العناصر والتأكد من وجودها
 const screenAuth = document.getElementById('screen-auth');
 const screenApp = document.getElementById('screen-app');
 const chatMessages = document.getElementById('chat-messages');
@@ -25,23 +26,21 @@ let currentRoomId = null;
 let unsubscribeChat = null;
 let shortUid = "";
 
-// 1. الدخول بجوجل
-document.getElementById('btn-google-login').addEventListener('click', () => { signInWithPopup(auth, new GoogleAuthProvider()); });
+// تفعيل أزرار تسجيل الدخول
+document.getElementById('btn-google-login').onclick = () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e => alert(e.message)); };
+document.getElementById('btn-anon-login').onclick = () => { signInAnonymously(auth).catch(e => alert(e.message)); };
 
-// 2. الدخول المجهول
-document.getElementById('btn-anon-login').addEventListener('click', () => { signInAnonymously(auth); });
-
-// 3. الدخول أو التسجيل بالبريد
-document.getElementById('btn-email-auth').addEventListener('click', () => {
+document.getElementById('btn-email-auth').onclick = () => {
     const email = document.getElementById('email-login').value.trim();
     const password = document.getElementById('password-login').value;
-    if(!email || !password) return alert("يرجى كتابة البريد وكلمة المرور!");
+    if(!email || !password) return alert("يرجى ملء خانات البريد وكلمة المرور!");
+    
     signInWithEmailAndPassword(auth, email, password).catch(() => {
         createUserWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
     });
-});
+};
 
-// مراقبة الجلسة والتعامل مع الـ ID المصغر
+// تتبع حالة المستخدم وتبديل الشاشات
 onAuthStateChanged(auth, (user) => {
     if (user) {
         screenAuth.classList.remove('active');
@@ -50,37 +49,44 @@ onAuthStateChanged(auth, (user) => {
         let name = user.displayName || (user.email ? user.email.split('@')[0] : "مستخدم مجهول");
         document.getElementById('user-display-name').innerText = name;
         
-        // تحويل الـ UID لـ ID قصير من 6 أرقام وحروف لسهولة التبادل
+        // جلب أول 6 رموز فقط من الـ UID الخاص بفايربيس كمعرف قصير فريد وثابت
         shortUid = user.uid.substring(0, 6);
         const uidInput = document.getElementById('user-uid-input');
         uidInput.value = shortUid;
         
-        // ميزة إضافية: عند الضغط على خانة الـ ID يتم النسخ تلقائياً للحافظة
+        // ميزة النسخ عند الضغط
         uidInput.onclick = () => {
             navigator.clipboard.writeText(shortUid);
-            alert("تم نسخ الـ ID المصغر الخاص بك بنجاح! 📋");
+            alert("تم نسخ الـ ID المصغر: " + shortUid);
         };
 
         document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
     } else {
         screenAuth.classList.add('active');
         screenApp.classList.remove('active');
+        inputFooterArea.style.display = 'none';
+        chatMessages.innerHTML = '';
         if (unsubscribeChat) unsubscribeChat();
     }
 });
 
 // تسجيل الخروج
-document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); });
+document.getElementById('btn-logout').onclick = () => { signOut(auth); };
 
-// ربط الغرف باستخدام الـ ID المصغر للطرفين
-document.getElementById('btn-connect-room').addEventListener('click', () => {
+// ربط المحادثة الفورية عبر الـ ID المصغر للطرفين
+document.getElementById('btn-connect-room').onclick = () => {
     const targetUid = document.getElementById('target-identifier').value.trim();
-    if(!targetUid || shortUid === targetUid) return alert("أدخل الـ ID المصغر الصحيح المكون من 6 أرقام الخاص بصديقك!");
+    if(!targetUid || shortUid === targetUid) return alert("أدخل الـ ID المصغر الصحيح الخاص بصديقك (6 رموز)!");
     
     currentRoomId = [shortUid, targetUid].sort().join("_");
     inputFooterArea.style.display = 'flex';
+    
+    // إخفاء رسالة الترحيب والبدء فوراً في جلب الرسائل
+    const welcomeBox = document.getElementById('welcome-box');
+    if (welcomeBox) welcomeBox.style.display = 'none';
+    
     loadLiveMessages(currentRoomId);
-});
+};
 
 // إرسال الرسائل
 async function sendMessage() {
@@ -97,10 +103,10 @@ async function sendMessage() {
     }
 }
 
-document.getElementById('btn-send-message').addEventListener('click', sendMessage);
-chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+document.getElementById('btn-send-message').onclick = sendMessage;
+chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
 
-// جلب وتحديث الشات لحظياً
+// جلب وتحديث الرسائل لايف من السيرفر فوراً
 function loadLiveMessages(roomId) {
     if (unsubscribeChat) unsubscribeChat();
     const q = query(collection(db, "whatsapp_verified_chats"), where("roomId", "==", roomId), orderBy("timestamp", "asc"));

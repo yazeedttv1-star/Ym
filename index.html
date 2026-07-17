@@ -2,99 +2,57 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>واتساب ويب الموحد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أنا آسف يا بطتي 💙</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app-container">
-
-    <div id="screen-auth" class="screen active auth-wrapper">
+    <div id="screen-auth" class="screen">
         <div class="auth-card">
-            <div class="auth-header">
-                <i class="fab fa-whatsapp whatsapp-icon"></i>
-                <h2>واتساب ويب الموحد</h2>
-                <p>سجل دخولك لبدء المحادثة الفورية المشفرة</p>
+            <i class="fas fa-heart"></i>
+            <h2>مرحباً بكِ يا بطتي 💙</h2>
+            <p>برجاء تسجيل الدخول بحساب Google لفتح المفاجأة الخاصة بكِ</p>
+            <button id="btn-google-login" class="google-btn">
+                <i class="fab fa-google"></i> الدخول السريع عبر Google
+            </button>
+        </div>
+    </div>
+
+    <div id="screen-game" class="screen hidden">
+        <div class="game-container">
+            <div class="user-nav">
+                <span id="user-display-name">بطتي</span> | 
+                <button id="btn-logout" class="logout-btn">خروج</button>
+            </div>
+            
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN6MzNmdmZ3Z3V0cTY1bXN4cXF6dG00Z2I2cTV6YmN6Y2Z5eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/b9Q0bbcGyZfG90XIQa/giphy.gif" class="duck-gif" alt="بطة زعلانة">
+            
+            <h1 id="game-title">هل أنا مسامح وصافي يا بطتي؟ 🥺</h1>
+            <p class="game-subtitle">اضغطي على "سامحتك" لرفع عداد الرضا والمصالحـة!</p>
+            
+            <div class="progress-wrapper">
+                <div id="love-progress" class="progress-bar"></div>
+                <div id="progress-text-label" class="progress-text">نسبة الرضا: 20%</div>
             </div>
 
-            <div class="auth-section">
-                <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email-login" placeholder="البريد الإلكتروني...">
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password-login" placeholder="كلمة المرور...">
-                </div>
-                <button id="btn-email-auth" class="main-btn teal-btn">تسجيل / دخول بالبريد</button>
-            </div>
-
-            <div class="text-divider">أو الدخول السريع بنقرة واحدة</div>
-
-            <div class="social-auth-container">
-                <button id="btn-google-login" class="social-btn google-btn">
-                    <i class="fab fa-google"></i> حساب Google
-                </button>
-                <button id="btn-anon-login" class="social-btn anon-btn">
-                    <i class="fas fa-user-secret"></i> دخول كمستخدم مجهول
-                </button>
+            <div class="buttons-grid">
+                <button id="btn-yes" class="game-btn yes-btn">سامحتك خلاص 💙</button>
+                <button id="btn-no" class="game-btn no-btn">لسه زعلانة 😤</button>
             </div>
         </div>
     </div>
 
-    <div id="screen-app" class="screen chat-wrapper">
-        <div class="app-header">
-            <div class="user-profile">
-                <div class="avatar-circle" id="user-avatar">U</div>
-                <div class="profile-meta">
-                    <h3 id="user-display-name">جاري التحميل...</h3>
-                    <div class="uid-box">
-                        <span>الـ ID (اضغط للنسخ):</span>
-                        <input type="text" id="user-uid-input" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button id="btn-start-call" class="call-trigger-btn" style="display: none;" title="طلب اتصال مباشر"><i class="fas fa-phone-alt"></i></button>
-                <button id="btn-logout" class="logout-btn" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
-            </div>
-        </div>
-
-        <div class="connect-holder" id="connect-bar-holder">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لفتح الشات...">
-            </div>
-            <button id="btn-connect-room" class="action-connect">فتح الدردشة</button>
-        </div>
-
-        <div id="incoming-call-box" class="call-alert-box" style="display: none;">
-            <p><i class="fas fa-phone-volume phone-ring"></i> صديقك ذو المعرف (<strong id="caller-id-label">...</strong>) يطلب التحدث معك اتصال الآن!</p>
-            <div class="call-actions">
-                <button id="btn-accept-call" class="call-btn accept-call">قبول المكالمة  📞</button>
-                <button id="btn-reject-call" class="call-btn reject-call">إغلاق ❌</button>
-            </div>
-        </div>
-
-        <div class="chat-area" id="chat-messages">
-            <div class="welcome-box" id="welcome-box">
-                <i class="fas fa-comments"></i>
-                <p id="welcome-text">اكتب الـ ID المكون من 6 رموز الخاص بصديقك في بار البحث بالأعلى لفتح الروم وبدء الدردشة فوراً، ويمكنك طلب مكالمة لايف في أي وقت من زر الهاتف بالبار العلوي.</p>
-            </div>
-        </div>
-
-        <div class="chat-footer" id="input-footer-area" style="display:none;">
-            <div class="type-area">
-                <input type="text" id="chat-input" placeholder="اكتب رسالة...">
-            </div>
-            <button id="btn-send-message" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+    <div id="screen-victory" class="screen hidden">
+        <div class="victory-card">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBmYm9oZjhpbXZ4a3EwZ3U4MTlsdDRmbGlidDJxb3pjdTRuMnVwZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26FLdmIp6wJr91JAI/giphy.gif" style="width: 160px;" alt="احتفال">
+            <h2>الحمد لله يا أحلى بطة في الكون! 🎉💙</h2>
+            <p>أنا مكنتش هقدر أنام وأنتِ زعلانة مني، العداد وصل 100% ودلوقتي قلبي ارتاح تماماً. ربنا يخليكِ ليا وميحرمنيش من طيبة قلبك أبداً يا دنيتي كلها 💖.</p>
         </div>
     </div>
 
-</div>
-
-<script type="module" src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>

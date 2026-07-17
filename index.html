@@ -151,7 +151,7 @@
     <div id="screen-auth" class="card">
         <div class="icon-header"><i class="fas fa-user-lock"></i></div>
         <h1>مرحباً بكِ يا أميرتي 🌟</h1>
-        <p>سجلي دخولك أولاً عبر حساب Google لفتح المفاجأة الخاصة بكِ.</p>
+        <p>سجلي دخولكِ أولاً عبر حساب Google لفتح المفاجأة الخاصة بكِ الحفظ على قاعدة البيانات.</p>
         <button id="btn-google-login" class="google-btn">
             <i class="fab fa-google"></i> الدخول السريع عبر Google
         </button>
@@ -198,15 +198,15 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // ⚠️ ضع بيانات مشروعك الخاص بـ Firebase هنا لتفعيل الاتصال الحقيقي
+        // مشروع موجه للربط والعمل الفوري والمباشر
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+            authDomain: "ym-pro-max.firebaseapp.com",
+            databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com",
+            projectId: "ym-pro-max",
+            storageBucket: "ym-pro-max.firebasestorage.app",
+            messagingSenderId: "174657071953",
+            appId: "1:174657071953:web:5e831fc337df46dbd18170"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -222,36 +222,31 @@
         let currentUser = null;
         let clickCount = 0;
 
-        // 1. تسجيل الدخول بجوجل
         document.getElementById('btn-google-login').onclick = () => {
-            signInWithPopup(auth, new GoogleAuthProvider())
-                .catch(err => alert("حدث خطأ أثناء تسجيل الدخول: " + err.message));
+            signInWithPopup(auth, new GoogleAuthProvider()).catch(err => alert(err.message));
         };
 
-        // مراقبة حالة المستخدم الحقيقية
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 screenAuth.classList.add('hidden');
                 screenPassword.classList.remove('hidden');
                 
-                // حفظ بيانات الدخول الأساسية في قاعدة البيانات
-                set(ref(db, 'users/' + user.uid + '/profile'), {
+                set(ref(db, 'couple_games/' + user.uid + '/session'), {
                     name: user.displayName,
                     email: user.email,
-                    lastLogin: new Date().toISOString()
+                    timestamp: new Date().toISOString()
                 });
             }
         });
 
-        // 2. التحقق من كلمة السر "بطتي" وحفظها في قاعدة البيانات
         document.getElementById('btn-check-password').onclick = () => {
             const val = document.getElementById('password-input').value.trim();
             if (val === "بطتي") {
                 if (currentUser) {
-                    set(ref(db, 'users/' + currentUser.uid + '/status'), {
-                        passwordVerified: true,
-                        enteredWord: val
+                    set(ref(db, 'couple_games/' + currentUser.uid + '/verification'), {
+                        status: "نجاح",
+                        wordUsed: val
                     });
                 }
                 screenPassword.classList.add('hidden');
@@ -262,13 +257,11 @@
             }
         };
 
-        // 3. الانتقال للعبة
         document.getElementById('btn-go-game').onclick = () => {
             screenMsg1.classList.add('hidden');
             screenGame.classList.remove('hidden');
         };
 
-        // 4. اللعبة التفاعلية لتحديث عداد الرضا وتخزينه
         document.getElementById('btn-click-game').onclick = () => {
             if (clickCount < 10) {
                 clickCount++;
@@ -278,11 +271,10 @@
                 
                 confetti({ particleCount: 10, spread: 20, origin: { y: 0.8 } });
 
-                // حفظ النقاط أولاً بأول في الـ Realtime Database
                 if (currentUser) {
-                    set(ref(db, 'users/' + currentUser.uid + '/gameProgress'), {
-                        clicks: clickCount,
-                        satisfactionRatio: percentage
+                    set(ref(db, 'couple_games/' + currentUser.uid + '/game'), {
+                        score: clickCount,
+                        satisfaction: percentage
                     });
                 }
 
@@ -290,21 +282,17 @@
                     setTimeout(() => {
                         screenGame.classList.add('hidden');
                         screenFinal.classList.remove('hidden');
-                        triggerGrandConfetti();
+                        let duration = 4 * 1000;
+                        let end = Date.now() + duration;
+                        (function frame() {
+                            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                            if (Date.now() < end) requestAnimationFrame(frame);
+                        }());
                     }, 500);
                 }
             }
         };
-
-        function triggerGrandConfetti() {
-            let duration = 4 * 1000;
-            let end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-        }
     </script>
 </body>
 </html>

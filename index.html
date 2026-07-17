@@ -3,73 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واتساب الذهبي المطور 👑</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#075E54">
-    <meta name="theme-color" content="#b59410">
-    
+    <title>موقعي المتكامل</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0b141a; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: #fff; }
-        .container { background: #111b21; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 360px; height: 500px; text-align: center; display: flex; flex-direction: column; border: 1px solid #b59410; justify-content: space-between; }
-        
-        /* المدخلات والأزرار بالثيم الذهبي */
-        input { padding: 12px; margin: 8px 0; border: 1px solid #b59410; border-radius: 6px; font-size: 14px; background: #2a3942; color: #fff; }
-        input::placeholder { color: #8696a0; }
-        button { padding: 12px; background-color: #b59410; color: #000; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #ffd700; }
-        
-        /* رأس المحادثة */
-        .chat-header { display: flex; justify-content: space-between; align-items: center; background: #202c33; padding: 10px; border-radius: 8px; border-bottom: 2px solid #b59410; }
-        
-        /* صندوق الشات الخلفية بنقشة الواتساب */
-        #chat-box { flex: 1; border: 1px solid #222; border-radius: 8px; margin: 10px 0; padding: 10px; overflow-y: auto; text-align: right; background: #0b141a; display: flex; flex-direction: column; }
-        
-        /* فقاعات الرسائل */
-        .message { padding: 8px 12px; border-radius: 8px; margin: 5px 0; max-width: 75%; width: fit-content; word-break: break-all; font-size: 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .message.other { background: #202c33; align-self: flex-start; color: #fff; border-right: 3px solid #b59410; }
-        .message.me { align-self: flex-end; background: #b59410; color: #000; font-weight: 500; }
-        
-        .username { font-weight: bold; font-size: 11px; display: block; margin-bottom: 3px; color: #ffd700; }
-        .message.me .username { color: #443500; }
-        
-        .row { display: flex; gap: 5px; background: #202c33; padding: 5px; border-radius: 8px; }
-        .row input { flex: 1; margin: 0; border: none; background: transparent; }
-        
-        #auth-container { justify-content: center; height: auto; }
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .btn-google { background-color: #4285F4; color: white; }
+        .btn-google:hover { background-color: #357ae8; }
+        .btn-save { background-color: #28a745; color: white; margin-top: 10px; }
+        .btn-save:hover { background-color: #218838; }
+        .btn-logout { background-color: #dc3545; color: white; margin-top: 20px; }
+        .btn-logout:hover { background-color: #c82333; }
+        input { width: 90%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="auth-container">
-    <h2 style="color: #b59410; margin-top: 0;">👑 واتساب الذهبي 👑</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني">
-    <input type="password" id="password" placeholder="كلمة المرور">
-    <input type="text" id="username" placeholder="الاسم المستعار (Username)">
-    <button id="btn-signup">إنشاء حساب ذهبي جديد</button>
-    <button id="btn-login" style="background-color: #202c33; color: #b59410; border: 1px solid #b59410; margin-top: 5px;">تسجيل الدخول</button>
+    <h2>مرحباً بك في موقعي</h2>
+    <p>يرجى تسجيل الدخول للمتابعة</p>
+    <button id="btn-google-login" class="btn-google">التسجيل بواسطة Google</button>
 </div>
 
 <div class="container" id="app-container" style="display: none;">
-    <div class="chat-header">
-        <span id="welcome-user" style="font-weight: bold; color: #b59410;"></span>
-        <button id="btn-logout" style="background-color: #dc3545; color: white; padding: 5px 10px; font-size: 12px;">خروج</button>
-    </div>
+    <h2 id="welcome-msg">مرحباً!</h2>
+    <p>تم تسجيل دخولك بنجاح وقاعدة البيانات متصلة.</p>
     
-    <div id="chat-box"></div>
+    <input type="text" id="user-data" placeholder="اكتب شيئاً لحفظه في قاعدة البيانات">
+    <button id="btn-save" class="btn-save">حفظ في قاعدة البيانات</button>
     
-    <div class="row">
-        <input type="text" id="msg-input" placeholder="اكتب رسالة...">
-        <button id="btn-send" style="padding: 10px 20px;">إرسال</button>
-    </div>
+    <button id="btn-logout" class="btn-logout">تسجيل الخروج</button>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // كود الربط الخاص بك
+  // كود الربط الخاص بمشروعك ym-pro-max
   const firebaseConfig = {
     apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
     authDomain: "ym-pro-max.firebaseapp.com",
@@ -79,98 +50,62 @@
     appId: "1:174657071953:web:5e831fc337df46dbd18170"
   };
 
+  // تهيئة الخدمات
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
   const authContainer = document.getElementById('auth-container');
   const appContainer = document.getElementById('app-container');
-  let currentUsername = "";
+  const welcomeMsg = document.getElementById('welcome-msg');
 
-  // 1. إنشاء حساب وحفظ اليوزر نيم
-  document.getElementById('btn-signup').addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const username = document.getElementById('username').value;
-      
-      if(!email || !password || !username) return alert('برجاء كتابة جميع البيانات والاسم المستعار');
-      
-      try {
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          await setDoc(doc(db, "users", userCredential.user.uid), { username: username });
-          alert('تم تسجيل حسابك الذهبي بنجاح! 🎉');
-      } catch (error) { alert(error.message); }
+  // 1. تسجيل الدخول بجوجل
+  document.getElementById('btn-google-login').addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+          .then((result) => {
+              alert('أهلاً بك ' + result.user.displayName);
+          })
+          .catch((error) => {
+              alert('خطأ في تسجيل الدخول: ' + error.message);
+          });
   });
 
-  // 2. تسجيل الدخول
-  document.getElementById('btn-login').addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      if(!email || !password) return alert('اكتب الإيميل والباسورد');
-      signInWithEmailAndPassword(auth, email, password).catch(error => alert(error.message));
-  });
-
-  // 3. مراقبة حالة المستخدم وتفعيل الشات
-  let unsubscribeChat; 
-  onAuthStateChanged(auth, async (user) => {
+  // 2. مراقبة حالة المستخدم
+  onAuthStateChanged(auth, (user) => {
       if (user) {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          currentUsername = userDoc.exists() ? userDoc.data().username : "مستخدم ذهبي";
-          
-          document.getElementById('welcome-user').innerText = `👑 ${currentUsername}`;
           authContainer.style.display = 'none';
-          appContainer.style.display = 'flex';
-          
-          loadMessages(user.uid);
+          appContainer.style.display = 'block';
+          welcomeMsg.innerText = `مرحباً يا ${user.displayName}!`;
       } else {
-          authContainer.style.display = 'flex';
+          authContainer.style.display = 'block';
           appContainer.style.display = 'none';
-          if(unsubscribeChat) unsubscribeChat();
       }
   });
 
-  // 4. إرسال الرسالة
-  document.getElementById('btn-send').addEventListener('click', async () => {
-      const msgInput = document.getElementById('msg-input');
-      if(!msgInput.value.trim()) return;
-
-      try {
-          await addDoc(collection(db, "chats"), {
-              senderId: auth.currentUser.uid,
-              username: currentUsername,
-              text: msgInput.value,
-              createdAt: new Date()
-          });
-          msgInput.value = "";
-      } catch (e) { alert(e.message); }
+  // 3. حفظ البيانات في Firestore
+  document.getElementById('btn-save').addEventListener('click', async () => {
+      const dataText = document.getElementById('user-data').value;
+      const user = auth.currentUser;
+      if (user) {
+          try {
+              await setDoc(doc(db, "users", user.uid), {
+                  text: dataText,
+                  name: user.displayName,
+                  email: user.email,
+                  lastUpdated: new Date()
+              });
+              alert('تم حفظ النص في قاعدة البيانات بنجاح!');
+          } catch (e) {
+              alert('خطأ في الحفظ: ' + e.message);
+          }
+      }
   });
 
-  // 5. عرض الرسائل لايف (Real-time)
-  function loadMessages(currentUid) {
-      const q = query(collection(db, "chats"), orderBy("createdAt", "asc"));
-      const chatBox = document.getElementById('chat-box');
-      
-      unsubscribeChat = onSnapshot(q, (snapshot) => {
-          chatBox.innerHTML = "";
-          snapshot.forEach((doc) => {
-              const data = doc.data();
-              const msgDiv = document.createElement('div');
-              
-              if(data.senderId === currentUid) {
-                  msgDiv.className = "message me";
-              } else {
-                  msgDiv.className = "message other";
-              }
-              
-              msgDiv.innerHTML = `<span class="username">${data.username}</span> ${data.text}`;
-              chatBox.appendChild(msgDiv);
-          });
-          chatBox.scrollTop = chatBox.scrollHeight;
-      });
-  }
-
-  // 6. تسجيل الخروج
-  document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+  // 4. تسجيل الخروج
+  document.getElementById('btn-logout').addEventListener('click', () => {
+      signOut(auth);
+  });
 </script>
 
 </body>

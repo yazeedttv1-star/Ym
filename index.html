@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مفاجأة لبطتي 🦆✨</title>
+    <title>علشان خاطر عيون بطتي 🥺💙</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,169 +17,218 @@
         }
 
         body {
-            background-color: #fff0f5;
-            background-image: radial-gradient(#ffb6c1 1px, transparent 1px);
+            background-color: #f5f3ff;
+            background-image: radial-gradient(#ddd6fe 1px, transparent 1px);
             background-size: 24px 24px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden;
         }
 
         .card {
             background: white;
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
-            padding: 40px 30px;
+            padding: 35px 25px;
             border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.3);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
             text-align: center;
-            border: 1px solid #ffe4e1;
+            border: 1px solid #e9d5ff;
+            position: relative;
         }
 
         h1 {
-            color: #d11a5b;
-            font-size: 26px;
-            margin-bottom: 10px;
+            color: #6d28d9;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
 
-        .subtitle {
-            color: #6b7280;
+        p {
+            color: #4b5563;
             font-size: 15px;
-            margin-bottom: 30px;
-        }
-
-        .interactive-area {
-            background: #fffafa;
-            border: 2px dashed #ff69b4;
-            padding: 30px 20px;
-            border-radius: 20px;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            line-height: 1.6;
             margin-bottom: 25px;
         }
 
-        .display-text {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            line-height: 1.6;
+        .input-group {
+            margin-bottom: 20px;
         }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid #ddd6fe;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.3s;
         }
 
-        .magic-btn {
-            padding: 16px;
-            border-radius: 16px;
+        .input-group input:focus {
+            border-color: #8b5cf6;
+        }
+
+        .main-btn {
+            background: #8b5cf6;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transition: background 0.2s;
+        }
+        .main-btn:hover { background: #7c3aed; }
+
+        /* لعبة العداد التفاعلية */
+        .progress-container {
+            background: #f3f4f6;
+            border-radius: 20px;
+            height: 24px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid #e5e7eb;
         }
 
-        .btn-pink {
-            background: #ff69b4;
-            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
-        }
-        .btn-pink:hover { background: #ff1493; transform: scale(1.02); }
-
-        .btn-purple {
-            background: #9370db;
-            box-shadow: 0 4px 12px rgba(147, 112, 219, 0.3);
-        }
-        .btn-purple:hover { background: #8a2be2; transform: scale(1.02); }
-
-        /* تأثير القلوب الطائرة */
-        .floating-heart {
-            position: fixed;
-            font-size: 24px;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 9999;
+        .progress-bar {
+            background: linear-gradient(90deg, #a78bfa, #8b5cf6);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 2px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #4c1d95;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .icon-header {
+            font-size: 45px;
+            color: #8b5cf6;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <i class="fas fa-gift" style="font-size: 50px; color: #ff69b4; margin-bottom: 15px;"></i>
-        <h1>مساحة بطتي الخاصة 🎀</h1>
-        <p class="subtitle">اضغطي على الأزرار السحرية بالأسفل لرؤية المفاجآت!</p>
+    <div id="screen-password" class="card">
+        <div class="icon-header"><i class="fas fa-lock"></i></div>
+        <h1>سؤال الأمان السري 🔐</h1>
+        <p>اكتبي الكلمة اللي دايماً مسميكي بيها علشان تفتحي المفاجأة؟</p>
+        <div class="input-group">
+            <input type="text" id="password-input" placeholder="اكتبي الاسم هنا...">
+        </div>
+        <button id="btn-check-password" class="main-btn">دخول ✨</button>
+    </div>
 
-        <div class="interactive-area">
-            <p id="display-zone" class="display-text">في انتظار أميرتي لتضغط على الزر الأول ✨</p>
+    <div id="screen-msg1" class="card hidden">
+        <div class="icon-header"><i class="fas fa-sad-tear"></i></div>
+        <h1>والله يا بطتي تأخرت غصب عني 🥺</h1>
+        <p>الموقع ده تم تطويره حالا دلوقتي علشان خاطر عيونك وضحكتك يا بطتي.. انا اسف اني تأخرت والله مش اقصد والله حقك عليا متزعليش مني.</p>
+        <button id="btn-go-game" class="main-btn">اضغطي هنا لتحدي الرضا 💜</button>
+    </div>
+
+    <div id="screen-game" class="card hidden">
+        <div class="icon-header"><i class="fas fa-heartbeat"></i></div>
+        <h1>تحدي نسبة الرضا ⚡</h1>
+        <p>اضغطي على الزر بالأسفل كذا مرة علشان تملي العداد وتفتحي الرسالة الأخيرة!</p>
+        
+        <div class="progress-container">
+            <div id="love-progress" class="progress-bar"></div>
+            <div id="progress-label" class="progress-text">نسبة الرضا: 0%</div>
         </div>
 
-        <div class="btn-grid">
-            <button id="btn-surprise" class="magic-btn btn-pink">اضغطي هنا للمفاجأة الأولى 💖</button>
-            <button id="btn-kiss" class="magic-btn btn-purple">اضغطي هنا لاستلام الهدية الخاصة 💋</button>
-        </div>
+        <button id="btn-click-game" class="main-btn">اضغطي هنا لملء العداد 💖</button>
+    </div>
+
+    <div id="screen-final" class="card hidden">
+        <div class="icon-header"><i class="fas fa-kiss-wink-heart"></i></div>
+        <h1>وعلى فكرة لو متصالحين تعالى قولي دلوقتي يلا 😍</h1>
+        <p style="font-size: 18px; font-weight: bold; color: #db2777; margin-top: 15px;">بحببببك 💙✨</p>
     </div>
 
     <script>
-        const displayZone = document.getElementById('display-zone');
-        const btnSurprise = document.getElementById('btn-surprise');
-        const btnKiss = document.getElementById('btn-kiss');
+        const screenPassword = document.getElementById('screen-password');
+        const screenMsg1 = document.getElementById('screen-msg1');
+        const screenGame = document.getElementById('screen-game');
+        const screenFinal = document.getElementById('screen-final');
 
-        const sweetMessages = [
-            "أنتِ أجمل وأحلى بطة في الكون كله! 🦆💗",
-            "ضحكتك بتنور الدنيا واليوم بيبقى أحلى بكتير بسببك ✨",
-            "وجودك في حياتي هو أحسن حاجة حصلت دايماً وبدون كلام 😍",
-            "كتلة الكسل اللطيفة المفضلة عندي دايماً وأبدأ 👑"
-        ];
+        const passwordInput = document.getElementById('password-input');
+        const btnCheckPassword = document.getElementById('btn-check-password');
+        const btnGoGame = document.getElementById('btn-go-game');
+        const btnClickGame = document.getElementById('btn-click-game');
+        
+        const loveProgress = document.getElementById('love-progress');
+        const progressLabel = document.getElementById('progress-label');
 
-        btnSurprise.onclick = () => {
-            // اختيار رسالة عشوائية لطيفة
-            const randomMessage = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
-            displayZone.innerText = randomMessage;
-            
-            // تشغيل تأثير الاحتفال
-            confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
-        };
+        let clickCount = 0;
 
-        btnKiss.onclick = (e) => {
-            // عرض الرسالة الخاصة بالهدية
-            displayZone.innerText = "أرسلت لكِ قبلة طائرة مليئة بالحب والدفء! 💋❤️";
-            
-            // تشغيل تأثير الاحتفال بالألوان الوردية
-            confetti({
-                particleCount: 80,
-                spread: 80,
-                colors: ['#ff69b4', '#ffb6c1', '#ff1493']
-            });
-
-            // توليد قلوب متطايرة عند موضع الضغط
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    createHeart(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2);
-                }, i * 100);
+        // 1. التحقق من كلمة السر
+        btnCheckPassword.onclick = () => {
+            const val = passwordInput.value.trim();
+            if (val === "بطتي") {
+                screenPassword.classList.add('hidden');
+                screenMsg1.classList.remove('hidden');
+                confetti({ particleCount: 40, spread: 50 });
+            } else {
+                alert("❌ الاسم غلط فكري تاني.. مسميكي إيه؟ 🙄");
             }
         };
 
-        function createHeart(x, y) {
-            const heart = document.createElement('i');
-            heart.className = 'fas fa-heart floating-heart';
-            // توزيع عشوائي طفيف حول مكان الضغط
-            heart.style.left = (x + (Math.random() * 40 - 20)) + 'px';
-            heart.style.top = (y + (Math.random() * 40 - 20)) + 'px';
-            heart.style.color = '#ff1493';
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 1000);
+        // 2. الانتقال للعبة
+        btnGoGame.onclick = () => {
+            screenMsg1.classList.add('hidden');
+            screenGame.classList.remove('hidden');
+        };
+
+        // 3. عمل اللعبة التفاعلية لملء العداد
+        btnClickGame.onclick = () => {
+            if (clickCount < 10) {
+                clickCount++;
+                let percentage = clickCount * 10;
+                loveProgress.style.width = percentage + '%';
+                progressLabel.innerText = `نسبة الرضا: ${percentage}%`;
+                
+                // تأثير خفيف عند كل ضغطة
+                confetti({ particleCount: 10, spread: 20, origin: { y: 0.8 } });
+
+                if (clickCount >= 10) {
+                    setTimeout(() => {
+                        screenGame.classList.add('hidden');
+                        screenFinal.classList.remove('hidden');
+                        triggerGrandConfetti();
+                    }, 500);
+                }
+            }
+        };
+
+        // تأثير ألعاب نارية كبير في النهاية
+        function triggerGrandConfetti() {
+            let duration = 4 * 1000;
+            let end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
         }
     </script>
 </body>

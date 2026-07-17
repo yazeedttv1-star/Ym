@@ -42,9 +42,10 @@
             flex-direction: column;
         }
 
+        /* إصلاح مشكلة الاختفاء الفجائي */
         .hidden {
-            opacity: 0;
-            pointer-events: none;
+            opacity: 0 !important;
+            pointer-events: none !important;
             display: none !important;
         }
 
@@ -108,6 +109,7 @@
             width: 100%;
             box-shadow: 0 4px 12px rgba(59,130,246,0.2);
             transition: background 0.2s;
+            margin-top: 10px;
         }
         .main-btn:hover { background: #2563eb; }
 
@@ -134,7 +136,7 @@
         .click-game-container {
             display: flex;
             width: 100%;
-            height: 250px;
+            height: 200px;
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 15px;
@@ -163,7 +165,7 @@
         #game-canvas-container {
             position: relative;
             width: 100%;
-            height: 230px;
+            height: 200px;
             background: #f8fafc;
             border-radius: 16px;
             border: 2px solid #e2e8f0;
@@ -190,13 +192,39 @@
         .falling-heart-item { position: absolute; color: #ef4444; font-size: 24px; pointer-events: none; }
         .game-stats { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #1e3a8a; margin-bottom: 10px; }
 
-        /* ==================== لعبة 3: تحدي الأسئلة والـ Trivia ==================== */
+        /* ==================== لعبة 3: لعبة XO التفاعلية ==================== */
+        .xo-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 240px;
+            margin: 15px auto;
+        }
+
+        .xo-cell {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .xo-cell:hover { background: #f0fdf4; }
+        .xo-cell.X { color: #3b82f6; }
+        .xo-cell.O { color: #ef4444; }
+
+        /* ==================== لعبة 4: تحدي الأسئلة والـ Trivia ==================== */
         .quiz-box { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px dashed #cbd5e1; text-align: right; }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .option-btn { background: white; border: 2px solid #e2e8f0; padding: 12px; border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: 600; transition: all 0.2s; text-align: center; }
         .option-btn:hover { border-color: #3b82f6; background: #f0f7ff; }
 
-        /* ==================== لعبة 4: اختبار التوافق ==================== */
+        /* ==================== لعبة 5: اختبار التوافق ==================== */
         .match-box { padding: 20px; background: #fafafa; border-radius: 16px; margin-bottom: 15px; }
         .match-percent { font-size: 45px; font-weight: 800; color: #ec4899; margin: 10px 0; }
 
@@ -224,7 +252,7 @@
                 <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
             </div>
             <h1>اللعبة 1: تحدي النقر السريع ⚡</h1>
-            <p id="click-timer" class="subtitle" style="font-weight: bold; color: #ef4444;">اضغطوا على "ابدأ" لبدء تكسير الشاشة!</p>
+            <p id="click-timer" class="subtitle" style="font-weight: bold; color: #ef4444;">اضغطوا على "ابدأ" لبدء المنافسة!</p>
             
             <div class="click-game-container">
                 <div id="click-player" class="click-half player-left">
@@ -247,7 +275,7 @@
                 <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
             </div>
             <h1>اللعبة 2: صياد القلوب السريع 🧺❤️</h1>
-            <p class="subtitle">حركي السلة بالماوس أو اللمس لتجميع 10 قلوب قبل انتهاء الوقت!</p>
+            <p class="subtitle">حركي السلة بالماوس أو اللمس لتجميع 10 قلوب بسرعة!</p>
             
             <div class="game-stats">
                 <div id="game-score">القلوب المجمعة: 0 / 10</div>
@@ -258,7 +286,7 @@
                 <div id="game-basket" class="basket">🧺</div>
             </div>
             
-            <button id="btn-start-heart-game" class="main-btn">ابدأي اللعب 🎮</button>
+            <button id="btn-start-heart-game" class="main-btn">ابدأ اللعب 🎮</button>
         </div>
     </div>
 
@@ -267,8 +295,31 @@
             <div class="user-nav">
                 <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
             </div>
-            <h1>اللعبة 3: بنك الأسئلة والذكاء 🧠</h1>
-            <p class="subtitle">تحدي معلومات عن علاقتنا، جاوبي صح للانتقال للتحدي القادم:</p>
+            <h1>اللعبة 3: تحدي الذكاء XO ❌⭕</h1>
+            <p id="xo-status" class="subtitle" style="font-weight: bold; color: #2563eb;">الدور الآن: دورك أنت (X)</p>
+            
+            <div class="xo-board">
+                <div class="xo-cell" data-index="0"></div>
+                <div class="xo-cell" data-index="1"></div>
+                <div class="xo-cell" data-index="2"></div>
+                <div class="xo-cell" data-index="3"></div>
+                <div class="xo-cell" data-index="4"></div>
+                <div class="xo-cell" data-index="5"></div>
+                <div class="xo-cell" data-index="6"></div>
+                <div class="xo-cell" data-index="7"></div>
+                <div class="xo-cell" data-index="8"></div>
+            </div>
+            <button id="btn-skip-xo" class="main-btn" style="background: #64748b;">الانتقال للعبة التالية ➡️</button>
+        </div>
+    </div>
+
+    <div id="screen-game4" class="screen hidden">
+        <div class="card">
+            <div class="user-nav">
+                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
+            </div>
+            <h1>اللعبة 4: بنك الأسئلة والذكاء 🧠</h1>
+            <p class="subtitle">سؤال سريع عن علاقتنا، جاوبي صح للانتقال للتحدي الأخير:</p>
             
             <div class="quiz-box">
                 <h3 id="question-text">مين فينا اللي بينام أسرع أول ما يحط رأسه على المخدة؟ 😂</h3>
@@ -280,13 +331,13 @@
         </div>
     </div>
 
-    <div id="screen-game4" class="screen hidden">
+    <div id="screen-game5" class="screen hidden">
         <div class="card">
             <div class="user-nav">
                 <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
             </div>
-            <h1>اللعبة 4: مقياس التوافق الخارق 🔮</h1>
-            <p class="subtitle">اضغطوا على الزر سوا لمعرفة نسبة التوافق اليوم الكترونياً!</p>
+            <h1>اللعبة 5: مقياس التوافق الخارق 🔮</h1>
+            <p class="subtitle">اضغطوا على الزر معاً لحساب نسبة التوافق الحالية لايف!</p>
             
             <div class="match-box">
                 <div id="match-result" class="match-percent">??%</div>
@@ -328,9 +379,10 @@
         const screenGame2 = document.getElementById('screen-game2');
         const screenGame3 = document.getElementById('screen-game3');
         const screenGame4 = document.getElementById('screen-game4');
+        const screenGame5 = document.getElementById('screen-game5');
         const screenVictory = document.getElementById('screen-victory');
 
-        // إدارة الـ Auth لايف
+        // إدارة الدخول والخروج بـ Firebase Auth
         document.getElementById('btn-google-login').onclick = () => {
             signInWithPopup(auth, new GoogleAuthProvider()).catch(err => alert(err.message));
         };
@@ -347,8 +399,8 @@
         });
 
         function showScreen(target) {
-            [screenAuth, screenGame1, screenGame2, screenGame3, screenGame4, screenVictory].forEach(s => s.classList.add('hidden'));
-            target.remove('hidden');
+            [screenAuth, screenGame1, screenGame2, screenGame3, screenGame4, screenGame5, screenVictory].forEach(s => s.classList.add('hidden'));
+            target.classList.remove('hidden');
         }
 
         /* ==================== اللعبة 1: تحدي النقر السريع ==================== */
@@ -386,7 +438,6 @@
         const btnStartHeart = document.getElementById('btn-start-heart-game');
         let hScore = 0, hTimeLeft = 25, hInterval = null, spawnInterval = null, isHRunning = false;
 
-        // تحريك السلة بالماوس أو اللمس داخل المربع الخاص بها
         const moveBasket = (e) => {
             if(!isHRunning) return;
             const rect = canvasContainer.getBoundingClientRect();
@@ -397,7 +448,6 @@
             gameBasket.style.left = x + 'px';
         };
         canvasContainer.onmousemove = moveBasket;
-        canvasContainer.getClientRects();
         canvasContainer.ontouchmove = moveBasket;
 
         btnStartHeart.onclick = () => {
@@ -409,7 +459,6 @@
                 document.getElementById('game-timer').innerText = `الوقت: ${hTimeLeft} ثانية`;
                 if(hTimeLeft <= 0) {
                     clearInterval(hInterval); clearInterval(spawnInterval); isHRunning = false;
-                    alert(hScore >= 10 ? "كفوو نجحتِ في تجميع القلوب بالكامل! 🎉" : "خلص الوقت! بس هنعديها وندخل التحدي الجاي 😉");
                     showScreen(screenGame3);
                 }
             }, 1000);
@@ -437,28 +486,71 @@
                         heart.remove();
                         if(hScore >= 10) {
                             clearInterval(hInterval); clearInterval(spawnInterval); isHRunning = false;
-                            confetti({ particleCount: 35 });
+                            confetti({ particleCount: 25 });
                             setTimeout(() => { showScreen(screenGame3); }, 600);
                         }
                         return;
                     }
-                    if(top > 230) heart.remove(); else requestAnimationFrame(fall);
+                    if(top > 200) heart.remove(); else requestAnimationFrame(fall);
                 }
                 requestAnimationFrame(fall);
             }, 600);
         };
 
-        /* ==================== اللعبة 3: تحدي الأسئلة والـ Trivia ==================== */
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.onclick = () => {
-                alert(btn.getAttribute('data-correct') === 'true' ? "إجابة عبقرية وصحيحة تماماً! 😂🎯" : "غلط بس الإجابة دي تضحك ف هنمشيها صح! 🤫");
-                showScreen(screenGame4);
+        /* ==================== اللعبة 3: لعبة XO التفاعلية ==================== */
+        let xoBoard = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X"; // X هو الزوج، O هو البطة
+        const cells = document.querySelectorAll('.xo-cell');
+        const xoStatus = document.getElementById('xo-status');
+
+        cells.forEach(cell => {
+            cell.onclick = () => {
+                const index = cell.getAttribute('data-index');
+                if (xoBoard[index] !== "" || checkXOWinner()) return;
+
+                xoBoard[index] = currentPlayer;
+                cell.innerText = currentPlayer;
+                cell.classList.add(currentPlayer);
+
+                if (checkXOWinner()) {
+                    let winnerName = currentPlayer === "X" ? "أنت الفائز (X)🤵!" : "بطتك هي الفائزة (O)🦆🏆!";
+                    xoStatus.innerText = `🎉 المشهد انتهى! الفائز: ${winnerName}`;
+                    confetti({ particleCount: 40 });
+                    setTimeout(() => { showScreen(screenGame4); }, 2000);
+                } else if (!xoBoard.includes("")) {
+                    xoStatus.innerText = "🤝 تعادل رائع في الذكاء!";
+                    setTimeout(() => { showScreen(screenGame4); }, 2000);
+                } else {
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";
+                    xoStatus.innerText = currentPlayer === "X" ? "الدور الآن: دورك أنت (X)" : "الدور الآن: دور بطتك (O)";
+                }
             };
         });
 
-        /* ==================== اللعبة 4: اختبار درجة التوافق ==================== */
+        document.getElementById('btn-skip-xo').onclick = () => { showScreen(screenGame4); };
+
+        function checkXOWinner() {
+            const winPatterns = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            return winPatterns.some(pattern => {
+                return pattern.every(i => xoBoard[i] === currentPlayer);
+            });
+        }
+
+        /* ==================== اللعبة 4: تحدي الأسئلة ==================== */
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.onclick = () => {
+                alert(btn.getAttribute('data-correct') === 'true' ? "إجابة عبقرية وصحيحة تماماً! 😂🎯" : "غلط بس الإجابة دي تضحك ف هنمشيها صح! 🤫");
+                showScreen(screenGame5);
+            };
+        });
+
+        /* ==================== اللعبة 5: اختبار درجة التوافق ==================== */
         document.getElementById('btn-calc-match').onclick = () => {
-            let percentage = Math.floor(Math.random() * 31) + 70; // نسبة عشوائية حلوة بين 70% و 100%
+            let percentage = Math.floor(Math.random() * 31) + 70; // نسبة عشوائية بين 70% و 100%
             document.getElementById('match-result').innerText = percentage + '%';
             
             let comments = [
@@ -485,9 +577,13 @@
             clearInterval(clickInterval); clearInterval(hInterval); clearInterval(spawnInterval);
             isClickRunning = false; isHRunning = false;
             pScore = 0; dScore = 0; hScore = 0;
+            xoBoard = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            cells.forEach(c => { c.innerText = ""; c.className = "xo-cell"; });
+            xoStatus.innerText = "الدور الآن: دورك أنت (X)";
             btnStartClick.style.display = 'block';
             btnStartHeart.style.display = 'block';
-            document.getElementById('click-timer').innerText = "اضغطوا على 'ابدأ' لبدء تكسير الشاشة!";
+            document.getElementById('click-timer').innerText = "اضغطوا على 'ابدأ' لبدء المنافسة!";
             document.getElementById('game-score').innerText = "القلوب المجمعة: 0 / 10";
             document.getElementById('game-timer').innerText = "الوقت: 25 ثانية";
             document.getElementById('match-result').innerText = '??%';

@@ -1,133 +1,255 @@
-:root {
-    --wa-teal: #008069;
-    --wa-teal-hover: #005e4b;
-    --wa-dark: #111b21;
-    --wa-gray-bg: #efeae2;
-    --wa-header: #f0f2f5;
-    --bubble-me: #dcf8c6;
-    --bubble-other: #ffffff;
-    --text-main: #111b21;
-    --text-sub: #667781;
-}
-
+/* --- التنسيقات العامة --- */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: var(--wa-dark);
-    background-image: linear-gradient(180deg, #00a884 0%, var(--wa-dark) 100%);
-    background-size: 100% 120px;
-    background-repeat: no-repeat;
+    background-color: #e6f0fa;
+    background-image: radial-gradient(#b3d1ff 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow: hidden;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
 }
 
-.app-container {
-    background: #fff;
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 460px;
     height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+    padding: 20px;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    overflow: hidden;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+/* --- كارت تسجيل الدخول --- */
+.auth-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,128,255,0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.auth-card i.fa-heart {
+    font-size: 50px;
+    color: #3b82f6;
+    margin-bottom: 20px;
+    animation: pulse 1.5s infinite;
+}
+
+.auth-card h2 {
+    color: #1e3a8a;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.auth-card p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.google-btn {
+    background: white;
+    border: 2px solid #e2e8f0;
+    color: #334155;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.google-btn i {
+    color: #ea4335;
+    font-size: 18px;
+}
+
+/* --- ساحة اللعبة التفاعلية --- */
+.game-container {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    text-align: center;
     position: relative;
 }
 
-@media (min-width: 480px) {
-    .app-container { height: 90vh; border-radius: 12px; }
-}
-
-.screen { display: none; flex-direction: column; height: 100%; width: 100%; overflow: hidden; }
-.screen.active { display: flex; }
-
-/* واجهة الدخول */
-.auth-wrapper { padding: 40px 24px; background: #fff; justify-content: center; align-items: center; }
-.auth-card { width: 100%; display: flex; flex-direction: column; gap: 20px; }
-.auth-header { text-align: center; }
-.whatsapp-icon { font-size: 60px; color: #25D366; margin-bottom: 12px; }
-.auth-header h2 { color: var(--text-main); font-size: 24px; font-weight: 700; }
-.auth-header p { color: var(--text-sub); font-size: 13.5px; margin-top: 6px; }
-.auth-section { display: flex; flex-direction: column; gap: 12px; }
-.input-field { display: flex; align-items: center; background: var(--wa-header); border-radius: 10px; padding: 6px 14px; }
-.input-field i { color: var(--text-sub); font-size: 16px; margin-left: 12px; }
-.input-field input { flex: 1; border: none; background: transparent; padding: 8px 0; font-size: 14.5px; outline: none; color: var(--text-main); }
-.main-btn { width: 100%; padding: 14px; border-radius: 10px; font-size: 15.5px; font-weight: bold; border: none; cursor: pointer; color: white; background: var(--wa-teal); }
-.main-btn:hover { background: var(--wa-teal-hover); }
-.text-divider { display: flex; align-items: center; text-align: center; color: var(--text-sub); font-size: 12px; }
-.text-divider::before, .text-divider::after { content: ''; flex: 1; border-bottom: 1px solid #e9edef; }
-.text-divider::before { margin-left: 1em; }
-.text-divider::after { margin-right: 1em; }
-.social-auth-container { display: flex; flex-direction: column; gap: 10px; }
-.social-btn { width: 100%; background: #fff; border: 1px solid #e9edef; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
-.social-btn:hover { background: var(--wa-header); }
-.google-btn i { color: #ea4335; }
-.anon-btn i { color: #555; }
-
-/* واجهة الشات */
-.chat-wrapper { background: var(--wa-gray-bg); }
-.app-header { background: var(--wa-header); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e9edef; }
-.user-profile { display: flex; align-items: center; gap: 12px; max-width: 70%; }
-.avatar-circle { width: 42px; height: 42px; background: var(--wa-teal); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; }
-.profile-meta { display: flex; flex-direction: column; }
-.profile-meta h3 { font-size: 14.5px; color: var(--text-main); font-weight: 600; }
-.uid-box { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-sub); }
-.uid-box input { border: none; background: transparent; font-size: 11.5px; font-weight: bold; color: var(--wa-teal); outline: none; width: 65px; cursor: pointer; }
-
-.header-actions { display: flex; align-items: center; gap: 14px; }
-.call-trigger-btn { background: transparent; border: none; color: var(--wa-teal); font-size: 18px; cursor: pointer; padding: 4px; }
-.call-trigger-btn:hover { color: var(--wa-teal-hover); }
-.logout-btn { background: transparent; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer; padding: 4px; }
-.logout-btn:hover { color: #c62828; }
-
-.connect-holder { background: #fff; padding: 10px 14px; display: flex; gap: 8px; border-bottom: 1px solid #e9edef; }
-.search-bar { flex: 1; display: flex; align-items: center; background: var(--wa-header); border-radius: 20px; padding: 0 12px; }
-.search-bar i { color: var(--text-sub); margin-left: 8px; }
-.search-bar input { flex: 1; border: none; background: transparent; padding: 8px 0; font-size: 13px; outline: none; }
-.action-connect { background: var(--wa-teal); color: white; border: none; padding: 0 16px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; }
-
-/* بوكس إشعار طلب الاتصال الذكي */
-.call-alert-box {
-    background: #e8f5e9;
-    border-bottom: 2px solid #4caf50;
-    padding: 12px 16px;
+.user-nav {
+    position: absolute;
+    top: 15px;
+    left: 15px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 8px;
-    animation: slideDown 0.3s ease-out;
+    font-size: 12px;
+    color: #64748b;
 }
-@keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.call-alert-box p { font-size: 12.5px; color: #1b5e20; line-height: 1.4; }
-.phone-ring { animation: ring 0.6s infinite alternate; color: #2e7d32; margin-left: 4px; }
-@keyframes ring { from { transform: scale(1); } to { transform: scale(1.15); } }
-.call-actions { display: flex; gap: 10px; }
-.call-btn { flex: 1; padding: 8px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
-.accept-call { background: #2e7d32; color: white; }
-.reject-call { background: #c62828; color: white; }
 
-.chat-area { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
-.welcome-box { text-align: center; background: #fff; padding: 16px; border-radius: 10px; max-width: 85%; margin: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-.welcome-box i { font-size: 24px; color: var(--wa-teal); margin-bottom: 8px; }
-.welcome-box p { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-.msg-line { display: flex; flex-direction: column; margin-bottom: 8px; max-width: 75%; }
-.msg-line.sent { align-self: flex-end; }
-.msg-line.received { align-self: flex-start; }
-.bubble-wrap { padding: 8px 12px; border-radius: 8px; font-size: 14px; color: var(--text-main); box-shadow: 0 1px 2px rgba(0,0,0,0.05); word-break: break-word; }
-.sent .bubble-wrap { background: var(--bubble-me); }
-.received .bubble-wrap { background: var(--bubble-other); }
-.b-sender { font-size: 11px; font-weight: bold; color: #35a57f; margin-bottom: 3px; display: block; }
-.b-time { font-size: 9px; color: var(--text-sub); text-align: left; display: block; margin-top: 4px; }
+.duck-gif {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
 
-.chat-footer { padding: 10px 14px; background: var(--wa-header); display: flex; align-items: center; gap: 10px; }
-.type-area { flex: 1; background: #fff; border-radius: 22px; padding: 0 16px; }
-.type-area input { width: 100%; border: none; background: transparent; padding: 10px 0; font-size: 14.5px; outline: none; }
-.send-btn { background: var(--wa-teal); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 15px; }
+.game-container h1 {
+    color: #1d4ed8;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.game-subtitle {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* شريط العداد */
+.progress-wrapper {
+    background: #f1f5f9;
+    border-radius: 20px;
+    height: 24px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    height: 100%;
+    width: 20%;
+    transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 2px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1e3a8a;
+}
+
+/* أزرار التفاعل اللعبة */
+.buttons-grid {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: center;
+    min-height: 55px;
+    position: relative;
+}
+
+.game-btn {
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.yes-btn {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+}
+.yes-btn:hover {
+    transform: scale(1.05);
+    background: #1d4ed8;
+}
+
+.no-btn {
+    background: #f1f5f9;
+    color: #64748b;
+    position: relative;
+}
+
+/* --- واجهة الفوز والاعتذار الكبرى --- */
+.victory-card {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(37,99,235,0.15);
+    border: 3px solid #bfdbfe;
+}
+
+.victory-card h2 {
+    color: #1e3a8a;
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+.victory-card p {
+    color: #475569;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.floating-heart {
+    position: fixed;
+    color: #60a5fa;
+    font-size: 24px;
+    pointer-events: none;
+    animation: floatUp 1.5s ease-out forwards;
+    z-index: 999;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

@@ -1,201 +1,119 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+// إعدادات مشروع الفايربيس (Firebase) الخاصة بك
 const firebaseConfig = {
-  apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
-  authDomain: "ym-pro-max.firebaseapp.com",
-  projectId: "ym-pro-max",
-  storageBucket: "ym-pro-max.firebasestorage.app",
-  messagingSenderId: "174657071953",
-  appId: "1:174657071953:web:5e831fc337df46dbd18170"
+    apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+    authDomain: "ym-pro-max.firebaseapp.com",
+    projectId: "ym-pro-max",
+    storageBucket: "ym-pro-max.firebasestorage.app",
+    messagingSenderId: "174657071953",
+    appId: "1:174657071953:web:5e831fc337df46dbd18170"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 const screenAuth = document.getElementById('screen-auth');
-const screenApp = document.getElementById('screen-app');
-const chatMessages = document.getElementById('chat-messages');
-const chatInput = document.getElementById('chat-input');
-const inputFooterArea = document.getElementById('input-footer-area');
+const screenGame = document.getElementById('screen-game');
+const screenVictory = document.getElementById('screen-victory');
+const loveProgress = document.getElementById('love-progress');
+const progressTextLabel = document.getElementById('progress-text-label');
 
-const incomingCallBox = document.getElementById('incoming-call-box');
-const callerIdLabel = document.getElementById('caller-id-label');
-const btnStartCall = document.getElementById('btn-start-call');
+let currentProgress = 20; // نسبة البداية
 
-let currentRoomId = null;
-let unsubscribeChat = null;
-let unsubscribeCalls = null;
-let shortUid = ""; 
-let friendShortId = ""; // حفظ الـ ID الخاص بالصديق الحالي
-let currentCallRequestId = null;
-
-// أزرار تسجيل الدخول
-document.getElementById('btn-google-login').onclick = () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e => alert(e.message)); };
-document.getElementById('btn-anon-login').onclick = () => { signInAnonymously(auth).catch(e => alert(e.message)); };
-
-document.getElementById('btn-email-auth').onclick = () => {
-    const email = document.getElementById('email-login').value.trim();
-    const password = document.getElementById('password-login').value;
-    if(!email || !password) return alert("يرجى ملء البيانات!");
-    signInWithEmailAndPassword(auth, email, password).catch(() => {
-        createUserWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
-    });
+// تفعيل تسجيل الدخول بـ Google
+document.getElementById('btn-google-login').onclick = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider).catch(err => alert("حدث خطأ أثناء تسجيل الدخول: " + err.message));
 };
 
-// متابعة الجلسة
+// تفعيل تسجيل الخروج
+document.getElementById('btn-logout').onclick = () => {
+    signOut(auth);
+};
+
+// تتبع حالة تسجيل الدخول وتبديل الشاشات لايف
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        screenAuth.classList.remove('active');
-        screenApp.classList.add('active');
-        
-        let name = user.displayName || (user.email ? user.email.split('@')[0] : "مستخدم مجهول");
-        document.getElementById('user-display-name').innerText = name;
-        
-        shortUid = user.uid.substring(0, 6);
-        const uidInput = document.getElementById('user-uid-input');
-        uidInput.value = shortUid;
-        
-        uidInput.onclick = () => {
-            navigator.clipboard.writeText(shortUid);
-            alert("تم نسخ معرفك: " + shortUid);
-        };
-
-        document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
-        
-        // تشغيل مراقبة طلبات المكالمات الواردة بالخلفية
-        listenToCalls();
+        screenAuth.classList.add('hidden');
+        screenGame.classList.remove('hidden');
+        screenVictory.classList.add('hidden');
+        document.getElementById('user-display-name').innerText = user.displayName;
     } else {
-        screenAuth.classList.add('active');
-        screenApp.classList.remove('active');
-        if (unsubscribeChat) unsubscribeChat();
-        if (unsubscribeCalls) unsubscribeCalls();
+        screenAuth.classList.remove('hidden');
+        screenGame.classList.add('hidden');
+        screenVictory.classList.add('hidden');
+        
+        // إعادة تصفير اللعبة عند تسجيل الخروج
+        currentProgress = 20;
+        loveProgress.style.width = '20%';
+        progressTextLabel.innerText = "نسبة الرضا: 20%";
     }
 });
 
-document.getElementById('btn-logout').onclick = () => { signOut(auth); };
+/* --- منطق وعمل اللعبة التفاعلي --- */
+const btnYes = document.getElementById('btn-yes');
+const btnNo = document.getElementById('btn-no');
 
-// 1. فتح الدردشة فوراً وبشكل عادي قبل الاتصال
-document.getElementById('btn-connect-room').onclick = () => {
-    const targetInput = document.getElementById('target-identifier').value.trim();
-    if(!targetInput || targetInput.length < 5) return alert("أدخل معرف صديقك الصحيح (6 رموز)!");
-    if(shortUid === targetInput) return alert("لا يمكنك فتح شات مع نفسك!");
-    
-    friendShortId = targetInput;
-    currentRoomId = [shortUid, targetInput].sort().join("_");
-    
-    // فتح الواجهة فوراً وعرض بار الإرسال
-    document.getElementById('welcome-box').style.display = 'none';
-    inputFooterArea.style.display = 'flex';
-    btnStartCall.style.display = 'block'; // إظهار زر الاتصال في الأعلى
-    
-    loadLiveMessages(currentRoomId);
+// عند الضغط على زر الموافقة والمصالحة
+btnYes.onclick = (e) => {
+    if (currentProgress < 100) {
+        currentProgress += 20; // زيادة العداد مع كل ضغطة
+        loveProgress.style.width = currentProgress + '%';
+        progressTextLabel.innerText = `نسبة الرضا: ${currentProgress}%`;
+        
+        // إطلاق قلوب متطايرة عند موضع الضغطة
+        createHeart(e.clientX, e.clientY);
+
+        // ألعاب نارية مصغرة مع كل ضغطة
+        confetti({ particleCount: 40, spread: 40, origin: { y: 0.8 } });
+
+        if (currentProgress >= 100) {
+            // شاشة الفوز الكبرى والاعتذار النهائي بعد ثانية مصغرة
+            setTimeout(() => {
+                screenGame.classList.add('hidden');
+                screenVictory.classList.remove('hidden');
+                
+                // احتفال ضخم ومستمر بالألعاب النارية لفترة
+                let duration = 4 * 1000;
+                let end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                    if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            }, 600);
+        }
+    }
 };
 
-// 2. زر طلب اتصال لايف أثناء الدردشة
-btnStartCall.onclick = async () => {
-    if(!friendShortId) return;
-    alert("جاري إرسال طلب اتصال لصديقك لايف... 📞");
-    
-    await addDoc(collection(db, "call_requests"), {
-        senderId: shortUid,
-        receiverId: friendShortId,
-        status: "pending",
-        timestamp: new Date()
-    });
-};
+// الزر المشاكس: الهروب عند محاولة الرفض
+btnNo.onmouseover = moveNoButton;
+btnNo.onclick = moveNoButton; // للموبايل عند اللمس والضغط
 
-// 3. مراقبة المكالمات لايف في الخلفية
-function listenToCalls() {
-    if (unsubscribeCalls) unsubscribeCalls();
+function moveNoButton() {
+    // توليد أبعاد عشوائية في نطاق الشاشة لمنع اختفاء الزر تماماً
+    const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 40);
+    const y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 40);
     
-    const q = query(collection(db, "call_requests"), orderBy("timestamp", "desc"));
-    
-    unsubscribeCalls = onSnapshot(q, (snapshot) => {
-        snapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            
-            // استقبال مكالمة واردة
-            if (data.receiverId === shortUid && data.status === "pending") {
-                currentCallRequestId = docSnap.id;
-                callerIdLabel.innerText = data.senderId;
-                incomingCallBox.style.display = 'flex';
-            }
-            
-            // رد المكالمة المقبولة للمتصل
-            if (data.senderId === shortUid && data.status === "accepted") {
-                alert("✅ صديقك وافق على طلب الاتصال الآن!");
-                // هنا تقدر تفتح أي ميزة إضافية أو تسيبها إشعار نجاح
-            }
-            
-            if (data.senderId === shortUid && data.status === "rejected") {
-                alert("❌ تم رفض أو إغلاق طلب الاتصال.");
-            }
-        });
-    });
+    btnNo.style.position = 'fixed';
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+    btnNo.style.zIndex = '9999';
 }
 
-// أزرار القبول والرفض للمكالمة الواردة
-document.getElementById('btn-accept-call').onclick = async () => {
-    if (currentCallRequestId) {
-        await updateDoc(doc(db, "call_requests", currentCallRequestId), { status: "accepted" });
-        incomingCallBox.style.display = 'none';
-        alert("تم قبول الاتصال بنجاح! 📞");
-    }
-};
-
-document.getElementById('btn-reject-call').onclick = async () => {
-    if (currentCallRequestId) {
-        await updateDoc(doc(db, "call_requests", currentCallRequestId), { status: "rejected" });
-        incomingCallBox.style.display = 'none';
-    }
-};
-
-// إرسال الرسائل
-async function sendMessage() {
-    const text = chatInput.value.trim();
-    if (text && auth.currentUser && currentRoomId) {
-        chatInput.value = '';
-        await addDoc(collection(db, "whatsapp_verified_chats"), {
-            roomId: currentRoomId,
-            text: text,
-            senderId: shortUid,
-            senderName: auth.currentUser.displayName || (auth.currentUser.email ? auth.currentUser.email.split('@')[0] : "صديقك"),
-            timestamp: new Date()
-        });
-    }
-}
-
-document.getElementById('btn-send-message').onclick = sendMessage;
-chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
-
-// تحديث الرسائل لايف
-function loadLiveMessages(roomId) {
-    if (unsubscribeChat) unsubscribeChat();
-    const q = query(collection(db, "whatsapp_verified_chats"), where("roomId", "==", roomId), orderBy("timestamp", "asc"));
+// دالة إنشاء القلوب الطائرة اللطيفة
+function createHeart(x, y) {
+    const heart = document.createElement('i');
+    heart.className = 'fas fa-heart floating-heart';
+    heart.style.left = x + 'px';
+    heart.style.top = y + 'px';
     
-    unsubscribeChat = onSnapshot(q, (snapshot) => {
-        chatMessages.innerHTML = '';
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const isMe = data.senderId === shortUid;
-            const msgLine = document.createElement('div');
-            msgLine.className = `msg-line ${isMe ? 'sent' : 'received'}`;
-            
-            let t = "الآن";
-            if(data.timestamp) t = data.timestamp.toDate().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            
-            msgLine.innerHTML = `
-                <div class="bubble-wrap">
-                    ${!isMe ? `<span class="b-sender">${data.senderName}</span>` : ''}
-                    <span class="b-text">${data.text}</span>
-                    <span class="b-time">${t}</span>
-                </div>
-            `;
-            chatMessages.appendChild(msgLine);
-        });
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
+    const colors = ['#3b82f6', '#60a5fa', '#f43f5e', '#ec4899'];
+    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(heart);
+    
+    setTimeout(() => { heart.remove(); }, 1500);
 }

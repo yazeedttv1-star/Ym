@@ -3,34 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات واتساب الخاص والمشفر</title>
+    <title>شات واتساب برقم الهاتف</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #e5ddd5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .container { background: white; width: 100%; max-width: 450px; height: 90vh; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
         
         /* واجهة الدخول */
         .login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 20px; background: #fff; }
-        .btn-google { background-color: #25D366; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-google:hover { background-color: #20ba59; }
-
-        /* اختيار الشخص */
-        .room-selection { padding: 15px; background: #075E54; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .room-input { flex: 1; padding: 8px 12px; border: none; border-radius: 20px; outline: none; }
-        .btn-connect { background: #128C7E; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        input { width: 85%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 20px; text-align: center; font-size: 15px; }
+        .btn-action { background-color: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 90%; }
+        .btn-action:hover { background-color: #20ba59; }
 
         /* واجهة الشات */
         .chat-header { background: #075E54; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
         .btn-logout { background: transparent; color: #fff; border: 1px solid #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
-        
-        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 15px; position: relative; word-break: break-word; }
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 15px; word-break: break-word; }
         .msg.sent { background: #dcf8c6; align-self: flex-end; }
         .msg.received { background: #ffffff; align-self: flex-start; }
         .msg-user { font-size: 11px; color: #25D366; font-weight: bold; display: block; margin-bottom: 2px; }
-
         .chat-input-area { padding: 10px; background: #f0f0f0; display: flex; align-items: center; }
-        .chat-input { flex: 1; padding: 12px; border: none; border-radius: 20px; outline: none; font-size: 15px; }
+        .chat-input { flex: 1; padding: 12px; border: none; border-radius: 20px; outline: none; }
         .btn-send { background: #075E54; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; margin-right: 8px; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
@@ -38,8 +31,17 @@
 
 <div class="container">
     <div id="auth-container" class="login-screen">
-        <h2 style="color: #075E54; margin-bottom: 20px;">واتساب المحمي والمشفر 🔒</h2>
-        <button id="btn-google-login" class="btn-google">سجل دخول آمن بجوجل</button>
+        <h2 style="color: #075E54; margin-bottom: 20px;">واتساب برقم الهاتف 📱</h2>
+        
+        <div id="phone-input-area" style="width: 100%; text-align: center;">
+            <input type="tel" id="phone-number" placeholder="اكتب رقمك بصيغة دولية (مثل +2010...)">
+            <div id="recaptcha-container"></div> <button id="btn-send-code" class="btn-action" style="margin-top: 10px;">إرسال رمز التحقق</button>
+        </div>
+
+        <div id="code-input-area" style="width: 100%; text-align: center; display: none;">
+            <input type="text" id="verification-code" placeholder="أدخل الرمز المكون من 6 أرقام">
+            <button id="btn-verify-code" class="btn-action">تأكيد الرمز والدخول</button>
+        </div>
     </div>
 
     <div id="app-container" style="display: none; flex-direction: column; height: 100%;">
@@ -47,18 +49,11 @@
             <span id="user-profile">جاري التحميل...</span>
             <button id="btn-logout" class="btn-logout">خروج</button>
         </div>
-
-        <div class="room-selection">
-            <input type="email" id="target-email" class="room-input" placeholder="اكتب إيميل صديقك للشات السري...">
-            <button id="btn-connect" class="btn-connect">بدء المحادثة</button>
-        </div>
         
-        <div class="chat-messages" id="chat-messages">
-            <p style="text-align: center; color: #666; font-size: 14px;">ادخل إيميل صديقك بالأعلى لبدء شات خاص آمن.</p>
-        </div>
+        <div class="chat-messages" id="chat-messages"></div>
         
-        <div class="chat-input-area" id="input-area" style="display: none;">
-            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالة مشفرة يسطا...">
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالتك يسطا...">
             <button id="btn-send" class="btn-send">◀</button>
         </div>
     </div>
@@ -66,8 +61,8 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
@@ -81,60 +76,76 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
 
   const authContainer = document.getElementById('auth-container');
   const appContainer = document.getElementById('app-container');
   const chatMessages = document.getElementById('chat-messages');
   const chatInput = document.getElementById('chat-input');
-  const inputArea = document.getElementById('input-area');
-  let currentRoomId = null;
-  let unsubscribeChat = null;
+  
+  let confirmationResult = null;
 
-  document.getElementById('btn-google-login').addEventListener('click', () => {
-      signInWithPopup(auth, provider).catch(err => alert(err.message));
+  // إعداد أداة الحماية المانعة للاسبرام (reCAPTCHA)
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+      'size': 'invisible'
   });
 
+  // 1. طلب إرسال الرمز للهاتف
+  document.getElementById('btn-send-code').addEventListener('click', () => {
+      const phoneNumber = document.getElementById('phone-number').value.trim();
+      const appVerifier = window.recaptchaVerifier;
+
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+          .then((result) => {
+              confirmationResult = result;
+              document.getElementById('phone-input-area').style.display = 'none';
+              document.getElementById('code-input-area').style.display = 'block';
+              alert('تم إرسال الرمز إلى هاتفك!');
+          }).catch((error) => {
+              alert('خطأ في الإرسال: ' + error.message);
+          });
+  });
+
+  // 2. التحقق من الرمز المدخل والدخول
+  document.getElementById('btn-verify-code').addEventListener('click', () => {
+      const code = document.getElementById('verification-code').value.trim();
+      if(confirmationResult) {
+          confirmationResult.confirm(code).then(() => {
+              alert('تم تسجيل الدخول بنجاح!');
+          }).catch((error) => {
+              alert('الرمز خاطئ يسطا: ' + error.message);
+          });
+      }
+  });
+
+  // 3. خروج
   document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); });
 
+  // 4. مراقبة المستخدم والشات اللحظي
+  let unsubscribeChat;
   onAuthStateChanged(auth, (user) => {
       if (user) {
           authContainer.style.display = 'none';
           appContainer.style.display = 'flex';
-          document.getElementById('user-profile').innerText = `حسابك: ${user.email}`;
+          document.getElementById('user-profile').innerText = `هاتفك: ${user.phoneNumber}`;
+          loadMessages();
       } else {
           authContainer.style.display = 'flex';
           appContainer.style.display = 'none';
+          document.getElementById('phone-input-area').style.display = 'block';
+          document.getElementById('code-input-area').style.display = 'none';
           if (unsubscribeChat) unsubscribeChat();
       }
   });
 
-  // إنشاء معرف غرفة فريد وخاص بالـ 2 مستخدمين فقط لمنع التجسس
-  document.getElementById('btn-connect').addEventListener('click', () => {
-      const myEmail = auth.currentUser.email.toLowerCase().trim();
-      const friendEmail = document.getElementById('target-email').value.toLowerCase().trim();
-      
-      if(!friendEmail || myEmail === friendEmail) {
-          alert("ادخل إيميل صديقك بشكل صحيح!");
-          return;
-      }
-
-      // دمج الإيميلين وترتيبهم أبجدياً لإنشاء Room ID ثابت ومحمي للطرفين
-      currentRoomId = [myEmail, friendEmail].sort().join("_");
-      inputArea.style.display = 'flex';
-      loadPrivateMessages(currentRoomId);
-  });
-
+  // 5. إرسال الرسالة
   async function sendMessage() {
       const text = chatInput.value.trim();
       const user = auth.currentUser;
-      if (text && user && currentRoomId) {
+      if (text && user) {
           chatInput.value = '';
-          await addDoc(collection(db, "secure_chats"), {
-              roomId: currentRoomId,
+          await addDoc(collection(db, "phone_chats"), {
               text: text,
-              sender: user.email,
-              senderName: user.displayName,
+              sender: user.phoneNumber,
               timestamp: new Date()
           });
       }
@@ -143,24 +154,18 @@
   document.getElementById('btn-send').addEventListener('click', sendMessage);
   chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 
-  function loadPrivateMessages(roomId) {
-      if (unsubscribeChat) unsubscribeChat();
-      
-      const q = query(
-          collection(db, "secure_chats"), 
-          where("roomId", "==", roomId),
-          orderBy("timestamp", "asc")
-      );
-      
+  // 6. تحميل الرسائل وايف
+  function loadMessages() {
+      const q = query(collection(db, "phone_chats"), orderBy("timestamp", "asc"));
       unsubscribeChat = onSnapshot(q, (snapshot) => {
           chatMessages.innerHTML = '';
           snapshot.forEach((doc) => {
               const data = doc.data();
-              const isMe = data.sender === auth.currentUser.email;
+              const isMe = data.sender === auth.currentUser.phoneNumber;
               
               const msgDiv = document.createElement('div');
               msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
-              msgDiv.innerHTML = `<span class="msg-user">${isMe ? 'أنت' : data.senderName}</span>${data.text}`;
+              msgDiv.innerHTML = `<span class="msg-user">${isMe ? 'أنت' : data.sender}</span>${data.text}`;
               chatMessages.appendChild(msgDiv);
           });
           chatMessages.scrollTop = chatMessages.scrollHeight;

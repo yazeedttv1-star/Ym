@@ -10,7 +10,13 @@
         
         /* واجهة الدخول */
         .login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 20px; background: #fff; }
-        input { width: 85%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 20px; text-align: center; font-size: 15px; }
+        
+        /* صندوق إدخال الرقم المعدل */
+        .phone-container { display: flex; align-items: center; justify-content: center; direction: ltr; width: 85%; margin: 8px 0; border: 1px solid #ccc; border-radius: 20px; padding: 4px 12px; background: #fafafa; }
+        .country-code { font-size: 16px; font-weight: bold; color: #555; padding-right: 5px; border-right: 1px solid #ccc; margin-right: 5px; }
+        .phone-input { flex: 1; border: none; background: transparent; padding: 8px; font-size: 16px; outline: none; }
+        
+        input[type="text"] { width: 85%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 20px; text-align: center; font-size: 15px; }
         .btn-action { background-color: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 90%; }
         .btn-action:hover { background-color: #20ba59; }
 
@@ -33,9 +39,13 @@
     <div id="auth-container" class="login-screen">
         <h2 style="color: #075E54; margin-bottom: 20px;">واتساب برقم الهاتف 📱</h2>
         
-        <div id="phone-input-area" style="width: 100%; text-align: center;">
-            <input type="tel" id="phone-number" placeholder="اكتب رقمك بصيغة دولية (مثل +2010...)">
-            <div id="recaptcha-container"></div> <button id="btn-send-code" class="btn-action" style="margin-top: 10px;">إرسال رمز التحقق</button>
+        <div id="phone-input-area" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="phone-container">
+                <span class="country-code">+20</span>
+                <input type="tel" id="phone-number" class="phone-input" placeholder="10xxxxxxxx">
+            </div>
+            <div id="recaptcha-container"></div>
+            <button id="btn-send-code" class="btn-action" style="margin-top: 10px;">إرسال رمز التحقق</button>
         </div>
 
         <div id="code-input-area" style="width: 100%; text-align: center; display: none;">
@@ -84,17 +94,24 @@
   
   let confirmationResult = null;
 
-  // إعداد أداة الحماية المانعة للاسبرام (reCAPTCHA)
   window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
       'size': 'invisible'
   });
 
-  // 1. طلب إرسال الرمز للهاتف
+  // 1. طلب إرسال الرمز للهاتف (الدمج التلقائي)
   document.getElementById('btn-send-code').addEventListener('click', () => {
-      const phoneNumber = document.getElementById('phone-number').value.trim();
+      let rawNumber = document.getElementById('phone-number').value.trim();
+      
+      // إذا كتب المستخدم الصفر الأول بالخطأ نقوم بمسحه تلقائياً لضمان الحماية
+      if (rawNumber.startsWith('0')) {
+          rawNumber = rawNumber.substring(1);
+      }
+
+      // دمج كود مصر مع الرقم المدخل
+      const fullPhoneNumber = "+20" + rawNumber;
       const appVerifier = window.recaptchaVerifier;
 
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier)
           .then((result) => {
               confirmationResult = result;
               document.getElementById('phone-input-area').style.display = 'none';
@@ -105,7 +122,7 @@
           });
   });
 
-  // 2. التحقق من الرمز المدخل والدخول
+  // 2. التحقق من الرمز
   document.getElementById('btn-verify-code').addEventListener('click', () => {
       const code = document.getElementById('verification-code').value.trim();
       if(confirmationResult) {
@@ -117,10 +134,8 @@
       }
   });
 
-  // 3. خروج
   document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); });
 
-  // 4. مراقبة المستخدم والشات اللحظي
   let unsubscribeChat;
   onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -131,13 +146,12 @@
       } else {
           authContainer.style.display = 'flex';
           appContainer.style.display = 'none';
-          document.getElementById('phone-input-area').style.display = 'block';
+          document.getElementById('phone-input-area').style.display = 'flex';
           document.getElementById('code-input-area').style.display = 'none';
           if (unsubscribeChat) unsubscribeChat();
       }
   });
 
-  // 5. إرسال الرسالة
   async function sendMessage() {
       const text = chatInput.value.trim();
       const user = auth.currentUser;
@@ -154,7 +168,6 @@
   document.getElementById('btn-send').addEventListener('click', sendMessage);
   chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 
-  // 6. تحميل الرسائل وايف
   function loadMessages() {
       const q = query(collection(db, "phone_chats"), orderBy("timestamp", "asc"));
       unsubscribeChat = onSnapshot(q, (snapshot) => {

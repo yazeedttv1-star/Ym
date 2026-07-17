@@ -1,107 +1,101 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>YM Chat</title>
-
-<meta name="theme-color" content="#008069">
-
-<link rel="manifest" href="manifest.json">
-
-<link rel="icon" href="assets/logo.png">
-
-<link rel="stylesheet" href="style.css">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واتساب برو | نظام المراسلة الموحد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div id="loading">
+<div class="app-container">
 
-<div class="loader"></div>
+    <div id="screen-auth" class="screen active auth-box">
+        <div class="auth-header">
+            <i class="fab fa-whatsapp brand-icon"></i>
+            <h2>تسجيل الدخول للمنصة</h2>
+            <p>اختر إحدى الطرق المؤمنة للبدء في المراسلة الفورية</p>
+        </div>
 
-<h2>YM Chat</h2>
+        <div class="form-group">
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email-login" placeholder="البريد الإلكتروني...">
+            </div>
+            <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password-login" placeholder="كلمة المرور...">
+            </div>
+            <button id="btn-email-auth" class="btn btn-teal"><i class="fas fa-sign-in-alt"></i> دخول بالبريد</button>
+        </div>
 
-<p>Loading...</p>
+        <div class="separator">أو استخدام رقم الهاتف</div>
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <i class="fas fa-phone-alt"></i>
+                <span class="country-code">+20</span>
+                <input type="tel" id="phone-number" placeholder="10xxxxxxxx">
+            </div>
+            <div class="input-wrapper" id="otp-area" style="display:none;">
+                <i class="fas fa-key"></i>
+                <input type="text" id="verification-code" placeholder="أدخل رمز الـ OTP المكون من 6 أرقام">
+            </div>
+            <div id="recaptcha-container"></div>
+            <button id="btn-phone-action" class="btn btn-green"><i class="fas fa-paper-plane"></i> إرسال كود التحقق</button>
+        </div>
+
+        <div class="separator">خيارات الدخول السريع</div>
+
+        <div class="quick-auth-grid">
+            <button id="btn-google-login" class="btn btn-outline btn-google"><i class="fab fa-google"></i> حساب Google</button>
+            <button id="btn-anon-login" class="btn btn-outline btn-anon"><i class="fas fa-user-secret"></i> دخول مجهول الهوية</button>
+        </div>
+    </div>
+
+    <div id="screen-app" class="screen chat-window">
+        <div class="main-header">
+            <div class="profile-section">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <div class="user-details">
+                    <h3 id="user-display-name">جاري التحميل...</h3>
+                    <div class="uid-copy-container" title="اضغط لنسخ معرف الـ ID الفريد الخاص بك">
+                        <span class="uid-label">المعرف الخاص بك:</span>
+                        <input type="text" id="user-uid-input" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button id="btn-logout" class="logout-trigger" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <div class="connection-bar">
+            <div class="search-box">
+                <i class="fas fa-user-plus"></i>
+                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لبدء المحادثة المشفرة...">
+            </div>
+            <button id="btn-connect-room" class="connect-action">بدء المحادثة</button>
+        </div>
+
+        <div class="chat-viewport" id="chat-messages">
+            <div class="system-welcome-message">
+                <i class="fas fa-shield-alt"></i>
+                <p>المراسلة مشفرة وآمنة تماماً. قم بتبادل المعرف (ID) الظاهر بالأعلى مع صديقك، وضعه في الخانة لبدء شات حقيقي مباشر بينكما مهما اختلفت طريقة تسجيل الدخول.</p>
+            </div>
+        </div>
+
+        <div class="messaging-footer" id="input-footer-area" style="display:none;">
+            <div class="input-container">
+                <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا يسطا...">
+            </div>
+            <button id="btn-send-message" class="send-trigger"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
 
 </div>
-
-<div id="app" style="display:none;">
-
-<header class="topbar">
-
-<div class="logo">
-
-<i class="fa-brands fa-rocketchat"></i>
-
-<span>YM Chat</span>
-
-</div>
-
-<div class="actions">
-
-<button id="themeBtn">
-
-<i class="fa-solid fa-moon"></i>
-
-</button>
-
-<button id="profileBtn">
-
-<i class="fa-solid fa-user"></i>
-
-</button>
-
-</div>
-
-</header>
-
-<main id="content">
-
-</main>
-
-</div>
-
-<script type="module" src="firebase.js"></script>
-
-<script type="module" src="auth.js"></script>
-
-<script type="module" src="users.js"></script>
-
-<script type="module" src="chat.js"></script>
 
 <script type="module" src="app.js"></script>
-
-<script>
-
-window.onload=()=>{
-
-setTimeout(()=>{
-
-document.getElementById("loading").style.display="none";
-
-document.getElementById("app").style.display="block";
-
-},1000)
-
-}
-
-</script>
-
 </body>
-
 </html>

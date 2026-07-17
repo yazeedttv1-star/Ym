@@ -51,34 +51,37 @@
                 <div class="profile-meta">
                     <h3 id="user-display-name">جاري التحميل...</h3>
                     <div class="uid-box">
-                        <span>الـ ID الخاص بك (اضغط للنسخ):</span>
+                        <span>الـ ID (اضغط للنسخ):</span>
                         <input type="text" id="user-uid-input" readonly>
                     </div>
                 </div>
             </div>
-            <button id="btn-logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            <div class="header-actions">
+                <button id="btn-start-call" class="call-trigger-btn" style="display: none;" title="طلب اتصال مباشر"><i class="fas fa-phone-alt"></i></button>
+                <button id="btn-logout" class="logout-btn" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
         </div>
 
-        <div class="connect-holder">
+        <div class="connect-holder" id="connect-bar-holder">
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لطلب الاتصال...">
+                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لفتح الشات...">
             </div>
-            <button id="btn-connect-room" class="action-connect">إرسال طلب ربط</button>
+            <button id="btn-connect-room" class="action-connect">فتح الدردشة</button>
         </div>
 
-        <div id="incoming-request-box" class="request-alert-box" style="display: none;">
-            <p><i class="fas fa-user-plus"></i> هناك طلب اتصال وارد من المعرف: <strong id="caller-id-label">...</strong></p>
-            <div class="request-actions">
-                <button id="btn-accept-request" class="req-btn accept-btn">قبول ✅</button>
-                <button id="btn-reject-request" class="req-btn reject-btn">رفض ❌</button>
+        <div id="incoming-call-box" class="call-alert-box" style="display: none;">
+            <p><i class="fas fa-phone-volume phone-ring"></i> صديقك ذو المعرف (<strong id="caller-id-label">...</strong>) يطلب التحدث معك اتصال الآن!</p>
+            <div class="call-actions">
+                <button id="btn-accept-call" class="call-btn accept-call">قبول المكالمة  📞</button>
+                <button id="btn-reject-call" class="call-btn reject-call">إغلاق ❌</button>
             </div>
         </div>
 
         <div class="chat-area" id="chat-messages">
             <div class="welcome-box" id="welcome-box">
-                <i class="fas fa-lock"></i>
-                <p id="welcome-text">المحادثة آمنة تماماً. تبادل الـ ID الموجود في الأعلى مع صديقك، واكتب معرفه هنا لتبعت له طلب اتصال لايف.</p>
+                <i class="fas fa-comments"></i>
+                <p id="welcome-text">اكتب الـ ID المكون من 6 رموز الخاص بصديقك في بار البحث بالأعلى لفتح الروم وبدء الدردشة فوراً، ويمكنك طلب مكالمة لايف في أي وقت من زر الهاتف بالبار العلوي.</p>
             </div>
         </div>
 

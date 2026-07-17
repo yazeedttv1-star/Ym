@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ألعاب بطتي المفضلة 🎮💙</title>
+    <title>مفاجأة لبطتي 🦆✨</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- التنسيقات العامة --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,577 +17,169 @@
         }
 
         body {
-            background-color: #f0f4f8;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 20px 20px;
-            overflow: hidden;
+            background-color: #fff0f5;
+            background-image: radial-gradient(#ffb6c1 1px, transparent 1px);
+            background-size: 24px 24px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.4s ease-in-out;
             padding: 20px;
-            flex-direction: column;
         }
 
-        /* إصلاح مشكلة الاختفاء الفجائي */
-        .hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            display: none !important;
-        }
-
-        /* --- تصميم الكروت الأساسية --- */
         .card {
             background: white;
             max-width: 500px;
             width: 100%;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            padding: 40px 30px;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.3);
             text-align: center;
-            position: relative;
-            border: 1px solid #e2e8f0;
-            z-index: 10;
+            border: 1px solid #ffe4e1;
         }
 
-        h1, h2 {
-            color: #1e3a8a;
+        h1 {
+            color: #d11a5b;
+            font-size: 26px;
             margin-bottom: 10px;
-            font-size: 22px;
         }
 
         .subtitle {
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 30px;
         }
 
-        /* --- بار المستخدم العلوي --- */
-        .user-nav {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #64748b;
-            z-index: 20;
-        }
-
-        .btn-logout {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .main-btn {
-            background: #3b82f6;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(59,130,246,0.2);
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-        .main-btn:hover { background: #2563eb; }
-
-        .google-btn {
-            background: white;
-            border: 2px solid #e2e8f0;
-            color: #334155;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        .google-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
-        .google-btn i { color: #ea4335; }
-
-        /* ==================== لعبة 1: تحدي النقر السريع ==================== */
-        .click-game-container {
-            display: flex;
-            width: 100%;
-            height: 200px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            border: 2px solid #e2e8f0;
-        }
-
-        .click-half {
-            flex: 1;
+        .interactive-area {
+            background: #fffafa;
+            border: 2px dashed #ff69b4;
+            padding: 30px 20px;
+            border-radius: 20px;
+            min-height: 180px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            user-select: none;
-            transition: background 0.1s;
+            margin-bottom: 25px;
         }
 
-        .player-left { background: #eff6ff; color: #1e40af; }
-        .player-left:active { background: #dbeafe; }
-        .player-right { background: #fff1f2; color: #9f1239; }
-        .player-right:active { background: #ffe4e6; }
-
-        .click-score { font-size: 36px; font-weight: 800; margin-top: 10px; }
-
-        /* ==================== لعبة 2: التقاط القلوب ==================== */
-        #game-canvas-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: #f8fafc;
-            border-radius: 16px;
-            border: 2px solid #e2e8f0;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .basket {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 40px;
-            background: #3b82f6;
-            border-radius: 0 0 15px 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
+        .display-text {
             font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.6;
         }
 
-        .falling-heart-item { position: absolute; color: #ef4444; font-size: 24px; pointer-events: none; }
-        .game-stats { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #1e3a8a; margin-bottom: 10px; }
-
-        /* ==================== لعبة 3: لعبة XO التفاعلية ==================== */
-        .xo-board {
+        .btn-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 240px;
-            margin: 15px auto;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
-        .xo-cell {
-            background: #f8fafc;
-            border: 2px solid #cbd5e1;
-            height: 70px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
+        .magic-btn {
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 16px;
             font-weight: bold;
+            border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            color: white;
         }
-        .xo-cell:hover { background: #f0fdf4; }
-        .xo-cell.X { color: #3b82f6; }
-        .xo-cell.O { color: #ef4444; }
 
-        /* ==================== لعبة 4: تحدي الأسئلة والـ Trivia ==================== */
-        .quiz-box { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px dashed #cbd5e1; text-align: right; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .option-btn { background: white; border: 2px solid #e2e8f0; padding: 12px; border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: 600; transition: all 0.2s; text-align: center; }
-        .option-btn:hover { border-color: #3b82f6; background: #f0f7ff; }
+        .btn-pink {
+            background: #ff69b4;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+        }
+        .btn-pink:hover { background: #ff1493; transform: scale(1.02); }
 
-        /* ==================== لعبة 5: اختبار التوافق ==================== */
-        .match-box { padding: 20px; background: #fafafa; border-radius: 16px; margin-bottom: 15px; }
-        .match-percent { font-size: 45px; font-weight: 800; color: #ec4899; margin: 10px 0; }
+        .btn-purple {
+            background: #9370db;
+            box-shadow: 0 4px 12px rgba(147, 112, 219, 0.3);
+        }
+        .btn-purple:hover { background: #8a2be2; transform: scale(1.02); }
 
-        /* أنيميشن */
-        .heart-pulse { animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        /* تأثير القلوب الطائرة */
+        .floating-heart {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="screen-auth" class="screen">
-        <div class="card">
-            <i class="fas fa-gamepad heart-pulse" style="font-size: 50px; color: #3b82f6; margin-bottom: 15px;"></i>
-            <h2>مغامرة ألعاب الـ Couples 🎮</h2>
-            <p class="subtitle">سجلي دخولكِ بحساب Google لفتح ساحة التحدي والمنافسة بيننا!</p>
-            <button id="btn-google-login" class="google-btn">
-                <i class="fab fa-google"></i> الدخول السريع عبر Google
-            </button>
+    <div class="card">
+        <i class="fas fa-gift" style="font-size: 50px; color: #ff69b4; margin-bottom: 15px;"></i>
+        <h1>مساحة بطتي الخاصة 🎀</h1>
+        <p class="subtitle">اضغطي على الأزرار السحرية بالأسفل لرؤية المفاجآت!</p>
+
+        <div class="interactive-area">
+            <p id="display-zone" class="display-text">في انتظار أميرتي لتضغط على الزر الأول ✨</p>
+        </div>
+
+        <div class="btn-grid">
+            <button id="btn-surprise" class="magic-btn btn-pink">اضغطي هنا للمفاجأة الأولى 💖</button>
+            <button id="btn-kiss" class="magic-btn btn-purple">اضغطي هنا لاستلام الهدية الخاصة 💋</button>
         </div>
     </div>
 
-    <div id="screen-game1" class="screen hidden">
-        <div class="card">
-            <div class="user-nav">
-                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
-            </div>
-            <h1>اللعبة 1: تحدي النقر السريع ⚡</h1>
-            <p id="click-timer" class="subtitle" style="font-weight: bold; color: #ef4444;">اضغطوا على "ابدأ" لبدء المنافسة!</p>
-            
-            <div class="click-game-container">
-                <div id="click-player" class="click-half player-left">
-                    <span>نقراتك أنت🤵</span>
-                    <div id="score-player" class="click-score">0</div>
-                </div>
-                <div id="click-duck" class="click-half player-right">
-                    <span>نقرات بطتي 🦆</span>
-                    <div id="score-duck" class="click-score">0</div>
-                </div>
-            </div>
-            
-            <button id="btn-start-click-game" class="main-btn">ابدأ التحدي (10 ثوانٍ) 🏁</button>
-        </div>
-    </div>
+    <script>
+        const displayZone = document.getElementById('display-zone');
+        const btnSurprise = document.getElementById('btn-surprise');
+        const btnKiss = document.getElementById('btn-kiss');
 
-    <div id="screen-game2" class="screen hidden">
-        <div class="card">
-            <div class="user-nav">
-                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
-            </div>
-            <h1>اللعبة 2: صياد القلوب السريع 🧺❤️</h1>
-            <p class="subtitle">حركي السلة بالماوس أو اللمس لتجميع 10 قلوب بسرعة!</p>
+        const sweetMessages = [
+            "أنتِ أجمل وأحلى بطة في الكون كله! 🦆💗",
+            "ضحكتك بتنور الدنيا واليوم بيبقى أحلى بكتير بسببك ✨",
+            "وجودك في حياتي هو أحسن حاجة حصلت دايماً وبدون كلام 😍",
+            "كتلة الكسل اللطيفة المفضلة عندي دايماً وأبدأ 👑"
+        ];
+
+        btnSurprise.onclick = () => {
+            // اختيار رسالة عشوائية لطيفة
+            const randomMessage = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+            displayZone.innerText = randomMessage;
             
-            <div class="game-stats">
-                <div id="game-score">القلوب المجمعة: 0 / 10</div>
-                <div id="game-timer">الوقت: 25 ثانية</div>
-            </div>
-
-            <div id="game-canvas-container">
-                <div id="game-basket" class="basket">🧺</div>
-            </div>
-            
-            <button id="btn-start-heart-game" class="main-btn">ابدأ اللعب 🎮</button>
-        </div>
-    </div>
-
-    <div id="screen-game3" class="screen hidden">
-        <div class="card">
-            <div class="user-nav">
-                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
-            </div>
-            <h1>اللعبة 3: تحدي الذكاء XO ❌⭕</h1>
-            <p id="xo-status" class="subtitle" style="font-weight: bold; color: #2563eb;">الدور الآن: دورك أنت (X)</p>
-            
-            <div class="xo-board">
-                <div class="xo-cell" data-index="0"></div>
-                <div class="xo-cell" data-index="1"></div>
-                <div class="xo-cell" data-index="2"></div>
-                <div class="xo-cell" data-index="3"></div>
-                <div class="xo-cell" data-index="4"></div>
-                <div class="xo-cell" data-index="5"></div>
-                <div class="xo-cell" data-index="6"></div>
-                <div class="xo-cell" data-index="7"></div>
-                <div class="xo-cell" data-index="8"></div>
-            </div>
-            <button id="btn-skip-xo" class="main-btn" style="background: #64748b;">الانتقال للعبة التالية ➡️</button>
-        </div>
-    </div>
-
-    <div id="screen-game4" class="screen hidden">
-        <div class="card">
-            <div class="user-nav">
-                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
-            </div>
-            <h1>اللعبة 4: بنك الأسئلة والذكاء 🧠</h1>
-            <p class="subtitle">سؤال سريع عن علاقتنا، جاوبي صح للانتقال للتحدي الأخير:</p>
-            
-            <div class="quiz-box">
-                <h3 id="question-text">مين فينا اللي بينام أسرع أول ما يحط رأسه على المخدة؟ 😂</h3>
-                <div class="quiz-options">
-                    <button class="option-btn" data-correct="true">البطة طبعاً (كتلة كسل متحركة) 😴</button>
-                    <button class="option-btn" data-correct="false">أنا (بفضل صاحي أفكر) 🥸</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-game5" class="screen hidden">
-        <div class="card">
-            <div class="user-nav">
-                <span class="user-name-tag">بطتي</span> | <button class="btn-logout">خروج</button>
-            </div>
-            <h1>اللعبة 5: مقياس التوافق الخارق 🔮</h1>
-            <p class="subtitle">اضغطوا على الزر معاً لحساب نسبة التوافق الحالية لايف!</p>
-            
-            <div class="match-box">
-                <div id="match-result" class="match-percent">??%</div>
-                <p id="match-comment" style="font-size: 14px; color: #475569; font-weight: 600;">في انتظار ضغطتكم السحرية...</p>
-            </div>
-            
-            <button id="btn-calc-match" class="main-btn">احسب النسبة لايف 💖</button>
-        </div>
-    </div>
-
-    <div id="screen-victory" class="screen hidden">
-        <div class="card">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBmYm9oZjhpbXZ4a3EwZ3U4MTlsdDRmbGlidDJxb3pjdTRuMnVwZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26FLdmIp6wJr91JAI/giphy.gif" style="width: 150px; margin-bottom: 10px;" alt="احتفال">
-            <h2>خلصنا كل الألعاب سوا بنجاح! 🏆🎉</h2>
-            <p class="subtitle" style="font-size: 15px;">المنافسة كانت قوية والضحك كان كتير! ربنا يخلينا لبعض ويديم الألعاب والأنشطة اللطيفة دي بينا دايماً يا أحلى بطة في الدنيا 💙✨.</p>
-            <button id="btn-replay-all" class="main-btn" style="background: #10b981;">إعادة اللعب من الأول 🔄</button>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
-            authDomain: "ym-pro-max.firebaseapp.com",
-            projectId: "ym-pro-max",
-            storageBucket: "ym-pro-max.firebasestorage.app",
-            messagingSenderId: "174657071953",
-            appId: "1:174657071953:web:5e831fc337df46dbd18170"
+            // تشغيل تأثير الاحتفال
+            confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // الشاشات
-        const screenAuth = document.getElementById('screen-auth');
-        const screenGame1 = document.getElementById('screen-game1');
-        const screenGame2 = document.getElementById('screen-game2');
-        const screenGame3 = document.getElementById('screen-game3');
-        const screenGame4 = document.getElementById('screen-game4');
-        const screenGame5 = document.getElementById('screen-game5');
-        const screenVictory = document.getElementById('screen-victory');
-
-        // إدارة الدخول والخروج بـ Firebase Auth
-        document.getElementById('btn-google-login').onclick = () => {
-            signInWithPopup(auth, new GoogleAuthProvider()).catch(err => alert(err.message));
-        };
-        document.querySelectorAll('.btn-logout').forEach(b => b.onclick = () => signOut(auth));
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                showScreen(screenGame1);
-                document.querySelectorAll('.user-name-tag').forEach(el => el.innerText = user.displayName);
-            } else {
-                showScreen(screenAuth);
-                resetAllStates();
-            }
-        });
-
-        function showScreen(target) {
-            [screenAuth, screenGame1, screenGame2, screenGame3, screenGame4, screenGame5, screenVictory].forEach(s => s.classList.add('hidden'));
-            target.classList.remove('hidden');
-        }
-
-        /* ==================== اللعبة 1: تحدي النقر السريع ==================== */
-        let pScore = 0, dScore = 0, clickTimeLeft = 10, clickInterval = null, isClickRunning = false;
-        const btnStartClick = document.getElementById('btn-start-click-game');
-        const pLeft = document.getElementById('click-player');
-        const pRight = document.getElementById('click-duck');
-
-        btnStartClick.onclick = () => {
-            if(isClickRunning) return;
-            pScore = 0; dScore = 0; clickTimeLeft = 10; isClickRunning = true;
-            document.getElementById('score-player').innerText = '0';
-            document.getElementById('score-duck').innerText = '0';
-            btnStartClick.style.display = 'none';
-
-            clickInterval = setInterval(() => {
-                clickTimeLeft--;
-                document.getElementById('click-timer').innerText = `الوقت المتبقي: ${clickTimeLeft} ثانية`;
-                if(clickTimeLeft <= 0) {
-                    clearInterval(clickInterval);
-                    isClickRunning = false;
-                    let winner = pScore > dScore ? "أنت كسبت طبعاً! 🤵" : pScore < dScore ? "بطتك فازت واكتسحتك! 🦆🏆" : "تعادل أسطوري! 🤝";
-                    alert(`انتهى الوقت! \n النتيجة: أنت (${pScore}) | بطتك (${dScore}) \nالفائز: ${winner}`);
-                    showScreen(screenGame2);
-                }
-            }, 1000);
-        };
-
-        pLeft.onclick = () => { if(isClickRunning) { pScore++; document.getElementById('score-player').innerText = pScore; } };
-        pRight.onclick = () => { if(isClickRunning) { dScore++; document.getElementById('score-duck').innerText = dScore; } };
-
-        /* ==================== اللعبة 2: التقاط القلوب ==================== */
-        const canvasContainer = document.getElementById('game-canvas-container');
-        const gameBasket = document.getElementById('game-basket');
-        const btnStartHeart = document.getElementById('btn-start-heart-game');
-        let hScore = 0, hTimeLeft = 25, hInterval = null, spawnInterval = null, isHRunning = false;
-
-        const moveBasket = (e) => {
-            if(!isHRunning) return;
-            const rect = canvasContainer.getBoundingClientRect();
-            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let x = clientX - rect.left;
-            if (x < 35) x = 35;
-            if (x > rect.width - 35) x = rect.width - 35;
-            gameBasket.style.left = x + 'px';
-        };
-        canvasContainer.onmousemove = moveBasket;
-        canvasContainer.ontouchmove = moveBasket;
-
-        btnStartHeart.onclick = () => {
-            btnStartHeart.style.display = 'none';
-            isHRunning = true; hScore = 0; hTimeLeft = 25;
+        btnKiss.onclick = (e) => {
+            // عرض الرسالة الخاصة بالهدية
+            displayZone.innerText = "أرسلت لكِ قبلة طائرة مليئة بالحب والدفء! 💋❤️";
             
-            hInterval = setInterval(() => {
-                hTimeLeft--;
-                document.getElementById('game-timer').innerText = `الوقت: ${hTimeLeft} ثانية`;
-                if(hTimeLeft <= 0) {
-                    clearInterval(hInterval); clearInterval(spawnInterval); isHRunning = false;
-                    showScreen(screenGame3);
-                }
-            }, 1000);
-
-            spawnInterval = setInterval(() => {
-                if(!isHRunning) return;
-                const heart = document.createElement('div');
-                heart.className = 'falling-heart-item';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * (canvasContainer.offsetWidth - 30) + 'px';
-                heart.style.top = '0px';
-                canvasContainer.appendChild(heart);
-
-                let top = 0;
-                function fall() {
-                    if(!isHRunning) { heart.remove(); return; }
-                    top += 4; heart.style.top = top + 'px';
-                    
-                    let bRect = gameBasket.getBoundingClientRect();
-                    let hRect = heart.getBoundingClientRect();
-
-                    if(hRect.bottom >= bRect.top && hRect.right >= bRect.left && hRect.left <= bRect.right && hRect.top <= bRect.bottom) {
-                        hScore++;
-                        document.getElementById('game-score').innerText = `القلوب المجمعة: ${hScore} / 10`;
-                        heart.remove();
-                        if(hScore >= 10) {
-                            clearInterval(hInterval); clearInterval(spawnInterval); isHRunning = false;
-                            confetti({ particleCount: 25 });
-                            setTimeout(() => { showScreen(screenGame3); }, 600);
-                        }
-                        return;
-                    }
-                    if(top > 200) heart.remove(); else requestAnimationFrame(fall);
-                }
-                requestAnimationFrame(fall);
-            }, 600);
-        };
-
-        /* ==================== اللعبة 3: لعبة XO التفاعلية ==================== */
-        let xoBoard = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X"; // X هو الزوج، O هو البطة
-        const cells = document.querySelectorAll('.xo-cell');
-        const xoStatus = document.getElementById('xo-status');
-
-        cells.forEach(cell => {
-            cell.onclick = () => {
-                const index = cell.getAttribute('data-index');
-                if (xoBoard[index] !== "" || checkXOWinner()) return;
-
-                xoBoard[index] = currentPlayer;
-                cell.innerText = currentPlayer;
-                cell.classList.add(currentPlayer);
-
-                if (checkXOWinner()) {
-                    let winnerName = currentPlayer === "X" ? "أنت الفائز (X)🤵!" : "بطتك هي الفائزة (O)🦆🏆!";
-                    xoStatus.innerText = `🎉 المشهد انتهى! الفائز: ${winnerName}`;
-                    confetti({ particleCount: 40 });
-                    setTimeout(() => { showScreen(screenGame4); }, 2000);
-                } else if (!xoBoard.includes("")) {
-                    xoStatus.innerText = "🤝 تعادل رائع في الذكاء!";
-                    setTimeout(() => { showScreen(screenGame4); }, 2000);
-                } else {
-                    currentPlayer = currentPlayer === "X" ? "O" : "X";
-                    xoStatus.innerText = currentPlayer === "X" ? "الدور الآن: دورك أنت (X)" : "الدور الآن: دور بطتك (O)";
-                }
-            };
-        });
-
-        document.getElementById('btn-skip-xo').onclick = () => { showScreen(screenGame4); };
-
-        function checkXOWinner() {
-            const winPatterns = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            return winPatterns.some(pattern => {
-                return pattern.every(i => xoBoard[i] === currentPlayer);
+            // تشغيل تأثير الاحتفال بالألوان الوردية
+            confetti({
+                particleCount: 80,
+                spread: 80,
+                colors: ['#ff69b4', '#ffb6c1', '#ff1493']
             });
-        }
 
-        /* ==================== اللعبة 4: تحدي الأسئلة ==================== */
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.onclick = () => {
-                alert(btn.getAttribute('data-correct') === 'true' ? "إجابة عبقرية وصحيحة تماماً! 😂🎯" : "غلط بس الإجابة دي تضحك ف هنمشيها صح! 🤫");
-                showScreen(screenGame5);
-            };
-        });
-
-        /* ==================== اللعبة 5: اختبار درجة التوافق ==================== */
-        document.getElementById('btn-calc-match').onclick = () => {
-            let percentage = Math.floor(Math.random() * 31) + 70; // نسبة عشوائية بين 70% و 100%
-            document.getElementById('match-result').innerText = percentage + '%';
-            
-            let comments = [
-                "توافق خارق للطبيعة.. مفيش منكم اتنين! ✨",
-                "علاقة كيمياء مثالية.. أنتم الاتنين مجانين زي بعض! 🤪",
-                "نسبة ممتازة، بطتك بتحبك أكتر من الأكل والنوم! 💖"
-            ];
-            document.getElementById('match-comment').innerText = comments[Math.floor(Math.random() * comments.length)];
-            
-            setTimeout(() => {
-                showScreen(screenVictory);
-                let end = Date.now() + (3 * 1000);
-                (function frame() {
-                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-                    if (Date.now() < end) requestAnimationFrame(frame);
-                }());
-            }, 2000);
+            // توليد قلوب متطايرة عند موضع الضغط
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createHeart(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2);
+                }, i * 100);
+            }
         };
 
-        document.getElementById('btn-replay-all').onclick = () => { resetAllStates(); showScreen(screenGame1); };
-
-        function resetAllStates() {
-            clearInterval(clickInterval); clearInterval(hInterval); clearInterval(spawnInterval);
-            isClickRunning = false; isHRunning = false;
-            pScore = 0; dScore = 0; hScore = 0;
-            xoBoard = ["", "", "", "", "", "", "", "", ""];
-            currentPlayer = "X";
-            cells.forEach(c => { c.innerText = ""; c.className = "xo-cell"; });
-            xoStatus.innerText = "الدور الآن: دورك أنت (X)";
-            btnStartClick.style.display = 'block';
-            btnStartHeart.style.display = 'block';
-            document.getElementById('click-timer').innerText = "اضغطوا على 'ابدأ' لبدء المنافسة!";
-            document.getElementById('game-score').innerText = "القلوب المجمعة: 0 / 10";
-            document.getElementById('game-timer').innerText = "الوقت: 25 ثانية";
-            document.getElementById('match-result').innerText = '??%';
-            document.getElementById('match-comment').innerText = "في انتظار ضغطتكم السحرية...";
-            document.querySelectorAll('.falling-heart-item').forEach(h => h.remove());
+        function createHeart(x, y) {
+            const heart = document.createElement('i');
+            heart.className = 'fas fa-heart floating-heart';
+            // توزيع عشوائي طفيف حول مكان الضغط
+            heart.style.left = (x + (Math.random() * 40 - 20)) + 'px';
+            heart.style.top = (y + (Math.random() * 40 - 20)) + 'px';
+            heart.style.color = '#ff1493';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 1000);
         }
     </script>
 </body>

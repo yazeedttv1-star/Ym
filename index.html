@@ -62,15 +62,23 @@
         <div class="connect-holder">
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك للتوصيل...">
+                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لطلب الاتصال...">
             </div>
-            <button id="btn-connect-room" class="action-connect">ربط الشات</button>
+            <button id="btn-connect-room" class="action-connect">إرسال طلب ربط</button>
+        </div>
+
+        <div id="incoming-request-box" class="request-alert-box" style="display: none;">
+            <p><i class="fas fa-user-plus"></i> هناك طلب اتصال وارد من المعرف: <strong id="caller-id-label">...</strong></p>
+            <div class="request-actions">
+                <button id="btn-accept-request" class="req-btn accept-btn">قبول ✅</button>
+                <button id="btn-reject-request" class="req-btn reject-btn">رفض ❌</button>
+            </div>
         </div>
 
         <div class="chat-area" id="chat-messages">
             <div class="welcome-box" id="welcome-box">
                 <i class="fas fa-lock"></i>
-                <p>المحادثة آمنة تماماً. تبادل الـ ID الموجود في الأعلى مع صديقك وضعه في خانة البحث لفتح الروم وبدء المراسلة الحية.</p>
+                <p id="welcome-text">المحادثة آمنة تماماً. تبادل الـ ID الموجود في الأعلى مع صديقك، واكتب معرفه هنا لتبعت له طلب اتصال لايف.</p>
             </div>
         </div>
 

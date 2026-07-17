@@ -3,137 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموقع متوقف مؤقتاً</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-
+    <title>موقع يزيد - تسجيل دخول وقاعدة بيانات</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #111; /* خلفية داكنة لتناسب شريط الأخبار */
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            font-family: 'Aref Ruqaa', serif; /* تطبيق خط الرقعة على كامل الصفحة */
-        }
-
-        /* شاشة الوسط الرئيسية التوضيحية */
-        .center-container {
-            text-align: center;
-            padding: 20px;
-            max-width: 90%;
-        }
-
-        .center-container .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite alternate;
-        }
-
-        /* الاسم والجملة في منتصف الشاشة بخط كبير */
-        .main-title {
-            font-size: 42px;
-            color: #f1c40f; /* لون ذهبي مميز للاسم */
-            text-shadow: 2px 2px 10px rgba(241, 196, 15, 0.3);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .sub-title {
-            color: #aaa;
-            font-size: 22px;
-        }
-
-        /* حاوية شريط الأخبار السفلي التلفزيوني */
-        .ticker-wrapper {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(90deg, #b30000 0%, #e60000 100%); /* لون أحمر إخباري عاجل */
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            height: 65px;
-            border-top: 3px solid #f1c40f;
-        }
-
-        /* كلمة عاجل الثابتة في الجانب */
-        .ticker-title {
-            background-color: #f1c40f;
-            color: #111;
-            padding: 0 25px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-size: 20px;
-            z-index: 5;
-            box-shadow: 5px 0 10px rgba(0,0,0,0.3);
-        }
-
-        /* الحاوية المتحركة للنص */
-        .ticker-text-container {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-        }
-
-        /* حركة النص المستمرة (شريط الأخبار) */
-        .ticker-text {
-            display: inline-block;
-            padding-right: 100%; 
-            font-size: 26px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            animation: marquee 18s linear infinite; /* سرعة مرور شريط الأخبار */
-        }
-
-        /* تأثير الأنيميشن لتحريك شريط الأخبار تلفزيونياً */
-        @keyframes marquee {
-            0% {
-                transform: translate3d(100%, 0, 0);
-            }
-            100% {
-                transform: translate3d(-100%, 0, 0);
-            }
-        }
-
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.08); }
-        }
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        h2 { color: #333; margin-bottom: 20px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        button { width: 98%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #0056b3; }
+        .btn-secondary { background-color: #28a745; margin-top: 8px; }
+        .btn-secondary:hover { background-color: #218838; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        p { color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="center-container">
-        <div class="icon">⚙️</div>
-        <h1 class="main-title">مع تحياتي يزيد أحمد</h1>
-        <p class="sub-title">الموقع سوف يشتغل قريباً انتظروني...</p>
-    </div>
+<div class="container" id="auth-container">
+    <h2>مرحباً بك</h2>
+    <input type="email" id="email" placeholder="البريد الإلكتروني">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button id="btn-signup">إنشاء حساب جديد</button>
+    <button id="btn-login" class="btn-secondary">تسجيل الدخول</button>
+</div>
 
-    <div class="ticker-wrapper">
-        <div class="ticker-title">تنويه عاجل</div>
-        <div class="ticker-text-container">
-            <div class="ticker-text">
-                الموقع سوف يشتغل قريباً انتظروني مع تحياتي يزيد أحمد... ✨ الموقع سوف يشتغل قريباً انتظروني مع تحياتي يزيد أحمد... ✨
-            </div>
-        </div>
-    </div>
+<div class="container" id="app-container" style="display: none;">
+    <h2>لوحة التحكم</h2>
+    <p id="welcome-msg">أنت مسجل الدخول الآن ✨</p>
+    <input type="text" id="user-data" placeholder="اكتب نصاً لحفظه في قاعدة البيانات">
+    <button id="btn-save">حفظ في قاعدة البيانات</button>
+    <br><br>
+    <button id="btn-logout" class="btn-danger">تسجيل الخروج</button>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // كود الربط الخاص بمشروعك (ym-pro-max)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+    authDomain: "ym-pro-max.firebaseapp.com",
+    projectId: "ym-pro-max",
+    storageBucket: "ym-pro-max.firebasestorage.app",
+    messagingSenderId: "174657071953",
+    appId: "1:174657071953:web:5e831fc337df46dbd18170"
+  };
+
+  // تهيئة الخدمات
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const authContainer = document.getElementById('auth-container');
+  const appContainer = document.getElementById('app-container');
+
+  // 1. إنشاء حساب جديد
+  document.getElementById('btn-signup').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if(!email || !password) return alert('برجاء ملء البيانات');
+      
+      createUserWithEmailAndPassword(auth, email, password)
+          .then(() => alert('تم إنشاء حسابك بنجاح!'))
+          .catch(error => alert('خطأ: ' + error.message));
+  });
+
+  // 2. تسجيل الدخول للحساب الحالي
+  document.getElementById('btn-login').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if(!email || !password) return alert('برجاء ملء البيانات');
+
+      signInWithEmailAndPassword(auth, email, password)
+          .then(() => alert('تم تسجيل الدخول بنجاح!'))
+          .catch(error => alert('خطأ: ' + error.message));
+  });
+
+  // 3. التحقق من حالة المستخدم تلقائياً
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          authContainer.style.display = 'none';
+          appContainer.style.display = 'block';
+          document.getElementById('welcome-msg').innerText = `مرحباً: ${user.email}`;
+      } else {
+          authContainer.style.display = 'block';
+          appContainer.style.display = 'none';
+      }
+  });
+
+  // 4. حفظ البيانات في Firestore باسم المستخدم
+  document.getElementById('btn-save').addEventListener('click', async () => {
+      const dataText = document.getElementById('user-data').value;
+      const user = auth.currentUser;
+      if(!dataText) return alert('اكتب شيئاً أولاً');
+
+      if (user) {
+          try {
+              await setDoc(doc(db, "users", user.uid), {
+                  text: dataText,
+                  email: user.email,
+                  savedAt: new Date()
+              });
+              alert('تم الحفظ في قاعدة البيانات بنجاح! 🎉');
+              document.getElementById('user-data').value = ''; // تفريغ الحقل
+          } catch (e) {
+              alert('خطأ أثناء الحفظ: ' + e.message);
+          }
+      }
+  });
+
+  // 5. تسجيل الخروج
+  document.getElementById('btn-logout').addEventListener('click', () => {
+      signOut(auth).then(() => alert('تم تسجيل الخروج'));
+  });
+</script>
 
 </body>
 </html>

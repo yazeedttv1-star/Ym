@@ -3,48 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات يزيد السري 💬</title>
+    <title>واتساب الذهبي المطور 👑</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#075E54">
+    <meta name="theme-color" content="#b59410">
+    
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; text-align: center; display: flex; flex-direction: column; }
-        input { padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        button { padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; }
-        button:hover { background-color: #0056b3; }
+        body { font-family: Arial, sans-serif; background-color: #0b141a; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: #fff; }
+        .container { background: #111b21; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 360px; height: 500px; text-align: center; display: flex; flex-direction: column; border: 1px solid #b59410; justify-content: space-between; }
         
-        /* تصميم صندوق الشات */
-        #chat-box { height: 300px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; padding: 10px; overflow-y: auto; text-align: right; background: #fafafa; display: flex; flex-direction: column; }
-        .message { background: #e1ffc7; padding: 8px 12px; border-radius: 8px; margin: 5px 0; max-width: 80%; width: fit-content; word-break: break-all; }
-        .message.other { background: #fff; border: 1px solid #ddd; align-self: flex-start; }
-        .message.me { align-self: flex-end; background: #007bff; color: white; }
-        .username { font-weight: bold; font-size: 12px; display: block; margin-bottom: 3px; color: #555; }
-        .message.me .username { color: #e0e0e0; }
+        /* المدخلات والأزرار بالثيم الذهبي */
+        input { padding: 12px; margin: 8px 0; border: 1px solid #b59410; border-radius: 6px; font-size: 14px; background: #2a3942; color: #fff; }
+        input::placeholder { color: #8696a0; }
+        button { padding: 12px; background-color: #b59410; color: #000; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #ffd700; }
         
-        .row { display: flex; gap: 5px; }
-        .row input { flex: 1; }
+        /* رأس المحادثة */
+        .chat-header { display: flex; justify-content: space-between; align-items: center; background: #202c33; padding: 10px; border-radius: 8px; border-bottom: 2px solid #b59410; }
+        
+        /* صندوق الشات الخلفية بنقشة الواتساب */
+        #chat-box { flex: 1; border: 1px solid #222; border-radius: 8px; margin: 10px 0; padding: 10px; overflow-y: auto; text-align: right; background: #0b141a; display: flex; flex-direction: column; }
+        
+        /* فقاعات الرسائل */
+        .message { padding: 8px 12px; border-radius: 8px; margin: 5px 0; max-width: 75%; width: fit-content; word-break: break-all; font-size: 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .message.other { background: #202c33; align-self: flex-start; color: #fff; border-right: 3px solid #b59410; }
+        .message.me { align-self: flex-end; background: #b59410; color: #000; font-weight: 500; }
+        
+        .username { font-weight: bold; font-size: 11px; display: block; margin-bottom: 3px; color: #ffd700; }
+        .message.me .username { color: #443500; }
+        
+        .row { display: flex; gap: 5px; background: #202c33; padding: 5px; border-radius: 8px; }
+        .row input { flex: 1; margin: 0; border: none; background: transparent; }
+        
+        #auth-container { justify-content: center; height: auto; }
     </style>
 </head>
 <body>
 
 <div class="container" id="auth-container">
-    <h2>تسجيل الدخول للشات</h2>
+    <h2 style="color: #b59410; margin-top: 0;">👑 واتساب الذهبي 👑</h2>
     <input type="email" id="email" placeholder="البريد الإلكتروني">
     <input type="password" id="password" placeholder="كلمة المرور">
     <input type="text" id="username" placeholder="الاسم المستعار (Username)">
-    <button id="btn-signup">إنشاء حساب جديد</button>
-    <button id="btn-login" style="background-color: #28a745; margin-top: 5px;">دخول</button>
+    <button id="btn-signup">إنشاء حساب ذهبي جديد</button>
+    <button id="btn-login" style="background-color: #202c33; color: #b59410; border: 1px solid #b59410; margin-top: 5px;">تسجيل الدخول</button>
 </div>
 
-<div class="container" id="app-container" style="display: none; height: 450px;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span id="welcome-user" style="font-weight: bold; color: #333;"></span>
-        <button id="btn-logout" style="background-color: #dc3545; padding: 5px 10px; font-size: 12px;">خروج</button>
+<div class="container" id="app-container" style="display: none;">
+    <div class="chat-header">
+        <span id="welcome-user" style="font-weight: bold; color: #b59410;"></span>
+        <button id="btn-logout" style="background-color: #dc3545; color: white; padding: 5px 10px; font-size: 12px;">خروج</button>
     </div>
     
     <div id="chat-box"></div>
     
     <div class="row">
-        <input type="text" id="msg-input" placeholder="اكتب رسالتك هنا...">
-        <button id="btn-send">إرسال</button>
+        <input type="text" id="msg-input" placeholder="اكتب رسالة...">
+        <button id="btn-send" style="padding: 10px 20px;">إرسال</button>
     </div>
 </div>
 
@@ -77,13 +93,12 @@
       const password = document.getElementById('password').value;
       const username = document.getElementById('username').value;
       
-      if(!email || !password || !username) return alert('امْلأ جميع الحقول واكتب اسمك المستعار');
+      if(!email || !password || !username) return alert('برجاء كتابة جميع البيانات والاسم المستعار');
       
       try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          // حفظ اسم المستخدم المستعار في الفايربيز مربوطاً بـ ID الحساب
           await setDoc(doc(db, "users", userCredential.user.uid), { username: username });
-          alert('تم إنشاء الحساب بنجاح!');
+          alert('تم تسجيل حسابك الذهبي بنجاح! 🎉');
       } catch (error) { alert(error.message); }
   });
 
@@ -95,28 +110,26 @@
       signInWithEmailAndPassword(auth, email, password).catch(error => alert(error.message));
   });
 
-  // 3. مراقبة حالة المستخدم وجلب اليوزر نيم وتشغيل الشات الفوري
+  // 3. مراقبة حالة المستخدم وتفعيل الشات
   let unsubscribeChat; 
   onAuthStateChanged(auth, async (user) => {
       if (user) {
-          // جلب اليوزر نيم من قاعدة البيانات
           const userDoc = await getDoc(doc(db, "users", user.uid));
-          currentUsername = userDoc.exists() ? userDoc.data().username : "مستخدم مجهول";
+          currentUsername = userDoc.exists() ? userDoc.data().username : "مستخدم ذهبي";
           
-          document.getElementById('welcome-user').innerText = `👤 ${currentUsername}`;
+          document.getElementById('welcome-user').innerText = `👑 ${currentUsername}`;
           authContainer.style.display = 'none';
           appContainer.style.display = 'flex';
           
-          // تشغيل الاستماع للرسائل فوراً (Real-time)
           loadMessages(user.uid);
       } else {
           authContainer.style.display = 'flex';
           appContainer.style.display = 'none';
-          if(unsubscribeChat) unsubscribeChat(); // إيقاف الشات عند الخروج
+          if(unsubscribeChat) unsubscribeChat();
       }
   });
 
-  // 4. إرسال الرسالة لقاعدة البيانات
+  // 4. إرسال الرسالة
   document.getElementById('btn-send').addEventListener('click', async () => {
       const msgInput = document.getElementById('msg-input');
       if(!msgInput.value.trim()) return;
@@ -128,22 +141,21 @@
               text: msgInput.value,
               createdAt: new Date()
           });
-          msgInput.value = ""; // مسح الخانة بعد الإرسال
-      </div> catch (e) { alert(e.message); }
+          msgInput.value = "";
+      } catch (e) { alert(e.message); }
   });
 
-  // 5. جلب وعرض الرسائل تلقائياً في نفس اللحظة
+  // 5. عرض الرسائل لايف (Real-time)
   function loadMessages(currentUid) {
       const q = query(collection(db, "chats"), orderBy("createdAt", "asc"));
       const chatBox = document.getElementById('chat-box');
       
       unsubscribeChat = onSnapshot(q, (snapshot) => {
-          chatBox.innerHTML = ""; // تفريغ الصندوق لإعادة الرسم
+          chatBox.innerHTML = "";
           snapshot.forEach((doc) => {
               const data = doc.data();
               const msgDiv = document.createElement('div');
               
-              // تحديد هل الرسالة لي أم لشخص آخر لتغيير التصميم
               if(data.senderId === currentUid) {
                   msgDiv.className = "message me";
               } else {
@@ -153,7 +165,7 @@
               msgDiv.innerHTML = `<span class="username">${data.username}</span> ${data.text}`;
               chatBox.appendChild(msgDiv);
           });
-          chatBox.scrollTop = chatBox.scrollHeight; // النزول لآخر رسالة تلقائياً
+          chatBox.scrollTop = chatBox.scrollHeight;
       });
   }
 

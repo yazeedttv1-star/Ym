@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واتساب برو | نظام المراسلة الموحد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>واتساب برو | المحادثة الفورية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,86 +11,86 @@
 
 <div class="app-container">
 
-    <div id="screen-auth" class="screen active auth-box">
-        <div class="auth-header">
-            <i class="fab fa-whatsapp brand-icon"></i>
-            <h2>تسجيل الدخول للمنصة</h2>
-            <p>اختر إحدى الطرق المؤمنة للبدء في المراسلة الفورية</p>
-        </div>
-
-        <div class="form-group">
-            <div class="input-wrapper">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="email-login" placeholder="البريد الإلكتروني...">
+    <div id="screen-auth" class="screen active auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fab fa-whatsapp whatsapp-icon"></i>
+                <h2>واتساب ويب الموحد</h2>
+                <p>سجل دخولك بالطريقة المناسبة لك لبدء الشات الفوري</p>
             </div>
-            <div class="input-wrapper">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password-login" placeholder="كلمة المرور...">
+
+            <div class="auth-section">
+                <div class="input-field">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email-login" placeholder="البريد الإلكتروني...">
+                </div>
+                <div class="input-field">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password-login" placeholder="كلمة المرور...">
+                </div>
+                <button id="btn-email-auth" class="main-btn teal-btn"><i class="fas fa-sign-in-alt"></i> دخول بالبريد</button>
             </div>
-            <button id="btn-email-auth" class="btn btn-teal"><i class="fas fa-sign-in-alt"></i> دخول بالبريد</button>
-        </div>
 
-        <div class="separator">أو استخدام رقم الهاتف</div>
+            <div class="text-divider">أو برقم الهاتف</div>
 
-        <div class="form-group">
-            <div class="input-wrapper">
-                <i class="fas fa-phone-alt"></i>
-                <span class="country-code">+20</span>
-                <input type="tel" id="phone-number" placeholder="10xxxxxxxx">
+            <div class="auth-section">
+                <div class="input-field" id="phone-field-area">
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="country-prefix">+20</span>
+                    <input type="tel" id="phone-number" placeholder="10xxxxxxxx">
+                </div>
+                <div class="input-field" id="otp-area" style="display:none;">
+                    <i class="fas fa-key"></i>
+                    <input type="text" id="verification-code" placeholder="أدخل كود الـ OTP">
+                </div>
+                <div id="recaptcha-container"></div>
+                <button id="btn-phone-action" class="main-btn green-btn"><i class="fas fa-paper-plane"></i> إرسال كود التحقق</button>
             </div>
-            <div class="input-wrapper" id="otp-area" style="display:none;">
-                <i class="fas fa-key"></i>
-                <input type="text" id="verification-code" placeholder="أدخل رمز الـ OTP المكون من 6 أرقام">
+
+            <div class="text-divider">طرق سريعة</div>
+
+            <div class="social-auth-row">
+                <button id="btn-google-login" class="grid-btn google-btn"><i class="fab fa-google"></i> Google</button>
+                <button id="btn-anon-login" class="grid-btn anon-btn"><i class="fas fa-user-secret"></i> مجهول</button>
             </div>
-            <div id="recaptcha-container"></div>
-            <button id="btn-phone-action" class="btn btn-green"><i class="fas fa-paper-plane"></i> إرسال كود التحقق</button>
-        </div>
-
-        <div class="separator">خيارات الدخول السريع</div>
-
-        <div class="quick-auth-grid">
-            <button id="btn-google-login" class="btn btn-outline btn-google"><i class="fab fa-google"></i> حساب Google</button>
-            <button id="btn-anon-login" class="btn btn-outline btn-anon"><i class="fas fa-user-secret"></i> دخول مجهول الهوية</button>
         </div>
     </div>
 
-    <div id="screen-app" class="screen chat-window">
-        <div class="main-header">
-            <div class="profile-section">
-                <div class="user-avatar" id="user-avatar">U</div>
-                <div class="user-details">
+    <div id="screen-app" class="screen chat-wrapper">
+        <div class="app-header">
+            <div class="user-profile">
+                <div class="avatar-circle" id="user-avatar">U</div>
+                <div class="profile-meta">
                     <h3 id="user-display-name">جاري التحميل...</h3>
-                    <div class="uid-copy-container" title="اضغط لنسخ معرف الـ ID الفريد الخاص بك">
-                        <span class="uid-label">المعرف الخاص بك:</span>
-                        <input type="text" id="user-uid-input" readonly>
+                    <div class="uid-box">
+                        <span>الـ ID الخاص بك:</span>
+                        <input type="text" id="user-uid-input" readonly title="اضغط لنسخ الـ ID">
                     </div>
                 </div>
             </div>
-            <div class="header-controls">
-                <button id="btn-logout" class="logout-trigger" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
+            <button id="btn-logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+
+        <div class="connect-holder">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="target-identifier" placeholder="الصق الـ ID الخاص بصديقك لفتح المحادثة...">
+            </div>
+            <button id="btn-connect-room" class="action-connect">ربط الشات</button>
+        </div>
+
+        <div class="chat-area" id="chat-messages">
+            <div class="welcome-box">
+                <i class="fas fa-lock"></i>
+                <p>المحادثة مشفرة تماماً. تبادل الـ ID الموجود في الأعلى مع صديقك وضعه في خانة البحث لتبدأوا المراسلة فوراً وبشكل حي.</p>
             </div>
         </div>
 
-        <div class="connection-bar">
-            <div class="search-box">
-                <i class="fas fa-user-plus"></i>
-                <input type="text" id="target-identifier" placeholder="أدخل الـ ID الخاص بصديقك لبدء المحادثة المشفرة...">
+        <div class="chat-footer" id="input-footer-area" style="display:none;">
+            <div class="type-area">
+                <input type="text" id="chat-input" placeholder="اكتب رسالة...">
             </div>
-            <button id="btn-connect-room" class="connect-action">بدء المحادثة</button>
-        </div>
-
-        <div class="chat-viewport" id="chat-messages">
-            <div class="system-welcome-message">
-                <i class="fas fa-shield-alt"></i>
-                <p>المراسلة مشفرة وآمنة تماماً. قم بتبادل المعرف (ID) الظاهر بالأعلى مع صديقك، وضعه في الخانة لبدء شات حقيقي مباشر بينكما مهما اختلفت طريقة تسجيل الدخول.</p>
-            </div>
-        </div>
-
-        <div class="messaging-footer" id="input-footer-area" style="display:none;">
-            <div class="input-container">
-                <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا يسطا...">
-            </div>
-            <button id="btn-send-message" class="send-trigger"><i class="fas fa-paper-plane"></i></button>
+            <button id="btn-send-message" class="send-btn"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 

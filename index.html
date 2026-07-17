@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات وايتس - يسطا</title>
+    <title>شات واتساب الخاص والمشفر</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #e5ddd5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .container { background: white; width: 100%; max-width: 450px; height: 90vh; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
@@ -13,8 +13,13 @@
         .btn-google { background-color: #25D366; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-google:hover { background-color: #20ba59; }
 
+        /* اختيار الشخص */
+        .room-selection { padding: 15px; background: #075E54; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .room-input { flex: 1; padding: 8px 12px; border: none; border-radius: 20px; outline: none; }
+        .btn-connect { background: #128C7E; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+
         /* واجهة الشات */
-        .chat-header { background: #075E54; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
+        .chat-header { background: #075E54; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
         .btn-logout { background: transparent; color: #fff; border: 1px solid #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
@@ -33,21 +38,27 @@
 
 <div class="container">
     <div id="auth-container" class="login-screen">
-        <h2 style="color: #075E54; margin-bottom: 20px;">واتساب يسطا المطور</h2>
-        <button id="btn-google-login" class="btn-google">سجل دخول بجوجل وابدأ شات</button>
+        <h2 style="color: #075E54; margin-bottom: 20px;">واتساب المحمي والمشفر 🔒</h2>
+        <button id="btn-google-login" class="btn-google">سجل دخول آمن بجوجل</button>
     </div>
 
     <div id="app-container" style="display: none; flex-direction: column; height: 100%;">
         <div class="chat-header">
-            <span id="chat-title">غرفة الدردشة العامة</span>
+            <span id="user-profile">جاري التحميل...</span>
             <button id="btn-logout" class="btn-logout">خروج</button>
+        </div>
+
+        <div class="room-selection">
+            <input type="email" id="target-email" class="room-input" placeholder="اكتب إيميل صديقك للشات السري...">
+            <button id="btn-connect" class="btn-connect">بدء المحادثة</button>
         </div>
         
         <div class="chat-messages" id="chat-messages">
-            </div>
+            <p style="text-align: center; color: #666; font-size: 14px;">ادخل إيميل صديقك بالأعلى لبدء شات خاص آمن.</p>
+        </div>
         
-        <div class="chat-input-area">
-            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالتك هنا يسطا...">
+        <div class="chat-input-area" id="input-area" style="display: none;">
+            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالة مشفرة يسطا...">
             <button id="btn-send" class="btn-send">◀</button>
         </div>
     </div>
@@ -56,9 +67,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // كود الربط الخاص بمشروعك
   const firebaseConfig = {
     apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
     authDomain: "ym-pro-max.firebaseapp.com",
@@ -77,75 +87,85 @@
   const appContainer = document.getElementById('app-container');
   const chatMessages = document.getElementById('chat-messages');
   const chatInput = document.getElementById('chat-input');
+  const inputArea = document.getElementById('input-area');
+  let currentRoomId = null;
+  let unsubscribeChat = null;
 
-  // 1. دخول بجوجل
   document.getElementById('btn-google-login').addEventListener('click', () => {
       signInWithPopup(auth, provider).catch(err => alert(err.message));
   });
 
-  // 2. خروج
-  document.getElementById('btn-logout').addEventListener('click', () => {
-      signOut(auth);
-  });
+  document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); });
 
-  // 3. مراقبة حالة المستخدم وتشغيل الشات اللحظي
-  let unsubscribeChat;
   onAuthStateChanged(auth, (user) => {
       if (user) {
           authContainer.style.display = 'none';
           appContainer.style.display = 'flex';
-          loadMessages(); // تشغيل استماع الرسائل
+          document.getElementById('user-profile').innerText = `حسابك: ${user.email}`;
       } else {
           authContainer.style.display = 'flex';
           appContainer.style.display = 'none';
-          if (unsubscribeChat) unsubscribeChat(); // إيقاف الاستماع عند الخروج
+          if (unsubscribeChat) unsubscribeChat();
       }
   });
 
-  // 4. إرسال رسالة للشات
+  // إنشاء معرف غرفة فريد وخاص بالـ 2 مستخدمين فقط لمنع التجسس
+  document.getElementById('btn-connect').addEventListener('click', () => {
+      const myEmail = auth.currentUser.email.toLowerCase().trim();
+      const friendEmail = document.getElementById('target-email').value.toLowerCase().trim();
+      
+      if(!friendEmail || myEmail === friendEmail) {
+          alert("ادخل إيميل صديقك بشكل صحيح!");
+          return;
+      }
+
+      // دمج الإيميلين وترتيبهم أبجدياً لإنشاء Room ID ثابت ومحمي للطرفين
+      currentRoomId = [myEmail, friendEmail].sort().join("_");
+      inputArea.style.display = 'flex';
+      loadPrivateMessages(currentRoomId);
+  });
+
   async function sendMessage() {
       const text = chatInput.value.trim();
       const user = auth.currentUser;
-      if (text && user) {
+      if (text && user && currentRoomId) {
           chatInput.value = '';
-          try {
-              await addDoc(collection(db, "chats"), {
-                  text: text,
-                  uid: user.uid,
-                  name: user.displayName,
-                  timestamp: new Date()
-              });
-          } catch (e) {
-              alert("خطأ في الإرسال: " + e.message);
-          }
+          await addDoc(collection(db, "secure_chats"), {
+              roomId: currentRoomId,
+              text: text,
+              sender: user.email,
+              senderName: user.displayName,
+              timestamp: new Date()
+          });
       }
   }
 
   document.getElementById('btn-send').addEventListener('click', sendMessage);
   chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 
-  // 5. تحميل واستماع الرسائل بشكل حي (Real-time)
-  function loadMessages() {
-      const q = query(collection(db, "chats"), orderBy("timestamp", "asc"));
+  function loadPrivateMessages(roomId) {
+      if (unsubscribeChat) unsubscribeChat();
+      
+      const q = query(
+          collection(db, "secure_chats"), 
+          where("roomId", "==", roomId),
+          orderBy("timestamp", "asc")
+      );
+      
       unsubscribeChat = onSnapshot(q, (snapshot) => {
           chatMessages.innerHTML = '';
           snapshot.forEach((doc) => {
               const data = doc.data();
-              const isMe = data.uid === auth.currentUser.uid;
+              const isMe = data.sender === auth.currentUser.email;
               
               const msgDiv = document.createElement('div');
               msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
-              
-              msgDiv.innerHTML = `
-                  <span class="msg-user">${isMe ? 'أنت' : data.name}</span>
-                  ${data.text}
-              `;
+              msgDiv.innerHTML = `<span class="msg-user">${isMe ? 'أنت' : data.senderName}</span>${data.text}`;
               chatMessages.appendChild(msgDiv);
           });
-          chatMessages.scrollTop = chatMessages.scrollHeight; // نزول تلقائي لآخر رسالة
+          chatMessages.scrollTop = chatMessages.scrollHeight;
       });
   }
 </script>
-
 </body>
 </html>

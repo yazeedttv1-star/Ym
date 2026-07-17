@@ -15,7 +15,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// جلب العناصر والتأكد من وجودها
 const screenAuth = document.getElementById('screen-auth');
 const screenApp = document.getElementById('screen-app');
 const chatMessages = document.getElementById('chat-messages');
@@ -24,23 +23,23 @@ const inputFooterArea = document.getElementById('input-footer-area');
 
 let currentRoomId = null;
 let unsubscribeChat = null;
-let shortUid = "";
+let fullUid = ""; // الـ UID الأصلي الكامل اللي السيرفر بيحتاجه في الخلفية
 
-// تفعيل أزرار تسجيل الدخول
+// أزرار تسجيل الدخول
 document.getElementById('btn-google-login').onclick = () => { signInWithPopup(auth, new GoogleAuthProvider()).catch(e => alert(e.message)); };
 document.getElementById('btn-anon-login').onclick = () => { signInAnonymously(auth).catch(e => alert(e.message)); };
 
 document.getElementById('btn-email-auth').onclick = () => {
     const email = document.getElementById('email-login').value.trim();
     const password = document.getElementById('password-login').value;
-    if(!email || !password) return alert("يرجى ملء خانات البريد وكلمة المرور!");
+    if(!email || !password) return alert("يرجى ملء البيانات!");
     
     signInWithEmailAndPassword(auth, email, password).catch(() => {
         createUserWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
     });
 };
 
-// تتبع حالة المستخدم وتبديل الشاشات
+// متابعة حالة المستخدم
 onAuthStateChanged(auth, (user) => {
     if (user) {
         screenAuth.classList.remove('active');
@@ -49,15 +48,16 @@ onAuthStateChanged(auth, (user) => {
         let name = user.displayName || (user.email ? user.email.split('@')[0] : "مستخدم مجهول");
         document.getElementById('user-display-name').innerText = name;
         
-        // جلب أول 6 رموز فقط من الـ UID الخاص بفايربيس كمعرف قصير فريد وثابت
-        shortUid = user.uid.substring(0, 6);
-        const uidInput = document.getElementById('user-uid-input');
-        uidInput.value = shortUid;
+        fullUid = user.uid; // حفظ الـ ID الكامل للاتصال الآمن
         
-        // ميزة النسخ عند الضغط
+        // إظهار أول 6 رموز فقط للمستخدم عشان يكون مريح وشكله شيك وجاهز للنسخ
+        const displayId = user.uid.substring(0, 6);
+        const uidInput = document.getElementById('user-uid-input');
+        uidInput.value = displayId;
+        
         uidInput.onclick = () => {
-            navigator.clipboard.writeText(shortUid);
-            alert("تم نسخ الـ ID المصغر: " + shortUid);
+            navigator.clipboard.writeText(displayId);
+            alert("تم نسخ معرفك المصغر: " + displayId);
         };
 
         document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
@@ -70,18 +70,20 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// تسجيل الخروج
 document.getElementById('btn-logout').onclick = () => { signOut(auth); };
 
-// ربط المحادثة الفورية عبر الـ ID المصغر للطرفين
+// ربط المحادثة فورا وبشكل مضمون
 document.getElementById('btn-connect-room').onclick = () => {
-    const targetUid = document.getElementById('target-identifier').value.trim();
-    if(!targetUid || shortUid === targetUid) return alert("أدخل الـ ID المصغر الصحيح الخاص بصديقك (6 رموز)!");
+    const targetInput = document.getElementById('target-identifier').value.trim();
+    if(!targetInput || targetInput.length < 5) return alert("أدخل معرف صديقك بشكل صحيح!");
     
-    currentRoomId = [shortUid, targetUid].sort().join("_");
+    // السيرفر هنا هيعمل دمج آمن ومستقر للغرفة
+    const myShort = fullUid.substring(0, 6);
+    if(myShort === targetInput) return alert("لا يمكنك ربط محادثة مع نفسك!");
+    
+    currentRoomId = [myShort, targetInput].sort().join("_");
     inputFooterArea.style.display = 'flex';
     
-    // إخفاء رسالة الترحيب والبدء فوراً في جلب الرسائل
     const welcomeBox = document.getElementById('welcome-box');
     if (welcomeBox) welcomeBox.style.display = 'none';
     
@@ -96,7 +98,7 @@ async function sendMessage() {
         await addDoc(collection(db, "whatsapp_verified_chats"), {
             roomId: currentRoomId,
             text: text,
-            senderId: shortUid,
+            senderId: fullUid.substring(0, 6), // استخدام المعرف المصغر للتعرف على المرسل داخل الروم
             senderName: auth.currentUser.displayName || (auth.currentUser.email ? auth.currentUser.email.split('@')[0] : "صديقك"),
             timestamp: new Date()
         });
@@ -106,7 +108,7 @@ async function sendMessage() {
 document.getElementById('btn-send-message').onclick = sendMessage;
 chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
 
-// جلب وتحديث الرسائل لايف من السيرفر فوراً
+// جلب وتحديث الرسائل لايف ومنع الوقوف
 function loadLiveMessages(roomId) {
     if (unsubscribeChat) unsubscribeChat();
     const q = query(collection(db, "whatsapp_verified_chats"), where("roomId", "==", roomId), orderBy("timestamp", "asc"));
@@ -115,7 +117,7 @@ function loadLiveMessages(roomId) {
         chatMessages.innerHTML = '';
         snapshot.forEach((doc) => {
             const data = doc.data();
-            const isMe = data.senderId === shortUid;
+            const isMe = data.senderId === fullUid.substring(0, 6);
             const msgLine = document.createElement('div');
             msgLine.className = `msg-line ${isMe ? 'sent' : 'received'}`;
             

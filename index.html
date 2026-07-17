@@ -3,46 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع يزيد - تسجيل دخول وقاعدة بيانات</title>
+    <title>شات يزيد السري 💬</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
-        h2 { color: #333; margin-bottom: 20px; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        button { width: 98%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; text-align: center; display: flex; flex-direction: column; }
+        input { padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        button { padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; }
         button:hover { background-color: #0056b3; }
-        .btn-secondary { background-color: #28a745; margin-top: 8px; }
-        .btn-secondary:hover { background-color: #218838; }
-        .btn-danger { background-color: #dc3545; }
-        .btn-danger:hover { background-color: #c82333; }
-        p { color: #666; font-size: 14px; }
+        
+        /* تصميم صندوق الشات */
+        #chat-box { height: 300px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; padding: 10px; overflow-y: auto; text-align: right; background: #fafafa; display: flex; flex-direction: column; }
+        .message { background: #e1ffc7; padding: 8px 12px; border-radius: 8px; margin: 5px 0; max-width: 80%; width: fit-content; word-break: break-all; }
+        .message.other { background: #fff; border: 1px solid #ddd; align-self: flex-start; }
+        .message.me { align-self: flex-end; background: #007bff; color: white; }
+        .username { font-weight: bold; font-size: 12px; display: block; margin-bottom: 3px; color: #555; }
+        .message.me .username { color: #e0e0e0; }
+        
+        .row { display: flex; gap: 5px; }
+        .row input { flex: 1; }
     </style>
 </head>
 <body>
 
 <div class="container" id="auth-container">
-    <h2>مرحباً بك</h2>
+    <h2>تسجيل الدخول للشات</h2>
     <input type="email" id="email" placeholder="البريد الإلكتروني">
     <input type="password" id="password" placeholder="كلمة المرور">
+    <input type="text" id="username" placeholder="الاسم المستعار (Username)">
     <button id="btn-signup">إنشاء حساب جديد</button>
-    <button id="btn-login" class="btn-secondary">تسجيل الدخول</button>
+    <button id="btn-login" style="background-color: #28a745; margin-top: 5px;">دخول</button>
 </div>
 
-<div class="container" id="app-container" style="display: none;">
-    <h2>لوحة التحكم</h2>
-    <p id="welcome-msg">أنت مسجل الدخول الآن ✨</p>
-    <input type="text" id="user-data" placeholder="اكتب نصاً لحفظه في قاعدة البيانات">
-    <button id="btn-save">حفظ في قاعدة البيانات</button>
-    <br><br>
-    <button id="btn-logout" class="btn-danger">تسجيل الخروج</button>
+<div class="container" id="app-container" style="display: none; height: 450px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="welcome-user" style="font-weight: bold; color: #333;"></span>
+        <button id="btn-logout" style="background-color: #dc3545; padding: 5px 10px; font-size: 12px;">خروج</button>
+    </div>
+    
+    <div id="chat-box"></div>
+    
+    <div class="row">
+        <input type="text" id="msg-input" placeholder="اكتب رسالتك هنا...">
+        <button id="btn-send">إرسال</button>
+    </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // كود الربط الخاص بمشروعك (ym-pro-max)
+  // كود الربط الخاص بك
   const firebaseConfig = {
     apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
     authDomain: "ym-pro-max.firebaseapp.com",
@@ -52,73 +63,102 @@
     appId: "1:174657071953:web:5e831fc337df46dbd18170"
   };
 
-  // تهيئة الخدمات
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
   const authContainer = document.getElementById('auth-container');
   const appContainer = document.getElementById('app-container');
+  let currentUsername = "";
 
-  // 1. إنشاء حساب جديد
-  document.getElementById('btn-signup').addEventListener('click', () => {
+  // 1. إنشاء حساب وحفظ اليوزر نيم
+  document.getElementById('btn-signup').addEventListener('click', async () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      if(!email || !password) return alert('برجاء ملء البيانات');
+      const username = document.getElementById('username').value;
       
-      createUserWithEmailAndPassword(auth, email, password)
-          .then(() => alert('تم إنشاء حسابك بنجاح!'))
-          .catch(error => alert('خطأ: ' + error.message));
+      if(!email || !password || !username) return alert('امْلأ جميع الحقول واكتب اسمك المستعار');
+      
+      try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          // حفظ اسم المستخدم المستعار في الفايربيز مربوطاً بـ ID الحساب
+          await setDoc(doc(db, "users", userCredential.user.uid), { username: username });
+          alert('تم إنشاء الحساب بنجاح!');
+      } catch (error) { alert(error.message); }
   });
 
-  // 2. تسجيل الدخول للحساب الحالي
+  // 2. تسجيل الدخول
   document.getElementById('btn-login').addEventListener('click', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      if(!email || !password) return alert('برجاء ملء البيانات');
-
-      signInWithEmailAndPassword(auth, email, password)
-          .then(() => alert('تم تسجيل الدخول بنجاح!'))
-          .catch(error => alert('خطأ: ' + error.message));
+      if(!email || !password) return alert('اكتب الإيميل والباسورد');
+      signInWithEmailAndPassword(auth, email, password).catch(error => alert(error.message));
   });
 
-  // 3. التحقق من حالة المستخدم تلقائياً
-  onAuthStateChanged(auth, (user) => {
+  // 3. مراقبة حالة المستخدم وجلب اليوزر نيم وتشغيل الشات الفوري
+  let unsubscribeChat; 
+  onAuthStateChanged(auth, async (user) => {
       if (user) {
+          // جلب اليوزر نيم من قاعدة البيانات
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          currentUsername = userDoc.exists() ? userDoc.data().username : "مستخدم مجهول";
+          
+          document.getElementById('welcome-user').innerText = `👤 ${currentUsername}`;
           authContainer.style.display = 'none';
-          appContainer.style.display = 'block';
-          document.getElementById('welcome-msg').innerText = `مرحباً: ${user.email}`;
+          appContainer.style.display = 'flex';
+          
+          // تشغيل الاستماع للرسائل فوراً (Real-time)
+          loadMessages(user.uid);
       } else {
-          authContainer.style.display = 'block';
+          authContainer.style.display = 'flex';
           appContainer.style.display = 'none';
+          if(unsubscribeChat) unsubscribeChat(); // إيقاف الشات عند الخروج
       }
   });
 
-  // 4. حفظ البيانات في Firestore باسم المستخدم
-  document.getElementById('btn-save').addEventListener('click', async () => {
-      const dataText = document.getElementById('user-data').value;
-      const user = auth.currentUser;
-      if(!dataText) return alert('اكتب شيئاً أولاً');
+  // 4. إرسال الرسالة لقاعدة البيانات
+  document.getElementById('btn-send').addEventListener('click', async () => {
+      const msgInput = document.getElementById('msg-input');
+      if(!msgInput.value.trim()) return;
 
-      if (user) {
-          try {
-              await setDoc(doc(db, "users", user.uid), {
-                  text: dataText,
-                  email: user.email,
-                  savedAt: new Date()
-              });
-              alert('تم الحفظ في قاعدة البيانات بنجاح! 🎉');
-              document.getElementById('user-data').value = ''; // تفريغ الحقل
-          } catch (e) {
-              alert('خطأ أثناء الحفظ: ' + e.message);
-          }
-      }
+      try {
+          await addDoc(collection(db, "chats"), {
+              senderId: auth.currentUser.uid,
+              username: currentUsername,
+              text: msgInput.value,
+              createdAt: new Date()
+          });
+          msgInput.value = ""; // مسح الخانة بعد الإرسال
+      </div> catch (e) { alert(e.message); }
   });
 
-  // 5. تسجيل الخروج
-  document.getElementById('btn-logout').addEventListener('click', () => {
-      signOut(auth).then(() => alert('تم تسجيل الخروج'));
-  });
+  // 5. جلب وعرض الرسائل تلقائياً في نفس اللحظة
+  function loadMessages(currentUid) {
+      const q = query(collection(db, "chats"), orderBy("createdAt", "asc"));
+      const chatBox = document.getElementById('chat-box');
+      
+      unsubscribeChat = onSnapshot(q, (snapshot) => {
+          chatBox.innerHTML = ""; // تفريغ الصندوق لإعادة الرسم
+          snapshot.forEach((doc) => {
+              const data = doc.data();
+              const msgDiv = document.createElement('div');
+              
+              // تحديد هل الرسالة لي أم لشخص آخر لتغيير التصميم
+              if(data.senderId === currentUid) {
+                  msgDiv.className = "message me";
+              } else {
+                  msgDiv.className = "message other";
+              }
+              
+              msgDiv.innerHTML = `<span class="username">${data.username}</span> ${data.text}`;
+              chatBox.appendChild(msgDiv);
+          });
+          chatBox.scrollTop = chatBox.scrollHeight; // النزول لآخر رسالة تلقائياً
+      });
+  }
+
+  // 6. تسجيل الخروج
+  document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 </script>
 
 </body>

@@ -3,44 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقعي المتكامل</title>
+    <title>شات وايتس - يسطا</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        .btn-google { background-color: #4285F4; color: white; }
-        .btn-google:hover { background-color: #357ae8; }
-        .btn-save { background-color: #28a745; color: white; margin-top: 10px; }
-        .btn-save:hover { background-color: #218838; }
-        .btn-logout { background-color: #dc3545; color: white; margin-top: 20px; }
-        .btn-logout:hover { background-color: #c82333; }
-        input { width: 90%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        body { font-family: Arial, sans-serif; background-color: #e5ddd5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; width: 100%; max-width: 450px; height: 90vh; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
+        
+        /* واجهة الدخول */
+        .login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 20px; background: #fff; }
+        .btn-google { background-color: #25D366; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-google:hover { background-color: #20ba59; }
+
+        /* واجهة الشات */
+        .chat-header { background: #075E54; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
+        .btn-logout { background: transparent; color: #fff; border: 1px solid #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
+        
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 15px; position: relative; word-break: break-word; }
+        .msg.sent { background: #dcf8c6; align-self: flex-end; }
+        .msg.received { background: #ffffff; align-self: flex-start; }
+        .msg-user { font-size: 11px; color: #25D366; font-weight: bold; display: block; margin-bottom: 2px; }
+
+        .chat-input-area { padding: 10px; background: #f0f0f0; display: flex; align-items: center; }
+        .chat-input { flex: 1; padding: 12px; border: none; border-radius: 20px; outline: none; font-size: 15px; }
+        .btn-send { background: #075E54; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; margin-right: 8px; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
-<div class="container" id="auth-container">
-    <h2>مرحباً بك في موقعي</h2>
-    <p>يرجى تسجيل الدخول للمتابعة</p>
-    <button id="btn-google-login" class="btn-google">التسجيل بواسطة Google</button>
-</div>
+<div class="container">
+    <div id="auth-container" class="login-screen">
+        <h2 style="color: #075E54; margin-bottom: 20px;">واتساب يسطا المطور</h2>
+        <button id="btn-google-login" class="btn-google">سجل دخول بجوجل وابدأ شات</button>
+    </div>
 
-<div class="container" id="app-container" style="display: none;">
-    <h2 id="welcome-msg">مرحباً!</h2>
-    <p>تم تسجيل دخولك بنجاح وقاعدة البيانات متصلة.</p>
-    
-    <input type="text" id="user-data" placeholder="اكتب شيئاً لحفظه في قاعدة البيانات">
-    <button id="btn-save" class="btn-save">حفظ في قاعدة البيانات</button>
-    
-    <button id="btn-logout" class="btn-logout">تسجيل الخروج</button>
+    <div id="app-container" style="display: none; flex-direction: column; height: 100%;">
+        <div class="chat-header">
+            <span id="chat-title">غرفة الدردشة العامة</span>
+            <button id="btn-logout" class="btn-logout">خروج</button>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="اكتب رسالتك هنا يسطا...">
+            <button id="btn-send" class="btn-send">◀</button>
+        </div>
+    </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // كود الربط الخاص بمشروعك ym-pro-max
+  // كود الربط الخاص بمشروعك
   const firebaseConfig = {
     apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
     authDomain: "ym-pro-max.firebaseapp.com",
@@ -50,7 +68,6 @@
     appId: "1:174657071953:web:5e831fc337df46dbd18170"
   };
 
-  // تهيئة الخدمات
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -58,54 +75,76 @@
 
   const authContainer = document.getElementById('auth-container');
   const appContainer = document.getElementById('app-container');
-  const welcomeMsg = document.getElementById('welcome-msg');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
 
-  // 1. تسجيل الدخول بجوجل
+  // 1. دخول بجوجل
   document.getElementById('btn-google-login').addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-          .then((result) => {
-              alert('أهلاً بك ' + result.user.displayName);
-          })
-          .catch((error) => {
-              alert('خطأ في تسجيل الدخول: ' + error.message);
-          });
+      signInWithPopup(auth, provider).catch(err => alert(err.message));
   });
 
-  // 2. مراقبة حالة المستخدم
-  onAuthStateChanged(auth, (user) => {
-      if (user) {
-          authContainer.style.display = 'none';
-          appContainer.style.display = 'block';
-          welcomeMsg.innerText = `مرحباً يا ${user.displayName}!`;
-      } else {
-          authContainer.style.display = 'block';
-          appContainer.style.display = 'none';
-      }
-  });
-
-  // 3. حفظ البيانات في Firestore
-  document.getElementById('btn-save').addEventListener('click', async () => {
-      const dataText = document.getElementById('user-data').value;
-      const user = auth.currentUser;
-      if (user) {
-          try {
-              await setDoc(doc(db, "users", user.uid), {
-                  text: dataText,
-                  name: user.displayName,
-                  email: user.email,
-                  lastUpdated: new Date()
-              });
-              alert('تم حفظ النص في قاعدة البيانات بنجاح!');
-          } catch (e) {
-              alert('خطأ في الحفظ: ' + e.message);
-          }
-      }
-  });
-
-  // 4. تسجيل الخروج
+  // 2. خروج
   document.getElementById('btn-logout').addEventListener('click', () => {
       signOut(auth);
   });
+
+  // 3. مراقبة حالة المستخدم وتشغيل الشات اللحظي
+  let unsubscribeChat;
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          authContainer.style.display = 'none';
+          appContainer.style.display = 'flex';
+          loadMessages(); // تشغيل استماع الرسائل
+      } else {
+          authContainer.style.display = 'flex';
+          appContainer.style.display = 'none';
+          if (unsubscribeChat) unsubscribeChat(); // إيقاف الاستماع عند الخروج
+      }
+  });
+
+  // 4. إرسال رسالة للشات
+  async function sendMessage() {
+      const text = chatInput.value.trim();
+      const user = auth.currentUser;
+      if (text && user) {
+          chatInput.value = '';
+          try {
+              await addDoc(collection(db, "chats"), {
+                  text: text,
+                  uid: user.uid,
+                  name: user.displayName,
+                  timestamp: new Date()
+              });
+          } catch (e) {
+              alert("خطأ في الإرسال: " + e.message);
+          }
+      }
+  }
+
+  document.getElementById('btn-send').addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+
+  // 5. تحميل واستماع الرسائل بشكل حي (Real-time)
+  function loadMessages() {
+      const q = query(collection(db, "chats"), orderBy("timestamp", "asc"));
+      unsubscribeChat = onSnapshot(q, (snapshot) => {
+          chatMessages.innerHTML = '';
+          snapshot.forEach((doc) => {
+              const data = doc.data();
+              const isMe = data.uid === auth.currentUser.uid;
+              
+              const msgDiv = document.createElement('div');
+              msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
+              
+              msgDiv.innerHTML = `
+                  <span class="msg-user">${isMe ? 'أنت' : data.name}</span>
+                  ${data.text}
+              `;
+              chatMessages.appendChild(msgDiv);
+          });
+          chatMessages.scrollTop = chatMessages.scrollHeight; // نزول تلقائي لآخر رسالة
+      });
+  }
 </script>
 
 </body>

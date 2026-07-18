@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واتساب ويب - دردشة آمنة وخاصة 🔒</title>
+    <title>واتساب ويب - دردشة خاصة آمنة 🔒💚</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0b141a; color: #e9edef; height: 100vh; display: flex; justify-content: center; align-items: center; }
         
-        /* شاشات الدخول والإعدادات */
+        /* شاشات الدخول واختيار الغرفة */
         .auth-card { background: #111b21; max-width: 400px; width: 100%; padding: 40px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; border: 1px solid #222e35; }
         .auth-card h1 { color: #00a884; font-size: 24px; margin-bottom: 15px; }
         .auth-card p { color: #8696a0; font-size: 14px; margin-bottom: 30px; }
@@ -45,17 +45,17 @@
 <body>
 
     <div id="screen-auth" class="auth-card">
-        <h1>بوابة الخصوصية الآمنة 🔐</h1>
-        <p>سجل دخولك أولاً لبدء تشفير المحادثات.</p>
+        <h1>واتساب الجماعي الآمن 🔐</h1>
+        <p>سجل دخولك أولاً لفتح الدردشات المشفرة الخاصة بكم.</p>
         <button id="btn-google" class="login-btn btn-google"><i class="fab fa-google" style="color: #ea4335;"></i> الدخول عبر Google</button>
         <button id="btn-facebook" class="login-btn btn-facebook"><i class="fab fa-facebook"></i> الدخول عبر Facebook</button>
     </div>
 
     <div id="screen-room" class="auth-card hidden">
-        <h1>إنشاء غرفة خاصة مشفرة 🔒</h1>
-        <p>اكتب اسم الغرفة أو الكود السري المشترك بينك وبين الطرف الآخر لدخول الشات الخاص.</p>
-        <input type="text" id="room-id-input" class="input-room" placeholder="مثال: s_room_99">
-        <button id="btn-enter-room" class="login-btn" style="background: #00a884; color: white;">دخول الغرفة الآمنة 🚀</button>
+        <h1>ادخل كود الغرفة الخاصة 🔒</h1>
+        <p>اكتب أي اسم أو رقم سري متفق عليه مع الشخص الآخر لفتح الشات الخاص بكم.</p>
+        <input type="text" id="room-id-input" class="input-room" placeholder="مثال: yazeed99">
+        <button id="btn-enter-room" class="login-btn" style="background: #00a884; color: white;">دخول الغرفة الآن 🚀</button>
     </div>
 
     <div id="screen-chat" class="whatsapp-container hidden">
@@ -82,7 +82,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
@@ -108,7 +108,6 @@
 
         let currentUserName = "";
         let selectedRoomId = "";
-        let unsubscribeChat = null;
 
         document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
         document.getElementById('btn-facebook').onclick = () => signInWithPopup(auth, new FacebookAuthProvider());
@@ -118,13 +117,12 @@
                 currentUserName = user.displayName || "مستخدم واتساب";
                 userNameDisplay.innerText = currentUserName;
                 sAuth.classList.add('hidden');
-                sRoom.classList.remove('hidden'); // توجيه المستخدم لصفحة اختيار الغرفة أولاً
+                sRoom.classList.remove('hidden'); 
             }
         });
 
-        // عند الضغط على دخول الغرفة
         document.getElementById('btn-enter-room').onclick = () => {
-            const roomVal = roomIdInput.value.trim();
+            const roomVal = roomIdInput.value.trim().toLowerCase(); // تحويل الحروف لصغيرة منعاً للغلط
             if (roomVal !== "") {
                 selectedRoomId = roomVal;
                 currentRoomDisplay.innerText = selectedRoomId;
@@ -132,23 +130,29 @@
                 sChat.classList.remove('hidden');
                 startLiveChat();
             } else {
-                alert("الرجاء إدخال اسم أو كود الغرفة أولاً!");
+                alert("الرجاء إدخال اسم الغرفة أولاً!");
             }
         };
 
-        // دالة بدء جلب الرسائل الخاصة بالغرفة المحددة فقط بشكل آمن
         function startLiveChat() {
-            // جلب المستندات التي تنتمي فقط للـ roomId المختار وترتيبها تصاعدياً
-            const q = query(
-                collection(db, "private_chats"), 
-                where("roomId", "==", selectedRoomId),
-                orderBy("timestamp", "asc")
-            );
+            // كود مبسط جداً: يبحث فقط بدون ترتيب معقد منعا لمشكلة الـ Index في السيرفر
+            const q = query(collection(db, "private_chats"), where("roomId", "==", selectedRoomId));
 
-            unsubscribeChat = onSnapshot(q, (snapshot) => {
-                chatMain.innerHTML = "";
+            onSnapshot(q, (snapshot) => {
+                let messagesArray = [];
+                
                 snapshot.forEach((doc) => {
-                    const data = doc.data();
+                    let msgData = doc.data();
+                    // تحويل التايم ستامب لـ تاريخ حقيقي عشان نرتبه جوه المتصفح
+                    msgData.realTime = msgData.timestamp ? msgData.timestamp.toDate() : new Date();
+                    messagesArray.push(msgData);
+                });
+
+                // ترتيب الرسايل برمجياً من الأقدم للأحدث
+                messagesArray.sort((a, b) => a.realTime - b.realTime);
+
+                chatMain.innerHTML = "";
+                messagesArray.forEach((data) => {
                     const messageElement = document.createElement('div');
                     messageElement.classList.add('message');
 
@@ -176,14 +180,14 @@
             if (text !== "" && selectedRoomId !== "") {
                 try {
                     await addDoc(collection(db, "private_chats"), {
-                        roomId: selectedRoomId, // حفظ معرف الغرفة لمنع الآخرين من رؤيتها
+                        roomId: selectedRoomId, 
                         sender: currentUserName,
                         text: text,
-                        timestamp: new Date()
+                        timestamp: new Date() // السيرفر بيسجل الوقت الحالي
                     });
                     chatInput.value = "";
                 } catch (e) {
-                    alert("خطأ في الإرسال: تأكد من تفعيل الكوليكشن وإعدادات القواعد في السيرفر.");
+                    alert("خطأ: تأكد من تفعيل الـ Firestore وضبط الـ Rules لـ 'allow read, write: if true;' مؤقتاً");
                 }
             }
         }

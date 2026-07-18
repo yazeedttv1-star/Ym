@@ -3,72 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المساحة المشتركة الذكية ⚡</title>
+    <title>غرفة الدردشة العامة 🌐✨</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { max-width: 800px; width: 100%; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: #1e293b; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid #334155; }
-        h1, h2 { color: #38bdf8; margin-bottom: 15px; }
+        .card { background: #1e293b; max-width: 600px; width: 100%; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid #334155; display: flex; flex-direction: column; }
+        h1 { color: #38bdf8; font-size: 24px; margin-bottom: 10px; text-align: center; }
+        p { color: #94a3b8; font-size: 14px; margin-bottom: 25px; text-align: center; }
         .hidden { display: none !important; }
         
-        /* تصميم الشات */
-        .chat-box { background: #0f172a; height: 200px; border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 10px; }
-        .msg { background: #334155; padding: 8px 12px; border-radius: 8px; width: fit-content; max-width: 80%; }
-        .msg.me { background: #0ea5e9; align-self: flex-start; color: #0f172a; font-weight: bold; }
-        .input-group { display: flex; gap: 10px; }
-        input { flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; outline: none; }
-        button { background: #38bdf8; color: #0f172a; padding: 12px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background: #0ea5e9; }
+        /* أزرار تسجيل الدخول */
+        .auth-btns { display: flex; flex-direction: column; gap: 15px; }
+        .login-btn { padding: 14px; border-radius: 12px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; transition: all 0.2s; }
+        .btn-google { background: white; color: #334155; }
+        .btn-google:hover { background: #f1f5f9; }
+        .btn-facebook { background: #1877f2; color: white; }
+        .btn-facebook:hover { background: #166fe5; }
+
+        /* شاشة الشات العام */
+        .chat-container { display: flex; flex-direction: column; height: 450px; }
+        .chat-box { flex-grow: 1; background: #0f172a; border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 12px; }
+        .msg { background: #334155; padding: 10px 14px; border-radius: 12px; width: fit-content; max-width: 85%; display: flex; flex-direction: column; }
+        .msg-sender { font-size: 12px; font-weight: bold; color: #38bdf8; margin-bottom: 4px; }
+        .msg.me { background: #0ea5e9; align-self: flex-start; color: #0f172a; }
+        .msg.me .msg-sender { color: #1e293b; }
+        .msg-text { font-size: 15px; word-break: break-word; }
         
-        /* المود */
-        .mood-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .mood-btn { background: #334155; color: white; padding: 10px; border-radius: 8px; cursor: pointer; flex: 1; text-align: center; }
-        .mood-btn:hover { background: #475569; }
-        .current-mood { font-size: 18px; color: #e2e8f0; margin-top: 10px; text-align: center; }
+        .input-group { display: flex; gap: 10px; }
+        input { flex-grow: 1; padding: 14px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; outline: none; font-size: 15px; }
+        input:focus { border-color: #38bdf8; }
+        .send-btn { background: #38bdf8; color: #0f172a; padding: 0 24px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .send-btn:hover { background: #0ea5e9; }
     </style>
 </head>
 <body>
 
-    <div id="screen-auth" class="card" style="text-align: center; max-width: 450px; margin: 0 auto;">
-        <h1>لوحة التحكم المشتركة 🔐</h1>
-        <p style="color: #94a3b8; margin-bottom: 20px;">سجل دخول بجوجل لفتح المساحة الخاصة بكم المربوطة بقاعدة البيانات.</p>
-        <button id="btn-google-login" style="width: 100%; background: white; color: #334155;"><i class="fab fa-google" style="color: #ea4335; margin-left: 10px;"></i> الدخول عبر Google</button>
+    <div id="screen-auth" class="card" style="max-width: 420px;">
+        <h1>غرفة الشات الجماعي 🌐</h1>
+        <p>سجل دخولك الآن للبدء في الدردشة الحية والمباشرة مع الجميع.</p>
+        <div class="auth-btns">
+            <button id="btn-google" class="login-btn btn-google"><i class="fab fa-google" style="color: #ea4335;"></i> الدخول عبر Google</button>
+            <button id="btn-facebook" class="login-btn btn-facebook"><i class="fab fa-facebook"></i> الدخول عبر Facebook</button>
+        </div>
     </div>
 
-    <div id="main-dashboard" class="container hidden">
-        <div class="card">
-            <h2>مرحباً <span id="user-name" style="color: #fff;"></span> 👋</h2>
-            <p style="color: #94a3b8;">هذه مساحتكم الحية والدائمة على الإنترنت.</p>
-        </div>
-
-        <div class="card">
-            <h2>الحالة المزاجية الحالية 🎭</h2>
-            <div class="current-mood" id="mood-display">جاري تحميل الحالات...</div>
-            <div class="mood-btns">
-                <div class="mood-btn" onclick="setMood('😊 مبسوط(ة)')">😊 مبسوط</div>
-                <div class="mood-btn" onclick="setMood('😴 كسلان(ة)')">😴 كسلان</div>
-                <div class="mood-btn" onclick="setMood('🥺 زعلان(ة)')">🥺 زعلان</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>مذكرة الرسائل اللحظية 💬</h2>
+    <div id="screen-chat" class="card hidden">
+        <h1>الدردشة العامة المباشرة 💬</h1>
+        <p>أنت متصل الآن كـ: <span id="user-display-name" style="color: #fff; font-weight: bold;"></span></p>
+        
+        <div class="chat-container">
             <div class="chat-box" id="chat-box"></div>
             <div class="input-group">
-                <input type="text" id="chat-input" placeholder="اكتب رسالة أو ملاحظة هنا...">
-                <button id="btn-send">إرسال 🚀</button>
+                <input type="text" id="chat-input" placeholder="اكتب رسالتك للجميع هنا...">
+                <button id="btn-send" class="send-btn">إرسال 🚀</button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // إعدادات الـ Firebase الحقيقية بتاعتك
+        // إعدادات الـ Firebase الحقيقية الخاصة بك
         const firebaseConfig = {
           apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
           authDomain: "ym-pro-max.firebaseapp.com",
@@ -84,69 +82,68 @@
         const db = getDatabase(app);
 
         const sAuth = document.getElementById('screen-auth');
-        const mDashboard = document.getElementById('main-dashboard');
-        const userNameDisplay = document.getElementById('user-name');
+        const sChat = document.getElementById('screen-chat');
+        const userDisplayName = document.getElementById('user-display-name');
         const chatBox = document.getElementById('chat-box');
         const chatInput = document.getElementById('chat-input');
 
-        let userDisplayName = "";
+        let currentName = "";
 
-        document.getElementById('btn-google-login').onclick = () => {
-            signInWithPopup(auth, new GoogleAuthProvider());
+        // تسجيل الدخول بجوجل
+        document.getElementById('btn-google').onclick = () => {
+            signInWithPopup(auth, new GoogleAuthProvider()).catch(err => alert("خطأ جوجل: " + err.message));
         };
 
+        // تسجيل الدخول بفيسبوك
+        document.getElementById('btn-facebook').onclick = () => {
+            signInWithPopup(auth, new FacebookAuthProvider()).catch(err => alert("خطأ فيسبوك: " + err.message));
+        };
+
+        // مراقبة حالة تسجيل الدخول والاتصال بالشات العام
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                userDisplayName = user.displayName;
-                userNameDisplay.innerText = userDisplayName;
+                currentName = user.displayName || "مستخدم مجهول";
+                userDisplayName.innerText = currentName;
                 sAuth.classList.add('hidden');
-                mDashboard.classList.remove('hidden');
+                sChat.classList.remove('hidden');
 
-                // الاستماع اللحظي للرسائل في قاعدة البيانات
-                onValue(ref(db, 'dashboard/chat'), (snapshot) => {
+                // جلب الرسائل العامة وحفظ تحديثاتها لايف لكل المستخدمين
+                onValue(ref(db, 'public_chat'), (snapshot) => {
                     chatBox.innerHTML = "";
                     snapshot.forEach((childSnapshot) => {
                         const data = childSnapshot.val();
                         const msgDiv = document.createElement('div');
                         msgDiv.classList.add('msg');
-                        if (data.sender === userDisplayName) msgDiv.classList.add('me');
-                        msgDiv.innerText = `${data.sender}: ${data.text}`;
+                        
+                        // تمييز رسائلي بلون مختلف عن بقية الأعضاء
+                        if (data.sender === currentName) msgDiv.classList.add('me');
+                        
+                        msgDiv.innerHTML = `
+                            <span class="msg-sender">${data.sender}</span>
+                            <span class="msg-text">${data.text}</span>
+                        `;
                         chatBox.appendChild(msgDiv);
                     });
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                });
-
-                // الاستماع اللحظي للحالة المزاجية
-                onValue(ref(db, 'dashboard/moods'), (snapshot) => {
-                    const moods = snapshot.val() || {};
-                    let html = "";
-                    for (let id in moods) {
-                        html += `<div><strong>${moods[id].name}:</strong> في حالة ${moods[id].status}</div>`;
-                    }
-                    document.getElementById('mood-display').innerHTML = html || "لا توجد حالات مسجلة حالياً";
+                    chatBox.scrollTop = chatBox.scrollHeight; // التمرير التلقائي لآخر رسالة
                 });
             }
         });
 
-        // إرسال رسالة للشات وحفظها بشكل دائم
-        document.getElementById('btn-send').onclick = sendMessage;
-        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+        // تنفيذ إرسال الرسالة للجميع
+        document.getElementById('btn-send').onclick = sendPublicMessage;
+        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendPublicMessage(); });
 
-        function sendMessage() {
+        function sendPublicMessage() {
             const text = chatInput.value.trim();
             if (text !== "") {
-                const chatRef = ref(db, 'dashboard/chat');
-                const newMsgRef = push(chatRef);
-                set(newMsgRef, { sender: userDisplayName, text: text, time: new Date().toISOString() });
+                const globalChatRef = ref(db, 'public_chat');
+                const newMsgRef = push(globalChatRef); // إنشاء معرف فريد للرسالة
+                set(newMsgRef, {
+                    sender: currentName,
+                    text: text,
+                    timestamp: new Date().toISOString()
+                });
                 chatInput.value = "";
-            }
-        }
-
-        // تحديث المود في قاعدة البيانات الدائمة
-        window.setMood = function(moodText) {
-            const user = auth.currentUser;
-            if (user) {
-                set(ref(db, 'dashboard/moods/' + user.uid), { name: user.displayName, status: moodText });
             }
         }
     </script>

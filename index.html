@@ -3,296 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>علشان خاطر عيون بطتي 🥺💙</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>المساحة المشتركة الذكية ⚡</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f5f3ff;
-            background-image: radial-gradient(#ddd6fe 1px, transparent 1px);
-            background-size: 24px 24px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .card {
-            background: white;
-            max-width: 480px;
-            width: 100%;
-            padding: 35px 25px;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
-            text-align: center;
-            border: 1px solid #e9d5ff;
-            position: relative;
-        }
-
-        h1 {
-            color: #6d28d9;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        p {
-            color: #4b5563;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 2px solid #ddd6fe;
-            font-size: 16px;
-            outline: none;
-            text-align: center;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: #8b5cf6;
-        }
-
-        .main-btn {
-            background: #8b5cf6;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-        .main-btn:hover { background: #7c3aed; }
-
-        .google-btn {
-            background: white;
-            border: 2px solid #e2e8f0;
-            color: #334155;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        .google-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
-        .google-btn i { color: #ea4335; }
-
-        .progress-container {
-            background: #f3f4f6;
-            border-radius: 20px;
-            height: 24px;
-            width: 100%;
-            overflow: hidden;
-            margin-bottom: 20px;
-            position: relative;
-            border: 1px solid #e5e7eb;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, #a78bfa, #8b5cf6);
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            top: 2px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #4c1d95;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .icon-header {
-            font-size: 45px;
-            color: #8b5cf6;
-            margin-bottom: 15px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { max-width: 800px; width: 100%; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { background: #1e293b; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid #334155; }
+        h1, h2 { color: #38bdf8; margin-bottom: 15px; }
+        .hidden { display: none !important; }
+        
+        /* تصميم الشات */
+        .chat-box { background: #0f172a; height: 200px; border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 10px; }
+        .msg { background: #334155; padding: 8px 12px; border-radius: 8px; width: fit-content; max-width: 80%; }
+        .msg.me { background: #0ea5e9; align-self: flex-start; color: #0f172a; font-weight: bold; }
+        .input-group { display: flex; gap: 10px; }
+        input { flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; outline: none; }
+        button { background: #38bdf8; color: #0f172a; padding: 12px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0ea5e9; }
+        
+        /* المود */
+        .mood-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .mood-btn { background: #334155; color: white; padding: 10px; border-radius: 8px; cursor: pointer; flex: 1; text-align: center; }
+        .mood-btn:hover { background: #475569; }
+        .current-mood { font-size: 18px; color: #e2e8f0; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="screen-auth" class="card">
-        <div class="icon-header"><i class="fas fa-user-lock"></i></div>
-        <h1>مرحباً بكِ يا أميرتي 🌟</h1>
-        <p>سجلي دخولكِ أولاً عبر حساب Google لفتح المفاجأة الخاصة بكِ الحفظ على قاعدة البيانات.</p>
-        <button id="btn-google-login" class="google-btn">
-            <i class="fab fa-google"></i> الدخول السريع عبر Google
-        </button>
+    <div id="screen-auth" class="card" style="text-align: center; max-width: 450px; margin: 0 auto;">
+        <h1>لوحة التحكم المشتركة 🔐</h1>
+        <p style="color: #94a3b8; margin-bottom: 20px;">سجل دخول بجوجل لفتح المساحة الخاصة بكم المربوطة بقاعدة البيانات.</p>
+        <button id="btn-google-login" style="width: 100%; background: white; color: #334155;"><i class="fab fa-google" style="color: #ea4335; margin-left: 10px;"></i> الدخول عبر Google</button>
     </div>
 
-    <div id="screen-password" class="card hidden">
-        <div class="icon-header"><i class="fas fa-lock"></i></div>
-        <h1>سؤال الأمان السري 🔐</h1>
-        <p>اكتبي الكلمة اللي دايماً مسميكي بيها علشان تفتحي المفاجأة؟</p>
-        <div class="input-group">
-            <input type="text" id="password-input" placeholder="اكتبي الاسم هنا...">
-        </div>
-        <button id="btn-check-password" class="main-btn">دخول ✨</button>
-    </div>
-
-    <div id="screen-msg1" class="card hidden">
-        <div class="icon-header"><i class="fas fa-sad-tear"></i></div>
-        <h1>والله يا بطتي تأخرت غصب عني 🥺</h1>
-        <p>الموقع ده تم تطويره حالا دلوقتي علشان خاطر عيونك وضحكتك يا بطتي.. انا اسف اني تأخرت والله مش اقصد والله حقك عليا متزعليش مني.</p>
-        <button id="btn-go-game" class="main-btn">اضغطي هنا لتحدي الرضا 💜</button>
-    </div>
-
-    <div id="screen-game" class="card hidden">
-        <div class="icon-header"><i class="fas fa-heartbeat"></i></div>
-        <h1>تحدي نسبة الرضا ⚡</h1>
-        <p>اضغطي على الزر بالأسفل كذا مرة علشان تملي العداد وتفتحي الرسالة الأخيرة!</p>
-        
-        <div class="progress-container">
-            <div id="love-progress" class="progress-bar"></div>
-            <div id="progress-label" class="progress-text">نسبة الرضا: 0%</div>
+    <div id="main-dashboard" class="container hidden">
+        <div class="card">
+            <h2>مرحباً <span id="user-name" style="color: #fff;"></span> 👋</h2>
+            <p style="color: #94a3b8;">هذه مساحتكم الحية والدائمة على الإنترنت.</p>
         </div>
 
-        <button id="btn-click-game" class="main-btn">اضغطي هنا لملء العداد 💖</button>
-    </div>
+        <div class="card">
+            <h2>الحالة المزاجية الحالية 🎭</h2>
+            <div class="current-mood" id="mood-display">جاري تحميل الحالات...</div>
+            <div class="mood-btns">
+                <div class="mood-btn" onclick="setMood('😊 مبسوط(ة)')">😊 مبسوط</div>
+                <div class="mood-btn" onclick="setMood('😴 كسلان(ة)')">😴 كسلان</div>
+                <div class="mood-btn" onclick="setMood('🥺 زعلان(ة)')">🥺 زعلان</div>
+            </div>
+        </div>
 
-    <div id="screen-final" class="card hidden">
-        <div class="icon-header"><i class="fas fa-kiss-wink-heart"></i></div>
-        <h1>وعلى فكرة لو متصالحين تعالى قولي دلوقتي يلا 😍</h1>
-        <p style="font-size: 18px; font-weight: bold; color: #db2777; margin-top: 15px;">بحببببك 💙✨</p>
+        <div class="card">
+            <h2>مذكرة الرسائل اللحظية 💬</h2>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-group">
+                <input type="text" id="chat-input" placeholder="اكتب رسالة أو ملاحظة هنا...">
+                <button id="btn-send">إرسال 🚀</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // مشروع موجه للربط والعمل الفوري والمباشر
+        // إعدادات الـ Firebase الحقيقية بتاعتك
         const firebaseConfig = {
-            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
-            authDomain: "ym-pro-max.firebaseapp.com",
-            databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com",
-            projectId: "ym-pro-max",
-            storageBucket: "ym-pro-max.firebasestorage.app",
-            messagingSenderId: "174657071953",
-            appId: "1:174657071953:web:5e831fc337df46dbd18170"
+          apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+          authDomain: "ym-pro-max.firebaseapp.com",
+          projectId: "ym-pro-max",
+          storageBucket: "ym-pro-max.firebasestorage.app",
+          messagingSenderId: "174657071953",
+          appId: "1:174657071953:web:5e831fc337df46dbd18170",
+          databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        const screenAuth = document.getElementById('screen-auth');
-        const screenPassword = document.getElementById('screen-password');
-        const screenMsg1 = document.getElementById('screen-msg1');
-        const screenGame = document.getElementById('screen-game');
-        const screenFinal = document.getElementById('screen-final');
+        const sAuth = document.getElementById('screen-auth');
+        const mDashboard = document.getElementById('main-dashboard');
+        const userNameDisplay = document.getElementById('user-name');
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
 
-        let currentUser = null;
-        let clickCount = 0;
+        let userDisplayName = "";
 
         document.getElementById('btn-google-login').onclick = () => {
-            signInWithPopup(auth, new GoogleAuthProvider()).catch(err => alert(err.message));
+            signInWithPopup(auth, new GoogleAuthProvider());
         };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                currentUser = user;
-                screenAuth.classList.add('hidden');
-                screenPassword.classList.remove('hidden');
-                
-                set(ref(db, 'couple_games/' + user.uid + '/session'), {
-                    name: user.displayName,
-                    email: user.email,
-                    timestamp: new Date().toISOString()
+                userDisplayName = user.displayName;
+                userNameDisplay.innerText = userDisplayName;
+                sAuth.classList.add('hidden');
+                mDashboard.classList.remove('hidden');
+
+                // الاستماع اللحظي للرسائل في قاعدة البيانات
+                onValue(ref(db, 'dashboard/chat'), (snapshot) => {
+                    chatBox.innerHTML = "";
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        const msgDiv = document.createElement('div');
+                        msgDiv.classList.add('msg');
+                        if (data.sender === userDisplayName) msgDiv.classList.add('me');
+                        msgDiv.innerText = `${data.sender}: ${data.text}`;
+                        chatBox.appendChild(msgDiv);
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                });
+
+                // الاستماع اللحظي للحالة المزاجية
+                onValue(ref(db, 'dashboard/moods'), (snapshot) => {
+                    const moods = snapshot.val() || {};
+                    let html = "";
+                    for (let id in moods) {
+                        html += `<div><strong>${moods[id].name}:</strong> في حالة ${moods[id].status}</div>`;
+                    }
+                    document.getElementById('mood-display').innerHTML = html || "لا توجد حالات مسجلة حالياً";
                 });
             }
         });
 
-        document.getElementById('btn-check-password').onclick = () => {
-            const val = document.getElementById('password-input').value.trim();
-            if (val === "بطتي") {
-                if (currentUser) {
-                    set(ref(db, 'couple_games/' + currentUser.uid + '/verification'), {
-                        status: "نجاح",
-                        wordUsed: val
-                    });
-                }
-                screenPassword.classList.add('hidden');
-                screenMsg1.classList.remove('hidden');
-                confetti({ particleCount: 40, spread: 50 });
-            } else {
-                alert("❌ الاسم غلط فكري تاني.. مسميكي إيه؟ 🙄");
+        // إرسال رسالة للشات وحفظها بشكل دائم
+        document.getElementById('btn-send').onclick = sendMessage;
+        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (text !== "") {
+                const chatRef = ref(db, 'dashboard/chat');
+                const newMsgRef = push(chatRef);
+                set(newMsgRef, { sender: userDisplayName, text: text, time: new Date().toISOString() });
+                chatInput.value = "";
             }
-        };
+        }
 
-        document.getElementById('btn-go-game').onclick = () => {
-            screenMsg1.classList.add('hidden');
-            screenGame.classList.remove('hidden');
-        };
-
-        document.getElementById('btn-click-game').onclick = () => {
-            if (clickCount < 10) {
-                clickCount++;
-                let percentage = clickCount * 10;
-                document.getElementById('love-progress').style.width = percentage + '%';
-                document.getElementById('progress-label').innerText = `نسبة الرضا: ${percentage}%`;
-                
-                confetti({ particleCount: 10, spread: 20, origin: { y: 0.8 } });
-
-                if (currentUser) {
-                    set(ref(db, 'couple_games/' + currentUser.uid + '/game'), {
-                        score: clickCount,
-                        satisfaction: percentage
-                    });
-                }
-
-                if (clickCount >= 10) {
-                    setTimeout(() => {
-                        screenGame.classList.add('hidden');
-                        screenFinal.classList.remove('hidden');
-                        let duration = 4 * 1000;
-                        let end = Date.now() + duration;
-                        (function frame() {
-                            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-                            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-                            if (Date.now() < end) requestAnimationFrame(frame);
-                        }());
-                    }, 500);
-                }
+        // تحديث المود في قاعدة البيانات الدائمة
+        window.setMood = function(moodText) {
+            const user = auth.currentUser;
+            if (user) {
+                set(ref(db, 'dashboard/moods/' + user.uid), { name: user.displayName, status: moodText });
             }
-        };
+        }
     </script>
 </body>
 </html>

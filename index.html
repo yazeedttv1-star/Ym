@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واتساب ويب - شات جماعي 💬💚</title>
+    <title>واتساب ويب - دردشة آمنة وخاصة 🔒</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0b141a; color: #e9edef; height: 100vh; display: flex; justify-content: center; align-items: center; }
         
-        /* شاشة تسجيل الدخول */
+        /* شاشات الدخول والإعدادات */
         .auth-card { background: #111b21; max-width: 400px; width: 100%; padding: 40px 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; border: 1px solid #222e35; }
         .auth-card h1 { color: #00a884; font-size: 24px; margin-bottom: 15px; }
         .auth-card p { color: #8696a0; font-size: 14px; margin-bottom: 30px; }
         .login-btn { padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; transition: 0.2s; margin-bottom: 15px; }
         .btn-google { background: white; color: #3b3b3b; }
         .btn-facebook { background: #1877f2; color: white; }
+
+        .input-room { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2a3942; background: #202c33; color: white; margin-bottom: 20px; text-align: center; font-size: 16px; outline: none; }
+        .input-room:focus { border-color: #00a884; }
 
         /* واجهة الواتساب */
         .whatsapp-container { width: 100%; height: 100vh; display: flex; flex-direction: column; background-color: #0b141a; }
@@ -42,18 +45,25 @@
 <body>
 
     <div id="screen-auth" class="auth-card">
-        <h1>واتساب الجماعي 🌐</h1>
-        <p>سجل دخولك الآن للبدء في دردشة فورية متصلة بـ Cloud Firestore.</p>
+        <h1>بوابة الخصوصية الآمنة 🔐</h1>
+        <p>سجل دخولك أولاً لبدء تشفير المحادثات.</p>
         <button id="btn-google" class="login-btn btn-google"><i class="fab fa-google" style="color: #ea4335;"></i> الدخول عبر Google</button>
         <button id="btn-facebook" class="login-btn btn-facebook"><i class="fab fa-facebook"></i> الدخول عبر Facebook</button>
+    </div>
+
+    <div id="screen-room" class="auth-card hidden">
+        <h1>إنشاء غرفة خاصة مشفرة 🔒</h1>
+        <p>اكتب اسم الغرفة أو الكود السري المشترك بينك وبين الطرف الآخر لدخول الشات الخاص.</p>
+        <input type="text" id="room-id-input" class="input-room" placeholder="مثال: s_room_99">
+        <button id="btn-enter-room" class="login-btn" style="background: #00a884; color: white;">دخول الغرفة الآمنة 🚀</button>
     </div>
 
     <div id="screen-chat" class="whatsapp-container hidden">
         <div class="chat-header">
             <div class="user-info">
-                <i class="fas fa-users"></i>
+                <i class="fas fa-lock" style="color: #00a884;"></i>
                 <div>
-                    <span>المجموعة العامة (Firestore)</span>
+                    <span>غرفة مشفرة: <span id="current-room-display" style="color: #38bdf8;"></span></span>
                     <p style="font-size: 12px; color: #8696a0;">متصل كـ: <span id="user-name" style="color: #00a884;"></span></p>
                 </div>
             </div>
@@ -63,17 +73,16 @@
 
         <div class="chat-footer">
             <div class="input-wrapper">
-                <input type="text" id="chat-input" placeholder="اكتب رسالة...">
+                <input type="text" id="chat-input" placeholder="اكتب رسالة مشفرة...">
             </div>
             <button id="btn-send" class="send-btn"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script type="module">
-        // استدعاء مكتبات Firestore بدلاً من Realtime Database
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
@@ -86,15 +95,20 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app); // تشغيل الفايرستور هيدر
+        const db = getFirestore(app);
 
         const sAuth = document.getElementById('screen-auth');
+        const sRoom = document.getElementById('screen-room');
         const sChat = document.getElementById('screen-chat');
         const userNameDisplay = document.getElementById('user-name');
+        const currentRoomDisplay = document.getElementById('current-room-display');
         const chatMain = document.getElementById('chat-main');
         const chatInput = document.getElementById('chat-input');
+        const roomIdInput = document.getElementById('room-id-input');
 
         let currentUserName = "";
+        let selectedRoomId = "";
+        let unsubscribeChat = null;
 
         document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
         document.getElementById('btn-facebook').onclick = () => signInWithPopup(auth, new FacebookAuthProvider());
@@ -104,49 +118,72 @@
                 currentUserName = user.displayName || "مستخدم واتساب";
                 userNameDisplay.innerText = currentUserName;
                 sAuth.classList.add('hidden');
-                sChat.classList.remove('hidden');
-
-                // جلب الرسائل من Firestore وترتيبها بالوقت لايف
-                const q = query(collection(db, "whatsapp_chat"), orderBy("timestamp", "asc"));
-                onSnapshot(q, (snapshot) => {
-                    chatMain.innerHTML = "";
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const messageElement = document.createElement('div');
-                        messageElement.classList.add('message');
-
-                        if (data.sender === currentUserName) {
-                            messageElement.classList.add('sent');
-                            messageElement.innerHTML = `<span class="message-text">${data.text}</span>`;
-                        } else {
-                            messageElement.classList.add('received');
-                            messageElement.innerHTML = `
-                                <span class="sender-name">${data.sender}</span>
-                                <span class="message-text">${data.text}</span>
-                            `;
-                        }
-                        chatMain.appendChild(messageElement);
-                    });
-                    chatMain.scrollTop = chatMain.scrollHeight;
-                });
+                sRoom.classList.remove('hidden'); // توجيه المستخدم لصفحة اختيار الغرفة أولاً
             }
         });
 
-        document.getElementById('btn-send').onclick = sendFirestoreMessage;
-        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendFirestoreMessage(); });
+        // عند الضغط على دخول الغرفة
+        document.getElementById('btn-enter-room').onclick = () => {
+            const roomVal = roomIdInput.value.trim();
+            if (roomVal !== "") {
+                selectedRoomId = roomVal;
+                currentRoomDisplay.innerText = selectedRoomId;
+                sRoom.classList.add('hidden');
+                sChat.classList.remove('hidden');
+                startLiveChat();
+            } else {
+                alert("الرجاء إدخال اسم أو كود الغرفة أولاً!");
+            }
+        };
 
-        async function sendFirestoreMessage() {
+        // دالة بدء جلب الرسائل الخاصة بالغرفة المحددة فقط بشكل آمن
+        function startLiveChat() {
+            // جلب المستندات التي تنتمي فقط للـ roomId المختار وترتيبها تصاعدياً
+            const q = query(
+                collection(db, "private_chats"), 
+                where("roomId", "==", selectedRoomId),
+                orderBy("timestamp", "asc")
+            );
+
+            unsubscribeChat = onSnapshot(q, (snapshot) => {
+                chatMain.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+
+                    if (data.sender === currentUserName) {
+                        messageElement.classList.add('sent');
+                        messageElement.innerHTML = `<span class="message-text">${data.text}</span>`;
+                    } else {
+                        messageElement.classList.add('received');
+                        messageElement.innerHTML = `
+                            <span class="sender-name">${data.sender}</span>
+                            <span class="message-text">${data.text}</span>
+                        `;
+                    }
+                    chatMain.appendChild(messageElement);
+                });
+                chatMain.scrollTop = chatMain.scrollHeight;
+            });
+        }
+
+        document.getElementById('btn-send').onclick = sendPrivateMessage;
+        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendPrivateMessage(); });
+
+        async function sendPrivateMessage() {
             const text = chatInput.value.trim();
-            if (text !== "") {
+            if (text !== "" && selectedRoomId !== "") {
                 try {
-                    await addDoc(collection(db, "whatsapp_chat"), {
+                    await addDoc(collection(db, "private_chats"), {
+                        roomId: selectedRoomId, // حفظ معرف الغرفة لمنع الآخرين من رؤيتها
                         sender: currentUserName,
                         text: text,
                         timestamp: new Date()
                     });
                     chatInput.value = "";
                 } catch (e) {
-                    alert("خطأ أثناء الإرسال: تحقق من تفعيل قاعدة البيانات في لوحة التحكم.");
+                    alert("خطأ في الإرسال: تأكد من تفعيل الكوليكشن وإعدادات القواعد في السيرفر.");
                 }
             }
         }

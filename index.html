@@ -1,493 +1,248 @@
-// ==========================================
-// 1. MANIFEST CONFIGURATION (public/manifest.json)
-// ==========================================
-export const manifestConfig = {
-  "name": "دردشة",
-  "short_name": "دردشة",
-  "description": "منصة دردشة عربية حديثة",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
-  "lang": "ar",
-  "dir": "rtl",
-  "icons": [
-    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" }
-  ]
-};
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>واتساب ويب بسيط</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-// ==========================================
-// 2. FEATURE COMPONENTS (NotificationCenter & ThemeToggle)
-// ==========================================
-import React, { useEffect, useState, createContext, useContext, useCallback, forwardRef } from "react";
-import { Bell, Check, Moon, Sun, Monitor, ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal, ArrowLeft, ArrowRight } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { arSA } from "date-fns/locale";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
-import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio";
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
-import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
+    body {
+      background-color: #d1dbe4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-// Helper for Tailwind class merging
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    /* الحاوية الرئيسية للتطبيق */
+    .app-container {
+      width: 900px;
+      height: 90vh;
+      background-color: #fff;
+      display: flex;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+    /* القائمة الجانبية (الشات الجانبي) */
+    .sidebar {
+      width: 35%;
+      border-left: 1px solid #e0e0e0;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
 
-// Mocked/Imported Supabase & Hooks for standalone compilation
-const supabase = (window as any).supabase;
-const useAuth = () => ({ user: (window as any).currentUser || { id: "demo-user" } });
-const applyTheme = (t: string) => document.documentElement.classList.toggle("dark", t === "dark");
-const getStoredTheme = () => "system";
-type Theme = "light" | "dark" | "system";
+    .sidebar-header {
+      padding: 15px;
+      background-color: #f0f2f5;
+      font-weight: bold;
+      color: #008069;
+    }
 
-// Dummy Popover / Dropdown components if Radix ones aren't direct imports
-const Popover = ({ children }: any) => <div className="relative inline-block">{children}</div>;
-const PopoverTrigger = ({ children, asChild }: any) => <div>{children}</div>;
-const PopoverContent = ({ children, className }: any) => <div className={cn("absolute z-50 bg-popover border p-2 shadow-md rounded-md", className)}>{children}</div>;
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+    }
 
-const DropdownMenu = ({ children }: any) => <div className="relative inline-block">{children}</div>;
-const DropdownMenuTrigger = ({ children, asChild }: any) => <div>{children}</div>;
-const DropdownMenuContent = ({ children }: any) => <div className="absolute z-50 bg-popover border p-2 shadow-md rounded-md">{children}</div>;
-const DropdownMenuItem = ({ children, onClick }: any) => <div onClick={onClick} className="p-2 hover:bg-accent cursor-pointer rounded-sm flex items-center">{children}</div>;
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f2f5;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-// --- Notification Center Component ---
-interface Notif {
-  id: string;
-  title: string;
-  body: string | null;
-  read: boolean;
-  created_at: string;
-}
+    .chat-item:hover, .chat-item.active {
+      background-color: #f0f2f5;
+    }
 
-export function NotificationCenter() {
-  const { user } = useAuth();
-  const [items, setItems] = useState<Notif[]>([]);
-  const unread = items.filter((n) => !n.read).length;
+    .avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: #128c7e;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      margin-left: 12px;
+    }
 
-  useEffect(() => {
-    if (!user) return;
-    const load = () =>
-      supabase
-        ?.from("notifications")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(20)
-        .then(({ data }: any) => setItems((data as Notif[]) ?? []));
-    load();
-    const ch = supabase
-      ?.channel(`notif-${user.id}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
-        () => load(),
-      )
-      .subscribe();
-    return () => { supabase?.removeChannel(ch); };
-  }, [user]);
+    .chat-info h4 {
+      font-size: 15px;
+      color: #111b21;
+    }
 
-  const markAll = async () => {
-    if (!user) return;
-    await supabase?.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
-  };
+    .chat-info p {
+      font-size: 13px;
+      color: #667781;
+      margin-top: 3px;
+    }
 
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button className="relative p-2 rounded-lg hover:bg-accent" aria-label="الإشعارات">
-          <Bell className="h-4 w-4" />
-          {unread > 0 && (
-            <span className="absolute top-1 left-1 h-4 min-w-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] grid place-items-center">
-              {unread}
-            </span>
-          )}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 p-0" dir="rtl">
-        <div className="p-3 border-b border-border flex items-center justify-between">
-          <div className="font-semibold text-sm">الإشعارات</div>
-          {unread > 0 && (
-            <Button size="sm" variant="ghost" onClick={markAll} className="h-7 text-xs">
-              <Check className="h-3 w-3 ml-1" /> تعليم الكل مقروءًا
-            </Button>
-          )}
-        </div>
-        <div className="max-h-80 overflow-y-auto">
-          {items.length === 0 ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">لا إشعارات</div>
-          ) : (
-            items.map((n) => (
-              <div key={n.id} className={`p-3 border-b border-border last:border-0 ${!n.read ? "bg-accent/30" : ""}`}>
-                <div className="text-sm font-medium">{n.title}</div>
-                {n.body && <div className="text-xs text-muted-foreground mt-0.5">{n.body}</div>}
-                <div className="text-[10px] text-muted-foreground mt-1">
-                  {formatDistanceToNow(new Date(n.created_at), { addSuffix: true, locale: arSA })}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
+    /* منطقة المحادثة Main Chat Area */
+    .main-chat {
+      width: 65%;
+      display: flex;
+      flex-direction: column;
+      background-color: #efeae2;
+    }
 
-// --- Theme Toggle Component ---
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("system");
+    .chat-header {
+      padding: 10px 15px;
+      background-color: #f0f2f5;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
 
-  useEffect(() => { setTheme(getStoredTheme() as Theme); }, []);
+    .messages-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-  const set = (t: Theme) => { setTheme(t); applyTheme(t); };
+    /* الفقاعات (الرسائل) */
+    .message {
+      max-width: 65%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+      position: relative;
+      word-wrap: break-word;
+    }
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="p-2 rounded-lg hover:bg-accent" aria-label="الوضع">
-          {theme === "dark" ? <Moon className="h-4 w-4" /> : theme === "light" ? <Sun className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => set("light")}><Sun className="h-4 w-4 ml-2" /> فاتح</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => set("dark")}><Moon className="h-4 w-4 ml-2" /> داكن</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => set("system")}><Monitor className="h-4 w-4 ml-2" /> النظام</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+    .message.incoming {
+      background-color: #ffffff;
+      align-self: flex-start;
+      border-top-right-radius: 0;
+    }
 
-// ==========================================
-// 3. UI COMPONENTS LIBRARY
-// ==========================================
+    .message.outgoing {
+      background-color: #d9fdd3;
+      align-self: flex-end;
+      border-top-left-radius: 0;
+    }
 
-// --- Accordion ---
-export const Accordion = AccordionPrimitive.Root;
+    /* منطقة إدخال النص */
+    .chat-input-area {
+      padding: 10px 15px;
+      background-color: #f0f2f5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-export const AccordionItem = forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
->(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
-));
-AccordionItem.displayName = "AccordionItem";
+    .chat-input-area input {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+    }
 
-export const AccordionTrigger = forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex flex-1 items-center justify-between py-4 text-sm font-medium cursor-pointer transition-all hover:underline text-left [&[data-state=open]>svg]:rotate-180",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
-));
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+    .send-btn {
+      background-color: #008069;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-export const AccordionContent = forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Content
-    ref={ref}
-    className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-    {...props}
-  >
-    <div className={cn("pb-4 pt-0", className)}>{children}</div>
-  </AccordionPrimitive.Content>
-));
-AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+    .send-btn:hover {
+      background-color: #006e5a;
+    }
+  </style>
+</head>
+<body>
 
-// --- Button ---
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
-      },
-    },
-    defaultVariants: { variant: "default", size: "default" },
-  }
-);
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
-  }
-);
-Button.displayName = "Button";
-
-// --- AlertDialog ---
-export const AlertDialog = AlertDialogPrimitive.Root;
-export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
-export const AlertDialogPortal = AlertDialogPrimitive.Portal;
-
-export const AlertDialogOverlay = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
-    className={cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className)}
-    {...props}
-    ref={ref}
-  />
-));
-AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
-
-export const AlertDialogContent = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
->(({ className, ...props }, ref) => (
-  <AlertDialogPortal>
-    <AlertDialogOverlay />
-    <AlertDialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg",
-        className
-      )}
-      {...props}
-    />
-  </AlertDialogPortal>
-));
-AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
-
-export const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
-);
-
-export const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
-);
-
-export const AlertDialogTitle = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Title ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
-));
-
-export const AlertDialogDescription = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Description ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
-));
-
-export const AlertDialogAction = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Action>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Action ref={ref} className={cn(buttonVariants(), className)} {...props} />
-));
-
-export const AlertDialogCancel = forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
->(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel ref={ref} className={cn(buttonVariants({ variant: "outline" }), "mt-2 sm:mt-0", className)} {...props} />
-));
-
-// --- Alert ---
-export const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
-  {
-    variants: {
-      variant: {
-        default: "bg-background text-foreground",
-        destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
-      },
-    },
-    defaultVariants: { variant: "default" },
-  }
-);
-
-export const Alert = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>>(
-  ({ className, variant, ...props }, ref) => <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
-);
-
-export const AlertTitle = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => <h5 ref={ref} className={cn("mb-1 font-medium leading-none tracking-tight", className)} {...props} />
-);
-
-export const AlertDescription = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
-);
-
-// --- AspectRatio & Avatar & Badge ---
-export const AspectRatio = AspectRatioPrimitive.Root;
-
-export const Avatar = forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Root ref={ref} className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)} {...props} />
-  )
-);
-
-export const AvatarImage = forwardRef<React.ElementRef<typeof AvatarPrimitive.Image>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Image ref={ref} className={cn("aspect-square h-full w-full", className)} {...props} />
-  )
-);
-
-export const AvatarFallback = forwardRef<React.ElementRef<typeof AvatarPrimitive.Fallback>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Fallback ref={ref} className={cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className)} {...props} />
-  )
-);
-
-export const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default: "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-        outline: "text-foreground",
-      },
-    },
-    defaultVariants: { variant: "default" },
-  }
-);
-
-export function Badge({ className, variant, ...props }: React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof badgeVariants>) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
-}
-
-// --- Breadcrumb ---
-export const Breadcrumb = forwardRef<HTMLElement, React.ComponentPropsWithoutRef<"nav">>(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
-
-export const BreadcrumbList = forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(
-  ({ className, ...props }, ref) => <ol ref={ref} className={cn("flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground sm:gap-2.5", className)} {...props} />
-);
-
-export const BreadcrumbItem = forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
-  ({ className, ...props }, ref) => <li ref={ref} className={cn("inline-flex items-center gap-1.5", className)} {...props} />
-);
-
-export const BreadcrumbLink = forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<"a"> & { asChild?: boolean }>(
-  ({ asChild, className, ...props }, ref) => {
-    const Comp = asChild ? Slot : "a";
-    return <Comp ref={ref} className={cn("transition-colors hover:text-foreground", className)} {...props} />;
-  }
-);
-
-export const BreadcrumbPage = forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
-  ({ className, ...props }, ref) => <span ref={ref} role="link" aria-disabled="true" aria-current="page" className={cn("font-normal text-foreground", className)} {...props} />
-);
-
-export const BreadcrumbSeparator = ({ children, className, ...props }: React.ComponentProps<"li">) => (
-  <li role="presentation" aria-hidden="true" className={cn("[&>svg]:w-3.5 [&>svg]:h-3.5", className)} {...props}>
-    {children ?? <ChevronRight />}
-  </li>
-);
-
-// --- Card ---
-export const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("rounded-xl border bg-card text-card-foreground shadow", className)} {...props} />
-));
-
-export const CardHeader = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-));
-
-export const CardTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("font-semibold leading-none tracking-tight", className)} {...props} />
-));
-
-export const CardDescription = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
-));
-
-export const CardContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-));
-
-export const CardFooter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
-));
-
-// --- Calendar ---
-export function CalendarDayButton({ className, day, modifiers, ...props }: React.ComponentProps<typeof DayButton>) {
-  const defaultClassNames = getDefaultClassNames();
-  const ref = React.useRef<HTMLButtonElement>(null);
-  useEffect(() => { if (modifiers.focused) ref.current?.focus(); }, [modifiers.focused]);
-
-  return (
-    <Button
-      ref={ref}
-      variant="ghost"
-      size="icon"
-      className={cn("h-auto w-full aspect-square font-normal", defaultClassNames.day, className)}
-      {...props}
-    />
-  );
-}
-
-export function Calendar({ className, classNames, showOutsideDays = true, captionLayout = "label", buttonVariant = "ghost", ...props }: React.ComponentProps<typeof DayPicker> & { buttonVariant?: any }) {
-  const defaultClassNames = getDefaultClassNames();
-  return (
-    <DayPicker
-      showOutsideDays={showOutsideDays}
-      className={cn("bg-background p-3", className)}
-      captionLayout={captionLayout}
-      classNames={{
-        root: cn("w-fit", defaultClassNames.root),
-        months: cn("relative flex flex-col gap-4 md:flex-row", defaultClassNames.months),
-        month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
-        table: "w-full border-collapse",
-        ...classNames,
-      }}
-      components={{ DayButton: CalendarDayButton }}
-      {...props}
-    />
-  );
-}
-
-// --- Carousel ---
-type CarouselApi = UseEmblaCarouselType[1];
-
-export const Carousel = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { orientation?: "horizontal" | "vertical" }>(
-  ({ orientation = "horizontal", className, children, ...props }, ref) => {
-    const [carouselRef] = useEmblaCarousel({ axis: orientation === "horizontal" ? "x" : "y" });
-    return (
-      <div ref={ref} className={cn("relative", className)} {...props}>
-        <div ref={carouselRef} className="overflow-hidden">
-          <div className="flex">{children}</div>
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        واتساب ويب
+      </div>
+      <div class="chat-list">
+        <div class="chat-item active">
+          <div class="avatar">أ</div>
+          <div class="chat-info">
+            <h4>أحمد علي</h4>
+            <p>أهلاً، كيف حالك؟</p>
+          </div>
         </div>
       </div>
-    );
-  }
-);
-Carousel.displayName = "Carousel";
+    </div>
+
+    <div class="main-chat">
+      <div class="chat-header">
+        <div class="avatar">أ</div>
+        <div class="chat-info" style="margin-right: 10px;">
+          <h4>أحمد علي</h4>
+          <p style="font-size: 11px; color: #667781;">متصل الآن</p>
+        </div>
+      </div>
+
+      <div class="messages-container" id="messagesContainer">
+        <div class="message incoming">
+          أهلاً بك! كيف يمكنني مساعدتك اليوم؟
+        </div>
+      </div>
+
+      <form class="chat-input-area" id="chatForm">
+        <input type="text" id="messageInput" placeholder="اكتب رسالة..." autocomplete="off">
+        <button type="submit" class="send-btn">إرسال</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const messagesContainer = document.getElementById('messagesContainer');
+
+    // دالة إضافة رسالة جديدة للشاشة
+    function addMessage(text, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', type);
+      messageDiv.textContent = text;
+      
+      messagesContainer.appendChild(messageDiv);
+      // التمرير لأسفل تلقائياً عند إضافة رسالة
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // التعامل مع إرسال النموذج
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const text = messageInput.value.trim();
+      if (text !== '') {
+        // 1. إضافة رسالتك (الصادرة)
+        addMessage(text, 'outgoing');
+        messageInput.value = '';
+
+        // 2. محاكاة رد تلقائي بسيط بعد ثانية واحدة (الواردة)
+        setTimeout(() => {
+          addMessage('تم استلام رسالتك بنجاح! 👍', 'incoming');
+        }, 1000);
+      }
+    });
+  </script>
+
+</body>
+</html>

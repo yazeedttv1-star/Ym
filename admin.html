@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — المتجر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --ink:#101915; --panel:#16241E; --panel-2:#1D2F27;
+    --line: rgba(201,162,75,0.18); --gold:#C9A24B; --gold-soft:#E4C878;
+    --sage:#7C9885; --cream:#F3EEE1; --muted:#9BAAA1; --danger:#C05A4A;
+  }
+  *{font-family:'Tajawal',sans-serif;}
+  h1,h2,h3,.font-display{font-family:'Cairo',sans-serif;}
+  body{background:var(--ink); color:var(--cream);}
+  .card{background:var(--panel); border:1px solid var(--line);}
+  .card-2{background:var(--panel-2); border:1px solid var(--line);}
+  .btn-gold{background:linear-gradient(180deg,var(--gold-soft),var(--gold)); color:#1B140A;}
+  .btn-gold:hover{filter:brightness(1.06);}
+  .btn-danger{background:var(--danger); color:#fff;}
+  .tab-active{background:var(--gold); color:#1B140A;}
+  .divider{height:1px; background:linear-gradient(90deg, transparent, var(--gold) 50%, transparent);}
+  input,textarea,select{color:var(--cream);}
+  input::placeholder,textarea::placeholder{color:var(--muted)}
+  .scrollbar-thin::-webkit-scrollbar{width:6px;}
+  .scrollbar-thin::-webkit-scrollbar-thumb{background:var(--gold); border-radius:10px;}
+  .fade-in{animation:fadeIn .35s ease both;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Gate screen -->
+<div id="gateScreen" class="min-h-screen flex items-center justify-center p-6">
+  <div class="card rounded-2xl p-8 max-w-sm w-full text-center fade-in">
+    <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center border mb-4" style="border-color:var(--gold)">
+      <span class="font-display font-black text-xl" style="color:var(--gold-soft)">م</span>
+    </div>
+    <h1 class="font-display font-black text-xl mb-2">لوحة التحكم</h1>
+    <p id="gateMsg" class="text-sm mb-6" style="color:var(--muted)">سجّل الدخول بحساب جوجل الخاص بالمالك</p>
+    <button id="loginBtn" class="btn-gold w-full py-3 rounded-lg font-bold">دخول بحساب جوجل</button>
+    <button id="logoutBtn" class="hidden card-2 w-full py-3 rounded-lg font-bold mt-3">تسجيل الخروج</button>
+  </div>
+</div>
+
+<!-- Admin dashboard -->
+<div id="dashboard" class="hidden min-h-screen">
+  <header class="sticky top-0 z-30 backdrop-blur bg-[#101915]/90 border-b" style="border-color:var(--line)">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+      <h1 class="font-display font-black text-lg">لوحة التحكم</h1>
+      <div class="flex items-center gap-3">
+        <img id="adminAvatar" class="w-8 h-8 rounded-full border" style="border-color:var(--gold)">
+        <button id="logoutBtn2" class="text-xs px-3 py-2 rounded-lg card-2">خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="card rounded-xl p-4 text-center">
+        <p class="text-2xl font-display font-black" id="statProducts">0</p>
+        <p class="text-xs" style="color:var(--muted)">المنتجات</p>
+      </div>
+      <div class="card rounded-xl p-4 text-center">
+        <p class="text-2xl font-display font-black" id="statOrders">0</p>
+        <p class="text-xs" style="color:var(--muted)">الطلبات</p>
+      </div>
+      <div class="card rounded-xl p-4 text-center">
+        <p class="text-2xl font-display font-black" style="color:var(--gold-soft)" id="statRevenue">0</p>
+        <p class="text-xs" style="color:var(--muted)">إجمالي المبيعات (ج.م)</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-6">
+      <button id="tabProducts" class="tab-active px-4 py-2 rounded-lg text-sm font-bold">المنتجات</button>
+      <button id="tabOrders" class="card-2 px-4 py-2 rounded-lg text-sm font-bold">الطلبات</button>
+    </div>
+
+    <!-- Products panel -->
+    <section id="panelProducts">
+      <div class="card rounded-xl p-5 mb-6">
+        <h3 class="font-display font-bold mb-4" id="formTitle">إضافة منتج جديد</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input id="pName" placeholder="اسم المنتج" class="card-2 rounded-lg px-4 py-3 outline-none">
+          <input id="pPrice" type="number" placeholder="السعر (ج.م)" class="card-2 rounded-lg px-4 py-3 outline-none">
+          <input id="pCategory" placeholder="الفئة (اختياري)" class="card-2 rounded-lg px-4 py-3 outline-none">
+          <input id="pStock" type="number" placeholder="الكمية المتاحة" class="card-2 rounded-lg px-4 py-3 outline-none">
+          <input id="pImage" placeholder="رابط الصورة (URL)" class="card-2 rounded-lg px-4 py-3 outline-none md:col-span-2">
+          <textarea id="pDesc" placeholder="الوصف" rows="2" class="card-2 rounded-lg px-4 py-3 outline-none md:col-span-2"></textarea>
+        </div>
+        <div class="flex gap-3 mt-4">
+          <button id="saveProductBtn" class="btn-gold px-6 py-3 rounded-lg font-bold">حفظ المنتج</button>
+          <button id="cancelEditBtn" class="hidden card-2 px-6 py-3 rounded-lg font-bold">إلغاء التعديل</button>
+        </div>
+      </div>
+
+      <div id="productsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- Orders panel -->
+    <section id="panelOrders" class="hidden">
+      <div id="ordersList" class="space-y-4"></div>
+    </section>
+  </main>
+</div>
+
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 card-2 px-5 py-3 rounded-lg text-sm hidden z-50"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDoc,
+    onSnapshot, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+    authDomain: "ym-pro-max.firebaseapp.com",
+    projectId: "ym-pro-max",
+    storageBucket: "ym-pro-max.firebasestorage.app",
+    messagingSenderId: "174657071953",
+    appId: "1:174657071953:web:5e831fc337df46dbd18170"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(()=> t.classList.add('hidden'), 2200);
+  }
+
+  const gateScreen = document.getElementById('gateScreen');
+  const dashboard = document.getElementById('dashboard');
+  const gateMsg = document.getElementById('gateMsg');
+  const loginBtn = document.getElementById('loginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutBtn2 = document.getElementById('logoutBtn2');
+
+  loginBtn.onclick = () => signInWithPopup(auth, provider).catch(()=> showToast('تعذر تسجيل الدخول'));
+  logoutBtn.onclick = () => signOut(auth);
+  logoutBtn2.onclick = () => signOut(auth);
+
+  let unsubProducts = null, unsubOrders = null;
+  let allProducts = [];
+  let allOrders = [];
+  let editingId = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if(!user){
+      gateScreen.classList.remove('hidden');
+      dashboard.classList.add('hidden');
+      loginBtn.classList.remove('hidden');
+      logoutBtn.classList.add('hidden');
+      gateMsg.textContent = 'سجّل الدخول بحساب جوجل الخاص بالمالك';
+      if(unsubProducts) unsubProducts();
+      if(unsubOrders) unsubOrders();
+      return;
+    }
+
+    // Check admin permission
+    try {
+      const adminSnap = await getDoc(doc(db, 'admins', user.uid));
+      if(!adminSnap.exists()){
+        gateScreen.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+        loginBtn.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+        gateMsg.innerHTML = `ليس لديك صلاحية الدخول لهذه اللوحة.<br><br>
+          <span class="text-xs" style="color:var(--muted)">لإضافتك كمسؤول، أضف مستند في مجموعة <b>admins</b> في Firestore بمعرّف:<br>
+          <code class="break-all" style="color:var(--gold-soft)">${user.uid}</code></span>`;
+        return;
+      }
+    } catch(e){
+      console.error(e);
+      gateMsg.textContent = 'تعذر التحقق من الصلاحيات. تحقق من إعدادات Firestore.';
+      return;
+    }
+
+    // Admin confirmed
+    gateScreen.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    document.getElementById('adminAvatar').src = user.photoURL || '';
+    listenProducts();
+    listenOrders();
+  });
+
+  // ---------- TABS ----------
+  const tabProducts = document.getElementById('tabProducts');
+  const tabOrders = document.getElementById('tabOrders');
+  const panelProducts = document.getElementById('panelProducts');
+  const panelOrders = document.getElementById('panelOrders');
+  tabProducts.onclick = () => {
+    tabProducts.classList.add('tab-active'); tabProducts.classList.remove('card-2');
+    tabOrders.classList.remove('tab-active'); tabOrders.classList.add('card-2');
+    panelProducts.classList.remove('hidden'); panelOrders.classList.add('hidden');
+  };
+  tabOrders.onclick = () => {
+    tabOrders.classList.add('tab-active'); tabOrders.classList.remove('card-2');
+    tabProducts.classList.remove('tab-active'); tabProducts.classList.add('card-2');
+    panelOrders.classList.remove('hidden'); panelProducts.classList.add('hidden');
+  };
+
+  // ---------- PRODUCTS ----------
+  function listenProducts(){
+    unsubProducts = onSnapshot(collection(db, 'products'), (snap) => {
+      allProducts = [];
+      snap.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+      document.getElementById('statProducts').textContent = allProducts.length;
+      renderProducts();
+    });
+  }
+
+  function renderProducts(){
+    const list = document.getElementById('productsList');
+    list.innerHTML = '';
+    allProducts.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'card rounded-xl p-4 flex gap-4 fade-in';
+      div.innerHTML = `
+        <img src="${p.image || 'https://placehold.co/100x100/16241E/C9A24B?text=No+Image'}" class="w-20 h-20 rounded-lg object-cover">
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <h4 class="font-display font-bold">${p.name || ''}</h4>
+            <span class="text-xs px-2 py-1 rounded-full" style="background:${p.active===false ? 'rgba(192,90,74,.2)' : 'rgba(124,152,133,.2)'}; color:${p.active===false ? 'var(--danger)' : 'var(--sage)'}">${p.active===false ? 'غير مفعّل' : 'مفعّل'}</span>
+          </div>
+          <p class="text-xs mt-1" style="color:var(--muted)">${p.description || ''}</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="font-bold" style="color:var(--gold-soft)">${p.price || 0} ج.م — مخزون: ${p.stock ?? '-'}</span>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <button data-id="${p.id}" class="editBtn text-xs px-3 py-2 rounded-lg card-2">تعديل</button>
+            <button data-id="${p.id}" class="toggleBtn text-xs px-3 py-2 rounded-lg card-2">${p.active===false ? 'تفعيل' : 'إخفاء'}</button>
+            <button data-id="${p.id}" class="deleteBtn text-xs px-3 py-2 rounded-lg btn-danger">حذف</button>
+          </div>
+        </div>`;
+      list.appendChild(div);
+    });
+    document.querySelectorAll('.editBtn').forEach(b => b.onclick = () => startEdit(b.dataset.id));
+    document.querySelectorAll('.toggleBtn').forEach(b => b.onclick = () => toggleActive(b.dataset.id));
+    document.querySelectorAll('.deleteBtn').forEach(b => b.onclick = () => deleteProduct(b.dataset.id));
+  }
+
+  function startEdit(id){
+    const p = allProducts.find(x => x.id === id);
+    if(!p) return;
+    editingId = id;
+    document.getElementById('formTitle').textContent = 'تعديل المنتج';
+    document.getElementById('pName').value = p.name || '';
+    document.getElementById('pPrice').value = p.price || '';
+    document.getElementById('pCategory').value = p.category || '';
+    document.getElementById('pStock').value = p.stock ?? '';
+    document.getElementById('pImage').value = p.image || '';
+    document.getElementById('pDesc').value = p.description || '';
+    document.getElementById('cancelEditBtn').classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  document.getElementById('cancelEditBtn').onclick = resetForm;
+  function resetForm(){
+    editingId = null;
+    document.getElementById('formTitle').textContent = 'إضافة منتج جديد';
+    ['pName','pPrice','pCategory','pStock','pImage','pDesc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('cancelEditBtn').classList.add('hidden');
+  }
+
+  document.getElementById('saveProductBtn').onclick = async () => {
+    const name = document.getElementById('pName').value.trim();
+    const price = parseFloat(document.getElementById('pPrice').value);
+    const category = document.getElementById('pCategory').value.trim();
+    const stock = parseInt(document.getElementById('pStock').value) || 0;
+    const image = document.getElementById('pImage').value.trim();
+    const description = document.getElementById('pDesc').value.trim();
+    if(!name || isNaN(price)){ showToast('يرجى إدخال الاسم والسعر على الأقل'); return; }
+
+    const payload = { name, price, category, stock, image, description };
+    try {
+      if(editingId){
+        await updateDoc(doc(db, 'products', editingId), payload);
+        showToast('تم تحديث المنتج');
+      } else {
+        await addDoc(collection(db, 'products'), { ...payload, active: true, createdAt: serverTimestamp() });
+        showToast('تم إضافة المنتج');
+      }
+      resetForm();
+    } catch(e){
+      console.error(e);
+      showToast('حدث خطأ أثناء الحفظ');
+    }
+  };
+
+  async function toggleActive(id){
+    const p = allProducts.find(x => x.id === id);
+    if(!p) return;
+    try { await updateDoc(doc(db, 'products', id), { active: p.active === false }); }
+    catch(e){ console.error(e); showToast('حدث خطأ'); }
+  }
+
+  async function deleteProduct(id){
+    if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+    try { await deleteDoc(doc(db, 'products', id)); showToast('تم الحذف'); }
+    catch(e){ console.error(e); showToast('حدث خطأ أثناء الحذف'); }
+  }
+
+  // ---------- ORDERS ----------
+  const statusOptions = ['قيد المراجعة','قيد التجهيز','تم الشحن','تم التسليم','ملغي'];
+
+  function listenOrders(){
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+    unsubOrders = onSnapshot(q, (snap) => {
+      allOrders = [];
+      snap.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+      document.getElementById('statOrders').textContent = allOrders.length;
+      const revenue = allOrders.filter(o => o.status !== 'ملغي').reduce((s,o)=> s + (o.total||0), 0);
+      document.getElementById('statRevenue').textContent = revenue;
+      renderOrders();
+    }, (err) => {
+      console.error(err);
+      showToast('تعذر تحميل الطلبات');
+    });
+  }
+
+  function renderOrders(){
+    const list = document.getElementById('ordersList');
+    if(allOrders.length === 0){
+      list.innerHTML = `<p class="text-center py-16" style="color:var(--muted)">لا توجد طلبات بعد</p>`;
+      return;
+    }
+    list.innerHTML = '';
+    allOrders.forEach(o => {
+      const div = document.createElement('div');
+      div.className = 'card rounded-xl p-5 fade-in';
+      const date = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString('ar-EG') : '';
+      div.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <span class="font-display font-bold">${o.customerName || o.userEmail || 'عميل'}</span>
+            <span class="text-xs mr-2" style="color:var(--muted)">${o.phone || ''}</span>
+          </div>
+          <span class="text-xs" style="color:var(--muted)">${date}</span>
+        </div>
+        <p class="text-sm mb-2" style="color:var(--muted)">${o.address || ''}</p>
+        <p class="text-sm mb-3">${(o.items||[]).map(i=> i.name+' ×'+i.qty).join('، ')}</p>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="font-bold" style="color:var(--gold-soft)">الإجمالي: ${o.total} ج.م</span>
+          <select data-id="${o.id}" class="statusSelect card-2 rounded-lg px-3 py-2 text-sm outline-none">
+            ${statusOptions.map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>`;
+      list.appendChild(div);
+    });
+    document.querySelectorAll('.statusSelect').forEach(sel => {
+      sel.onchange = async () => {
+        try {
+          await updateDoc(doc(db, 'orders', sel.dataset.id), { status: sel.value });
+          showToast('تم تحديث حالة الطلب');
+        } catch(e){ console.error(e); showToast('حدث خطأ'); }
+      };
+    });
+  }
+</script>
+</body>
+</html>

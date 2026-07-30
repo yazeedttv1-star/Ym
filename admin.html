@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex">
+
+    <aside class="w-64 bg-slate-900 text-white min-h-screen p-4 hidden md:block">
+        <h2 class="text-xl font-bold mb-8 text-indigo-400">لوحة الإدارة YM</h2>
+        <nav class="space-y-4">
+            <a href="#" class="block py-2 px-4 bg-indigo-600 rounded">نظرة عامة والتقارير</a>
+            <a href="#" class="block py-2 px-4 hover:bg-slate-800 rounded">إدارة المنتجات</a>
+            <a href="#" class="block py-2 px-4 hover:bg-slate-800 rounded">المخزون والطلبات</a>
+            <a href="index.html" class="block py-2 px-4 text-red-400 hover:bg-slate-800 rounded mt-8">العودة للمتجر</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold mb-6">إحصائيات المتجر والتقارير</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-5 rounded-lg shadow-sm border-r-4 border-indigo-500">
+                <p class="text-sm text-gray-500">إجمالي المبيعات</p>
+                <h3 class="text-2xl font-bold mt-1">$12,450</h3>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm border-r-4 border-green-500">
+                <p class="text-sm text-gray-500">عدد الطلبات المكتملة</p>
+                <h3 class="text-2xl font-bold mt-1">128</h3>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm border-r-4 border-yellow-500">
+                <p class="text-sm text-gray-500">تنبيهات المخزون (منتجات أوشكت على النفاد)</p>
+                <h3 class="text-2xl font-bold mt-1">3 منتجات</h3>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+            <h2 class="text-lg font-bold mb-4 border-b pb-2">إضافة منتج جديد (Firebase)</h2>
+            <form id="addProductForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">اسم المنتج</label>
+                    <input type="text" id="title" required class="w-full border p-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">السعر ($)</label>
+                    <input type="number" id="price" required class="w-full border p-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">التصنيف</label>
+                    <select id="category" class="w-full border p-2 rounded">
+                        <option value="electronics">إلكترونيات</option>
+                        <option value="clothes">ملابس</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">رابط صورة المنتج (URL)</label>
+                    <input type="url" id="imageUrl" placeholder="https://..." class="w-full border p-2 rounded">
+                </div>
+                <div class="col-span-full">
+                    <label class="block text-sm font-medium mb-1">وصف المنتج</label>
+                    <textarea id="description" class="w-full border p-2 rounded h-20"></textarea>
+                </div>
+                <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 col-span-full">حفظ المنتج وإضافته للمتجر</button>
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+            authDomain: "ym-pro-max.firebaseapp.com",
+            projectId: "ym-pro-max",
+            storageBucket: "ym-pro-max.firebasestorage.app",
+            messagingSenderId: "174657071953",
+            appId: "1:174657071953:web:5e831fc337df46dbd18170"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // إضافة منتج جديد لـ Firebase
+        document.getElementById("addProductForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById("title").value;
+            const price = parseFloat(document.getElementById("price").value);
+            const category = document.getElementById("category").value;
+            const imageUrl = document.getElementById("imageUrl").value;
+            const description = document.getElementById("description").value;
+
+            try {
+                await addDoc(collection(db, "products"), {
+                    title,
+                    price,
+                    category,
+                    imageUrl,
+                    description,
+                    createdAt: new Date()
+                });
+                alert("تمت إضافة المنتج بنجاح!");
+                document.getElementById("addProductForm").reset();
+            } catch (error) {
+                console.error("خطأ في الإضافة:", error);
+                alert("حدث خطأ أثناء حفظ المنتج.");
+            }
+        });
+    </script>
+</body>
+</html>

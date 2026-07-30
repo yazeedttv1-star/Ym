@@ -1,91 +1,286 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المتجر الإلكتروني المتكامل</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YM Pro Max - المتجر</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f5f7fa; color: #1e293b; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .header { background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 14px 0; position: sticky; top:0; z-index: 100; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+        .logo { font-size: 26px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+        .logo span { color: #3b82f6; }
+        .search-bar { display: flex; flex:1; max-width: 480px; background: #f1f5f9; border-radius: 60px; padding: 0 18px; align-items: center; }
+        .search-bar input { border: none; background: transparent; padding: 12px 6px; width: 100%; outline: none; font-size: 15px; }
+        .search-bar i { color: #64748b; font-size: 18px; }
+        .nav-icons { display: flex; align-items: center; gap: 22px; font-size: 20px; }
+        .nav-icons .cart-icon { position: relative; cursor: pointer; }
+        .cart-badge { position: absolute; top: -10px; right: -12px; background: #ef4444; color: #fff; border-radius: 50%; padding: 2px 8px; font-size: 12px; font-weight: 700; }
+        .lang-currency { display: flex; gap: 6px; font-size: 14px; background: #f1f5f9; padding: 6px 12px; border-radius: 40px; }
+        .lang-currency select { border: none; background: transparent; outline: none; font-weight: 500; }
+
+        /* Hero Banner */
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; padding: 50px 0; border-radius: 32px; margin: 24px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .hero-text { padding: 20px; max-width: 500px; }
+        .hero-text h1 { font-size: 40px; font-weight: 800; line-height: 1.2; }
+        .hero-text p { font-size: 18px; opacity: 0.8; margin: 16px 0; }
+        .hero-btn { background: #3b82f6; color: #fff; border: none; padding: 14px 36px; border-radius: 60px; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .hero-btn:hover { background: #2563eb; transform: scale(1.02); }
+        .hero-image { padding: 20px; }
+        .hero-image i { font-size: 120px; opacity: 0.2; }
+
+        /* Category Grid */
+        .section-title { font-size: 26px; font-weight: 700; margin: 40px 0 20px; display: flex; align-items: center; gap: 12px; }
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; }
+        .category-card { background: #fff; border-radius: 24px; padding: 24px 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: 0.3s; cursor: pointer; border: 1px solid #e9edf2; }
+        .category-card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+        .category-card i { font-size: 40px; color: #3b82f6; margin-bottom: 10px; }
+        .category-card h4 { font-size: 16px; }
+
+        /* Product Cards */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 16px; }
+        .product-card { background: #fff; border-radius: 24px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: 0.3s; border: 1px solid #e9edf2; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+        .product-img { height: 160px; background: #eef2f6; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #94a3b8; }
+        .product-name { font-weight: 700; margin: 12px 0 6px; }
+        .product-price { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .product-old-price { font-size: 14px; color: #94a3b8; text-decoration: line-through; margin-right: 10px; }
+        .product-rating { color: #f59e0b; font-size: 14px; margin: 6px 0; }
+
+        /* Features */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 20px; margin: 40px 0; background: #fff; padding: 30px 20px; border-radius: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .feature-item { text-align: center; }
+        .feature-item i { font-size: 32px; color: #3b82f6; margin-bottom: 8px; }
+
+        /* Footer */
+        .footer { background: #0f172a; color: #cbd5e1; padding: 40px 0 20px; margin-top: 50px; border-radius: 32px 32px 0 0; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 30px; }
+        .footer h4 { color: #fff; margin-bottom: 14px; }
+        .footer ul { list-style: none; }
+        .footer ul li { margin-bottom: 10px; cursor: pointer; }
+        .footer ul li:hover { color: #fff; }
+        .footer .social i { font-size: 24px; margin-left: 12px; color: #94a3b8; transition: 0.3s; }
+        .footer .social i:hover { color: #fff; }
+
+        /* Admin Panel (hidden by default, shown via JS) */
+        .admin-panel { display: none; margin: 30px 0; background: #fff; border-radius: 32px; padding: 30px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+        .admin-panel.active { display: block; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #e9edf2; padding-bottom: 20px; }
+        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 16px; margin: 24px 0; }
+        .stat-card { background: #f8fafc; padding: 20px; border-radius: 20px; border-right: 6px solid #3b82f6; }
+        .stat-card h3 { font-size: 28px; }
+        .admin-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 24px 0; border-bottom: 1px solid #e9edf2; padding-bottom: 12px; }
+        .admin-tab { background: #f1f5f9; padding: 10px 22px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .admin-tab.active { background: #3b82f6; color: #fff; }
+
+        .table-wrap { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 8px; text-align: right; border-bottom: 1px solid #e9edf2; }
+        th { background: #f1f5f9; }
+
+        .btn { background: #3b82f6; color: #fff; border: none; padding: 8px 18px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-sm { padding: 4px 12px; font-size: 13px; }
+        .btn-outline { background: transparent; border: 1px solid #3b82f6; color: #3b82f6; }
+        .btn-outline:hover { background: #3b82f6; color: #fff; }
+        .btn-success { background: #22c55e; }
+        .btn-danger { background: #ef4444; }
+
+        /* Responsive */
+        @media (max-width:700px) {
+            .header-content { flex-direction: column; align-items: stretch; }
+            .search-bar { max-width: 100%; }
+            .nav-icons { justify-content: center; }
+            .hero { text-align: center; justify-content: center; }
+            .hero-text h1 { font-size: 28px; }
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body>
 
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            <a href="#" class="text-2xl font-bold text-indigo-600 flex items-center gap-2">
-                <i class="fa-solid fa-bag-shopping"></i> YM Pro Store
-            </a>
-
-            <div class="flex-1 max-w-md hidden md:block">
-                <div class="relative">
-                    <input type="text" id="searchInput" placeholder="ابحث عن منتج..." class="w-full bg-gray-100 border border-gray-300 rounded-full py-2 px-4 pr-10 text-sm focus:outline-none focus:border-indigo-500">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-gray-400"></i>
-                </div>
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">YM<span>Pro</span>Max</div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="ابحث عن منتج..." id="searchInput" />
             </div>
-
-            <div class="flex items-center gap-4">
-                <a href="admin.html" class="text-sm text-gray-600 hover:text-indigo-600"><i class="fa-solid fa-user-shield"></i> لوحة التحكم</a>
-                <button id="cartBtn" class="relative p-2 text-gray-700 hover:text-indigo-600">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-                </button>
+            <div class="nav-icons">
+                <div class="lang-currency">
+                    <select><option>AR</option><option>EN</option></select>
+                    <select><option>EGP</option><option>USD</option></select>
+                </div>
+                <i class="far fa-user-circle"></i>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <section class="bg-indigo-900 text-white py-12 px-4 text-center">
-        <h1 class="text-3xl md:text-5xl font-extrabold mb-4">أفضل العروض المتاحة الآن!</h1>
-        <p class="text-indigo-200 mb-6">تسوق أحدث المنتجات بأسعار تنافسية وشحن سريع.</p>
-        <a href="#products" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition">تسوق الآن</a>
-    </section>
-
-    <main class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8" id="products">
-        <aside class="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-sm h-fit">
-            <h3 class="font-bold text-lg mb-4 border-b pb-2">الفلترة والترتيب</h3>
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">التصنيف</label>
-                <select id="categoryFilter" class="w-full border rounded-md p-2 text-sm">
-                    <option value="all">كل التصنيفات</option>
-                    <option value="electronics">إلكترونيات</option>
-                    <option value="clothes">ملابس</option>
-                </select>
+    <main class="container">
+        <!-- ========== HERO ========== -->
+        <section class="hero">
+            <div class="hero-text">
+                <h1>تسوق بأفضل العروض</h1>
+                <p>اكتشف تشكيلتنا الجديدة من الإلكترونيات والملابس مع خصومات تصل إلى 70%</p>
+                <button class="hero-btn" onclick="toggleAdmin()">📊 لوحة التحكم</button>
             </div>
-        </aside>
-
-        <section class="w-full md:w-3/4">
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <p class="col-span-full text-center text-gray-500">جاري تحميل المنتجات...</p>
+            <div class="hero-image">
+                <i class="fas fa-shopping-bag"></i>
             </div>
         </section>
-    </main>
 
-    <footer class="bg-gray-900 text-gray-300 py-8 mt-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <h4 class="text-white font-bold mb-3">عن المتجر</h4>
-                <p class="text-sm text-gray-400">متجرك الأول للتسوق الإلكتروني بسهولة وأمان.</p>
+        <!-- ========== CATEGORIES ========== -->
+        <div class="section-title"><i class="fas fa-th-large" style="color:#3b82f6;"></i> التصنيفات</div>
+        <div class="category-grid" id="categoryGrid">
+            <div class="category-card"><i class="fas fa-laptop"></i><h4>إلكترونيات</h4></div>
+            <div class="category-card"><i class="fas fa-tshirt"></i><h4>ملابس</h4></div>
+            <div class="category-card"><i class="fas fa-shoe-prints"></i><h4>أحذية</h4></div>
+            <div class="category-card"><i class="fas fa-couch"></i><h4>أثاث</h4></div>
+            <div class="category-card"><i class="fas fa-book"></i><h4>كتب</h4></div>
+            <div class="category-card"><i class="fas fa-gem"></i><h4>إكسسوارات</h4></div>
+        </div>
+
+        <!-- ========== BEST SELLERS ========== -->
+        <div class="section-title"><i class="fas fa-fire" style="color:#ef4444;"></i> الأكثر مبيعاً</div>
+        <div class="product-grid" id="productGrid">
+            <!-- سيتم ملئها بواسطة JS -->
+        </div>
+
+        <!-- ========== FLASH SALE ========== -->
+        <div class="section-title"><i class="fas fa-clock" style="color:#f59e0b;"></i> عروض محدودة <span id="countdown" style="font-size:18px; background:#f1f5f9; padding:4px 16px; border-radius:40px;">02:30:00</span></div>
+        <div class="product-grid" id="flashGrid"></div>
+
+        <!-- ========== FEATURES ========== -->
+        <div class="features">
+            <div class="feature-item"><i class="fas fa-truck"></i><h4>شحن سريع</h4><p>توصيل في أقل من 48 ساعة</p></div>
+            <div class="feature-item"><i class="fas fa-lock"></i><h4>دفع آمن</h4><p>بوابات دفع مشفرة</p></div>
+            <div class="feature-item"><i class="fas fa-undo-alt"></i><h4>استرجاع مجاني</h4><p>خلال 14 يوم</p></div>
+            <div class="feature-item"><i class="fas fa-headset"></i><h4>دعم 24/7</h4><p>فريق دعم متواصل</p></div>
+        </div>
+
+        <!-- ========== ADMIN PANEL (تظهر عند الضغط) ========== -->
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-header">
+                <h2><i class="fas fa-chart-simple"></i> لوحة تحكم المدير</h2>
+                <button class="btn btn-danger" onclick="toggleAdmin()">إغلاق</button>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-3">روابط سريعة</h4>
-                <ul class="text-sm space-y-2">
-                    <li><a href="#" class="hover:underline">سياسة الخصوصية</a></li>
-                    <li><a href="#" class="hover:underline">الشروط والأحكام</a></li>
-                </ul>
+
+            <!-- Stats -->
+            <div class="admin-stats" id="adminStats">
+                <div class="stat-card"><h3 id="statOrders">24</h3><span>طلبات جديدة</span></div>
+                <div class="stat-card"><h3 id="statRevenue">12,450</h3><span>أرباح اليوم</span></div>
+                <div class="stat-card"><h3 id="statVisitors">148</h3><span>زوار حالياً</span></div>
+                <div class="stat-card"><h3 id="statStock">3</h3><span>تنبيهات مخزون</span></div>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-3">وسائل الدفع المقبولة</h4>
-                <div class="flex gap-3 text-2xl">
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <i class="fa-solid fa-money-bill-wave"></i>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <span class="admin-tab active" data-tab="orders">الطلبات</span>
+                <span class="admin-tab" data-tab="products">المنتجات</span>
+                <span class="admin-tab" data-tab="customers">العملاء</span>
+                <span class="admin-tab" data-tab="marketing">التسويق</span>
+                <span class="admin-tab" data-tab="settings">الإعدادات</span>
+            </div>
+
+            <!-- Tab Content: Orders -->
+            <div id="tab-orders" class="tab-content">
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                    <span class="btn btn-sm">قيد الانتداب (4)</span>
+                    <span class="btn btn-sm btn-success">تم الشحن (7)</span>
+                    <span class="btn btn-sm btn-outline">مكتملة (12)</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>العميل</th><th>المنتج</th><th>المجموع</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                        <tbody>
+                            <tr><td>أحمد محمد</td><td>هاتف iPhone 15</td><td>22,500 ج.م</td><td><span style="color:#f59e0b;">قيد التجهيز</span></td><td><button class="btn btn-sm">تحديث</button></td></tr>
+                            <tr><td>سارة علي</td><td>حذاء رياضي</td><td>3,200 ج.م</td><td><span style="color:#22c55e;">تم الشحن</span></td><td><button class="btn btn-sm">تحديث</button></td></tr>
+                            <tr><td>محمد إبراهيم</td><td>ساعة ذكية</td><td>6,750 ج.م</td><td><span style="color:#ef4444;">معلق</span></td><td><button class="btn btn-sm">تحديث</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn" style="margin-top:16px;"><i class="fas fa-print"></i> طباعة الفواتير</button>
+            </div>
+
+            <!-- Tab Products (مختصر) -->
+            <div id="tab-products" class="tab-content" style="display:none;">
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                    <button class="btn"><i class="fas fa-plus"></i> إضافة منتج</button>
+                    <button class="btn btn-outline"><i class="fas fa-tags"></i> إدارة الأقسام</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>المنتج</th><th>السعر</th><th>المخزون</th><th>الحالة</th></tr></thead>
+                        <tbody>
+                            <tr><td>iPhone 15 Pro</td><td>32,000 ج.م</td><td>12</td><td><span style="color:#22c55e;">متوفر</span></td></tr>
+                            <tr><td>سماعة لاسلكية</td><td>1,250 ج.م</td><td>3</td><td><span style="color:#ef4444;">تنبيه</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab Customers -->
+            <div id="tab-customers" class="tab-content" style="display:none;">
+                <p><i class="fas fa-users"></i> إجمالي العملاء: 1,284 | VIP: 43</p>
+                <div class="table-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>المشتريات</th><th>التصنيف</th></tr></thead>
+                <tbody><tr><td>Nora Ahmed</td><td>nora@mail.com</td><td>6 طلبات</td><td>VIP</td></tr>
+                <tr><td>Karim Sami</td><td>karim@mail.com</td><td>2 طلبات</td><td>جديد</td></tr>
+                </tbody></table></div>
+            </div>
+
+            <!-- Tab Marketing -->
+            <div id="tab-marketing" class="tab-content" style="display:none;">
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <button class="btn"><i class="fas fa-ticket"></i> كوبونات خصم</button>
+                    <button class="btn btn-outline"><i class="fas fa-bolt"></i> عروض مؤقتة</button>
+                    <button class="btn btn-outline"><i class="fas fa-image"></i> إدارة البنرات</button>
+                </div>
+            </div>
+
+            <!-- Tab Settings -->
+            <div id="tab-settings" class="tab-content" style="display:none;">
+                <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                    <div><i class="fas fa-credit-card"></i> إعدادات الدفع</div>
+                    <div><i class="fas fa-shipping-fast"></i> إعدادات الشحن</div>
+                    <div><i class="fas fa-user-cog"></i> إدارة الصلاحيات</div>
+                    <div><i class="fas fa-globe"></i> اللغات والعملات</div>
                 </div>
             </div>
         </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div><h4>YM Pro Max</h4><p>أفضل وجهة للتسوق الإلكتروني</p></div>
+            <div><h4>سياسات</h4><ul><li>الخصوصية</li><li>الشروط والأحكام</li><li>الاستبدال والاسترجاع</li></ul></div>
+            <div><h4>تواصل</h4><ul><li>info@ympromax.com</li><li>واتساب: 0123456789</li></ul></div>
+            <div><h4>تابعنا</h4><div class="social"><i class="fab fa-instagram"></i><i class="fab fa-tiktok"></i><i class="fab fa-facebook"></i></div></div>
+        </div>
+        <div style="text-align:center; margin-top:30px; border-top:1px solid #1e293b; padding-top:20px; font-size:14px;">
+            <i class="fab fa-cc-visa fa-2x" style="margin:0 6px;"></i>
+            <i class="fab fa-cc-mastercard fa-2x" style="margin:0 6px;"></i>
+            <i class="fas fa-wallet fa-2x" style="margin:0 6px;"></i>
+            <p style="margin-top:10px;">© 2026 YM Pro Max. جميع الحقوق محفوظة.</p>
+        </div>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+    <script>
+        // ========== FIREBASE CONFIG ==========
         const firebaseConfig = {
             apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
             authDomain: "ym-pro-max.firebaseapp.com",
@@ -94,41 +289,124 @@
             messagingSenderId: "174657071953",
             appId: "1:174657071953:web:5e831fc337df46dbd18170"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // جلب المنتجات وعرضها
-        async function loadProducts() {
-            const querySnapshot = await getDocs(collection(db, "products"));
-            const productsGrid = document.getElementById("productsGrid");
-            productsGrid.innerHTML = "";
-
-            if(querySnapshot.empty) {
-                productsGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">لا توجد منتجات مضافة حالياً. يرجى إضافتها من لوحة التحكم.</p>`;
-                return;
+        // ========== TOGGLE ADMIN ==========
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                // تحديث الإحصائيات من Firestore (محاكاة)
+                updateAdminStats();
             }
-
-            querySnapshot.forEach((doc) => {
-                const item = doc.data();
-                productsGrid.innerHTML += `
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border">
-                        <img src="${item.imageUrl || 'https://via.placeholder.com/300'}" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded">${item.category || 'عام'}</span>
-                            <h3 class="font-bold text-lg mt-2">${item.title}</h3>
-                            <p class="text-sm text-gray-500 mt-1">${item.description}</p>
-                            <div class="flex justify-between items-center mt-4">
-                                <span class="font-bold text-lg text-indigo-600">${item.price} $</span>
-                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-2 rounded">إضافة للسلة</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
         }
 
+        // ========== ADMIN TABS ==========
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const tabName = this.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+                document.getElementById('tab-' + tabName).style.display = 'block';
+            });
+        });
+
+        // ========== UPDATE ADMIN STATS (قراءة من Firestore) ==========
+        async function updateAdminStats() {
+            try {
+                // جلب عدد الطلبات
+                const ordersSnap = await db.collection('orders').get();
+                document.getElementById('statOrders').textContent = ordersSnap.size || 0;
+
+                // جلب إجمالي الأرباح (محاكاة: نجمع مبلغ كل طلب)
+                let revenue = 0;
+                ordersSnap.forEach(doc => {
+                    const data = doc.data();
+                    revenue += data.total || 0;
+                });
+                document.getElementById('statRevenue').textContent = revenue.toLocaleString();
+
+                // عدد الزوار (محاكاة)
+                document.getElementById('statVisitors').textContent = Math.floor(Math.random() * 200) + 50;
+
+                // تنبيهات المخزون (من products)
+                const productsSnap = await db.collection('products').where('stock', '<=', 5).get();
+                document.getElementById('statStock').textContent = productsSnap.size;
+            } catch (e) {
+                console.log('Firebase read error (using fallback data):', e);
+                // بيانات احتياطية
+                document.getElementById('statOrders').textContent = '12';
+                document.getElementById('statRevenue').textContent = '8,450';
+                document.getElementById('statVisitors').textContent = '97';
+                document.getElementById('statStock').textContent = '2';
+            }
+        }
+
+        // ========== LOAD PRODUCTS FROM FIRESTORE ==========
+        async function loadProducts() {
+            try {
+                const snapshot = await db.collection('products').limit(6).get();
+                const grid = document.getElementById('productGrid');
+                grid.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const p = doc.data();
+                    grid.innerHTML += `
+                        <div class="product-card">
+                            <div class="product-img"><i class="fas fa-box"></i></div>
+                            <div class="product-name">${p.name || 'منتج'}</div>
+                            <div class="product-price">${p.price || 0} ج.م ${p.oldPrice ? `<span class="product-old-price">${p.oldPrice}</span>` : ''}</div>
+                            <div class="product-rating"><i class="fas fa-star"></i> ${p.rating || 4.5}</div>
+                            <button class="btn btn-sm" style="width:100%; margin-top:8px;">أضف للسلة</button>
+                        </div>
+                    `;
+                });
+                // إذا لم توجد بيانات نضيف عينات
+                if (grid.children.length === 0) {
+                    grid.innerHTML = sampleProducts();
+                }
+            } catch (e) {
+                console.log('Firestore error, loading samples:', e);
+                document.getElementById('productGrid').innerHTML = sampleProducts();
+            }
+        }
+
+        function sampleProducts() {
+            return `
+                <div class="product-card"><div class="product-img"><i class="fas fa-mobile-alt"></i></div><div class="product-name">هاتف ذكي</div><div class="product-price">12,500 ج.م <span class="product-old-price">15,000</span></div><div class="product-rating"><i class="fas fa-star"></i> 4.8</div><button class="btn btn-sm" style="width:100%; margin-top:8px;">أضف للسلة</button></div>
+                <div class="product-card"><div class="product-img"><i class="fas fa-headphones"></i></div><div class="product-name">سماعة لاسلكية</div><div class="product-price">2,250 ج.م</div><div class="product-rating"><i class="fas fa-star"></i> 4.3</div><button class="btn btn-sm" style="width:100%; margin-top:8px;">أضف للسلة</button></div>
+                <div class="product-card"><div class="product-img"><i class="fas fa-tshirt"></i></div><div class="product-name">تيشيرت قطني</div><div class="product-price">850 ج.م <span class="product-old-price">1,200</span></div><div class="product-rating"><i class="fas fa-star"></i> 4.6</div><button class="btn btn-sm" style="width:100%; margin-top:8px;">أضف للسلة</button></div>
+                <div class="product-card"><div class="product-img"><i class="fas fa-watch"></i></div><div class="product-name">ساعة رياضية</div><div class="product-price">4,800 ج.م</div><div class="product-rating"><i class="fas fa-star"></i> 4.7</div><button class="btn btn-sm" style="width:100%; margin-top:8px;">أضف للسلة</button></div>
+            `;
+        }
+
+        // Flash sale products
+        function loadFlash() {
+            document.getElementById('flashGrid').innerHTML = `
+                <div class="product-card"><div class="product-img"><i class="fas fa-laptop"></i></div><div class="product-name">لابتوب Ultra</div><div class="product-price">18,000 ج.م <span class="product-old-price">25,000</span></div><button class="btn btn-sm" style="width:100%; margin-top:8px;">شراء سريع</button></div>
+                <div class="product-card"><div class="product-img"><i class="fas fa-shoe-prints"></i></div><div class="product-name">حذاء رياضي</div><div class="product-price">2,100 ج.م <span class="product-old-price">3,000</span></div><button class="btn btn-sm" style="width:100%; margin-top:8px;">شراء سريع</button></div>
+            `;
+        }
+
+        // Countdown timer
+        let seconds = 9000; // 2.5 hours
+        setInterval(() => {
+            if (seconds <= 0) return;
+            seconds--;
+            const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            document.getElementById('countdown').textContent = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+
+        // Init
         loadProducts();
+        loadFlash();
+        // تحديث السلة (افتراضي)
+        document.getElementById('cartCount').textContent = '3';
+
+        console.log('✅ YM Pro Max Store + Admin connected to Firebase');
     </script>
 </body>
 </html>

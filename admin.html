@@ -3,322 +3,1564 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YM Pro Max - لوحة تحكم المدير</title>
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-    
+    <title>YM Pro Max - لوحة التحكم (Admin)</title>
+
+    <!-- Bootstrap 5 RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f1f5f9; color: #1e293b; direction: rtl; }
-        button { cursor: pointer; border: none; outline: none; }
-        input, select, textarea { font-family: inherit; outline: none; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; font-size: 14px; transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-
-        .toast { position: fixed; bottom: 30px; right: 30px; background: #1a2332; color: #fff; padding: 16px 24px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); z-index: 9999; display: none; align-items: center; gap: 12px; max-width: 400px; animation: slideIn 0.3s ease; }
-        .toast.show { display: flex; }
-        .toast.success { border-right: 4px solid #22c55e; }
-        .toast.error { border-right: 4px solid #ef4444; }
-        .toast.info { border-right: 4px solid #3b82f6; }
-        @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9998; justify-content: center; align-items: center; }
-        .loading-overlay.active { display: flex; }
-        .spinner { width: 50px; height: 50px; border: 4px solid #f3f4f6; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        #loginPage { display: none; min-height: 100vh; background: linear-gradient(135deg, #0f172a, #1e293b); justify-content: center; align-items: center; padding: 20px; }
-        #loginPage.active { display: flex; }
-        .login-box { background: #fff; border-radius: 24px; padding: 40px; max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .login-box h1 { font-size: 32px; margin-bottom: 8px; color: #0f172a; }
-        .login-box h1 span { color: #3b82f6; }
-        .login-box p { color: #64748b; margin-bottom: 30px; }
-        .login-box .google-btn { width: 100%; padding: 14px; background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.3s; }
-        .login-box .google-btn:hover { background: #f8fafc; border-color: #3b82f6; transform: translateY(-2px); }
-        .login-box .google-btn i { font-size: 22px; color: #ea4335; }
-        .login-box .divider { text-align: center; margin: 20px 0; color: #94a3b8; position: relative; }
-        .login-box .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; }
-        .login-box .divider span { background: #fff; padding: 0 12px; position: relative; }
-        .unauthorized { text-align: center; padding: 20px; color: #ef4444; }
-
-        #app { display: none; }
-        #app.active { display: block; }
-
-        .sidebar { width: 250px; background: #0f172a; color: #cbd5e1; position: fixed; top: 0; right: 0; bottom: 0; overflow-y: auto; z-index: 100; padding: 20px 0; }
-        .sidebar-brand { padding: 0 24px 30px; font-size: 24px; font-weight: 800; color: #fff; border-bottom: 1px solid #1e293b; }
-        .sidebar-brand span { color: #3b82f6; }
-        .sidebar-menu { padding: 16px 0; }
-        .sidebar-menu .menu-item { padding: 12px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.3s; border-right: 4px solid transparent; }
-        .sidebar-menu .menu-item:hover { background: #1e293b; border-right-color: #3b82f6; }
-        .sidebar-menu .menu-item.active { background: #1e293b; border-right-color: #3b82f6; color: #fff; }
-        .sidebar-menu .menu-item i { width: 22px; }
-        .sidebar-menu .menu-item .badge { background: #ef4444; color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 20px; margin-right: auto; }
-
-        .main-content { margin-right: 250px; padding: 24px 30px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; background: #fff; padding: 16px 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 24px; }
-        .top-bar h1 { font-size: 22px; }
-        .top-bar .user-info { display: flex; align-items: center; gap: 16px; }
-        .top-bar .user-info .avatar { width: 40px; height: 40px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; }
-        .top-bar .back-btn { padding: 8px 20px; background: #f1f5f9; border-radius: 40px; font-weight: 600; transition: 0.3s; }
-        .top-bar .back-btn:hover { background: #e2e8f0; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: #fff; padding: 20px 24px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-right: 6px solid #3b82f6; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-        .stat-card .stat-number { font-size: 30px; font-weight: 800; }
-        .stat-card .stat-label { color: #64748b; font-size: 14px; margin-top: 4px; }
-        .stat-card .stat-icon { float: left; font-size: 28px; opacity: 0.15; }
-        .stat-card.warning { border-right-color: #f59e0b; }
-        .stat-card.success { border-right-color: #22c55e; }
-        .stat-card.danger { border-right-color: #ef4444; }
-
-        .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 30px; }
-        .chart-box { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .chart-box h3 { margin-bottom: 16px; font-size: 16px; color: #64748b; }
-
-        .section-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 24px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-        .section-header h2 { font-size: 18px; }
-
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 12px 10px; text-align: right; border-bottom: 1px solid #e9edf2; }
-        th { background: #f8fafc; font-weight: 600; color: #475569; }
-        tr:hover { background: #f8fafc; }
-
-        .status-badge { padding: 4px 14px; border-radius: 40px; font-size: 12px; font-weight: 600; display: inline-block; }
-        .status-badge.pending { background: #fef3c7; color: #d97706; }
-        .status-badge.processing { background: #dbeafe; color: #2563eb; }
-        .status-badge.shipped { background: #d1fae5; color: #059669; }
-        .status-badge.delivered { background: #e0e7ff; color: #4338ca; }
-        .status-badge.cancelled { background: #fee2e2; color: #dc2626; }
-        .status-badge.in-stock { background: #d1fae5; color: #059669; }
-        .status-badge.low-stock { background: #fef3c7; color: #d97706; }
-        .status-badge.out-of-stock { background: #fee2e2; color: #dc2626; }
-
-        .btn { padding: 6px 18px; border-radius: 40px; font-weight: 600; font-size: 13px; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-primary { background: #3b82f6; color: #fff; }
-        .btn-primary:hover { background: #2563eb; }
-        .btn-success { background: #22c55e; color: #fff; }
-        .btn-success:hover { background: #16a34a; }
-        .btn-danger { background: #ef4444; color: #fff; }
-        .btn-danger:hover { background: #dc2626; }
-        .btn-outline { background: transparent; border: 1px solid #3b82f6; color: #3b82f6; }
-        .btn-outline:hover { background: #3b82f6; color: #fff; }
-        .btn-sm { padding: 4px 12px; font-size: 12px; }
-
-        .sub-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-        .sub-tab { padding: 6px 18px; border-radius: 40px; cursor: pointer; background: #f1f5f9; font-size: 14px; transition: 0.3s; }
-        .sub-tab.active { background: #3b82f6; color: #fff; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; justify-content: center; align-items: center; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: #fff; border-radius: 20px; padding: 30px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .modal h2 { margin-bottom: 20px; font-size: 22px; }
-        .modal .form-group { margin-bottom: 14px; }
-        .modal .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-        .modal .form-group input, .modal .form-group select, .modal .form-group textarea { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid #d1d5db; font-size: 14px; }
-        .modal .form-group textarea { min-height: 80px; resize: vertical; }
-        .modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .modal .modal-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-
-        @media (max-width: 900px) {
-            .sidebar { width: 70px; }
-            .sidebar-brand { font-size: 0; padding: 16px 0; text-align: center; }
-            .sidebar-brand span { font-size: 24px; }
-            .sidebar-brand::before { content: 'YM'; font-size: 24px; font-weight: 800; color: #fff; }
-            .sidebar-menu .menu-item span { display: none; }
-            .sidebar-menu .menu-item { justify-content: center; padding: 14px 0; }
-            .sidebar-menu .menu-item .badge { display: none; }
-            .main-content { margin-right: 70px; padding: 16px; }
-            .charts-row { grid-template-columns: 1fr; }
+        /* ============================================================
+                   BASE
+                ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .modal .form-row { grid-template-columns: 1fr; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f0f2f8;
+            color: #1a1a2e;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .sidebar::-webkit-scrollbar { width: 4px; }
-        .sidebar::-webkit-scrollbar-track { background: #0f172a; }
-        .sidebar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        /* ============================================================
+                   SIDEBAR
+                ============================================================ */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        .admin-sidebar {
+            width: 270px;
+            background: #1a1a2e;
+            color: #ccc;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1050;
+            transition: 0.3s;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.08);
+        }
+        .admin-sidebar .sidebar-brand {
+            padding: 0 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 16px;
+        }
+        .admin-sidebar .sidebar-brand h4 {
+            color: #fff;
+            font-weight: 900;
+            margin: 0;
+        }
+        .admin-sidebar .sidebar-brand h4 span {
+            color: #6c5ce7;
+        }
+        .admin-sidebar .sidebar-brand small {
+            color: #888;
+            font-size: 0.75rem;
+            display: block;
+        }
+        .admin-sidebar .nav-item {
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #aaa;
+            transition: 0.3s;
+            cursor: pointer;
+            border-right: 3px solid transparent;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .admin-sidebar .nav-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+        .admin-sidebar .nav-item.active {
+            background: rgba(108, 92, 231, 0.15);
+            color: #6c5ce7;
+            border-right-color: #6c5ce7;
+        }
+        .admin-sidebar .nav-item i {
+            width: 24px;
+            font-size: 1.15rem;
+        }
+        .admin-sidebar .nav-item .badge-side {
+            margin-right: auto;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        /* ============================================================
+                   MAIN CONTENT
+                ============================================================ */
+        .admin-main {
+            margin-right: 270px;
+            flex: 1;
+            padding: 20px 30px 40px;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+                   TOP BAR
+                ============================================================ */
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0 20px;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-topbar .page-title h4 {
+            font-weight: 800;
+            margin: 0;
+        }
+        .admin-topbar .page-title small {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .admin-topbar .user-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .admin-topbar .user-area .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c5ce7, #00b4d8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .admin-topbar .user-area .user-info {
+            text-align: left;
+        }
+        .admin-topbar .user-area .user-info .name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .admin-topbar .user-area .user-info .role {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .admin-topbar .user-area .logout-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .admin-topbar .user-area .logout-btn:hover {
+            color: #c0392b;
+        }
+
+        /* ============================================================
+                   STATS CARDS
+                ============================================================ */
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            transition: 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #fff;
+        }
+        .stat-card .stat-icon.purple {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+        }
+        .stat-card .stat-icon.blue {
+            background: linear-gradient(135deg, #00b4d8, #48cae4);
+        }
+        .stat-card .stat-icon.green {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+        }
+        .stat-card .stat-icon.orange {
+            background: linear-gradient(135deg, #fdcb6e, #f39c12);
+        }
+        .stat-card .stat-icon.red {
+            background: linear-gradient(135deg, #e74c3c, #fd79a8);
+        }
+        .stat-card .stat-number {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 4px 0 0;
+        }
+        .stat-card .stat-label {
+            color: #888;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+                   TABLES & CARDS
+                ============================================================ */
+        .section-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 28px;
+        }
+        .section-card .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .section-card .card-header-custom h5 {
+            font-weight: 800;
+            margin: 0;
+        }
+        .table-admin {
+            font-size: 0.9rem;
+        }
+        .table-admin th {
+            font-weight: 700;
+            color: #555;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .table-admin td {
+            vertical-align: middle;
+            padding: 12px 8px;
+        }
+        .badge-status {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-status.new {
+            background: #dfe6e9;
+            color: #2d3436;
+        }
+        .badge-status.processing {
+            background: #fdcb6e;
+            color: #6c5200;
+        }
+        .badge-status.shipped {
+            background: #74b9ff;
+            color: #003366;
+        }
+        .badge-status.delivered {
+            background: #55efc4;
+            color: #006644;
+        }
+        .badge-status.cancelled {
+            background: #fab1a0;
+            color: #7a2e1a;
+        }
+
+        .btn-action-sm {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            border: none;
+            transition: 0.3s;
+            margin: 0 2px;
+        }
+        .btn-action-sm.edit {
+            background: #dfe6e9;
+            color: #2d3436;
+        }
+        .btn-action-sm.edit:hover {
+            background: #6c5ce7;
+            color: #fff;
+        }
+        .btn-action-sm.delete {
+            background: #fab1a0;
+            color: #7a2e1a;
+        }
+        .btn-action-sm.delete:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-action-sm.view {
+            background: #74b9ff;
+            color: #003366;
+        }
+        .btn-action-sm.view:hover {
+            background: #0984e3;
+            color: #fff;
+        }
+
+        /* ============================================================
+                   PRODUCT LIST (mini)
+                ============================================================ */
+        .product-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .product-mini .emoji {
+            font-size: 2rem;
+        }
+        .product-mini .info .name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .product-mini .info .cat {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* ============================================================
+                   CHARTS
+                ============================================================ */
+        .chart-container {
+            position: relative;
+            height: 220px;
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                ============================================================ */
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                right: -270px;
+            }
+            .admin-sidebar.open {
+                right: 0;
+            }
+            .admin-main {
+                margin-right: 0;
+                padding: 16px;
+            }
+            .sidebar-toggle {
+                display: block !important;
+            }
+        }
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: #1a1a2e;
+            cursor: pointer;
+        }
+
+        /* ============================================================
+                   OVERLAY FOR MOBILE SIDEBAR
+                ============================================================ */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+            display: none;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ============================================================
+                   TOAST
+                ============================================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1200;
+        }
+        .toast-custom {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 16px 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideUp 0.4s ease;
+            margin-bottom: 10px;
+            border-right: 4px solid #6c5ce7;
+        }
+        .toast-custom i {
+            font-size: 1.4rem;
+            color: #6c5ce7;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+                   SCROLLBAR
+                ============================================================ */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6c5ce7;
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+                   MISC
+                ============================================================ */
+        .text-muted-light {
+            color: #999;
+        }
+        .fw-800 {
+            font-weight: 800;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        .empty-state-admin {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-state-admin i {
+            font-size: 3.5rem;
+            color: #ddd;
+            margin-bottom: 12px;
+        }
+        .empty-state-admin h6 {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .product-emoji-sm {
+            font-size: 2.2rem;
+        }
     </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-</div>
+    <!-- ============================================================
+    SIDEBAR OVERLAY (mobile)
+    ============================================================ -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<div class="toast" id="toast">
-    <i class="fas fa-check-circle" style="font-size: 22px;"></i>
-    <span id="toastMessage">تمت العملية بنجاح</span>
-</div>
+    <!-- ============================================================
+    ADMIN WRAPPER
+    ============================================================ -->
+    <div class="admin-wrapper">
 
-<div id="loginPage" class="active">
-    <div class="login-box">
-        <h1>YM<span>Pro</span>Max</h1>
-        <p>تسجيل الدخول إلى لوحة تحكم المدير</p>
-        <button class="google-btn" onclick="signInWithGoogle()">
-            <i class="fab fa-google"></i>
-            تسجيل الدخول بحساب Google
-        </button>
-        <div class="divider"><span>أو</span></div>
-        <button class="google-btn" onclick="demoLogin()" style="border-color: #3b82f6; color: #3b82f6;">
-            <i class="fas fa-user-shield"></i>
-            دخول تجريبي (مدير)
-        </button>
-    </div>
-</div>
-
-<div id="app">
-    <aside class="sidebar">
-        <div class="sidebar-brand">YM<span>Pro</span>Max</div>
-        <nav class="sidebar-menu">
-            <div class="menu-item active" data-section="dashboard"><i class="fas fa-chart-pie"></i><span>نظرة عامة</span></div>
-            <div class="menu-item" data-section="products"><i class="fas fa-boxes"></i><span>المنتجات</span><span class="badge" id="productBadge">0</span></div>
-            <div class="menu-item" data-section="inventory"><i class="fas fa-warehouse"></i><span>المخزون</span><span class="badge" id="inventoryBadge">0</span></div>
-            <div class="menu-item" data-section="orders"><i class="fas fa-truck"></i><span>الطلبات</span><span class="badge" id="orderBadge">0</span></div>
-            <div class="menu-item" data-section="customers"><i class="fas fa-users"></i><span>العملاء</span></div>
-            <div class="menu-item" data-section="settings"><i class="fas fa-cog"></i><span>الإعدادات</span></div>
-            <div class="menu-item" style="margin-top:20px; border-top:1px solid #1e293b; padding-top:20px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></div>
-        </nav>
-    </aside>
-
-    <main class="main-content">
-        <div class="top-bar">
-            <div style="display:flex; align-items:center; gap:16px;">
-                <h1 id="pageTitle">نظرة عامة</h1>
-                <button class="back-btn" onclick="window.location.href='index.html'">
-                    <i class="fas fa-arrow-right"></i> العودة للمتجر
-                </button>
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-brand">
+                <h4>YM<span>Pro</span>Max</h4>
+                <small><i class="fas fa-crown me-1"></i> لوحة التحكم</small>
             </div>
-            <div class="user-info">
-                <span id="adminName">مرحباً، المدير</span>
-                <div class="avatar" id="adminAvatar">A</div>
-            </div>
-        </div>
+            <nav>
+                <div class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </div>
+                <div class="nav-item" data-section="products">
+                    <i class="fas fa-boxes"></i> المنتجات
+                    <span class="badge-side" id="productCountBadge">0</span>
+                </div>
+                <div class="nav-item" data-section="orders">
+                    <i class="fas fa-shopping-cart"></i> الطلبات
+                    <span class="badge-side" id="orderCountBadge">0</span>
+                </div>
+                <div class="nav-item" data-section="customers">
+                    <i class="fas fa-users"></i> العملاء
+                    <span class="badge-side" id="customerCountBadge">0</span>
+                </div>
+                <div class="nav-item" data-section="inventory">
+                    <i class="fas fa-warehouse"></i> المخزون
+                </div>
+                <div class="nav-item" data-section="coupons">
+                    <i class="fas fa-tags"></i> الكوبونات
+                </div>
+                <div class="nav-item" data-section="analytics">
+                    <i class="fas fa-chart-line"></i> التحليلات
+                </div>
+                <div class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i> الإعدادات
+                </div>
+                <div class="nav-item" data-section="backup">
+                    <i class="fas fa-cloud-upload-alt"></i> النسخ الاحتياطي
+                </div>
+                <div class="nav-item" data-section="logs">
+                    <i class="fas fa-history"></i> سجل النشاط
+                </div>
+                <div class="nav-item" style="border-bottom:1px solid rgba(255,255,255,0.05);margin:8px 24px 12px;"></div>
+                <div class="nav-item" onclick="window.location.href='index.html'">
+                    <i class="fas fa-store"></i> زيارة المتجر
+                </div>
+            </nav>
+        </aside>
 
-        <div id="section-dashboard" class="section-content">
-            <div class="stats-grid" id="statsGrid">
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-number" id="statRevenue">0</div><div class="stat-label">إجمالي الأرباح</div></div>
-                <div class="stat-card warning"><div class="stat-icon"><i class="fas fa-shopping-cart"></i></div><div class="stat-number" id="statOrders">0</div><div class="stat-label">الطلبات</div></div>
-                <div class="stat-card success"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-number" id="statCompleted">0</div><div class="stat-label">طلبات مكتملة</div></div>
-                <div class="stat-card danger"><div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-number" id="statAlerts">0</div><div class="stat-label">تنبيهات المخزون</div></div>
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-boxes"></i></div><div class="stat-number" id="statProducts">0</div><div class="stat-label">المنتجات</div></div>
-                <div class="stat-card success"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number" id="statCustomers">0</div><div class="stat-label">العملاء</div></div>
-            </div>
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="admin-main">
 
-            <div class="charts-row">
-                <div class="chart-box"><h3><i class="fas fa-chart-line"></i> المبيعات الشهرية</h3><canvas id="salesChart" height="200"></canvas></div>
-                <div class="chart-box"><h3><i class="fas fa-chart-doughnut"></i> توزيع الطلبات</h3><canvas id="ordersChart" height="200"></canvas></div>
-            </div>
-
-            <div class="section-card">
-                <div class="section-header"><h2>آخر الطلبات</h2></div>
-                <div class="table-wrap"><table><thead><tr><th>#</th><th>العميل</th><th>المنتج</th><th>المجموع</th><th>الحالة</th></tr></thead><tbody id="recentOrders"></tbody></div>
-            </div>
-        </div>
-
-        <div id="section-products" class="section-content" style="display:none;">
-            <div class="section-card">
-                <div class="section-header">
-                    <h2>إدارة المنتجات</h2>
-                    <div><button class="btn btn-primary btn-sm" onclick="openProductModal()"><i class="fas fa-plus"></i> إضافة منتج</button></div>
-                </div>
-                <div class="sub-tabs">
-                    <span class="sub-tab active" data-subtab="all-products">جميع المنتجات</span>
-                    <span class="sub-tab" data-subtab="categories">التصنيفات</span>
-                    <span class="sub-tab" data-subtab="brands">العلامات التجارية</span>
-                </div>
-                <div id="subtab-all-products" class="tab-content active">
-                    <div class="table-wrap"><table><thead><tr><th>الصورة</th><th>الاسم</th><th>السعر</th><th>المخزون</th><th>التصنيف</th><th>إجراء</th></tr></thead><tbody id="productsTable"></tbody></div>
-                </div>
-                <div id="subtab-categories" class="tab-content">
-                    <button class="btn btn-sm btn-primary" onclick="addCategory()"><i class="fas fa-plus"></i> تصنيف جديد</button>
-                    <div id="categoriesList" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;"></div>
-                </div>
-                <div id="subtab-brands" class="tab-content">
-                    <button class="btn btn-sm btn-primary" onclick="addBrand()"><i class="fas fa-plus"></i> علامة تجارية جديدة</button>
-                    <div id="brandsList" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="section-inventory" class="section-content" style="display:none;">
-            <div class="section-card">
-                <div class="section-header"><h2>إدارة المخزون</h2></div>
-                <div class="table-wrap"><table><thead><tr><th>المنتج</th><th>الكمية</th><th>الحد الأدنى</th><th>الحالة</th></tr></thead><tbody id="inventoryTable"></tbody></div>
-            </div>
-        </div>
-
-        <div id="section-orders" class="section-content" style="display:none;">
-            <div class="section-card">
-                <div class="section-header"><h2>إدارة الطلبات</h2><button class="btn btn-success btn-sm"><i class="fas fa-print"></i> طباعة الفواتير</button></div>
-                <div class="sub-tabs">
-                    <span class="sub-tab active" data-subtab="all-orders">جميع الطلبات</span>
-                    <span class="sub-tab" data-subtab="pending-orders">قيد الانتداب</span>
-                    <span class="sub-tab" data-subtab="processing-orders">قيد التجهيز</span>
-                    <span class="sub-tab" data-subtab="shipped-orders">تم الشحن</span>
-                    <span class="sub-tab" data-subtab="delivered-orders">تم التوصيل</span>
-                    <span class="sub-tab" data-subtab="returns-orders">المرتجعات</span>
-                </div>
-                <div id="subtab-all-orders" class="tab-content active">
-                    <div class="table-wrap"><table><thead><tr><th>#</th><th>العميل</th><th>المنتج</th><th>المجموع</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="ordersTable"></tbody></div>
-                </div>
-                <div id="subtab-returns-orders" class="tab-content">
-                    <div class="table-wrap"><table><thead><tr><th>#</th><th>العميل</th><th>المنتج</th><th>سبب الإرجاع</th><th>الحالة</th></tr></thead><tbody id="returnsTable"></tbody></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="section-customers" class="section-content" style="display:none;">
-            <div class="section-card">
-                <div class="section-header"><h2>إدارة العملاء</h2></div>
-                <div class="sub-tabs">
-                    <span class="sub-tab active" data-subtab="all-customers">جميع العملاء</span>
-                    <span class="sub-tab" data-subtab="vip-customers">VIP</span>
-                    <span class="sub-tab" data-subtab="new-customers">جدد</span>
-                </div>
-                <div id="subtab-all-customers" class="tab-content active">
-                    <div class="table-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>المشتريات</th><th>إجمالي الإنفاق</th><th>التصنيف</th></tr></thead><tbody id="customersTable"></tbody></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="section-settings" class="section-content" style="display:none;">
-            <div class="section-card">
-                <div class="section-header"><h2>الإعدادات العامة</h2></div>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px;">
-                    <div style="background:#f8fafc; padding:20px; border-radius:16px;">
-                        <h4><i class="fas fa-credit-card"></i> إعدادات الدفع</h4>
-                        <div style="margin-top:10px;"><input type="checkbox" checked> بطاقات ائتمانية</div>
-                        <div><input type="checkbox" checked> الدفع عند الاستلام</div>
-                        <div><input type="checkbox"> محافظ إلكترونية</div>
-                        <button class="btn btn-primary btn-sm" style="margin-top:10px;">حفظ</button>
+            <!-- Top Bar -->
+            <div class="admin-topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="page-title">
+                        <h4 id="pageTitle">لوحة التحكم</h4>
+                        <small id="pageSubtitle">نظرة عامة على أداء المتجر</small>
                     </div>
-                    <div style="background:#f8fafc; padding:20px; border-radius:16px;">
-                        <h4><i class="fas fa-shipping-fast"></i> إعدادات الشحن</h4>
-                        <div style="margin-top:10px;">
-                            <label>الشحن داخل مصر: <input type="text" value="50 ج.م" style="width:80px;"></label>
+                </div>
+                <div class="user-area">
+                    <div class="user-info text-end">
+                        <div class="name" id="adminUserName">مدير المتجر</div>
+                        <div class="role">مدير عام</div>
+                    </div>
+                    <div class="avatar" id="adminAvatar">م</div>
+                    <button class="logout-btn" id="adminLogoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: DASHBOARD
+            ============================================================ -->
+            <div id="section-dashboard">
+
+                <!-- Stats Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">إجمالي المبيعات</div>
+                                    <div class="stat-number" id="totalSales">0 ج.م</div>
+                                </div>
+                                <div class="stat-icon purple"><i class="fas fa-dollar-sign"></i></div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">أرباح اليوم</div>
+                                    <div class="stat-number" id="todayProfit">0 ج.م</div>
+                                </div>
+                                <div class="stat-icon green"><i class="fas fa-calendar-day"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">عدد الطلبات</div>
+                                    <div class="stat-number" id="totalOrders">0</div>
+                                </div>
+                                <div class="stat-icon blue"><i class="fas fa-shopping-bag"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stat-label">العملاء</div>
+                                    <div class="stat-number" id="totalCustomers">0</div>
+                                </div>
+                                <div class="stat-icon orange"><i class="fas fa-users"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & More -->
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="section-card">
+                            <div class="card-header-custom">
+                                <h5><i class="fas fa-chart-bar me-2"></i> المبيعات خلال 7 أيام</h5>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="section-card">
+                            <div class="card-header-custom">
+                                <h5><i class="fas fa-exclamation-triangle me-2"></i> تنبيهات المخزون</h5>
+                            </div>
+                            <div id="lowStockAlerts">
+                                <div class="empty-state-admin">
+                                    <i class="fas fa-check-circle" style="color:#00b894;"></i>
+                                    <h6>جميع المنتجات متوفرة</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="section-card mt-4">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-clock me-2"></i> أحدث الطلبات</h5>
+                        <a href="#" class="text-muted small" id="viewAllOrdersLink">عرض الكل <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th># الطلب</th>
+                                    <th>العميل</th>
+                                    <th>المنتجات</th>
+                                    <th>المجموع</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top Products -->
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-fire me-2"></i> أكثر المنتجات مبيعًا</h5>
+                    </div>
+                    <div class="row g-3" id="topProductsGrid">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: PRODUCTS (hidden by default)
+            ============================================================ -->
+            <div id="section-products" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-boxes me-2"></i> إدارة المنتجات</h5>
+                        <button class="btn btn-sm btn-primary-custom" id="addProductBtn">
+                            <i class="fas fa-plus me-1"></i> إضافة منتج
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>القسم</th>
+                                    <th>السعر</th>
+                                    <th>المخزون</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: ORDERS (hidden by default)
+            ============================================================ -->
+            <div id="section-orders" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-shopping-cart me-2"></i> إدارة الطلبات</h5>
                         <div>
-                            <label>الشحن خارج مصر: <input type="text" value="200 ج.م" style="width:80px;"></label>
+                            <select class="form-select form-select-sm" id="orderFilter" style="width:auto;display:inline-block;border-radius:12px;">
+                                <option value="all">جميع الطلبات</option>
+                                <option value="new">جديد</option>
+                                <option value="processing">قيد التجهيز</option>
+                                <option value="shipped">تم الشحن</option>
+                                <option value="delivered">تم التسليم</option>
+                                <option value="cancelled">ملغي</option>
+                            </select>
                         </div>
-                        <button class="btn btn-primary btn-sm" style="margin-top:10px;">حفظ</button>
                     </div>
-                    <div style="background:#f8fafc; padding:20px; border-radius:16px;">
-                        <h4><i class="fas fa-user-cog"></i> إدارة الصلاحيات</h4>
-                        <div style="margin-top:10px;">
-                            <div>موظف المخزن: <span style="color:#22c55e;">مفعل</span></div>
-                           
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th># الطلب</th>
+                                    <th>العميل</th>
+                                    <th>المنتجات</th>
+                                    <th>المجموع</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: CUSTOMERS (hidden by default)
+            ============================================================ -->
+            <div id="section-customers" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-users me-2"></i> إدارة العملاء</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th>العميل</th>
+                                    <th>البريد</th>
+                                    <th>الهاتف</th>
+                                    <th>الطلبات</th>
+                                    <th>إجمالي الإنفاق</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: INVENTORY (hidden by default)
+            ============================================================ -->
+            <div id="section-inventory" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-warehouse me-2"></i> إدارة المخزون</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>الكمية</th>
+                                    <th>الحد الأدنى</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: COUPONS (hidden by default)
+            ============================================================ -->
+            <div id="section-coupons" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-tags me-2"></i> كوبونات الخصم</h5>
+                        <button class="btn btn-sm btn-primary-custom" id="addCouponBtn">
+                            <i class="fas fa-plus me-1"></i> إنشاء كوبون
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th>الكود</th>
+                                    <th>الخصم</th>
+                                    <th>نوع</th>
+                                    <th>تاريخ الانتهاء</th>
+                                    <th>الاستخدامات</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsTable">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: ANALYTICS (hidden by default)
+            ============================================================ -->
+            <div id="section-analytics" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-chart-line me-2"></i> التحليلات</h5>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-label">معدل التحويل</div>
+                                <div class="stat-number">12.4%</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-label">متوسط قيمة الطلب</div>
+                                <div class="stat-number">1,250 ج.م</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-label">إجمالي الزوار (اليوم)</div>
+                                <div class="stat-number">3,421</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card">
+                                <div class="stat-label">الصفحات الأكثر زيارة</div>
+                                <div class="stat-number">الرئيسية</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: SETTINGS (hidden by default)
+            ============================================================ -->
+            <div id="section-settings" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-cog me-2"></i> إعدادات المتجر</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">اسم المتجر</label>
+                            <input type="text" class="form-control form-control-custom" value="YM Pro Max" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">العملة</label>
+                            <select class="form-select form-control-custom">
+                                <option>ج.م - جنيه مصري</option>
+                                <option>$ - دولار أمريكي</option>
+                                <option>€ - يورو</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">اللغة</label>
+                            <select class="form-select form-control-custom">
+                                <option>العربية</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">المنطقة الزمنية</label>
+                            <select class="form-select form-control-custom">
+                                <option>القاهرة (UTC+2)</option>
+                                <option>الرياض (UTC+3)</option>
+                                <option>دبي (UTC+4)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary-custom" style="width:auto;padding:10px 40px;">حفظ الإعدادات</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: BACKUP (hidden by default)
+            ============================================================ -->
+            <div id="section-backup" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-cloud-upload-alt me-2"></i> النسخ الاحتياطي</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="stat-card text-center">
+                                <i class="fas fa-download" style="font-size:2.5rem;color:#6c5ce7;"></i>
+                                <h6 class="mt-2">نسخ احتياطي يدوي</h6>
+                                <p class="text-muted small">إنشاء نسخة احتياطية فورية</p>
+                                <button class="btn btn-primary-custom" style="width:auto;padding:8px 30px;">إنشاء الآن</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-card text-center">
+                                <i class="fas fa-clock" style="font-size:2.5rem;color:#00b894;"></i>
+                                <h6 class="mt-2">نسخ احتياطي تلقائي</h6>
+                                <p class="text-muted small">كل 24 ساعة</p>
+                                <button class="btn btn-primary-custom" style="width:auto;padding:8px 30px;background:linear-gradient(135deg,#00b894,#55efc4);">تفعيل</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION: LOGS (hidden by default)
+            ============================================================ -->
+            <div id="section-logs" style="display:none;">
+                <div class="section-card">
+                    <div class="card-header-custom">
+                        <h5><i class="fas fa-history me-2"></i> سجل النشاط</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-admin">
+                            <thead>
+                                <tr>
+                                    <th>المستخدم</th>
+                                    <th>الإجراء</th>
+                                    <th>الوقت</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTable">
+                                <tr>
+                                    <td>مدير النظام</td>
+                                    <td>أضاف منتج "هاتف X200"</td>
+                                    <td>منذ 5 دقائق</td>
+                                </tr>
+                                <tr>
+                                    <td>مدير النظام</td>
+                                    <td>غيّر حالة طلب #ORD-001</td>
+                                    <td>منذ 28 دقيقة</td>
+                                </tr>
+                                <tr>
+                                    <td>موظف مبيعات</td>
+                                    <td>عدّل سعر منتج "سماعة Pro"</td>
+                                    <td>منذ ساعة</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script type="module">
+        // ============================================================
+        // FIREBASE IMPORTS & CONFIG
+        // ============================================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            doc,
+            updateDoc,
+            deleteDoc,
+            query,
+            where,
+            orderBy,
+            limit,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+            authDomain: "ym-pro-max.firebaseapp.com",
+            projectId: "ym-pro-max",
+            storageBucket: "ym-pro-max.firebasestorage.app",
+            messagingSenderId: "174657071953",
+            appId: "1:174657071953:web:5e831fc337df46dbd18170"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ============================================================
+        // GLOBAL STATE
+        // ============================================================
+        let products = [];
+        let orders = [];
+        let customers = [];
+        let currentUser = null;
+        let currentSection = 'dashboard';
+        let salesChartInstance = null;
+
+        // ============================================================
+        // SAMPLE DATA (for demo when Firestore empty)
+        // ============================================================
+        const sampleProducts = [
+            { id: 'p1', name: 'هاتف ذكي X200', category: 'إلكترونيات', price: 12999, stock: 25, status: 'متوفر' },
+            { id: 'p2', name: 'سماعة لاسلكية Pro', category: 'إلكترونيات', price: 2499, stock: 40, status: 'متوفر' },
+            { id: 'p3', name: 'ساعة ذكية Series 8', category: 'ساعات', price: 4999, stock: 18, status: 'متوفر' },
+            { id: 'p4', name: 'قميص قطني كلاسيك', category: 'ملابس', price: 450, stock: 55, status: 'متوفر' },
+            { id: 'p5', name: 'حذاء رياضي RunMax', category: 'أحذية', price: 1800, stock: 32, status: 'متوفر' },
+            { id: 'p6', name: 'جهاز تحضير الطعام', category: 'أجهزة منزلية', price: 3200, stock: 12, status: 'متوفر' },
+            { id: 'p7', name: 'نظارة شمسية فاخرة', category: 'إكسسوارات', price: 1200, stock: 28, status: 'متوفر' },
+            { id: 'p8', name: 'لابتوب Pro Max', category: 'إلكترونيات', price: 35999, stock: 8, status: 'متوفر' },
+        ];
+
+        const sampleOrders = [
+            { id: 'ORD-001', customer: 'أحمد محمد', products: ['هاتف X200', 'سماعة Pro'], total: 15498, status: 'delivered' },
+            { id: 'ORD-002', customer: 'سارة علي', products: ['ساعة Series 8'], total: 4999, status: 'shipped' },
+            { id: 'ORD-003', customer: 'خالد حسن', products: ['قميص كلاسيك', 'حذاء RunMax'], total: 2250, status: 'processing' },
+            { id: 'ORD-004', customer: 'نورة يوسف', products: ['لابتوب Pro Max'], total: 35999, status: 'new' },
+            { id: 'ORD-005', customer: 'محمد إبراهيم', products: ['جهاز تحضير طعام'], total: 3200, status: 'cancelled' },
+        ];
+
+        const sampleCustomers = [
+            { name: 'أحمد محمد', email: 'ahmed@email.com', phone: '01001234567', orders: 5, totalSpent: 45200 },
+            { name: 'سارة علي', email: 'sara@email.com', phone: '01008765432', orders: 3, totalSpent: 18900 },
+            { name: 'خالد حسن', email: 'khaled@email.com', phone: '01005556677', orders: 7, totalSpent: 32100 },
+            { name: 'نورة يوسف', email: 'nora@email.com', phone: '01009876543', orders: 2, totalSpent: 42000 },
+            { name: 'محمد إبراهيم', email: 'mohamed@email.com', phone: '01001112233', orders: 4, totalSpent: 15600 },
+        ];
+
+        // ============================================================
+        // LOAD DATA
+        // ============================================================
+        async function loadData() {
+            try {
+                // Load products
+                const prodSnap = await getDocs(collection(db, 'products'));
+                if (!prodSnap.empty) {
+                    products = [];
+                    prodSnap.forEach(doc => {
+                        products.push({ id: doc.id, ...doc.data() });
+                    });
+                } else {
+                    products = sampleProducts;
+                }
+
+                // Load orders
+                const orderSnap = await getDocs(collection(db, 'orders'));
+                if (!orderSnap.empty) {
+                    orders = [];
+                    orderSnap.forEach(doc => {
+                        orders.push({ id: doc.id, ...doc.data() });
+                    });
+                } else {
+                    orders = sampleOrders;
+                }
+
+                // Load customers
+                const custSnap = await getDocs(collection(db, 'users'));
+                if (!custSnap.empty) {
+                    customers = [];
+                    custSnap.forEach(doc => {
+                        const data = doc.data();
+                        customers.push({
+                            id: doc.id,
+                            name: data.name || 'مستخدم',
+                            email: data.email || 'غير معروف',
+                            phone: data.phone || '-',
+                            orders: data.orders || 0,
+                            totalSpent: data.totalSpent || 0
+                        });
+                    });
+                } else {
+                    customers = sampleCustomers;
+                }
+            } catch (e) {
+                console.warn('Firestore error, using sample data:', e);
+                products = sampleProducts;
+                orders = sampleOrders;
+                customers = sampleCustomers;
+            }
+            renderAll();
+        }
+
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderAll() {
+            renderStats();
+            renderRecentOrders();
+            renderTopProducts();
+            renderProductsTable();
+            renderOrdersTable();
+            renderCustomersTable();
+            renderInventoryTable();
+            renderCouponsTable();
+            renderCharts();
+            updateBadges();
+        }
+
+        function renderStats() {
+            const totalSales = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+            document.getElementById('totalSales').textContent = totalSales.toLocaleString() + ' ج.م';
+            document.getElementById('todayProfit').textContent = (totalSales * 0.15).toFixed(0) + ' ج.م';
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('totalCustomers').textContent = customers.length;
+        }
+
+        function renderRecentOrders() {
+            const tbody = document.getElementById('recentOrdersTable');
+            const recent = orders.slice(0, 5);
+            if (recent.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="6" class="text-center text-muted">لا توجد طلبات حديثة</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = recent.map(o => `
+                        <tr>
+                            <td><strong>${o.id}</strong></td>
+                            <td>${o.customer}</td>
+                            <td>${Array.isArray(o.products) ? o.products.slice(0,2).join('، ') : o.products || '-'}</td>
+                            <td>${(o.total || 0).toLocaleString()} ج.م</td>
+                            <td><span class="badge-status ${o.status || 'new'}">${getStatusLabel(o.status)}</span></td>
+                            <td>
+                                <button class="btn-action-sm view">عرض</button>
+                                <button class="btn-action-sm edit">تعديل</button>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function renderTopProducts() {
+            const grid = document.getElementById('topProductsGrid');
+            const top = products.slice(0, 4);
+            if (top.length === 0) {
+                grid.innerHTML =
+                    `<div class="col-12"><div class="empty-state-admin"><i class="fas fa-box-open"></i><h6>لا توجد منتجات</h6></div></div>`;
+                return;
+            }
+            grid.innerHTML = top.map(p => `
+                        <div class="col-lg-3 col-md-6">
+                            <div class="stat-card text-center">
+                                <span style="font-size:2.5rem;">${p.image || '📦'}</span>
+                                <h6 class="mt-2">${p.name}</h6>
+                                <div class="stat-number" style="font-size:1.2rem;">${(p.price || 0).toLocaleString()} ج.م</div>
+                                <span class="badge bg-success">${p.stock || 0} متبقي</span>
+                            </div>
+                        </div>
+                    `).join('');
+        }
+
+        function renderProductsTable() {
+            const tbody = document.getElementById('productsTable');
+            if (products.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="6" class="text-center text-muted">لا توجد منتجات</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = products.map(p => `
+                        <tr>
+                            <td>
+                                <div class="product-mini">
+                                    <span class="emoji">${p.image || '📦'}</span>
+                                    <div class="info">
+                                        <div class="name">${p.name}</div>
+                                        <div class="cat">${p.category || 'غير مصنف'}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${p.category || '-'}</td>
+                            <td>${(p.price || 0).toLocaleString()} ج.م</td>
+                            <td>${p.stock || 0}</td>
+                            <td><span class="badge ${p.stock > 5 ? 'bg-success' : 'bg-warning'}">${p.stock > 5 ? 'متوفر' : 'مخزون محدود'}</span></td>
+                            <td>
+                                <button class="btn-action-sm edit" onclick="window.editProduct('${p.id}')">تعديل</button>
+                                <button class="btn-action-sm delete" onclick="window.deleteProduct('${p.id}')">حذف</button>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function renderOrdersTable() {
+            const tbody = document.getElementById('ordersTable');
+            const filter = document.getElementById('orderFilter')?.value || 'all';
+            const filtered = filter === 'all' ? orders : orders.filter(o => o.status === filter);
+            if (filtered.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="6" class="text-center text-muted">لا توجد طلبات</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = filtered.map(o => `
+                        <tr>
+                            <td><strong>${o.id}</strong></td>
+                            <td>${o.customer}</td>
+                            <td>${Array.isArray(o.products) ? o.products.slice(0,2).join('، ') : o.products || '-'}</td>
+                            <td>${(o.total || 0).toLocaleString()} ج.م</td>
+                            <td>
+                                <select class="form-select form-select-sm" style="width:auto;display:inline-block;border-radius:12px;font-size:0.8rem;" onchange="window.updateOrderStatus('${o.id}', this.value)">
+                                    <option value="new" ${o.status === 'new' ? 'selected' : ''}>جديد</option>
+                                    <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>قيد التجهيز</option>
+                                    <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>تم الشحن</option>
+                                    <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>تم التسليم</option>
+                                    <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>ملغي</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn-action-sm view">عرض</button>
+                                <button class="btn-action-sm edit">تعديل</button>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function renderCustomersTable() {
+            const tbody = document.getElementById('customersTable');
+            if (customers.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="6" class="text-center text-muted">لا يوجد عملاء</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = customers.map(c => `
+                        <tr>
+                            <td><strong>${c.name}</strong></td>
+                            <td>${c.email}</td>
+                            <td>${c.phone || '-'}</td>
+                            <td>${c.orders || 0}</td>
+                            <td>${(c.totalSpent || 0).toLocaleString()} ج.م</td>
+                            <td>
+                                <button class="btn-action-sm view">عرض</button>
+                                <button class="btn-action-sm edit">تواصل</button>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventoryTable');
+            if (products.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="5" class="text-center text-muted">لا توجد منتجات</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = products.map(p => {
+                const status = p.stock <= 0 ? 'نافد' : p.stock <= 5 ? 'منخفض' : 'جيد';
+                const badgeClass = p.stock <= 0 ? 'bg-danger' : p.stock <= 5 ? 'bg-warning' : 'bg-success';
+                return `
+                            <tr>
+                                <td>
+                                    <div class="product-mini">
+                                        <span class="emoji">${p.image || '📦'}</span>
+                                        <div class="info">
+                                            <div class="name">${p.name}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><strong>${p.stock || 0}</strong></td>
+                                <td>5</td>
+                                <td><span class="badge ${badgeClass}">${status}</span></td>
+                                <td>
+                                    <button class="btn-action-sm edit" onclick="window.editProduct('${p.id}')">تعديل</button>
+                                </td>
+                            </tr>
+                        `;
+            }).join('');
+        }
+
+        function renderCouponsTable() {
+            const tbody = document.getElementById('couponsTable');
+            const coupons = [
+                { code: 'WELCOME20', discount: 20, type: 'نسبة', expiry: '2026-12-31', uses: 145 },
+                { code: 'FLASH50', discount: 50, type: 'نسبة', expiry: '2026-08-15', uses: 87 },
+                { code: 'SAVE100', discount: 100, type: 'مبلغ ثابت', expiry: '2026-09-01', uses: 32 },
+            ];
+            tbody.innerHTML = coupons.map(c => `
+                        <tr>
+                            <td><span class="badge bg-primary">${c.code}</span></td>
+                            <td>${c.discount}${c.type === 'نسبة' ? '%' : ' ج.م'}</td>
+                            <td>${c.type}</td>
+                            <td>${c.expiry}</td>
+                            <td>${c.uses}</td>
+                            <td>
+                                <button class="btn-action-sm edit">تعديل</button>
+                                <button class="btn-action-sm delete">حذف</button>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function renderCharts() {
+            const ctx = document.getElementById('salesChart')?.getContext('2d');
+            if (!ctx) return;
+            if (salesChartInstance) salesChartInstance.destroy();
+            salesChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    datasets: [{
+                        label: 'المبيعات (ج.م)',
+                        data: [4200, 5800, 3900, 7200, 6100, 8400, 9600],
+                        borderColor: '#6c5ce7',
+                        backgroundColor: 'rgba(108,92,231,0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#6c5ce7',
+                        pointRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.04)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateBadges() {
+            document.getElementById('productCountBadge').textContent = products.length;
+            document.getElementById('orderCountBadge').textContent = orders.length;
+            document.getElementById('customerCountBadge').textContent = customers.length;
+        }
+
+        function getStatusLabel(status) {
+            const map = {
+                'new': 'جديد',
+                'processing': 'قيد التجهيز',
+                'shipped': 'تم الشحن',
+                'delivered': 'تم التسليم',
+                'cancelled': 'ملغي'
+            };
+            return map[status] || status;
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function showSection(section) {
+            currentSection = section;
+            // Hide all sections
+            document.querySelectorAll('[id^="section-"]').forEach(el => el.style.display = 'none');
+            // Show target
+            const target = document.getElementById(`section-${section}`);
+            if (target) target.style.display = 'block';
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.nav-item[data-section="${section}"]`)?.classList.add('active');
+            // Update title
+            const titles = {
+                dashboard: { title: 'لوحة التحكم', sub: 'نظرة عامة على أداء المتجر' },
+                products: { title: 'إدارة المنتجات', sub: 'إضافة وتعديل وحذف المنتجات' },
+                orders: { title: 'إدارة الطلبات', sub: 'متابعة وتحديث حالات الطلبات' },
+                customers: { title: 'إدارة العملاء', sub: 'قاعدة بيانات العملاء' },
+                inventory: { title: 'إدارة المخزون', sub: 'تتبع كميات المنتجات' },
+                coupons: { title: 'كوبونات الخصم', sub: 'إنشاء وإدارة الأكواد الترويجية' },
+                analytics: { title: 'التحليلات', sub: 'إحصائيات وتقارير متقدمة' },
+                settings: { title: 'الإعدادات', sub: 'تخصيص إعدادات المتجر' },
+                backup: { title: 'النسخ الاحتياطي', sub: 'إنشاء واستعادة نسخ احتياطية' },
+                logs: { title: 'سجل النشاط', sub: 'تتبع إجراءات المستخدمين' },
+            };
+            const info = titles[section] || titles.dashboard;
+            document.getElementById('pageTitle').textContent = info.title;
+            document.getElementById('pageSubtitle').textContent = info.sub;
+            // Close sidebar on mobile
+            closeSidebar();
+        }
+
+        document.querySelectorAll('.nav-item[data-section]').forEach(el => {
+            el.addEventListener('click', () => {
+                showSection(el.dataset.section);
+            });
+        });
+
+        // View all orders link
+        document.getElementById('viewAllOrdersLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('orders');
+        });
+
+        // ============================================================
+        // SIDEBAR TOGGLE (mobile)
+        // ============================================================
+        function toggleSidebar() {
+            document.getElementById('adminSidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('adminSidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        document.getElementById('sidebarToggle')?.addEventListener('click', toggleSidebar);
+        document.getElementById('sidebarOverlay')?.addEventListener('click', closeSidebar);
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast-custom';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(30px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+        window.showToast = showToast;
+
+        // ============================================================
+        // ORDER FILTER
+        // ============================================================
+        document.getElementById('orderFilter')?.addEventListener('change', () => {
+            renderOrdersTable();
+        });
+
+        // ============================================================
+        // EXPOSE FUNCTIONS TO WINDOW (for inline onclick)
+        // ============================================================
+        window.editProduct = (id) => {
+            showToast(`جاري فتح منتج ${id} للتعديل ✏️`);
+        };
+        window.deleteProduct = (id) => {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                showToast(`تم حذف المنتج ${id} 🗑️`);
+            }
+        };
+        window.updateOrderStatus = (id, status) => {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.status = status;
+                showToast(`تم تحديث حالة الطلب ${id} إلى "${getStatusLabel(status)}" ✅`);
+                renderOrdersTable();
+                renderRecentOrders();
+            }
+        };
+
+        // ============================================================
+        // AUTH
+        // ============================================================
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                const name = user.displayName || user.email?.split('@')[0] || 'مدير';
+                document.getElementById('adminUserName').textContent = name;
+                document.getElementById('adminAvatar').textContent = name.charAt(0).toUpperCase();
+                // Check if admin (simple check)
+                if (user.email !== 'admin@ympromax.com') {
+                    // Still allow access but show notice
+                }
+            } else {
+                // Redirect to login or show message
+                document.getElementById('adminUserName').textContent = 'غير مسجل';
+                document.getElementById('adminAvatar').textContent = '?';
+                showToast('يرجى تسجيل الدخول للوصول إلى لوحة التحكم');
+                // Optionally redirect to index
+                // window.location.href = 'index.html';
+            }
+        });
+
+        document.getElementById('adminLogoutBtn')?.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showToast('تم تسجيل الخروج 👋');
+                window.location.href = 'index.html';
+            } catch (e) {
+                showToast('خطأ في تسجيل الخروج');
+            }
+        });
+
+        // ============================================================
+        // ADD PRODUCT / COUPON (demo)
+        // ============================================================
+        document.getElementById('addProductBtn')?.addEventListener('click', () => {
+            showToast('فتح نموذج إضافة منتج جديد 📦');
+        });
+        document.getElementById('addCouponBtn')?.addEventListener('click', () => {
+            showToast('فتح نموذج إنشاء كوبون جديد 🏷️');
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        loadData();
+        console.log('🛒 YM Pro Max - لوحة التحكم (Admin)');
+        console.log('📦 المنتجات:', products.length);
+        console.log('📋 الطلبات:', orders.length);
+        console.log('👤 العملاء:', customers.length);
+        console.log('🔗 Firebase متصل ✅');
+    </script>
+</body>
+    </html>

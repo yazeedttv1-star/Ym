@@ -13,9 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
 
     <style>
-        /* ============================================================
-                   BASE
-                ============================================================ */
+        /* ===== BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -54,9 +52,7 @@
             border-radius: 4px;
         }
 
-        /* ============================================================
-                   HEADER
-                ============================================================ */
+        /* ===== TOP BAR ===== */
         .top-bar {
             background: #1a1a2e;
             color: #fff;
@@ -71,7 +67,60 @@
         .top-bar a:hover {
             color: #fff;
         }
+        .btn-google-login {
+            background: #fff;
+            color: #1a1a2e;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-google-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-google-login i {
+            color: #ea4335;
+        }
+        .btn-admin-dashboard {
+            background: linear-gradient(135deg, #6c5ce7, #00b4d8);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-admin-dashboard:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+            color: #fff;
+        }
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c5ce7, #00b4d8);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
 
+        /* ===== MAIN HEADER ===== */
         .main-header {
             background: #fff;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
@@ -211,9 +260,7 @@
             color: #6c5ce7;
         }
 
-        /* ============================================================
-                   HERO
-                ============================================================ */
+        /* ===== HERO ===== */
         .hero-section {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             padding: 60px 0 70px;
@@ -263,24 +310,8 @@
             box-shadow: 0 12px 30px rgba(108, 92, 231, 0.4);
             color: #fff;
         }
-        .hero-section .hero-image img {
-            max-width: 100%;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
 
-        /* ============================================================
-                   CATEGORIES
-                ============================================================ */
+        /* ===== CATEGORIES ===== */
         .categories-section {
             padding: 60px 0 40px;
         }
@@ -310,9 +341,7 @@
             margin: 0;
         }
 
-        /* ============================================================
-                   PRODUCT CARDS
-                ============================================================ */
+        /* ===== PRODUCT CARDS ===== */
         .product-card {
             background: #fff;
             border-radius: 16px;
@@ -339,14 +368,8 @@
             align-items: center;
             justify-content: center;
         }
-        .product-card .product-img img {
-            max-width: 100%;
-            max-height: 180px;
-            object-fit: contain;
-            transition: 0.4s;
-        }
-        .product-card:hover .product-img img {
-            transform: scale(1.05);
+        .product-card .product-img .product-emoji {
+            font-size: 4rem;
         }
         .product-card .product-img .badge-discount {
             position: absolute;
@@ -435,9 +458,7 @@
             transform: scale(1.02);
         }
 
-        /* ============================================================
-                   FLASH SALE
-                ============================================================ */
+        /* ===== FLASH SALE ===== */
         .flash-sale {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             padding: 50px 0;
@@ -468,9 +489,7 @@
             text-transform: uppercase;
         }
 
-        /* ============================================================
-                   FEATURES
-                ============================================================ */
+        /* ===== FEATURES ===== */
         .features-section {
             padding: 50px 0;
             background: #fff;
@@ -493,9 +512,7 @@
             margin: 0;
         }
 
-        /* ============================================================
-                   FOOTER
-                ============================================================ */
+        /* ===== FOOTER ===== */
         .footer {
             background: #1a1a2e;
             color: #ccc;
@@ -550,9 +567,7 @@
             color: #666;
         }
 
-        /* ============================================================
-                   CART SIDEBAR
-                ============================================================ */
+        /* ===== CART SIDEBAR ===== */
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -688,9 +703,7 @@
             color: #1a1a2e;
         }
 
-        /* ============================================================
-                   OVERLAY
-                ============================================================ */
+        /* ===== OVERLAY ===== */
         .overlay {
             position: fixed;
             top: 0;
@@ -705,9 +718,7 @@
             display: block;
         }
 
-        /* ============================================================
-                   TOAST
-                ============================================================ */
+        /* ===== TOAST ===== */
         .toast-container {
             position: fixed;
             bottom: 30px;
@@ -743,9 +754,7 @@
             }
         }
 
-        /* ============================================================
-                   PRODUCT DETAIL MODAL
-                ============================================================ */
+        /* ===== PRODUCT DETAIL MODAL ===== */
         .product-detail-modal .modal-body {
             padding: 30px;
         }
@@ -883,40 +892,7 @@
             padding-bottom: 0;
         }
 
-        /* ============================================================
-                   AUTH MODAL
-                ============================================================ */
-        .btn-primary-custom {
-            background: linear-gradient(135deg, #6c5ce7, #00b4d8);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            color: #fff;
-            transition: 0.3s;
-            width: 100%;
-            cursor: pointer;
-        }
-        .btn-primary-custom:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-            color: #fff;
-        }
-        .form-control-custom {
-            border-radius: 12px;
-            padding: 12px 16px;
-            border: 2px solid #e9ecef;
-            font-family: 'Cairo', sans-serif;
-            transition: 0.3s;
-        }
-        .form-control-custom:focus {
-            border-color: #6c5ce7;
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
-        }
-
-        /* ============================================================
-                   RESPONSIVE
-                ============================================================ */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .hero-section .hero-content h1 {
                 font-size: 2.2rem;
@@ -960,7 +936,6 @@
             }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -975,44 +950,39 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    TOP BAR
-    ============================================================ -->
+    <!-- ===== TOP BAR ===== -->
     <div class="top-bar">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
                     <i class="fas fa-truck-fast me-1"></i> شحن سريع مجاني للطلبات فوق 500 ج.م
                 </div>
-                <div>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <span class="mx-2 text-muted">|</span>
-                    <a href="#" id="topLoginBtn"><i class="fas fa-user me-1"></i> دخول</a>
-                    <a href="#" id="topRegisterBtn">تسجيل</a>
+                <div id="topBarAuth">
+                    <a href="#" id="googleLoginBtn" class="btn-google-login">
+                        <i class="fab fa-google"></i> تسجيل الدخول بجوجل
+                    </a>
+                    <span id="userDisplay" style="display:none;">
+                        <span class="user-avatar-small" id="userAvatarSmall">م</span>
+                        <span id="userNameDisplay" style="color:#fff;margin:0 8px;"></span>
+                        <a href="#" id="logoutBtn" style="color:#e74c3c;font-weight:600;">خروج</a>
+                    </span>
+                    <a href="#" id="adminDashboardLink" class="btn-admin-dashboard" style="display:none;margin-right:10px;">
+                        <i class="fas fa-crown"></i> لوحة التحكم
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================
-    MAIN HEADER
-    ============================================================ -->
+    <!-- ===== MAIN HEADER ===== -->
     <header class="main-header">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between">
-                <!-- Logo -->
                 <a href="#" class="logo">YM<span>Pro</span>Max</a>
-
-                <!-- Search -->
                 <div class="search-box d-none d-lg-block">
                     <input type="text" placeholder="ابحث عن منتج..." id="searchInput" />
                     <button id="searchBtn"><i class="fas fa-search"></i> بحث</button>
                 </div>
-
-                <!-- Actions -->
                 <div class="header-actions">
                     <button class="mobile-nav-toggle" id="mobileNavToggle">
                         <i class="fas fa-bars"></i>
@@ -1029,8 +999,6 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Navigation -->
             <div class="nav-menu mt-3 d-none d-lg-flex" id="mainNav">
                 <a href="#" class="active" data-category="all">الكل</a>
                 <a href="#" data-category="electronics">إلكترونيات</a>
@@ -1040,8 +1008,6 @@
                 <a href="#" data-category="home">أجهزة منزلية</a>
                 <a href="#" data-category="accessories">إكسسوارات</a>
             </div>
-
-            <!-- Mobile Nav Dropdown -->
             <div class="mobile-nav-dropdown" id="mobileNavDropdown">
                 <a href="#" data-category="all">الكل</a>
                 <a href="#" data-category="electronics">إلكترونيات</a>
@@ -1054,21 +1020,16 @@
         </div>
     </header>
 
-    <!-- ============================================================
-    OVERLAY
-    ============================================================ -->
+    <!-- ===== OVERLAY ===== -->
     <div class="overlay" id="overlay"></div>
 
-    <!-- ============================================================
-    CART SIDEBAR
-    ============================================================ -->
+    <!-- ===== CART SIDEBAR ===== -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h5><i class="fas fa-shopping-bag me-2"></i> سلة التسوق</h5>
             <button class="close-btn" id="closeCart"><i class="fas fa-times"></i></button>
         </div>
         <div id="cartItems">
-            <!-- Cart items rendered by JS -->
             <div class="empty-state">
                 <i class="fas fa-shopping-bag"></i>
                 <h6>سلة فارغة</h6>
@@ -1084,52 +1045,10 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    TOAST CONTAINER
-    ============================================================ -->
+    <!-- ===== TOAST ===== -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ============================================================
-    AUTH MODAL
-    ============================================================ -->
-    <div class="modal fade" id="authModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="authModalTitle">تسجيل الدخول</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="authForm">
-                        <div id="authError" class="alert alert-danger d-none"></div>
-                        <div class="mb-3" id="nameField">
-                            <label class="form-label fw-semibold">الاسم</label>
-                            <input type="text" class="form-control form-control-custom" id="authName" placeholder="أدخل اسمك" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">البريد الإلكتروني</label>
-                            <input type="email" class="form-control form-control-custom" id="authEmail" placeholder="example@email.com" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">كلمة المرور</label>
-                            <input type="password" class="form-control form-control-custom" id="authPassword" placeholder="********" required minlength="6" />
-                        </div>
-                        <button type="submit" class="btn-primary-custom" id="authSubmitBtn">
-                            <i class="fas fa-sign-in-alt me-2"></i> دخول
-                        </button>
-                    </form>
-                    <div class="text-center mt-3">
-                        <span class="text-muted" id="authToggleText">ليس لديك حساب؟</span>
-                        <a href="#" id="authToggleLink">إنشاء حساب</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    PRODUCT DETAIL MODAL
-    ============================================================ -->
+    <!-- ===== PRODUCT DETAIL MODAL ===== -->
     <div class="modal fade product-detail-modal" id="productDetailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -1179,12 +1098,10 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    MAIN CONTENT
-    ============================================================ -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
 
-        <!-- ===== HERO ===== -->
+        <!-- HERO -->
         <section class="hero-section">
             <div class="container">
                 <div class="row align-items-center">
@@ -1202,27 +1119,23 @@
             </div>
         </section>
 
-        <!-- ===== CATEGORIES ===== -->
+        <!-- CATEGORIES -->
         <section class="categories-section">
             <div class="container">
                 <h3 class="section-title">الأقسام الرئيسية</h3>
-                <div class="row g-3" id="categoriesGrid">
-                    <!-- Rendered by JS -->
-                </div>
+                <div class="row g-3" id="categoriesGrid"></div>
             </div>
         </section>
 
-        <!-- ===== BEST SELLERS ===== -->
+        <!-- BEST SELLERS -->
         <section class="py-4">
             <div class="container">
                 <h3 class="section-title">الأكثر مبيعًا 🔥</h3>
-                <div class="row g-4" id="bestSellersGrid">
-                    <!-- Rendered by JS -->
-                </div>
+                <div class="row g-4" id="bestSellersGrid"></div>
             </div>
         </section>
 
-        <!-- ===== FLASH SALE ===== -->
+        <!-- FLASH SALE -->
         <section class="flash-sale">
             <div class="container text-center">
                 <h3 class="fw-bold text-white"><i class="fas fa-bolt me-2"></i> عروض الخاطفة</h3>
@@ -1232,13 +1145,11 @@
                     <div class="time-box"><span class="num" id="cdMinutes">00</span><div class="label">دقائق</div></div>
                     <div class="time-box"><span class="num" id="cdSeconds">00</span><div class="label">ثواني</div></div>
                 </div>
-                <div class="row g-4 mt-3" id="flashSaleGrid">
-                    <!-- Rendered by JS -->
-                </div>
+                <div class="row g-4 mt-3" id="flashSaleGrid"></div>
             </div>
         </section>
 
-        <!-- ===== FEATURES ===== -->
+        <!-- FEATURES -->
         <section class="features-section">
             <div class="container">
                 <div class="row g-4">
@@ -1266,21 +1177,17 @@
             </div>
         </section>
 
-        <!-- ===== ALL PRODUCTS ===== -->
+        <!-- ALL PRODUCTS -->
         <section class="py-4">
             <div class="container">
                 <h3 class="section-title">جميع المنتجات</h3>
-                <div class="row g-4" id="allProductsGrid">
-                    <!-- Rendered by JS -->
-                </div>
+                <div class="row g-4" id="allProductsGrid"></div>
             </div>
         </section>
 
     </main>
 
-    <!-- ============================================================
-    FOOTER
-    ============================================================ -->
+    <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="container">
             <div class="row g-4">
@@ -1326,20 +1233,15 @@
                 </div>
             </div>
             <div class="copyright">
-                &copy; 2026 YM Pro Max. جميع الحقوق محفوظة. |
-                <a href="admin.html" class="text-muted" target="_blank"><i class="fas fa-crown me-1"></i> لوحة التحكم</a>
+                &copy; 2026 YM Pro Max. جميع الحقوق محفوظة.
             </div>
         </div>
     </footer>
 
-    <!-- ============================================================
-    SCRIPTS
-    ============================================================ -->
-    <!-- Bootstrap 5 -->
+    <!-- ===== SCRIPTS ===== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
     </script>
 
-    <!-- Firebase SDK (ES Modules) -->
     <script type="module">
         // ============================================================
         // FIREBASE IMPORTS & CONFIG
@@ -1347,18 +1249,20 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import {
             getAuth,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
             onAuthStateChanged,
             signOut
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
             getFirestore,
             collection,
-            addDoc,
             getDocs,
             doc,
-            setDoc
+            setDoc,
+            getDoc,
+            query,
+            limit
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1373,11 +1277,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
         // ============================================================
         // GLOBAL STATE
         // ============================================================
         let currentUser = null;
+        let isAdmin = false;
         let cart = JSON.parse(localStorage.getItem('ym_cart')) || [];
         let products = [];
         let categories = [];
@@ -1388,183 +1294,41 @@
         // ============================================================
         // SAMPLE DATA
         // ============================================================
-        const sampleProducts = [{
-            id: '1',
-            name: 'هاتف ذكي X200',
-            category: 'electronics',
-            price: 12999,
-            oldPrice: 15999,
-            image: '📱',
-            rating: 4.8,
-            description: 'أحدث هاتف ذكي مع كاميرا 108 ميجابكسل وشاشة AMOLED 6.8 بوصة.',
-            stock: 25,
-            discount: 20
-        }, {
-            id: '2',
-            name: 'سماعة لاسلكية Pro',
-            category: 'electronics',
-            price: 2499,
-            oldPrice: 3500,
-            image: '🎧',
-            rating: 4.6,
-            description: 'سماعة بلوتوث مع عزل ضوضاء ونظام صوتي عالي الجودة.',
-            stock: 40,
-            discount: 28
-        }, {
-            id: '3',
-            name: 'ساعة ذكية Series 8',
-            category: 'watches',
-            price: 4999,
-            oldPrice: 6999,
-            image: '⌚',
-            rating: 4.7,
-            description: 'ساعة ذكية متطورة مع مراقبة النوم ومعدل ضربات القلب.',
-            stock: 18,
-            discount: 28
-        }, {
-            id: '4',
-            name: 'قميص قطني كلاسيك',
-            category: 'clothing',
-            price: 450,
-            oldPrice: 650,
-            image: '👔',
-            rating: 4.3,
-            description: 'قميص قطني ناعم متعدد الألوان، مثالي للإطلالات اليومية.',
-            stock: 55,
-            discount: 30
-        }, {
-            id: '5',
-            name: 'حذاء رياضي RunMax',
-            category: 'shoes',
-            price: 1800,
-            oldPrice: 2500,
-            image: '👟',
-            rating: 4.5,
-            description: 'حذاء رياضي خفيف مع نعل مطاطي للجري والمشي.',
-            stock: 32,
-            discount: 28
-        }, {
-            id: '6',
-            name: 'جهاز تحضير الطعام',
-            category: 'home',
-            price: 3200,
-            oldPrice: 4200,
-            image: '🍳',
-            rating: 4.4,
-            description: 'جهاز متعدد الوظائف لتقطيع وخلط الطعام بسهولة.',
-            stock: 12,
-            discount: 23
-        }, {
-            id: '7',
-            name: 'نظارة شمسية فاخرة',
-            category: 'accessories',
-            price: 1200,
-            oldPrice: 1800,
-            image: '🕶️',
-            rating: 4.2,
-            description: 'نظارة شمسية عصرية مع حماية من الأشعة فوق البنفسجية.',
-            stock: 28,
-            discount: 33
-        }, {
-            id: '8',
-            name: 'لابتوب Pro Max',
-            category: 'electronics',
-            price: 35999,
-            oldPrice: 42999,
-            image: '💻',
-            rating: 4.9,
-            description: 'لابتوب عالي الأداء مع معالج Intel i9 وذاكرة 32GB.',
-            stock: 8,
-            discount: 16
-        }, {
-            id: '9',
-            name: 'سوار ذكي رياضي',
-            category: 'watches',
-            price: 899,
-            oldPrice: 1299,
-            image: '⌚',
-            rating: 4.0,
-            description: 'سوار ذكي متعدد الرياضات مع تتبع اللياقة والنوم.',
-            stock: 45,
-            discount: 30
-        }, {
-            id: '10',
-            name: 'فستان سهرة أنيق',
-            category: 'clothing',
-            price: 2200,
-            oldPrice: 3200,
-            image: '👗',
-            rating: 4.6,
-            description: 'فستان سهرة بتصميم كلاسيكي فاخر مثالي للمناسبات.',
-            stock: 15,
-            discount: 31
-        }, {
-            id: '11',
-            name: 'سماعة ألعاب محترفة',
-            category: 'electronics',
-            price: 3500,
-            oldPrice: 4500,
-            image: '🎮',
-            rating: 4.7,
-            description: 'سماعة محيطية مع ميكروفون عالي الجودة للعب والمحادثات.',
-            stock: 20,
-            discount: 22
-        }, {
-            id: '12',
-            name: 'ساعة يد كلاسيكية',
-            category: 'watches',
-            price: 7500,
-            oldPrice: 9500,
-            image: '⌚',
-            rating: 4.8,
-            description: 'ساعة يد أنيقة بتصميم سويسري فاخر ومقاومة للماء.',
-            stock: 6,
-            discount: 21
-        }, {
-            id: '13',
-            name: 'حذاء رسمي جلد',
-            category: 'shoes',
-            price: 2800,
-            oldPrice: 3800,
-            image: '👞',
-            rating: 4.4,
-            description: 'حذاء رسمي من الجلد الطبيعي مثالي للعمل والمناسبات.',
-            stock: 22,
-            discount: 26
-        }, {
-            id: '14',
-            name: 'غسالة أوتوماتيكية',
-            category: 'home',
-            price: 8500,
-            oldPrice: 10500,
-            image: '🧺',
-            rating: 4.5,
-            description: 'غسالة بسعة 8 كجم مع تقنية توفير الطاقة.',
-            stock: 10,
-            discount: 19
-        }, {
-            id: '15',
-            name: 'حقيبة ظهر عصرية',
-            category: 'accessories',
-            price: 650,
-            oldPrice: 950,
-            image: '🎒',
-            rating: 4.1,
-            description: 'حقيبة ظهر عملية ومتينة بتصميم عصري للأعمال والسفر.',
-            stock: 35,
-            discount: 31
-        }, {
-            id: '16',
-            name: 'شاشة 4K ذكية',
-            category: 'electronics',
-            price: 18999,
-            oldPrice: 22999,
-            image: '📺',
-            rating: 4.7,
-            description: 'شاشة 65 بوصة 4K Ultra HD مع تقنية HDR وذكاء اصطناعي.',
-            stock: 7,
-            discount: 17
-        }];
+        const sampleProducts = [
+            { id: '1', name: 'هاتف ذكي X200', category: 'electronics', price: 12999, oldPrice: 15999, image: '📱',
+                rating: 4.8, description: 'أحدث هاتف ذكي مع كاميرا 108 ميجابكسل وشاشة AMOLED 6.8 بوصة.', stock: 25,
+                discount: 20 },
+            { id: '2', name: 'سماعة لاسلكية Pro', category: 'electronics', price: 2499, oldPrice: 3500, image: '🎧',
+                rating: 4.6, description: 'سماعة بلوتوث مع عزل ضوضاء ونظام صوتي عالي الجودة.', stock: 40, discount: 28 },
+            { id: '3', name: 'ساعة ذكية Series 8', category: 'watches', price: 4999, oldPrice: 6999, image: '⌚',
+                rating: 4.7, description: 'ساعة ذكية متطورة مع مراقبة النوم ومعدل ضربات القلب.', stock: 18, discount: 28 },
+            { id: '4', name: 'قميص قطني كلاسيك', category: 'clothing', price: 450, oldPrice: 650, image: '👔',
+                rating: 4.3, description: 'قميص قطني ناعم متعدد الألوان، مثالي للإطلالات اليومية.', stock: 55, discount: 30 },
+            { id: '5', name: 'حذاء رياضي RunMax', category: 'shoes', price: 1800, oldPrice: 2500, image: '👟',
+                rating: 4.5, description: 'حذاء رياضي خفيف مع نعل مطاطي للجري والمشي.', stock: 32, discount: 28 },
+            { id: '6', name: 'جهاز تحضير الطعام', category: 'home', price: 3200, oldPrice: 4200, image: '🍳',
+                rating: 4.4, description: 'جهاز متعدد الوظائف لتقطيع وخلط الطعام بسهولة.', stock: 12, discount: 23 },
+            { id: '7', name: 'نظارة شمسية فاخرة', category: 'accessories', price: 1200, oldPrice: 1800, image: '🕶️',
+                rating: 4.2, description: 'نظارة شمسية عصرية مع حماية من الأشعة فوق البنفسجية.', stock: 28, discount: 33 },
+            { id: '8', name: 'لابتوب Pro Max', category: 'electronics', price: 35999, oldPrice: 42999, image: '💻',
+                rating: 4.9, description: 'لابتوب عالي الأداء مع معالج Intel i9 وذاكرة 32GB.', stock: 8, discount: 16 },
+            { id: '9', name: 'سوار ذكي رياضي', category: 'watches', price: 899, oldPrice: 1299, image: '⌚',
+                rating: 4.0, description: 'سوار ذكي متعدد الرياضات مع تتبع اللياقة والنوم.', stock: 45, discount: 30 },
+            { id: '10', name: 'فستان سهرة أنيق', category: 'clothing', price: 2200, oldPrice: 3200, image: '👗',
+                rating: 4.6, description: 'فستان سهرة بتصميم كلاسيكي فاخر مثالي للمناسبات.', stock: 15, discount: 31 },
+            { id: '11', name: 'سماعة ألعاب محترفة', category: 'electronics', price: 3500, oldPrice: 4500, image: '🎮',
+                rating: 4.7, description: 'سماعة محيطية مع ميكروفون عالي الجودة للعب والمحادثات.', stock: 20, discount: 22 },
+            { id: '12', name: 'ساعة يد كلاسيكية', category: 'watches', price: 7500, oldPrice: 9500, image: '⌚',
+                rating: 4.8, description: 'ساعة يد أنيقة بتصميم سويسري فاخر ومقاومة للماء.', stock: 6, discount: 21 },
+            { id: '13', name: 'حذاء رسمي جلد', category: 'shoes', price: 2800, oldPrice: 3800, image: '👞',
+                rating: 4.4, description: 'حذاء رسمي من الجلد الطبيعي مثالي للعمل والمناسبات.', stock: 22, discount: 26 },
+            { id: '14', name: 'غسالة أوتوماتيكية', category: 'home', price: 8500, oldPrice: 10500, image: '🧺',
+                rating: 4.5, description: 'غسالة بسعة 8 كجم مع تقنية توفير الطاقة.', stock: 10, discount: 19 },
+            { id: '15', name: 'حقيبة ظهر عصرية', category: 'accessories', price: 650, oldPrice: 950, image: '🎒',
+                rating: 4.1, description: 'حقيبة ظهر عملية ومتينة بتصميم عصري للأعمال والسفر.', stock: 35, discount: 31 },
+            { id: '16', name: 'شاشة 4K ذكية', category: 'electronics', price: 18999, oldPrice: 22999, image: '📺',
+                rating: 4.7, description: 'شاشة 65 بوصة 4K Ultra HD مع تقنية HDR وذكاء اصطناعي.', stock: 7, discount: 17 }
+        ];
 
         const sampleCategories = [
             { id: 'electronics', name: 'إلكترونيات', icon: 'fa-laptop', color: '#6c5ce7' },
@@ -1574,6 +1338,50 @@
             { id: 'home', name: 'أجهزة منزلية', icon: 'fa-home', color: '#e74c3c' },
             { id: 'accessories', name: 'إكسسوارات', icon: 'fa-gem', color: '#9b59b6' }
         ];
+
+        // ============================================================
+        // CHECK IF USER IS ADMIN (first registered user)
+        // ============================================================
+        async function checkIfAdmin(user) {
+            if (!user) return false;
+            try {
+                // Check if there's any admin in the database
+                const adminsRef = collection(db, 'admins');
+                const q = query(adminsRef, limit(1));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    // No admin exists → this user becomes the admin
+                    await setDoc(doc(db, 'admins', user.uid), {
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.displayName || 'مدير',
+                        photoURL: user.photoURL || '',
+                        createdAt: new Date().toISOString(),
+                        isAdmin: true
+                    });
+                    console.log('👑 First user became admin:', user.email);
+                    return true;
+                } else {
+                    // Check if this user is the admin
+                    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+                    if (adminDoc.exists() && adminDoc.data().isAdmin === true) {
+                        return true;
+                    }
+                    // Check if the user is the first admin (by email or uid)
+                    const firstAdmin = snapshot.docs[0].data();
+                    if (firstAdmin.uid === user.uid || firstAdmin.email === user.email) {
+                        return true;
+                    }
+                    return false;
+                }
+            } catch (error) {
+                console.warn('Error checking admin:', error);
+                // Fallback: check if user email matches the expected admin
+                // For safety, only allow if explicitly set
+                return false;
+            }
+        }
 
         // ============================================================
         // LOAD DATA FROM FIRESTORE OR SEED
@@ -1589,7 +1397,7 @@
                 } else {
                     products = sampleProducts;
                     for (const p of sampleProducts) {
-                        await addDoc(collection(db, 'products'), p);
+                        await setDoc(doc(db, 'products', p.id), p);
                     }
                 }
 
@@ -1602,7 +1410,7 @@
                 } else {
                     categories = sampleCategories;
                     for (const c of sampleCategories) {
-                        await addDoc(collection(db, 'categories'), c);
+                        await setDoc(doc(db, 'categories', c.id), c);
                     }
                 }
             } catch (e) {
@@ -1650,7 +1458,7 @@
                         <div class="col-lg-3 col-md-4 col-6">
                             <div class="product-card" data-id="${p.id}">
                                 <div class="product-img">
-                                    <span class="product-emoji" style="font-size:4rem;">${p.image || '📦'}</span>
+                                    <span class="product-emoji">${p.image || '📦'}</span>
                                     ${p.discount ? `<span class="badge-discount">-${p.discount}%</span>` : ''}
                                     <button class="wishlist-btn" data-id="${p.id}"><i class="far fa-heart"></i></button>
                                 </div>
@@ -1664,7 +1472,6 @@
                         </div>
                     `).join('');
 
-            // Event listeners
             container.querySelectorAll('.btn-add-cart').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1786,7 +1593,6 @@
             document.getElementById('cartCount').textContent = count;
         }
 
-        // Expose to window for inline onclick
         window.addToCart = addToCart;
         window.removeFromCart = removeFromCart;
         window.updateQty = updateQty;
@@ -1805,7 +1611,6 @@
             document.getElementById('detailRating').textContent = product.rating || 0;
             document.getElementById('detailDescription').textContent = product.description || 'منتج عالي الجودة';
             document.getElementById('detailQtyValue').textContent = '1';
-            // Variants demo
             const variants = ['أحمر', 'أزرق', 'أسود', 'أبيض'];
             document.getElementById('detailVariants').innerHTML = variants.map((v, i) =>
                 `<button class="variant-btn ${i===0?'active':''}">${v}</button>`
@@ -1821,7 +1626,6 @@
             modal.show();
         }
 
-        // Detail qty controls
         document.getElementById('detailQtyMinus')?.addEventListener('click', () => {
             if (detailQty > 1) { detailQty--;
                 document.getElementById('detailQtyValue').textContent = detailQty; }
@@ -1886,104 +1690,82 @@
         window.showToast = showToast;
 
         // ============================================================
-        // AUTH
+        // GOOGLE AUTH
         // ============================================================
-        let isLoginMode = true;
-        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
-
-        document.getElementById('topLoginBtn')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            isLoginMode = true;
-            document.getElementById('authModalTitle').textContent = 'تسجيل الدخول';
-            document.getElementById('authSubmitBtn').innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> دخول';
-            document.getElementById('authToggleText').textContent = 'ليس لديك حساب؟';
-            document.getElementById('authToggleLink').textContent = 'إنشاء حساب';
-            document.getElementById('nameField').classList.add('d-none');
-            document.getElementById('authError').classList.add('d-none');
-            authModal.show();
-        });
-
-        document.getElementById('topRegisterBtn')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            isLoginMode = false;
-            document.getElementById('authModalTitle').textContent = 'إنشاء حساب جديد';
-            document.getElementById('authSubmitBtn').innerHTML = '<i class="fas fa-user-plus me-2"></i> إنشاء حساب';
-            document.getElementById('authToggleText').textContent = 'لديك حساب بالفعل؟';
-            document.getElementById('authToggleLink').textContent = 'تسجيل الدخول';
-            document.getElementById('nameField').classList.remove('d-none');
-            document.getElementById('authError').classList.add('d-none');
-            authModal.show();
-        });
-
-        document.getElementById('authToggleLink')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            isLoginMode = !isLoginMode;
-            if (isLoginMode) {
-                document.getElementById('authModalTitle').textContent = 'تسجيل الدخول';
-                document.getElementById('authSubmitBtn').innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> دخول';
-                document.getElementById('authToggleText').textContent = 'ليس لديك حساب؟';
-                document.getElementById('authToggleLink').textContent = 'إنشاء حساب';
-                document.getElementById('nameField').classList.add('d-none');
-            } else {
-                document.getElementById('authModalTitle').textContent = 'إنشاء حساب جديد';
-                document.getElementById('authSubmitBtn').innerHTML = '<i class="fas fa-user-plus me-2"></i> إنشاء حساب';
-                document.getElementById('authToggleText').textContent = 'لديك حساب بالفعل؟';
-                document.getElementById('authToggleLink').textContent = 'تسجيل الدخول';
-                document.getElementById('nameField').classList.remove('d-none');
-            }
-            document.getElementById('authError').classList.add('d-none');
-        });
-
-        document.getElementById('authForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            const name = document.getElementById('authName').value;
-            const errorEl = document.getElementById('authError');
-
+        async function handleGoogleLogin() {
             try {
-                errorEl.classList.add('d-none');
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast('تم تسجيل الدخول بنجاح 👋');
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                showToast(`مرحبًا ${user.displayName || user.email} 👋`);
+                // Check if admin
+                const adminStatus = await checkIfAdmin(user);
+                if (adminStatus) {
+                    isAdmin = true;
+                    showToast('👑 أنت المدير! يمكنك الدخول إلى لوحة التحكم');
                 } else {
-                    const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    if (name) {
-                        await setDoc(doc(db, 'users', cred.user.uid), { name, email, createdAt: new Date() });
-                    }
-                    showToast('تم إنشاء الحساب بنجاح 🎉');
+                    isAdmin = false;
+                    showToast('مرحبًا بك في المتجر! أنت عميل عادي');
                 }
-                authModal.hide();
-                document.getElementById('authForm').reset();
-            } catch (err) {
-                errorEl.textContent = err.message;
-                errorEl.classList.remove('d-none');
+                updateUI(user);
+            } catch (error) {
+                console.error('Google login error:', error);
+                showToast('❌ فشل تسجيل الدخول: ' + error.message);
             }
-        });
+        }
 
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            const loginBtn = document.getElementById('topLoginBtn');
-            const registerBtn = document.getElementById('topRegisterBtn');
+        function updateUI(user) {
+            const googleBtn = document.getElementById('googleLoginBtn');
+            const userDisplay = document.getElementById('userDisplay');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const userAvatarSmall = document.getElementById('userAvatarSmall');
+            const adminLink = document.getElementById('adminDashboardLink');
+
             if (user) {
-                loginBtn.innerHTML =
-                `<i class="fas fa-user me-1"></i> ${user.displayName || user.email?.split('@')[0] || 'حسابي'}`;
-                registerBtn.textContent = 'تسجيل خروج';
-                registerBtn.onclick = (e) => {
-                    e.preventDefault();
-                    signOut(auth);
-                    showToast('تم تسجيل الخروج 👋');
-                };
+                googleBtn.style.display = 'none';
+                userDisplay.style.display = 'inline-flex';
+                userNameDisplay.textContent = user.displayName || user.email?.split('@')[0] || 'مستخدم';
+                userAvatarSmall.textContent = (user.displayName || user.email || 'م')[0].toUpperCase();
+                if (isAdmin) {
+                    adminLink.style.display = 'inline-flex';
+                } else {
+                    adminLink.style.display = 'none';
+                }
             } else {
-                loginBtn.innerHTML = '<i class="fas fa-user me-1"></i> دخول';
-                registerBtn.textContent = 'تسجيل';
-                registerBtn.onclick = null;
+                googleBtn.style.display = 'inline-flex';
+                userDisplay.style.display = 'none';
+                adminLink.style.display = 'none';
             }
-        });
+        }
 
         // ============================================================
         // UI EVENT BINDINGS
         // ============================================================
+        document.getElementById('googleLoginBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleGoogleLogin();
+        });
+
+        document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                isAdmin = false;
+                showToast('تم تسجيل الخروج 👋');
+                updateUI(null);
+            } catch (error) {
+                showToast('❌ خطأ في تسجيل الخروج');
+            }
+        });
+
+        document.getElementById('adminDashboardLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isAdmin) {
+                window.location.href = 'admin.html';
+            } else {
+                showToast('❌ غير مصرح بالدخول إلى لوحة التحكم');
+            }
+        });
+
         // Cart toggle
         document.getElementById('cartToggle')?.addEventListener('click', () => {
             document.getElementById('cartSidebar').classList.toggle('open');
@@ -2006,7 +1788,6 @@
             showToast('جاري توجيهك إلى صفحة الدفع... 💳');
         });
 
-        // Mobile nav
         document.getElementById('mobileNavToggle')?.addEventListener('click', () => {
             document.getElementById('mobileNavDropdown').classList.toggle('open');
         });
@@ -2055,7 +1836,21 @@
             if (currentUser) {
                 showToast(`مرحبًا ${currentUser.displayName || currentUser.email || 'مستخدم'} 👋`);
             } else {
-                document.getElementById('topLoginBtn')?.click();
+                document.getElementById('googleLoginBtn')?.click();
+            }
+        });
+
+        // ============================================================
+        // AUTH STATE LISTENER
+        // ============================================================
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            if (user) {
+                isAdmin = await checkIfAdmin(user);
+                updateUI(user);
+            } else {
+                isAdmin = false;
+                updateUI(null);
             }
         });
 
@@ -2063,11 +1858,11 @@
         // INIT
         // ============================================================
         loadData();
-        console.log('🚀 YM Pro Max - متجر إلكتروني احترافي (index.html)');
+        console.log('🚀 YM Pro Max - متجر إلكتروني (مع تسجيل دخول جوجل)');
         console.log('📦 المنتجات:', sampleProducts.length);
         console.log('📂 الأقسام:', sampleCategories.length);
-        console.log('🛒 السلة:', cart.length);
         console.log('🔗 Firebase متصل ✅');
+        console.log('👑 أول مسجل دخول بجوجل يصبح مديراً');
     </script>
 </body>
 </html>

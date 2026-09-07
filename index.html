@@ -4,21 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- كلمات البحث والوصف لتحسين الظهور في محرك بحث جوجل (SEO) -->
     <meta name="keywords" content="متجر إلكتروني, تسوق, منتجات, عروض, شراء, متجري الشخصي">
     <meta name="description" content="متجر إلكتروني مميز لشراء أفضل المنتجات وتلقي أحدث العروض والتنبيهات المباشرة.">
-
-    <!-- إثبات ملكية جوجل -->
     <meta name="google-site-verification" content="COp_HlkAGIZBpICb8UUZ-nWMRD3XtID1gZ0OhPcUbVQ" />
 
-    <!-- مكتبة OneSignal SDK المعالجة لمسار GitHub Pages الفرعي (/Ym/) -->
+    <!-- مكتبة OneSignal مع الضبط المباشر للمجلد الفرعي -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "f6282c50-6704-481a-9948-bd64cf4cbf08",
-          serviceWorkerPath: "OneSignalSDKWorker.js",
+          serviceWorkerPath: "/Ym/OneSignalSDKWorker.js",
           serviceWorkerParam: { scope: "/Ym/" }
         });
       });

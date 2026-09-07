@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- إثبات ملكية جوجل -->
+
+    <!-- كلمات البحث والوصف لتحسين الظهور في محرك بحث جوجل (SEO) -->
+    <meta name="keywords" content="متجر إلكتروني, تسوق, منتجات, عروض, شراء, متجري الشخصي">
+    <meta name="description" content="متجر إلكتروني مميز لشراء أفضل المنتجات وتلقي أحدث العروض والتنبيهات المباشرة.">
+
+    <!-- كود إثبات الملكية لـ Google Search Console -->
     <meta name="google-site-verification" content="COp_HlkAGIZBpICb8UUZ-nWMRD3XtID1gZ0OhPcUbVQ" />
 
     <!-- كود إشعارات OneSignal -->
@@ -18,7 +22,7 @@
       });
     </script>
 
-    <title>متجري ولوحة التحكم</title>
+    <title>متجري - أفضل العروض والمنتجات</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -103,7 +107,7 @@
 
 <div class="container">
 
-    <!-- لوحة التحكم الإدارية المصغرة -->
+    <!-- لوحة التحكم المصغرة -->
     <div class="card">
         <h2>⚙️ لوحة التحكم المصغرة</h2>
         
@@ -112,11 +116,11 @@
         <form id="productForm">
             <div class="form-group">
                 <label for="pName">اسم المنتج:</label>
-                <input type="text" id="pName" placeholder="مثال: ساعة ذكية" required>
+                <input type="text" id="pName" placeholder="مثال: هاتف ذكي" required>
             </div>
             <div class="form-group">
                 <label for="pPrice">السعر:</label>
-                <input type="text" id="pPrice" placeholder="مثال: 50 دولار" required>
+                <input type="text" id="pPrice" placeholder="مثال: 250 دولار" required>
             </div>
             <button type="submit">إضافة المنتج إلى الموقع</button>
         </form>
@@ -129,7 +133,7 @@
         <button class="btn-notify" onclick="triggerNotification()">إرسال إشعار تجريبي للزائر</button>
     </div>
 
-    <!-- قسم عرض المنتجات للزوار -->
+    <!-- قسم عرض المنتجات -->
     <div class="card">
         <h2>🛍️ المنتجات المعروضة</h2>
         <div class="products-grid" id="productsList">
@@ -143,7 +147,7 @@
 </div>
 
 <script>
-    // إضافة منتج ديناميكياً داخل الصفحة
+    // إضافة منتج جديد
     document.getElementById('productForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -159,16 +163,15 @@
 
         document.getElementById('productsList').insertAdjacentHTML('beforeend', productHTML);
 
-        // إعادة ضبط المدخلات
         document.getElementById('pName').value = '';
         document.getElementById('pPrice').value = '';
     });
 
-    // إرسال إشعار تجريبي محلي للزائر
+    // إرسال إشعار تجريبي
     function triggerNotification() {
         if (Notification.permission === "granted") {
             new Notification("تنبيه من المتجر! 🎁", {
-                body: "تم إرسال إشعار بنجاح من لوحة التحكم.",
+                body: "تم إرسال هذا الإشعار التجريبي بنجاح.",
                 icon: "https://via.placeholder.com/100"
             });
         } else {

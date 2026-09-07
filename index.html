@@ -11,13 +11,15 @@
     <!-- إثبات ملكية جوجل -->
     <meta name="google-site-verification" content="COp_HlkAGIZBpICb8UUZ-nWMRD3XtID1gZ0OhPcUbVQ" />
 
-    <!-- مكتبة OneSignal SDK بالـ App ID الجديد -->
+    <!-- مكتبة OneSignal SDK المعالجة لمسار GitHub Pages الفرعي (/Ym/) -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "f6282c50-6704-481a-9948-bd64cf4cbf08",
+          serviceWorkerPath: "OneSignalSDKWorker.js",
+          serviceWorkerParam: { scope: "/Ym/" }
         });
       });
     </script>

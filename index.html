@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- إثبات ملكية محرك بحث جوجل -->
+    
+    <!-- إثبات ملكية جوجل -->
     <meta name="google-site-verification" content="COp_HlkAGIZBpICb8UUZ-nWMRD3XtID1gZ0OhPcUbVQ" />
 
-    <!-- مكتبة OneSignal SDK -->
+    <!-- كود إشعارات OneSignal -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -18,10 +18,164 @@
       });
     </script>
 
-    <title>موقعي الشخصي</title>
+    <title>متجري ولوحة التحكم</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #219150;
+        }
+        .btn-notify {
+            background-color: #2980b9;
+        }
+        .btn-notify:hover {
+            background-color: #1f6391;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .product-card {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .product-card h4 {
+            margin: 10px 0 5px 0;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>مرحبًا بك في موقعي</h1>
-    <p>اشترك لتلقي أحدث الإشعارات والتحديثات.</p>
+
+<div class="container">
+
+    <!-- لوحة التحكم الإدارية المصغرة -->
+    <div class="card">
+        <h2>⚙️ لوحة التحكم المصغرة</h2>
+        
+        <!-- نموذج إضافة منتج -->
+        <h3>إضافة منتج جديد</h3>
+        <form id="productForm">
+            <div class="form-group">
+                <label for="pName">اسم المنتج:</label>
+                <input type="text" id="pName" placeholder="مثال: ساعة ذكية" required>
+            </div>
+            <div class="form-group">
+                <label for="pPrice">السعر:</label>
+                <input type="text" id="pPrice" placeholder="مثال: 50 دولار" required>
+            </div>
+            <button type="submit">إضافة المنتج إلى الموقع</button>
+        </form>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+        <!-- قسم الإشعارات -->
+        <h3>📢 الإشعارات</h3>
+        <p>أنشئ إشعاراً فورياً للزوار الذين وافقوا على الاستقبال:</p>
+        <button class="btn-notify" onclick="triggerNotification()">إرسال إشعار تجريبي للزائر</button>
+    </div>
+
+    <!-- قسم عرض المنتجات للزوار -->
+    <div class="card">
+        <h2>🛍️ المنتجات المعروضة</h2>
+        <div class="products-grid" id="productsList">
+            <div class="product-card">
+                <h4>منتج افتراضي</h4>
+                <p class="price">100 $</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // إضافة منتج ديناميكياً داخل الصفحة
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+
+        const productHTML = `
+            <div class="product-card">
+                <h4>${name}</h4>
+                <p class="price">${price}</p>
+            </div>
+        `;
+
+        document.getElementById('productsList').insertAdjacentHTML('beforeend', productHTML);
+
+        // إعادة ضبط المدخلات
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+    });
+
+    // إرسال إشعار تجريبي محلي للزائر
+    function triggerNotification() {
+        if (Notification.permission === "granted") {
+            new Notification("تنبيه من المتجر! 🎁", {
+                body: "تم إرسال إشعار بنجاح من لوحة التحكم.",
+                icon: "https://via.placeholder.com/100"
+            });
+        } else {
+            alert("يرجى الموافقة على استقبال الإشعارات من المتصفح أولاً.");
+        }
+    }
+</script>
+
 </body>
 </html>

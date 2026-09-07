@@ -3,37 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SEO & Google Search Console -->
+    
+    <!-- كلمات البحث والوصف لتحسين الظهور في محرك بحث جوجل (SEO) -->
     <meta name="keywords" content="متجر إلكتروني, تسوق, منتجات, عروض, شراء, متجري الشخصي">
     <meta name="description" content="متجر إلكتروني مميز لشراء أفضل المنتجات وتلقي أحدث العروض والتنبيهات المباشرة.">
+
+    <!-- إثبات ملكية جوجل -->
     <meta name="google-site-verification" content="COp_HlkAGIZBpICb8UUZ-nWMRD3XtID1gZ0OhPcUbVQ" />
 
-    <!-- OneSignal SDK -->
+    <!-- مكتبة OneSignal SDK بالـ App ID الجديد -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "89b561eb-0dc6-4d48-ac96-0a7822bbd822",
+          appId: "f6282c50-6704-481a-9948-bd64cf4cbf08",
         });
       });
     </script>
 
     <title>متجري - أفضل العروض والمنتجات</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; }
-        h2 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { background-color: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-notify { background-color: #2980b9; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .product-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; text-align: center; }
-        .price { color: #e74c3c; font-weight: bold; }
+        body { font-family: sans-serif; background-color: #f4f7f6; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 10px; }
+        input { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        .product-card { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; text-align: center; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -41,32 +39,22 @@
 <div class="container">
     <div class="card">
         <h2>⚙️ لوحة التحكم المصغرة</h2>
-        <h3>إضافة منتج جديد</h3>
         <form id="productForm">
             <div class="form-group">
-                <label for="pName">اسم المنتج:</label>
-                <input type="text" id="pName" placeholder="مثال: هاتف ذكي" required>
+                <label>اسم المنتج:</label>
+                <input type="text" id="pName" required>
             </div>
             <div class="form-group">
-                <label for="pPrice">السعر:</label>
-                <input type="text" id="pPrice" placeholder="مثال: 250 دولار" required>
+                <label>السعر:</label>
+                <input type="text" id="pPrice" required>
             </div>
-            <button type="submit">إضافة المنتج إلى الموقع</button>
+            <button type="submit">إضافة المنتج</button>
         </form>
-        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
-        <h3>📢 الإشعارات</h3>
-        <p>أنشئ إشعاراً فورياً للزوار الذين وافقوا على الاستقبال:</p>
-        <button class="btn-notify" onclick="triggerNotification()">إرسال إشعار تجريبي للزائر</button>
     </div>
 
     <div class="card">
         <h2>🛍️ المنتجات المعروضة</h2>
-        <div class="products-grid" id="productsList">
-            <div class="product-card">
-                <h4>منتج افتراضي</h4>
-                <p class="price">100 $</p>
-            </div>
-        </div>
+        <div class="products-grid" id="productsList"></div>
     </div>
 </div>
 
@@ -75,22 +63,11 @@
         e.preventDefault();
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
-        const productHTML = `<div class="product-card"><h4>${name}</h4><p class="price">${price}</p></div>`;
-        document.getElementById('productsList').insertAdjacentHTML('beforeend', productHTML);
+        const html = `<div class="product-card"><h4>${name}</h4><p>${price}</p></div>`;
+        document.getElementById('productsList').insertAdjacentHTML('beforeend', html);
         document.getElementById('pName').value = '';
         document.getElementById('pPrice').value = '';
     });
-
-    function triggerNotification() {
-        if (Notification.permission === "granted") {
-            new Notification("تنبيه من المتجر! 🎁", {
-                body: "تم إرسال هذا الإشعار التجريبي بنجاح.",
-                icon: "https://via.placeholder.com/100"
-            });
-        } else {
-            alert("يرجى الموافقة على استقبال الإشعارات من المتصفح أولاً.");
-        }
-    }
 </script>
 
 </body>

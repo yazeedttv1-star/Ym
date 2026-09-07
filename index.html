@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>سنتر سيجما التعليمي</title>
   
-  <!-- PWA -->
   <meta name="theme-color" content="#2563eb">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,7 +26,7 @@
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Cairo', sans-serif; background: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Cairo', sans-serif; background: #f1f5f9; }
     .app-container { max-width: 480px; margin: 0 auto; background: #f8fafc; min-height: 100vh; position: relative; }
     .slide-up { animation: slideUp 0.3s ease-out; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -42,7 +41,6 @@
     
     .option-btn { padding: 6px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .option-btn.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
-    .option-btn:active { transform: scale(0.95); }
     
     .admin-panel-section { background: white; border-radius: 16px; padding: 12px; border: 1px solid #e2e8f0; margin-bottom: 8px; }
     .admin-panel-section .header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0; }
@@ -150,8 +148,18 @@
     .result-card .result-subject { font-weight: 700; font-size: 13px; }
     .result-card .result-score { font-size: 16px; font-weight: 800; color: #16a34a; }
     
-    .dark-mode .exam-card { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .result-card { background: #0f172a !important; border-color: #166534 !important; }
+    .login-section { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; text-align: center; }
+    .login-section .logo { font-size: 48px; color: #2563eb; margin-bottom: 10px; }
+    .login-section h2 { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 5px; }
+    .login-section p { font-size: 12px; color: #64748b; margin-bottom: 15px; }
+    .login-section .input-group { margin-bottom: 12px; text-align: right; }
+    .login-section .input-group label { font-size: 11px; font-weight: 600; color: #475569; display: block; margin-bottom: 3px; }
+    .login-section .input-group input { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; transition: all 0.2s; }
+    .login-section .input-group input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .login-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .login-btn:active { transform: scale(0.98); }
+    
     .dark-mode .app-container { background: #0f172a; }
     .dark-mode .bg-white { background: #1e293b !important; }
     .dark-mode .text-slate-800 { color: #e2e8f0 !important; }
@@ -168,6 +176,11 @@
     .dark-mode .schedule-item { background: #1e293b !important; border-color: #334155 !important; }
     .dark-mode .schedule-item .teacher { color: #94a3b8 !important; }
     .dark-mode .pwa-install-banner { background: linear-gradient(135deg, #334155, #1e293b); }
+    .dark-mode .login-section { background: #1e293b !important; border-color: #334155 !important; }
+    .dark-mode .login-section h2 { color: #e2e8f0 !important; }
+    .dark-mode .login-section p { color: #94a3b8 !important; }
+    .dark-mode .login-section .input-group label { color: #94a3b8 !important; }
+    .dark-mode .login-section .input-group input { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
     
     @media (max-width: 400px) {
       .stat-number { font-size: 15px; }
@@ -215,8 +228,75 @@
   <!-- MAIN -->
   <main class="flex-1 p-3 space-y-3 overflow-y-auto" style="padding-bottom: 70px;">
 
-    <!-- HOME -->
-    <section id="tab-home" class="space-y-3 slide-up">
+    <!-- ===== LOGIN ===== -->
+    <section id="tab-login" class="slide-up">
+      <div class="login-section">
+        <div class="logo">Σ</div>
+        <h2>مرحباً بك في سنتر سيجما</h2>
+        <p>سجل دخولك باستخدام رقم الهاتف أو البريد الإلكتروني</p>
+        
+        <div class="input-group">
+          <label>📧 البريد الإلكتروني أو رقم الهاتف</label>
+          <input type="text" id="loginEmail" placeholder="example@email.com أو 01012345678">
+        </div>
+        
+        <div class="input-group">
+          <label>🔒 كلمة المرور</label>
+          <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+        
+        <button class="login-btn" onclick="loginUser()">🚀 تسجيل الدخول</button>
+        
+        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
+          ليس لديك حساب؟ 
+          <span onclick="switchTab('register')" style="color: #2563eb; cursor: pointer; font-weight: 600;">إنشاء حساب جديد</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REGISTER ===== -->
+    <section id="tab-register" class="hidden slide-up">
+      <div class="login-section">
+        <div class="logo">Σ</div>
+        <h2>إنشاء حساب جديد</h2>
+        <p>أدخل بياناتك للتسجيل في منصة سيجما</p>
+        
+        <div class="input-group">
+          <label>👤 الاسم الكامل</label>
+          <input type="text" id="regName" placeholder="أحمد محمد">
+        </div>
+        
+        <div class="input-group">
+          <label>📧 البريد الإلكتروني</label>
+          <input type="email" id="regEmail" placeholder="example@email.com">
+        </div>
+        
+        <div class="input-group">
+          <label>📱 رقم الهاتف</label>
+          <input type="tel" id="regPhone" placeholder="01012345678">
+        </div>
+        
+        <div class="input-group">
+          <label>🔒 كلمة المرور</label>
+          <input type="password" id="regPassword" placeholder="•••••••• (6 أحرف على الأقل)">
+        </div>
+        
+        <div class="input-group">
+          <label>📄 صورة البطاقة الشخصية أو شهادة الميلاد</label>
+          <input type="file" id="regIdImage" accept="image/*" style="padding: 8px;">
+        </div>
+        
+        <button class="login-btn" onclick="registerUser()">📝 إنشاء حساب</button>
+        
+        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
+          لديك حساب بالفعل؟ 
+          <span onclick="switchTab('login')" style="color: #2563eb; cursor: pointer; font-weight: 600;">تسجيل الدخول</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HOME ===== -->
+    <section id="tab-home" class="hidden space-y-3 slide-up">
       
       <div id="pwaBanner" class="pwa-install-banner" style="display:none;">
         <span class="icon">📱</span>
@@ -234,11 +314,11 @@
           <div class="flex-1">
             <div class="flex items-center justify-between">
               <h2 id="userName" class="font-bold text-sm">مرحباً بك</h2>
-              <button id="loginBtn" onclick="loginGoogle()" class="bg-white/20 hover:bg-white/30 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl transition whitespace-nowrap">
-                <i class="fa-brands fa-google text-xs"></i> دخول
+              <button id="loginBtn" onclick="logoutUser()" class="bg-red-500/80 hover:bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl transition">
+                <i class="fa-solid fa-sign-out-alt"></i> خروج
               </button>
             </div>
-            <p id="userSubtitle" class="text-xs text-blue-100">سجل دخولك للمتابعة</p>
+            <p id="userSubtitle" class="text-xs text-blue-100">أكمل بياناتك</p>
             <div id="userSubjects" class="mt-1"></div>
           </div>
         </div>
@@ -421,14 +501,9 @@
             <label class="text-[10px] font-bold text-slate-500">المواد:</label>
             <div id="subjectsCheckbox" class="mt-1 grid grid-cols-2 gap-1"></div>
           </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">صورة البطاقة الشخصية:</label>
-            <input type="file" id="profIdImage" accept="image/*" class="w-full text-xs p-1 bg-slate-50 rounded-lg border mt-0.5">
-          </div>
-          <button onclick="requestProfileUpdate()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-2.5 rounded-xl text-sm mt-2">
-            <i class="fa-solid fa-paper-plane"></i> طلب تعديل البيانات
+          <button onclick="saveProfile()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm mt-2">
+            <i class="fa-solid fa-save"></i> حفظ التغييرات
           </button>
-          <p class="text-[9px] text-slate-400 text-center">سيتم مراجعة الطلب من قبل الإدارة</p>
         </div>
       </div>
 
@@ -448,6 +523,14 @@
         <button onclick="sendComplaint()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-2 rounded-xl text-sm">
           <i class="fa-solid fa-paper-plane"></i> إرسال
         </button>
+      </div>
+
+      <div class="settings-card">
+        <div class="title"><i class="fa-solid fa-trash text-red-500"></i> حذف الحساب</div>
+        <button onclick="deleteAccount()" class="w-full bg-red-500 text-white font-bold py-2.5 rounded-xl text-sm">
+          <i class="fa-solid fa-trash-can"></i> حذف حسابي نهائياً
+        </button>
+        <p class="text-[9px] text-red-400 text-center mt-1">⚠️ هذا الإجراء لا يمكن التراجع عنه</p>
       </div>
     </section>
 
@@ -476,7 +559,7 @@
 
       <div id="adminPanel" class="hidden space-y-2">
         
-        <!-- ===== إحصائيات ===== -->
+        <!-- إحصائيات -->
         <div class="admin-panel-section" onclick="toggleStats()" style="cursor:pointer;">
           <div class="header">
             <h4><i class="fa-solid fa-chart-line text-blue-400"></i> الإحصائيات اللحظية</h4>
@@ -498,22 +581,7 @@
           </div>
         </div>
 
-        <!-- ===== إعدادات الإشعارات التلقائية ===== -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-gear text-slate-600"></i> إعدادات الإشعارات التلقائية</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
-              <input type="checkbox" id="autoNotifToggle" checked>
-              <label for="autoNotifToggle" class="text-xs font-bold text-slate-700">تفعيل الإشعارات التلقائية عند الإضافة</label>
-            </div>
-            <p class="text-[10px] text-slate-400 mt-1">عند تعطيل هذا الخيار، لن يتم إرسال إشعارات تلقائية عند إضافة أي محتوى جديد</p>
-          </div>
-        </div>
-
-        <!-- ===== طلبات تعديل البيانات ===== -->
+        <!-- طلبات تعديل البيانات -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-user-check text-amber-500"></i> طلبات تعديل البيانات</h4>
@@ -526,7 +594,7 @@
           </div>
         </div>
 
-        <!-- ===== إدارة المدرسين ===== -->
+        <!-- إدارة المدرسين -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-chalkboard-user text-indigo-600"></i> إدارة المدرسين</h4>
@@ -542,7 +610,7 @@
           </div>
         </div>
 
-        <!-- ===== إدارة الامتحانات ===== -->
+        <!-- إدارة الامتحانات -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-pen-to-square text-red-600"></i> إدارة الامتحانات</h4>
@@ -559,7 +627,7 @@
           </div>
         </div>
 
-        <!-- ===== إدارة النتائج ===== -->
+        <!-- إدارة النتائج -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-chart-simple text-green-600"></i> إدارة النتائج</h4>
@@ -578,7 +646,7 @@
           </div>
         </div>
 
-        <!-- ===== المتابعة الأسبوعية ===== -->
+        <!-- المتابعة الأسبوعية -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-calendar-week text-cyan-600"></i> المتابعة الأسبوعية</h4>
@@ -597,7 +665,7 @@
           </div>
         </div>
 
-        <!-- ===== إضافة حصة ===== -->
+        <!-- إضافة حصة -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-plus-circle text-blue-600"></i> إضافة حصة</h4>
@@ -644,7 +712,7 @@
           </div>
         </div>
 
-        <!-- ===== إرسال إشعار ===== -->
+        <!-- إرسال إشعار -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-paper-plane text-amber-500"></i> إرسال إشعار</h4>
@@ -677,7 +745,7 @@
           </div>
         </div>
 
-        <!-- ===== نشر خبر ===== -->
+        <!-- نشر خبر -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-image text-emerald-600"></i> نشر خبر</h4>
@@ -692,7 +760,7 @@
           </div>
         </div>
 
-        <!-- ===== رفع مذكرة ===== -->
+        <!-- رفع مذكرة -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-file-arrow-up text-purple-600"></i> رفع مذكرة</h4>
@@ -712,7 +780,7 @@
           </div>
         </div>
 
-        <!-- ===== أرقام السنتر والدعم ===== -->
+        <!-- أرقام السنتر والدعم -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-address-book text-green-600"></i> أرقام السنتر والدعم</h4>
@@ -732,7 +800,7 @@
           </div>
         </div>
 
-        <!-- ===== الشكاوى ===== -->
+        <!-- الشكاوى -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-message text-amber-500"></i> رسائل الشكاوى</h4>
@@ -745,7 +813,7 @@
           </div>
         </div>
 
-        <!-- ===== حذف الكل ===== -->
+        <!-- حذف الكل -->
         <div class="admin-panel-section">
           <div class="header" onclick="toggleSection(this)">
             <h4><i class="fa-solid fa-trash-can text-red-500"></i> حذف الكل</h4>
@@ -770,7 +838,7 @@
 
   <!-- BOTTOM NAV -->
   <nav class="fixed bottom-0 w-full max-w-[480px] bg-white/95 backdrop-blur-sm border-t border-slate-200 py-1 px-2 flex justify-around items-center z-30 shadow-lg" style="left:50%;transform:translateX(-50%);">
-    <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-[9px] font-bold text-blue-600"><i class="fa-solid fa-house text-lg"></i><span>الرئيسية</span></button>
+    <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-house text-lg"></i><span>الرئيسية</span></button>
     <button onclick="switchTab('schedule')" id="nav-schedule" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-calendar-days text-lg"></i><span>الجدول</span></button>
     <button onclick="switchTab('library')" id="nav-library" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-book-open text-lg"></i><span>المكتبة</span></button>
     <button onclick="switchTab('exams')" id="nav-exams" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-pen-to-square text-lg"></i><span>امتحانات</span></button>
@@ -784,7 +852,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, push, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCoHGEyhlsjmB_diUNm-R8SXB0Gm0kXw0A",
@@ -799,13 +867,16 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
 
   await setPersistence(auth, browserLocalPersistence);
 
-  window.db = db; window.auth = auth; window.provider = provider;
+  window.db = db; window.auth = auth;
   window.ref = ref; window.push = push; window.set = set; window.remove = remove; window.update = update; window.onValue = onValue;
-  window.signInWithPopup = signInWithPopup; window.signOut = signOut; window.onAuthStateChanged = onAuthStateChanged;
+  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+  window.signOut = signOut;
+  window.onAuthStateChanged = onAuthStateChanged;
+  window.deleteUser = deleteUser;
 </script>
 
 <!-- APPLICATION -->
@@ -816,7 +887,6 @@ let currentFilter = 'today', isAdmin = false, darkMode = false, deferredPrompt;
 let allUsers = {}, contacts = [], complaints = [], scheduleOption = 'full';
 let scheduleDayOption = 'today', notifOption = 'full';
 let currentViewerImage = '';
-let autoNotifEnabled = true;
 
 const ADMIN_UIDS = ['WCyUdR31uZOxJwtYzXx85K7E0Cf2', 'ADMIN_UID_2', 'ADMIN_UID_3'];
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
@@ -831,7 +901,6 @@ function openImageViewer(imageSrc, title = 'صورة') {
   const viewer = document.getElementById('imageViewer');
   const img = document.getElementById('viewerImage');
   const info = document.getElementById('imageInfo');
-  
   if (!viewer || !img) return;
   currentViewerImage = imageSrc;
   img.src = imageSrc;
@@ -969,9 +1038,11 @@ function handleAdminTab() {
 
 // ===== المصادقة =====
 function initApp() {
+  // التحقق من حالة المستخدم
   window.onAuthStateChanged(window.auth, user => {
     if (user) {
       currentUser = user;
+      // جلب بيانات المستخدم
       window.onValue(window.ref(window.db, `users/${user.uid}`), snap => {
         userData = snap.val();
         renderUser();
@@ -979,11 +1050,40 @@ function initApp() {
         if (!userData) {
           setTimeout(() => { switchTab('settings'); showToast('📝 أكمل بياناتك', 'warning'); }, 1000);
         }
+        // إظهار التبويب الرئيسي وإخفاء تسجيل الدخول
+        document.getElementById('tab-login').classList.add('hidden');
+        document.getElementById('tab-register').classList.add('hidden');
+        document.getElementById('tab-home').classList.remove('hidden');
+        // تحديث شريط التنقل
+        document.querySelectorAll('nav button').forEach(b => {
+          b.classList.remove('text-blue-600');
+          b.classList.add('text-slate-400');
+        });
+        const nav = document.getElementById('nav-home');
+        if (nav) { nav.classList.remove('text-slate-400'); nav.classList.add('text-blue-600'); }
       });
       window.set(window.ref(window.db, `users/${user.uid}/online`), true);
       window.set(window.ref(window.db, `users/${user.uid}/lastSeen`), Date.now());
     } else {
       currentUser = null; userData = null; isAdmin = false;
+      // إظهار شاشة تسجيل الدخول
+      document.getElementById('tab-login').classList.remove('hidden');
+      document.getElementById('tab-register').classList.add('hidden');
+      document.getElementById('tab-home').classList.add('hidden');
+      document.getElementById('tab-schedule').classList.add('hidden');
+      document.getElementById('tab-library').classList.add('hidden');
+      document.getElementById('tab-news').classList.add('hidden');
+      document.getElementById('tab-notifications').classList.add('hidden');
+      document.getElementById('tab-exams').classList.add('hidden');
+      document.getElementById('tab-results').classList.add('hidden');
+      document.getElementById('tab-teachers').classList.add('hidden');
+      document.getElementById('tab-settings').classList.add('hidden');
+      document.getElementById('tab-admin').classList.add('hidden');
+      // تحديث شريط التنقل
+      document.querySelectorAll('nav button').forEach(b => {
+        b.classList.remove('text-blue-600');
+        b.classList.add('text-slate-400');
+      });
       renderUser();
       document.getElementById('adminDenied').classList.add('hidden');
       document.getElementById('adminLogin').classList.remove('hidden');
@@ -1001,16 +1101,150 @@ function initApp() {
   loadProfileRequests();
 }
 
-function loginGoogle() {
-  window.signInWithPopup(window.auth, window.provider)
-    .then(() => showToast('✅ تم الدخول', 'success'))
-    .catch(e => showToast('❌ ' + e.message, 'error'));
+// ===== تسجيل الدخول =====
+function loginUser() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  if (!email || !password) {
+    showToast('⚠️ يرجى ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  // التحقق إذا كان الإدخال رقم هاتف أو بريد إلكتروني
+  const isPhone = /^[0-9]{10,11}$/.test(email);
+  let loginEmail = email;
+  
+  // إذا كان رقم هاتف، نحوله لبريد وهمي للتسجيل
+  if (isPhone) {
+    loginEmail = `user_${email}@sigma-center.com`;
+  }
+  
+  window.signInWithEmailAndPassword(window.auth, loginEmail, password)
+    .then(result => {
+      showToast('✅ تم تسجيل الدخول بنجاح', 'success');
+    })
+    .catch(error => {
+      if (error.code === 'auth/user-not-found') {
+        showToast('❌ لا يوجد حساب بهذا البريد أو الرقم', 'error');
+      } else if (error.code === 'auth/wrong-password') {
+        showToast('❌ كلمة المرور غير صحيحة', 'error');
+      } else {
+        showToast('❌ ' + error.message, 'error');
+      }
+    });
 }
 
+// ===== إنشاء حساب جديد =====
+function registerUser() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const idFile = document.getElementById('regIdImage').files[0];
+  
+  if (!name || !email || !phone || !password) {
+    showToast('⚠️ يرجى ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  if (password.length < 6) {
+    showToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+    return;
+  }
+  
+  if (!idFile) {
+    showToast('⚠️ يرجى رفع صورة البطاقة أو شهادة الميلاد', 'error');
+    return;
+  }
+  
+  // قراءة صورة البطاقة
+  const reader = new FileReader();
+  reader.readAsDataURL(idFile);
+  reader.onload = async function() {
+    const idImage = reader.result;
+    
+    try {
+      // إنشاء حساب في Firebase Auth
+      const result = await window.createUserWithEmailAndPassword(window.auth, email, password);
+      const user = result.user;
+      
+      // حفظ بيانات المستخدم في قاعدة البيانات مع الصورة
+      await window.set(window.ref(window.db, `users/${user.uid}`), {
+        name: name,
+        email: email,
+        phone: phone,
+        idImage: idImage,
+        stage: '',
+        grade: '',
+        subjects: [],
+        school: '',
+        parentPhone: '',
+        profileStatus: 'pending',
+        createdAt: new Date().toISOString(),
+        online: true,
+        lastSeen: Date.now()
+      });
+      
+      showToast('✅ تم إنشاء الحساب بنجاح! انتظر موافقة الإدارة', 'success');
+      
+      // تنظيف الحقول
+      document.getElementById('regName').value = '';
+      document.getElementById('regEmail').value = '';
+      document.getElementById('regPhone').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regIdImage').value = '';
+      
+      // التبديل لتسجيل الدخول
+      switchTab('login');
+      
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        showToast('❌ هذا البريد الإلكتروني مستخدم بالفعل', 'error');
+      } else {
+        showToast('❌ ' + error.message, 'error');
+      }
+    }
+  };
+}
+
+// ===== تسجيل الخروج =====
 function logoutUser() {
-  if (currentUser) window.set(window.ref(window.db, `users/${currentUser.uid}/online`), false);
+  if (currentUser) {
+    window.set(window.ref(window.db, `users/${currentUser.uid}/online`), false);
+  }
   window.signOut(window.auth);
-  showToast('👋 تم الخروج', 'warning');
+  showToast('👋 تم تسجيل الخروج', 'warning');
+}
+
+// ===== حذف الحساب =====
+function deleteAccount() {
+  if (!currentUser) return showToast('⚠️ سجل دخول أولاً', 'error');
+  
+  if (confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟ لا يمكن التراجع عن هذا الإجراء!')) {
+    const uid = currentUser.uid;
+    
+    // حذف بيانات المستخدم من قاعدة البيانات
+    window.remove(window.ref(window.db, `users/${uid}`))
+      .then(() => {
+        // حذف المستخدم من Firebase Auth
+        return window.deleteUser(currentUser);
+      })
+      .then(() => {
+        showToast('✅ تم حذف الحساب بنجاح', 'success');
+        // إعادة تحميل الصفحة لتحديث الحالة
+        window.location.reload();
+      })
+      .catch(error => {
+        // قد يحتاج المستخدم لإعادة المصادقة
+        if (error.code === 'auth/requires-recent-login') {
+          showToast('⚠️ يرجى تسجيل الدخول مرة أخرى ثم المحاولة', 'warning');
+          logoutUser();
+        } else {
+          showToast('❌ ' + error.message, 'error');
+        }
+      });
+  }
 }
 
 function renderUser() {
@@ -1021,18 +1255,18 @@ function renderUser() {
   const btn = document.getElementById('loginBtn');
 
   if (currentUser && userData) {
-    avatar.src = currentUser.photoURL || 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
+    avatar.src = userData.idImage || 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
     avatar.style.display = 'block';
-    name.textContent = `مرحباً، ${currentUser.displayName || 'طالب'}`;
+    name.textContent = `مرحباً، ${userData.name || 'طالب'}`;
     sub.textContent = `${userData.stage || ''} • صف ${userData.grade || ''}`;
     subjects.innerHTML = (userData.subjects || []).map(s => `<span class="subject-chip">${s}</span>`).join('');
     btn.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i> خروج';
     btn.onclick = logoutUser;
     btn.className = 'bg-red-500/80 hover:bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl';
   } else if (currentUser) {
-    avatar.src = currentUser.photoURL || 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
+    avatar.src = 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
     avatar.style.display = 'block';
-    name.textContent = `مرحباً، ${currentUser.displayName || 'طالب'}`;
+    name.textContent = `مرحباً، ${currentUser.email || 'طالب'}`;
     sub.textContent = 'أكمل بياناتك';
     subjects.innerHTML = '';
     btn.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i> خروج';
@@ -1043,65 +1277,15 @@ function renderUser() {
     name.textContent = 'مرحباً بك';
     sub.textContent = 'سجل دخولك';
     subjects.innerHTML = '';
-    btn.innerHTML = '<i class="fa-brands fa-google text-xs"></i> دخول';
-    btn.onclick = loginGoogle;
-    btn.className = 'bg-white/20 hover:bg-white/30 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl';
   }
 }
 
 function openProfile() { if (currentUser) switchTab('settings'); else showToast('⚠️ سجل دخول', 'error'); }
 
-// ===== طلب تعديل البيانات =====
-function requestProfileUpdate() {
-  if (!currentUser) return showToast('⚠️ سجل دخول', 'error');
-  
-  const school = document.getElementById('profSchool').value;
-  const parentPhone = document.getElementById('profParentPhone').value;
-  const stage = document.getElementById('profStage').value;
-  const grade = document.getElementById('profGrade').value;
-  const phone = document.getElementById('profPhone').value;
-  const checked = document.querySelectorAll('.subject-check:checked');
-  const subjects = Array.from(checked).map(cb => cb.value);
-  const idFile = document.getElementById('profIdImage').files[0];
-  
-  if (!school) return showToast('⚠️ اكتب اسم المدرسة', 'error');
-  if (!parentPhone) return showToast('⚠️ اكتب رقم ولي الأمر', 'error');
-  if (!subjects.length) return showToast('⚠️ اختر مادة', 'error');
-  if (!idFile) return showToast('⚠️ ارفع صورة البطاقة الشخصية', 'error');
-
-  const reader = new FileReader();
-  reader.readAsDataURL(idFile);
-  reader.onload = async function() {
-    const idImage = reader.result;
-    
-    await window.push(window.ref(window.db, 'profile_requests'), {
-      userId: currentUser.uid,
-      userName: currentUser.displayName,
-      userEmail: currentUser.email,
-      school: school,
-      parentPhone: parentPhone,
-      stage: stage,
-      grade: grade,
-      phone: phone,
-      subjects: subjects,
-      idImage: idImage,
-      status: 'pending',
-      date: new Date().toLocaleString('ar-EG'),
-      timestamp: Date.now()
-    });
-    
-    showToast('✅ تم إرسال طلب التعديل للإدارة', 'success');
-  };
-}
-
 // ===== حفظ الملف الشخصي =====
 function saveProfile() {
   if (!currentUser) return showToast('⚠️ سجل دخول', 'error');
   
-  if (!isAdmin && userData?.profileStatus !== 'approved') {
-    return showToast('⚠️ لا يمكن تعديل البيانات دون موافقة الإدارة', 'error');
-  }
-  
   const stage = document.getElementById('profStage').value;
   const grade = document.getElementById('profGrade').value;
   const phone = document.getElementById('profPhone').value;
@@ -1112,15 +1296,12 @@ function saveProfile() {
   
   if (!subjects.length) return showToast('⚠️ اختر مادة', 'error');
 
-  window.set(window.ref(window.db, `users/${currentUser.uid}`), {
-    name: currentUser.displayName,
-    email: currentUser.email,
-    photoURL: currentUser.photoURL,
+  window.update(window.ref(window.db, `users/${currentUser.uid}`), {
     stage, grade, subjects,
-    phone: phone ? btoa(phone) : '',
+    phone: phone,
     school: school,
-    parentPhone: parentPhone ? btoa(parentPhone) : '',
-    profileStatus: 'approved',
+    parentPhone: parentPhone,
+    profileStatus: userData?.profileStatus || 'pending',
     updatedAt: new Date().toISOString()
   }).then(() => { 
     showToast('✅ تم حفظ البيانات', 'success'); 
@@ -1143,10 +1324,10 @@ function loadSubjects() {
 
 function updateInfo() {
   if (currentUser && userData) {
-    document.getElementById('infoName').textContent = currentUser.displayName || '-';
-    document.getElementById('infoEmail').textContent = currentUser.email || '-';
-    document.getElementById('infoPhone').textContent = userData.phone ? atob(userData.phone) : '-';
-    document.getElementById('infoParentPhone').textContent = userData.parentPhone ? atob(userData.parentPhone) : '-';
+    document.getElementById('infoName').textContent = userData.name || '-';
+    document.getElementById('infoEmail').textContent = userData.email || '-';
+    document.getElementById('infoPhone').textContent = userData.phone || '-';
+    document.getElementById('infoParentPhone').textContent = userData.parentPhone || '-';
     document.getElementById('infoSchool').textContent = userData.school || '-';
     document.getElementById('infoStage').textContent = userData.stage || '-';
     document.getElementById('infoGrade').textContent = userData.grade || '-';
@@ -1154,9 +1335,9 @@ function updateInfo() {
     document.getElementById('infoStatus').textContent = userData.profileStatus === 'approved' ? '✅ معتمدة' : '⏳ قيد المراجعة';
     document.getElementById('infoStatus').className = userData.profileStatus === 'approved' ? 'font-bold text-green-600' : 'font-bold text-amber-600';
     
-    document.getElementById('profPhone').value = userData.phone ? atob(userData.phone) : '';
+    document.getElementById('profPhone').value = userData.phone || '';
     document.getElementById('profSchool').value = userData.school || '';
-    document.getElementById('profParentPhone').value = userData.parentPhone ? atob(userData.parentPhone) : '';
+    document.getElementById('profParentPhone').value = userData.parentPhone || '';
   }
 }
 
@@ -1323,7 +1504,6 @@ function deleteItem(path, key) {
   }
 }
 
-// ===== حذف الكل =====
 function deleteAll(path) {
   if (!isAdmin) return;
   const names = {
@@ -1629,7 +1809,7 @@ function rejectProfile(key) {
   showToast('❌ تم رفض الطلب', 'warning');
 }
 
-// ===== Base64 مع ضغط الصور =====
+// ===== Base64 =====
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -1647,12 +1827,10 @@ function compressImage(base64, maxWidth = 1200, quality = 0.8) {
       const canvas = document.createElement('canvas');
       let width = img.width;
       let height = img.height;
-      
       if (width > maxWidth) {
         height = (height * maxWidth) / width;
         width = maxWidth;
       }
-      
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
@@ -1708,10 +1886,6 @@ async function addSchedule() {
   document.getElementById('schTime').value = '';
   document.getElementById('schRoom').value = '';
   document.getElementById('schImage').value = '';
-  
-  if (autoNotifEnabled) {
-    sendAutoNotification('schedule', subject, `${subject} - يوم ${day} - مدرس: ${teacher}`);
-  }
 }
 
 // ===== إرسال إشعار =====
@@ -1781,10 +1955,6 @@ async function addNews() {
   document.getElementById('newsTitle').value = '';
   document.getElementById('newsContent').value = '';
   document.getElementById('newsImage').value = '';
-  
-  if (autoNotifEnabled) {
-    sendAutoNotification('news', title, title);
-  }
 }
 
 // ===== رفع مذكرة =====
@@ -1802,44 +1972,6 @@ async function uploadMat() {
   document.getElementById('matTitle').value = '';
   document.getElementById('matSubject').value = '';
   document.getElementById('matFile').value = '';
-  
-  if (autoNotifEnabled) {
-    sendAutoNotification('material', title, `${title} - ${subject}`);
-  }
-}
-
-// ===== نظام الإشعارات التلقائية =====
-async function sendAutoNotification(type, title, details) {
-  try {
-    if (!autoNotifEnabled) return;
-    
-    const notificationTypes = {
-      'schedule': { icon: '📚', title: '📚 حصة جديدة مضافة!', body: `تم إضافة حصة جديدة: ${title}` },
-      'news': { icon: '📰', title: '📰 خبر جديد!', body: `تم نشر خبر جديد: ${title}` },
-      'material': { icon: '📄', title: '📄 ملف جديد!', body: `تم رفع ملف جديد: ${title}` }
-    };
-
-    const notifData = notificationTypes[type] || notificationTypes['news'];
-    
-    await window.push(window.ref(window.db, 'notifications'), {
-      title: notifData.title,
-      body: `${notifData.body}\n📌 ${details}`,
-      stage: 'الكل',
-      grade: 'الكل',
-      subject: '',
-      imageData: '',
-      date: new Date().toLocaleDateString('ar-EG'),
-      time: new Date().toLocaleTimeString('ar-EG'),
-      createdAt: new Date().toISOString(),
-      isAuto: true,
-      type: type,
-      fromAdmin: currentUser?.displayName || 'الإدارة'
-    });
-
-    console.log(`✅ تم إرسال إشعار تلقائي: ${notifData.title}`);
-  } catch (error) {
-    console.error('❌ فشل إرسال الإشعار التلقائي:', error);
-  }
 }
 
 // ===== أرقام السنتر والدعم =====
@@ -1929,8 +2061,7 @@ function renderComplaints() {
     return;
   }
   container.innerHTML = complaints.reverse().map(c => {
-    let phone = 'غير متوفر';
-    try { if (c.userPhone) phone = atob(c.userPhone); } catch(e) {}
+    let phone = c.userPhone || 'غير متوفر';
     return `<div class="complaint-card"><div class="flex justify-between"><span class="name">${c.userName||'طالب'}</span><span class="phone">📱 ${phone}</span></div><div class="text">${c.text}</div><div class="flex justify-between mt-1"><span class="date">${c.date||''}</span><button onclick="deleteComplaint('${c.id}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div></div>`;
   }).join('');
 }
@@ -1946,7 +2077,7 @@ function sendComplaint() {
   if (!text) return showToast('⚠️ اكتب الشكوى', 'error');
   if (!currentUser) return showToast('⚠️ سجل دخول أولاً', 'error');
   window.push(window.ref(window.db, 'complaints'), {
-    text, userId: currentUser.uid, userName: currentUser.displayName,
+    text, userId: currentUser.uid, userName: userData?.name || currentUser.email,
     userEmail: currentUser.email, userPhone: userData?.phone || '',
     date: new Date().toLocaleString('ar-EG'), timestamp: Date.now()
   });
@@ -2141,7 +2272,7 @@ function toggleDarkMode() {
   document.getElementById('darkIcon').className = darkMode ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
 }
 
-console.log('✅ سنتر سيجما - النسخة المتكاملة جاهزة!');
+console.log('✅ سنتر سيجما - النسخة النهائية جاهزة!');
 </script>
 </body>
-            </html>
+  </html>

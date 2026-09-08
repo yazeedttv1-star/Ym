@@ -1,2324 +1,590 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title> - تطبيق الدردشة</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>" />
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دردشة 2010921</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ============================================================
-           CSS VARIABLES & RESET
-           ============================================================ */
-        :root {
-            --primary: #075e54;
-            --primary-light: #128c7e;
-            --primary-dark: #054740;
-            --secondary: #25d366;
-            --bg-dark: #0a0a0a;
-            --bg-chat: #0d0d0d;
-            --bg-header: #075e54;
-            --bg-input: #2d2d2d;
-            --bg-message-sent: #128c7e;
-            --bg-message-received: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #666666;
-            --border-color: #333333;
-            --shadow: 0 8px 32px rgba(0,0,0,0.4);
-            --radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            direction: rtl;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 2px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* ============================================================
-           SCREENS
-           ============================================================ */
-        .screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        #login-screen {
-            background: linear-gradient(145deg, var(--primary-dark), var(--primary));
-            z-index: 100;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        #login-screen.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-
-        #chat-screen {
-            background: var(--bg-dark);
-            z-index: 10;
-            flex-direction: column;
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-
-        #chat-screen.visible {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: all;
-        }
-
-        /* ============================================================
-           LOGIN
-           ============================================================ */
-        .login-container {
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 2.5rem 2rem;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.08);
-            width: 92%;
-            max-width: 400px;
-            animation: slideUp 0.6s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-container .logo {
-            margin-bottom: 2rem;
-        }
-
-        .login-container .logo .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.8rem;
-            font-size: 3rem;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .login-container .logo h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff, #25d366);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .login-container .logo p {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
-
-        .login-container .input-group {
-            margin-bottom: 12px;
-            text-align: right;
-        }
-
-        .login-container .input-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 4px;
-            text-align: right;
-        }
-
-        .login-container input {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: var(--transition);
-            direction: ltr;
-            text-align: center;
-            font-weight: 500;
-            letter-spacing: 2px;
-        }
-
-        .login-container input:focus {
-            border-color: var(--secondary);
-            background: rgba(255,255,255,0.12);
-            box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.1);
-        }
-
-        .login-container input::placeholder {
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 0;
-            font-weight: 400;
-        }
-
-        .login-container input#user-name-input {
-            direction: rtl;
-            letter-spacing: 0;
-            text-align: center;
-        }
-
-        .login-container .btn-primary {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: var(--secondary);
-            color: #fff;
-            font-size: 1.05rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .login-container .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.3);
-        }
-
-        .login-container .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .login-container .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        #error-msg {
-            color: #ff6b6b;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            display: none;
-            padding: 10px;
-            background: rgba(255,107,107,0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(255,107,107,0.2);
-        }
-
-        .login-container .room-info {
-            margin-top: 16px;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .login-container .room-info span {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.8rem;
-        }
-
-        .login-container .room-info strong {
-            color: var(--secondary);
-            font-size: 1.1rem;
-        }
-
-        .login-container .room-info .users-limit {
-            color: rgba(255,255,255,0.3);
-            font-size: 0.75rem;
-            margin-top: 4px;
-        }
-
-        /* ============================================================
-           CHAT HEADER
-           ============================================================ */
-        .chat-header {
-            background: var(--bg-header);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 65px;
-            flex-shrink: 0;
-            z-index: 20;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-left .room-badge {
-            background: rgba(255,255,255,0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.6);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .header-center {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
-        }
-
-        .header-center .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
-
-        .header-center .status-dot.online {
-            background: var(--secondary);
-        }
-
-        .header-center .status-dot.offline {
-            background: #666;
-            animation: none;
-        }
-
-        .header-center .status-text {
-            font-size: 0.75rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .avatar-small {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.15);
-            background: var(--primary-dark);
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            position: relative;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .icon-btn:active {
-            transform: scale(0.9);
-        }
-
-        .icon-btn .badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background: #e74c3c;
-            color: #fff;
-            font-size: 0.6rem;
-            padding: 2px 6px;
-            border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
-        }
-
-        /* ============================================================
-           STORIES
-           ============================================================ */
-        .stories-container {
-            background: #111;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-
-        .stories-container.open {
-            display: block;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stories-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .stories-header h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .stories-list {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 4px 0 8px;
-            scroll-behavior: smooth;
-        }
-
-        .stories-list::-webkit-scrollbar {
-            height: 2px;
-        }
-        .stories-list::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 2px;
-        }
-
-        .story-item {
-            flex-shrink: 0;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-light);
-            overflow: hidden;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .story-item:hover {
-            transform: scale(1.05);
-        }
-
-        .story-item:active {
-            transform: scale(0.95);
-        }
-
-        .story-item img, .story-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .story-item .story-user {
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-dark);
-            padding: 1px 6px;
-            border-radius: 10px;
-            font-size: 0.5rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            border: 1px solid var(--border-color);
-        }
-
-        .add-story-container {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .add-story-btn {
-            background: var(--primary-light);
-            color: #fff;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .add-story-btn:hover {
-            background: var(--primary);
-            transform: scale(1.02);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.4rem;
-            cursor: pointer;
-            padding: 4px 10px;
-            transition: var(--transition);
-            border-radius: 8px;
-        }
-
-        .close-btn:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-
-        /* ============================================================
-           CHAT MAIN
-           ============================================================ */
-        .chat-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-            background: var(--bg-chat);
-        }
-
-        /* ============================================================
-           TYPING INDICATOR
-           ============================================================ */
-        #typing-indicator {
-            padding: 4px 20px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-style: italic;
-            display: none;
-            min-height: 28px;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-            flex-shrink: 0;
-        }
-
-        #typing-indicator.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* ============================================================
-           MESSAGES
-           ============================================================ */
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: var(--bg-chat);
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(18, 140, 126, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(18, 140, 126, 0.03) 0%, transparent 50%);
-        }
-
-        .messages-container .empty-state {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 60px 20px;
-            font-size: 0.9rem;
-        }
-
-        .messages-container .empty-state .empty-icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
-            opacity: 0.3;
-        }
-
-        .messages-container .empty-state .empty-title {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        /* ===== MESSAGE ===== */
-        .message {
-            max-width: 78%;
-            padding: 10px 14px;
-            border-radius: 16px;
-            word-wrap: break-word;
-            position: relative;
-            animation: messageIn 0.3s ease;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-
-        @keyframes messageIn {
-            from { opacity: 0; transform: translateY(10px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .message.sent {
-            align-self: flex-end;
-            background: var(--bg-message-sent);
-            border-bottom-right-radius: 4px;
-            margin-left: 4px;
-        }
-
-        .message.received {
-            align-self: flex-start;
-            background: var(--bg-message-received);
-            border-bottom-left-radius: 4px;
-            margin-right: 4px;
-        }
-
-        .message .message-sender {
-            font-size: 0.7rem;
-            color: var(--secondary);
-            margin-bottom: 3px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .message .message-sender .sender-avatar {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .message .message-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            word-break: break-word;
-        }
-
-        .message .message-time {
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.4);
-            margin-top: 4px;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            justify-content: flex-end;
-        }
-
-        .message .message-time .read-status {
-            font-size: 0.7rem;
-        }
-
-        .message .message-media {
-            max-width: 100%;
-            border-radius: 10px;
-            margin: 4px 0;
-            cursor: pointer;
-            transition: var(--transition);
-            display: block;
-        }
-
-        .message .message-media:hover {
-            opacity: 0.9;
-        }
-
-        .message .message-media video {
-            max-width: 100%;
-            border-radius: 10px;
-            max-height: 300px;
-        }
-
-        .message .message-media audio {
-            width: 200px;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-
-        .message .message-file {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.08);
-            padding: 8px 14px;
-            border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
-            margin: 4px 0;
-            transition: var(--transition);
-            font-size: 0.85rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .message .message-file:hover {
-            background: rgba(255,255,255,0.15);
-        }
-
-        .message.received .message-file {
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* ============================================================
-           INPUT AREA
-           ============================================================ */
-        .message-input-area {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            padding: 10px 14px;
-            background: var(--bg-dark);
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            position: relative;
-            padding-bottom: 12px;
-        }
-
-        .input-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: flex-end;
-            background: var(--bg-input);
-            border-radius: 25px;
-            padding: 2px 16px;
-            border: 2px solid transparent;
-            transition: var(--transition);
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--primary-light);
-            background: #353535;
-        }
-
-        #message-input {
-            flex: 1;
-            padding: 10px 0;
-            border: none;
-            background: transparent;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            resize: none;
-            max-height: 120px;
-            min-height: 24px;
-            font-family: inherit;
-            line-height: 1.5;
-        }
-
-        #message-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .input-actions {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            padding: 4px 0;
-        }
-
-        .input-actions .icon-btn {
-            width: 34px;
-            height: 34px;
-            font-size: 1.1rem;
-            padding: 4px;
-            color: var(--text-muted);
-        }
-
-        .input-actions .icon-btn:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .send-btn {
-            background: var(--primary-light);
-            color: #fff;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            flex-shrink: 0;
-            align-self: flex-end;
-        }
-
-        .send-btn:hover {
-            background: var(--primary);
-            transform: scale(1.05);
-        }
-
-        .send-btn:active {
-            transform: scale(0.92);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ============================================================
-           MEDIA OPTIONS
-           ============================================================ */
-        .media-options {
-            display: none;
-            gap: 8px;
-            padding: 10px 14px 14px;
-            background: var(--bg-dark);
-            border-top: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            flex-shrink: 0;
-            animation: slideUp 0.3s ease;
-        }
-
-        .media-options.open {
-            display: flex;
-        }
-
-        .media-options button {
-            background: var(--bg-input);
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            min-width: 60px;
-            justify-content: center;
-        }
-
-        .media-options button:hover {
-            background: #3d3d3d;
-            transform: translateY(-1px);
-        }
-
-        .media-options button:active {
-            transform: scale(0.97);
-        }
-
-        /* ============================================================
-           CAMERA
-           ============================================================ */
-        #camera-preview {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            background: #000;
-            display: none;
-            border-radius: 12px;
-            margin: 4px 0;
-        }
-
-        #capture-btn {
-            display: none;
-            background: #e74c3c;
-            color: #fff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            margin: 4px auto;
-            transition: var(--transition);
-        }
-
-        #capture-btn:hover {
-            background: #c0392b;
-            transform: scale(1.02);
-        }
-
-        /* ============================================================
-           STORY VIEWER
-           ============================================================ */
-        .story-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.97);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            flex-direction: column;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .story-viewer.open {
-            display: flex;
-        }
-
-        .story-viewer #story-content {
-            max-width: 92%;
-            max-height: 80vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .story-viewer #story-content img,
-        .story-viewer #story-content video {
-            max-width: 100%;
-            max-height: 80vh;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        #story-progress {
-            width: 80%;
-            max-width: 400px;
-            height: 3px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        #story-progress .progress-bar {
-            height: 100%;
-            background: var(--secondary);
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .story-viewer .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.8rem;
-            z-index: 1001;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .story-viewer .close-btn:hover {
-            color: #fff;
-        }
-
-        .story-viewer .story-user-info {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #fff;
-            font-size: 0.9rem;
-            opacity: 0.7;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ============================================================
-           EMOJI PICKER
-           ============================================================ */
-        .emoji-picker {
-            position: absolute;
-            bottom: 75px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2d2d2d;
-            border-radius: 16px;
-            padding: 16px;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            z-index: 100;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.6);
-            border: 1px solid var(--border-color);
-            animation: slideUp 0.2s ease;
-            max-width: 320px;
-            width: 92%;
-        }
-
-        .emoji-picker button {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 8px;
-            transition: var(--transition);
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .emoji-picker button:hover {
-            background: rgba(255,255,255,0.05);
-            transform: scale(1.1);
-        }
-
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-        @media (max-width: 768px) {
-            .login-container {
-                padding: 2rem 1.5rem;
-                width: 94%;
-            }
-            
-            .login-container .logo .logo-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 2.2rem;
-            }
-
-            .login-container .logo h1 {
-                font-size: 1.6rem;
-            }
-
-            .message {
-                max-width: 88%;
-                padding: 8px 12px;
-            }
-
-            .message .message-text {
-                font-size: 0.9rem;
-            }
-
-            .chat-header {
-                padding: 8px 12px;
-                min-height: 56px;
-            }
-
-            .header-center .status-text {
-                font-size: 0.65rem;
-            }
-
-            .header-center .status-dot {
-                width: 6px;
-                height: 6px;
-            }
-
-            .messages-container {
-                padding: 12px 14px;
-            }
-
-            .message-input-area {
-                padding: 8px 10px 10px;
-                gap: 6px;
-            }
-
-            .input-wrapper {
-                padding: 2px 12px;
-                border-radius: 20px;
-            }
-
-            #message-input {
-                font-size: 0.9rem;
-                padding: 8px 0;
-            }
-
-            .send-btn {
-                width: 38px;
-                height: 38px;
-            }
-
-            .send-btn svg {
-                width: 18px;
-                height: 18px;
-            }
-
-            .icon-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 1rem;
-            }
-
-            .stories-container {
-                padding: 10px 12px;
-            }
-
-            .story-item {
-                width: 50px;
-                height: 50px;
-            }
-
-            .media-options button {
-                padding: 6px 12px;
-                font-size: 0.75rem;
-                min-width: 50px;
-            }
-
-            .emoji-picker {
-                grid-template-columns: repeat(6, 1fr);
-                padding: 12px;
-                bottom: 65px;
-            }
-
-            .emoji-picker button {
-                font-size: 1.5rem;
-            }
-
-            .story-viewer #story-content img,
-            .story-viewer #story-content video {
-                max-height: 70vh;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 1.5rem 1rem;
-            }
-
-            .login-container input {
-                padding: 12px 14px;
-                font-size: 0.9rem;
-            }
-
-            .login-container .btn-primary {
-                padding: 12px;
-                font-size: 0.95rem;
-            }
-
-            .message {
-                max-width: 92%;
-                padding: 7px 10px;
-                border-radius: 14px;
-            }
-
-            .message .message-text {
-                font-size: 0.85rem;
-            }
-
-            .chat-header .header-left .room-badge {
-                display: none;
-            }
-
-            .header-center .status-text {
-                font-size: 0.6rem;
-            }
-
-            .messages-container {
-                padding: 8px 10px;
-            }
-
-            .message-input-area {
-                padding: 6px 8px 8px;
-                gap: 4px;
-            }
-
-            .input-wrapper {
-                padding: 2px 10px;
-                border-radius: 18px;
-            }
-
-            #message-input {
-                font-size: 0.85rem;
-                padding: 6px 0;
-                min-height: 20px;
-            }
-
-            .send-btn {
-                width: 34px;
-                height: 34px;
-            }
-
-            .send-btn svg {
-                width: 16px;
-                height: 16px;
-            }
-
-            .icon-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 0.9rem;
-                padding: 3px;
-            }
-
-            .stories-container {
-                padding: 8px 10px;
-            }
-
-            .story-item {
-                width: 44px;
-                height: 44px;
-                border-width: 2px;
-            }
-
-            .add-story-btn {
-                padding: 6px 16px;
-                font-size: 0.75rem;
-            }
-
-            .media-options {
-                padding: 6px 8px 10px;
-                gap: 4px;
-            }
-
-            .media-options button {
-                padding: 5px 10px;
-                font-size: 0.7rem;
-                min-width: 44px;
-            }
-
-            .emoji-picker {
-                grid-template-columns: repeat(5, 1fr);
-                padding: 10px;
-                gap: 4px;
-                bottom: 58px;
-                max-width: 280px;
-            }
-
-            .emoji-picker button {
-                font-size: 1.3rem;
-            }
-
-            .story-viewer .close-btn {
-                top: 12px;
-                right: 12px;
-                font-size: 1.4rem;
-            }
-
-            #story-progress {
-                width: 90%;
-            }
-        }
-
-        /* ============================================================
-           UTILITY
-           ============================================================ */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        /* ============================================================
-           LOADING SPINNER
-           ============================================================ */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #0a0a0a; color: #fff; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        button { cursor: pointer; border: none; outline: none; background: none; color: #fff; }
+
+        /* ===== SCREENS ===== */
+        .screen { display: none; width: 100%; height: 100vh; max-width: 500px; margin: 0 auto; position: relative; background: #1a1a2e; overflow: hidden; }
+        .screen.active { display: flex; flex-direction: column; }
+
+        /* ===== LOGIN SCREEN ===== */
+        #loginScreen { justify-content: center; align-items: center; background: linear-gradient(145deg, #0f0f1f, #1a1a2e); }
+        .login-container { text-align: center; padding: 30px; width: 100%; max-width: 400px; }
+        .logo i { font-size: 60px; color: #25D366; }
+        .logo h1 { font-size: 28px; margin: 10px 0; background: linear-gradient(45deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo .version { font-size: 12px; color: #888; background: #222; padding: 2px 12px; border-radius: 12px; -webkit-text-fill-color: #888; }
+        .code-display { background: #252540; padding: 12px; border-radius: 10px; margin: 20px 0; border: 1px solid #25D36633; }
+        .code-display strong { color: #25D366; font-size: 18px; letter-spacing: 2px; }
+        .login-box input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 10px; border: 1px solid #333; background: #252540; color: #fff; font-size: 15px; }
+        .login-box input:focus { border-color: #25D366; outline: none; }
+        .btn-primary, .btn-secondary { width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; margin-top: 8px; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(45deg, #25D366, #128C7E); color: #fff; }
+        .btn-primary:hover { transform: scale(1.02); opacity: 0.9; }
+        .btn-secondary { background: #252540; color: #fff; border: 1px solid #444; }
+        .btn-secondary:hover { background: #333355; }
+        .footer-text { margin-top: 20px; font-size: 11px; color: #666; }
+
+        /* ===== CHAT SCREEN ===== */
+        #chatScreen { background: #0d0d1a; }
+        .chat-container { display: flex; flex-direction: column; height: 100vh; max-width: 500px; margin: 0 auto; }
+        
+        /* Header */
+        .chat-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #1a1a2e; border-bottom: 1px solid #2a2a4a; flex-shrink: 0; }
+        .header-info { display: flex; align-items: center; gap: 10px; }
+        .header-info i { color: #25D366; font-size: 22px; }
+        .chat-name { font-weight: bold; font-size: 16px; }
+        .online-status { font-size: 11px; color: #25D366; display: flex; align-items: center; gap: 4px; }
+        .online-status i { font-size: 8px; color: #25D366; }
+        .icon-btn { padding: 8px; border-radius: 50%; transition: background 0.3s; font-size: 18px; }
+        .icon-btn:hover { background: #2a2a4a; }
+
+        /* Messages */
+        .messages-area { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
+        .messages-area::-webkit-scrollbar { width: 4px; }
+        .messages-area::-webkit-scrollbar-track { background: transparent; }
+        .messages-area::-webkit-scrollbar-thumb { background: #25D36644; border-radius: 10px; }
+
+        .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; word-wrap: break-word; animation: fadeIn 0.3s; position: relative; }
+        .msg.sent { align-self: flex-end; background: linear-gradient(135deg, #25D366, #128C7E); border-bottom-right-radius: 4px; }
+        .msg.received { align-self: flex-start; background: #252540; border-bottom-left-radius: 4px; }
+        .msg .sender { font-size: 11px; color: #88ffaa; margin-bottom: 2px; display: block; }
+        .msg .time { font-size: 10px; opacity: 0.6; margin-top: 4px; display: block; text-align: left; }
+        .msg img, .msg video { max-width: 100%; max-height: 300px; border-radius: 8px; margin: 4px 0; cursor: pointer; }
+        .msg .audio-player { width: 100%; max-width: 200px; height: 40px; margin: 4px 0; }
+        .msg .file-attach { display: flex; align-items: center; gap: 8px; background: #ffffff15; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: #88ddff; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Input Area */
+        .input-area { display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: #1a1a2e; border-top: 1px solid #2a2a4a; flex-shrink: 0; }
+        .input-tools { display: flex; gap: 4px; }
+        .tool-btn { width: 38px; height: 38px; border-radius: 50%; font-size: 18px; transition: background 0.3s; color: #888; }
+        .tool-btn:hover { background: #2a2a4a; color: #fff; }
+        #messageInput { flex: 1; padding: 10px 14px; border-radius: 25px; border: 1px solid #333; background: #252540; color: #fff; font-size: 14px; }
+        #messageInput:focus { border-color: #25D366; outline: none; }
+        .send-btn { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(45deg, #25D366, #128C7E); font-size: 18px; transition: transform 0.2s; }
+        .send-btn:hover { transform: scale(1.05); }
+        .send-btn:active { transform: scale(0.95); }
+
+        /* Attach Menu */
+        .attach-menu { display: none; position: absolute; bottom: 75px; left: 10px; background: #1a1a2e; border-radius: 14px; padding: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.8); border: 1px solid #2a2a4a; z-index: 10; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .attach-menu.show { display: grid; }
+        .attach-option { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 14px; border-radius: 10px; transition: background 0.3s; font-size: 12px; color: #ccc; }
+        .attach-option:hover { background: #2a2a4a; }
+        .attach-option i { font-size: 24px; color: #25D366; }
+
+        /* Emoji Picker */
+        .emoji-picker { display: none; position: absolute; bottom: 75px; right: 10px; background: #1a1a2e; border-radius: 14px; padding: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.8); border: 1px solid #2a2a4a; z-index: 10; }
+        .emoji-picker.show { display: block; }
+        .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+        .emoji-grid span { font-size: 28px; cursor: pointer; transition: transform 0.2s; padding: 4px; text-align: center; }
+        .emoji-grid span:hover { transform: scale(1.3); background: #2a2a4a; border-radius: 8px; }
+
+        /* Recorder Panel */
+        .recorder-panel { display: none; align-items: center; gap: 12px; padding: 8px 14px; background: #1a1a2e; border-top: 1px solid #2a2a4a; flex-shrink: 0; }
+        .recorder-panel.show { display: flex; }
+        .record-btn { background: #ff4444; padding: 8px 18px; border-radius: 25px; font-size: 14px; }
+        .record-btn i { margin-left: 6px; }
+        .stop-btn { background: #ff8800; padding: 8px 18px; border-radius: 25px; font-size: 14px; }
+        .cancel-btn { color: #888; font-size: 20px; padding: 4px 10px; }
+        .recorder-timer { font-size: 18px; font-weight: bold; color: #ff4444; min-width: 50px; }
+
+        /* Viewer */
+        #viewerScreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 999; justify-content: center; align-items: center; }
+        #viewerScreen.active { display: flex; }
+        .viewer-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; padding: 10px; z-index: 10; }
+        .viewer-content { max-width: 95%; max-height: 95%; }
+        .viewer-content img, .viewer-content video { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) { .screen { max-width: 100%; } .msg { max-width: 92%; } }
+        @media (max-width: 400px) { .emoji-grid { grid-template-columns: repeat(6, 1fr); } .attach-menu { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #25D36644; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    LOGIN SCREEN    ============================================================ -->
-    <div id="login-screen" class="screen">
-        <div class="login-container">
-            <div class="logo">
-                <div class="logo-icon">💬</div>
-                <h1>يزيد</h1>
-                <p>غرفة دردشة خاصة</p>
-            </div>
-
-            <div class="input-group">
-                <label>👤 اسم المستخدم</label>
-                <input 
-                    type="text" 
-                    id="user-name-input" 
-                    placeholder="اكتب اسمك..."
-                    maxlength="20"
-                    autocomplete="off"
-                />
-            </div>
-
-            <div class="input-group">
-                <label>🔑 رمز الغرفة</label>
-                <input 
-                    type="password" 
-                    id="access-code" 
-                    placeholder="••••••"
-                    maxlength="10"
-                    autocomplete="off"
-                />
-            </div>
-
-            <button id="login-btn" class="btn-primary">
-                <span>دخول</span>
-                <span>➜</span>
-            </button>
-
-            <div id="error-msg"></div>
-
-            <div class="room-info">
-                <span>🏠 غرفة: <strong>يزيد</strong></span>
-                <div class="users-limit">👥 يتسع لـ 2 مستخدمين فقط</div>
-            </div>
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="loginScreen" class="screen active">
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-comment-dots"></i>
+            <h1>دردشة 2010921</h1>
+            <span class="version">v2.0</span>
         </div>
+        <div class="login-box">
+            <div class="code-display">🔑 رمز الدخول: <strong>2010921</strong></div>
+            <input type="text" id="usernameInput" placeholder="👤 اسم المستخدم" maxlength="20">
+            <input type="password" id="passwordInput" placeholder="🔒 كلمة المرور (اختياري)">
+            <button class="btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> دخول</button>
+            <button class="btn-secondary" id="guestBtn"><i class="fas fa-user"></i> دخول كزائر</button>
+        </div>
+        <div class="footer-text">📱 متوافق مع جميع الأجهزة 2010-2026</div>
     </div>
+</div>
 
-    <!-- ============================================================
-    CHAT SCREEN
-    ============================================================ -->
-    <div id="chat-screen" class="screen">
-
-        <!-- HEADER -->
-        <header class="chat-header">
-            <div class="header-left">
-                <img id="user-avatar" src="" alt="User" class="avatar-small" />
-                <span id="user-name-display">المستخدم</span>
-                <span class="room-badge">#يزيد</span>
+<!-- ==================== CHAT SCREEN ==================== -->
+<div id="chatScreen" class="screen">
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-info">
+                <i class="fas fa-comment-dots"></i>
+                <span class="chat-name">دردشة 2010921</span>
+                <span class="online-status"><i class="fas fa-circle"></i> متصل</span>
             </div>
+            <button class="icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
 
-            <div class="header-center">
-                <span class="status-dot online" id="status-dot"></span>
-                <span class="status-text" id="status-text">متصل</span>
-                <span style="color:var(--text-muted);font-size:0.6rem;">|</span>
-                <span id="online-count" style="font-size:0.7rem;color:var(--text-muted);">👤 0/2</span>
-            </div>
+        <!-- Messages -->
+        <div class="messages-area" id="messagesArea"></div>
 
-            <div class="header-right">
-                <button id="stories-btn" class="icon-btn" title="القصص">
-                    📸
-                </button>
-                <button id="clear-chat-btn" class="icon-btn" title="مسح الدردشة">
-                    🗑️
-                </button>
-                <button id="logout-btn" class="icon-btn" title="خروج">
-                    ⏻
-                </button>
+        <!-- Input -->
+        <div class="input-area">
+            <div class="input-tools">
+                <button class="tool-btn" id="emojiBtn"><i class="far fa-smile"></i></button>
+                <button class="tool-btn" id="attachBtn"><i class="fas fa-paperclip"></i></button>
+                <button class="tool-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
             </div>
-        </header>
+            <input type="text" id="messageInput" placeholder="اكتب رسالة..." maxlength="1000">
+            <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
 
-        <!-- STORIES -->
-        <div id="stories-container" class="stories-container">
-            <div class="stories-header">
-                <h3>📸 القصص</h3>
-                <button id="close-stories" class="close-btn">✕</button>
-            </div>
-            <div id="stories-list" class="stories-list"></div>
-            <div class="add-story-container">
-                <button id="add-story-btn" class="add-story-btn">+ إضافة قصة</button>
-                <input type="file" id="story-file-input" accept="image/*,video/*" style="display:none" />
+        <!-- Attach Menu -->
+        <div class="attach-menu" id="attachMenu">
+            <button class="attach-option" data-type="image"><i class="fas fa-image"></i> صورة</button>
+            <button class="attach-option" data-type="video"><i class="fas fa-video"></i> فيديو</button>
+            <button class="attach-option" data-type="audio"><i class="fas fa-music"></i> صوت</button>
+            <button class="attach-option" data-type="file"><i class="fas fa-file"></i> ملف</button>
+        </div>
+
+        <!-- Emoji Picker -->
+        <div class="emoji-picker" id="emojiPicker">
+            <div class="emoji-grid">
+                <span>😊</span><span>😂</span><span>🤣</span><span>😍</span><span>😘</span><span>🥰</span>
+                <span>😎</span><span>🤩</span><span>😢</span><span>😭</span><span>😱</span><span>🤔</span>
+                <span>👍</span><span>👎</span><span>👏</span><span>🙌</span><span>❤️</span><span>🧡</span>
+                <span>💛</span><span>💚</span><span>💙</span><span>💜</span><span>🖤</span><span>🤍</span>
+                <span>🔥</span><span>💯</span><span>⭐</span><span>⚡</span><span>🌈</span><span>☀️</span>
+                <span>🌙</span><span>🌊</span><span>🎉</span><span>🎊</span><span>🎁</span><span>🎈</span>
+                <span>🍕</span><span>🍔</span><span>🌮</span><span>🍣</span><span>🏠</span><span>✈️</span>
             </div>
         </div>
 
-        <!-- CHAT MAIN -->
-        <div class="chat-main">
-
-            <!-- TYPING INDICATOR -->
-            <div id="typing-indicator"></div>
-
-            <!-- MESSAGES -->
-            <div id="messages-container" class="messages-container">
-                <div class="empty-state">
-                    <div class="empty-icon">💬</div>
-                    <div class="empty-title">مرحباً بك في غرفة يزيد</div>
-                    <div style="font-size:0.8rem;color:var(--text-muted);">ابدأ المحادثة الآن</div>
-                </div>
-            </div>
-
-            <!-- MEDIA OPTIONS -->
-            <div id="media-options" class="media-options">
-                <button id="camera-btn">📷 كاميرا</button>
-                <button id="record-btn">🎙️ تسجيل</button>
-                <button id="gallery-btn">🖼️ معرض</button>
-                <button id="file-btn">📁 ملف</button>
-            </div>
-
-            <!-- CAMERA -->
-            <video id="camera-preview" autoplay muted playsinline></video>
-            <button id="capture-btn">📸 التقاط</button>
-
-            <!-- INPUT -->
-            <div class="message-input-area">
-                <button id="attach-btn" class="icon-btn" title="مرفقات">📎</button>
-                <div class="input-wrapper">
-                    <textarea 
-                        id="message-input" 
-                        placeholder="اكتب رسالة..."
-                        rows="1"
-                    ></textarea>
-                    <div class="input-actions">
-                        <button id="emoji-btn" class="icon-btn" title="إيموجي">😊</button>
-                    </div>
-                </div>
-                <button id="send-btn" class="send-btn" title="إرسال" disabled>
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13" />
-                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                    </svg>
-                </button>
-            </div>
+        <!-- Recorder -->
+        <div class="recorder-panel" id="recorderPanel">
+            <button class="record-btn" id="startRecordBtn"><i class="fas fa-circle"></i> تسجيل</button>
+            <button class="stop-btn" id="stopRecordBtn" style="display:none;"><i class="fas fa-stop"></i> إيقاف</button>
+            <button class="cancel-btn" id="cancelRecordBtn"><i class="fas fa-times"></i></button>
+            <span class="recorder-timer" id="recorderTimer">00:00</span>
         </div>
     </div>
+</div>
 
-    <!-- ============================================================
-    STORY VIEWER
-    ============================================================ -->
-    <div id="story-viewer" class="story-viewer">
-        <button id="close-story-viewer" class="close-btn">✕</button>
-        <div class="story-user-info" id="story-user-info"></div>
-        <div id="story-content"></div>
-        <div id="story-progress"><div class="progress-bar" id="story-progress-bar"></div></div>
-    </div>
+<!-- ==================== VIEWER SCREEN ==================== -->
+<div id="viewerScreen" class="screen">
+    <button class="viewer-close" id="closeViewer"><i class="fas fa-times"></i></button>
+    <div class="viewer-content" id="viewerContent"></div>
+</div>
 
-    <!-- ============================================================
-    HIDDEN FILE INPUTS
-    ============================================================ -->
-    <input type="file" id="file-input" accept="*/*" style="display:none" multiple />
+<!-- ==================== HIDDEN FILE INPUTS ==================== -->
+<input type="file" id="fileInput" accept="image/*,video/*,audio/*,.*" style="display:none" multiple>
 
-    <!-- ============================================================
-    FIREBASE + APP
-    ============================================================ -->
-    <script type="importmap">
-        {
-            "imports": {
-                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-                "firebase/analytics": "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js",
-                "firebase/storage": "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"
-            }
+<script>
+// ================================================================
+//  APPLICATION CODE
+// ================================================================
+
+// ---------- STATE ----------
+const state = {
+    username: 'زائر',
+    messages: [],
+    isRecording: false,
+    mediaRecorder: null,
+    audioChunks: [],
+    recorderTimer: null,
+    seconds: 0,
+    currentUser: null
+};
+
+// ---------- DOM REFS ----------
+const $ = id => document.getElementById(id);
+const loginScreen = $('loginScreen');
+const chatScreen = $('chatScreen');
+const viewerScreen = $('viewerScreen');
+const usernameInput = $('usernameInput');
+const passwordInput = $('passwordInput');
+const loginBtn = $('loginBtn');
+const guestBtn = $('guestBtn');
+const logoutBtn = $('logoutBtn');
+const messagesArea = $('messagesArea');
+const messageInput = $('messageInput');
+const sendBtn = $('sendBtn');
+const emojiBtn = $('emojiBtn');
+const attachBtn = $('attachBtn');
+const micBtn = $('micBtn');
+const attachMenu = $('attachMenu');
+const emojiPicker = $('emojiPicker');
+const recorderPanel = $('recorderPanel');
+const startRecordBtn = $('startRecordBtn');
+const stopRecordBtn = $('stopRecordBtn');
+const cancelRecordBtn = $('cancelRecordBtn');
+const recorderTimer = $('recorderTimer');
+const fileInput = $('fileInput');
+const viewerContent = $('viewerContent');
+const closeViewer = $('closeViewer');
+
+// ---------- UTILITY ----------
+function getTime() {
+    const d = new Date();
+    return d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+}
+
+function getFullTime() {
+    const d = new Date();
+    return d.toLocaleString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function formatTime(sec) {
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return `${m}:${s}`;
+}
+
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+// ---------- RENDER MESSAGES ----------
+function renderMessages() {
+    messagesArea.innerHTML = state.messages.map(msg => {
+        let content = '';
+        if (msg.type === 'text') {
+            content = `<span>${escapeHtml(msg.text)}</span>`;
+        } else if (msg.type === 'image') {
+            content = `<img src="${msg.data}" alt="صورة" onclick="viewMedia('${msg.data}', 'image')">`;
+        } else if (msg.type === 'video') {
+            content = `<video controls onclick="viewMedia('${msg.data}', 'video')"><source src="${msg.data}"></video>`;
+        } else if (msg.type === 'audio') {
+            content = `<audio controls class="audio-player"><source src="${msg.data}"></audio>`;
+        } else if (msg.type === 'file') {
+            content = `<a href="${msg.data}" target="_blank" class="file-attach"><i class="fas fa-file"></i> ${msg.filename || 'ملف'}</a>`;
         }
-    </script>
+        const sender = msg.sender === state.currentUser ? 'sent' : 'received';
+        const nameDisplay = msg.sender !== state.currentUser ? `<span class="sender">${escapeHtml(msg.sender)}</span>` : '';
+        return `<div class="msg ${sender}">${nameDisplay}${content}<span class="time">${msg.time}</span></div>`;
+    }).join('');
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
 
-    <script type="module">
-        // ============================================================
-        // IMPORTS
-        // ============================================================
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        import { 
-            getDatabase, ref, push, onChildAdded, set, update, remove, 
-            onValue, query, orderByChild, limitToLast, get, serverTimestamp 
-        } from "firebase/database";
-        import { 
-            getStorage, ref as storageRef, uploadBytesResumable, 
-            getDownloadURL, deleteObject 
-        } from "firebase/storage";
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
-        // ============================================================
-        // FIREBASE CONFIG
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyB5jFiYrMnH_tvaJAq5QmATI43Pu3F0Yaw",
-            authDomain: "my-project-f00cd.firebaseapp.com",
-            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com",
-            projectId: "my-project-f00cd",
-            storageBucket: "my-project-f00cd.firebasestorage.app",
-            messagingSenderId: "346249386295",
-            appId: "1:346249386295:web:5652b6b2309b795c89a2b2",
-            measurementId: "G-0XL21X43PR"
+// ---------- ADD MESSAGE ----------
+function addMessage(type, data, sender = null, extra = {}) {
+    const msg = {
+        id: generateId(),
+        type: type,
+        data: data,
+        sender: sender || state.currentUser || 'زائر',
+        time: getTime(),
+        fullTime: getFullTime(),
+        ...extra
+    };
+    state.messages.push(msg);
+    renderMessages();
+    // Save to localStorage
+    try {
+        localStorage.setItem('chat_messages', JSON.stringify(state.messages));
+    } catch(e) {}
+    return msg;
+}
+
+// ---------- VIEW MEDIA ----------
+window.viewMedia = function(src, type) {
+    viewerContent.innerHTML = type === 'video' 
+        ? `<video controls autoplay><source src="${src}"></video>`
+        : `<img src="${src}" alt="مرفق">`;
+    viewerScreen.classList.add('active');
+};
+
+// ---------- SEND TEXT ----------
+function sendText() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+    addMessage('text', text);
+    messageInput.value = '';
+    // Simulate reply
+    simulateReply(text);
+}
+
+// ---------- SIMULATE REPLY ----------
+function simulateReply(userText) {
+    const replies = [
+        'مرحباً! كيف حالك؟ 😊', 'شكراً لك!', 'جميل جداً!', 'أنا بخير، وأنت؟',
+        'نعم، فهمت ✅', 'بالطبع!', 'أنا معك 👍', 'حسناً، سأفعل ذلك',
+        'شكراً على مشاركتك ❤️', 'رائع! استمر 🎉', 'هذا مفيد جداً', 'أوافقك الرأي 💯',
+        'هل يمكنك التوضيح أكثر؟', 'سأفكر في ذلك', 'جيد، شكراً لك 🌟'
+    ];
+    const random = replies[Math.floor(Math.random() * replies.length)];
+    setTimeout(() => {
+        addMessage('text', random, 'المساعد');
+    }, 800 + Math.random() * 1500);
+}
+
+// ---------- FILE UPLOAD ----------
+function handleFileUpload(files) {
+    Array.from(files).forEach(file => {
+        const type = file.type.split('/')[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            let msgType = 'file';
+            let extra = { filename: file.name };
+            if (type === 'image') msgType = 'image';
+            else if (type === 'video') msgType = 'video';
+            else if (type === 'audio') msgType = 'audio';
+            addMessage(msgType, e.target.result, null, extra);
         };
+        reader.readAsDataURL(file);
+    });
+    attachMenu.classList.remove('show');
+}
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const database = getDatabase(app);
-        const storage = getStorage(app);
+// ---------- RECORDER ----------
+let recorderTimerInterval = null;
 
-        // ============================================================
-        // CONSTANTS
-        // ============================================================
-        const ROOM_NAME = 'يزيد';
-        const ROOM_ID = 'yazeed_room';
-        const MAX_USERS = 2;
-        const ACCESS_CODE = '2010921';
-
-        // ============================================================
-        // DOM REFS
-        // ============================================================
-        const loginScreen = document.getElementById('login-screen');
-        const chatScreen = document.getElementById('chat-screen');
-        const accessCodeInput = document.getElementById('access-code');
-        const userNameInput = document.getElementById('user-name-input');
-        const loginBtn = document.getElementById('login-btn');
-        const errorMsg = document.getElementById('error-msg');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const userAvatar = document.getElementById('user-avatar');
-        const messagesContainer = document.getElementById('messages-container');
-        const messageInput = document.getElementById('message-input');
-        const sendBtn = document.getElementById('send-btn');
-        const attachBtn = document.getElementById('attach-btn');
-        const mediaOptions = document.getElementById('media-options');
-        const cameraBtn = document.getElementById('camera-btn');
-        const recordBtn = document.getElementById('record-btn');
-        const galleryBtn = document.getElementById('gallery-btn');
-        const fileBtn = document.getElementById('file-btn');
-        const fileInput = document.getElementById('file-input');
-        const cameraPreview = document.getElementById('camera-preview');
-        const captureBtn = document.getElementById('capture-btn');
-        const storiesContainer = document.getElementById('stories-container');
-        const storiesList = document.getElementById('stories-list');
-        const addStoryBtn = document.getElementById('add-story-btn');
-        const storyFileInput = document.getElementById('story-file-input');
-        const storiesBtn = document.getElementById('stories-btn');
-        const closeStories = document.getElementById('close-stories');
-        const storyViewer = document.getElementById('story-viewer');
-        const storyContent = document.getElementById('story-content');
-        const closeStoryViewer = document.getElementById('close-story-viewer');
-        const storyProgressBar = document.getElementById('story-progress-bar');
-        const storyUserInfo = document.getElementById('story-user-info');
-        const emojiBtn = document.getElementById('emoji-btn');
-        const onlineCount = document.getElementById('online-count');
-        const typingIndicator = document.getElementById('typing-indicator');
-        const clearChatBtn = document.getElementById('clear-chat-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const statusDot = document.getElementById('status-dot');
-        const statusText = document.getElementById('status-text');
-
-        // ============================================================
-        // STATE
-        // ============================================================
-        let currentUser = null;
-        let selectedFile = null;
-        let mediaRecorder = null;
-        let recordedChunks = [];
-        let isTyping = false;
-        let typingTimeout = null;
-        let storyInterval = null;
-        let currentStoryIndex = 0;
-        let storiesData = [];
-        let cameraStream = null;
-        let isRecording = false;
-        let allUsers = {};
-        let isChatFull = false;
-
-        // ============================================================
-        // LOGIN
-        // ============================================================
-        loginBtn.addEventListener('click', handleLogin);
-        accessCodeInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-        userNameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
-
-        async function handleLogin() {
-            const code = accessCodeInput.value.trim();
-            const name = userNameInput.value.trim() || 'مستخدم';
-
-            if (code !== ACCESS_CODE) {
-                showError('⚠️ رمز الدخول غير صحيح');
-                return;
-            }
-
-            if (name.length < 2) {
-                showError('⚠️ الاسم يجب أن يكون حرفين على الأقل');
-                return;
-            }
-
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<span class="spinner"></span> جاري الدخول...';
-            hideError();
-
-            try {
-                // التحقق من عدد المستخدمين
-                const usersRef = ref(database, `rooms/${ROOM_ID}/users`);
-                const snapshot = await get(usersRef);
-                const users = snapshot.val() || {};
-                const userCount = Object.keys(users).length;
-
-                if (userCount >= MAX_USERS) {
-                    showError('⚠️ الغرفة ممتلئة! الحد الأقصى 2 مستخدمين');
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '<span>دخول</span><span>➜</span>';
-                    return;
-                }
-
-                // إنشاء مستخدم جديد
-                const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-                currentUser = {
-                    uid: userId,
-                    displayName: name,
-                    photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=128c7e&color=fff&size=128&bold=true`,
-                    online: true,
-                    joinedAt: Date.now()
+function startRecording() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('التسجيل غير مدعوم في هذا المتصفح');
+        return;
+    }
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            state.mediaRecorder = new MediaRecorder(stream);
+            state.audioChunks = [];
+            state.mediaRecorder.ondataavailable = e => state.audioChunks.push(e.data);
+            state.mediaRecorder.onstop = () => {
+                const blob = new Blob(state.audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    addMessage('audio', e.target.result);
                 };
-
-                // حفظ المستخدم
-                await set(ref(database, `rooms/${ROOM_ID}/users/${userId}`), {
-                    displayName: name,
-                    photoURL: currentUser.photoURL,
-                    online: true,
-                    joinedAt: Date.now()
-                });
-
-                // حفظ حالة الغرفة
-                await set(ref(database, `rooms/${ROOM_ID}/info`), {
-                    name: ROOM_NAME,
-                    userCount: userCount + 1,
-                    maxUsers: MAX_USERS,
-                    updatedAt: Date.now()
-                });
-
-                // تحديث حالة الاتصال
-                window.addEventListener('beforeunload', () => {
-                    update(ref(database, `rooms/${ROOM_ID}/users/${userId}`), {
-                        online: false,
-                        lastSeen: Date.now()
-                    });
-                });
-
-                // دخول ناجح
-                loginScreen.classList.add('hidden');
-                chatScreen.classList.add('visible');
-                userNameDisplay.textContent = name;
-                userAvatar.src = currentUser.photoURL;
-                
-                loadMessages();
-                loadStories();
-                loadUsers();
-                setupTypingIndicator();
-                updateOnlineCount();
-
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<span>دخول</span><span>➜</span>';
-
-            } catch (error) {
-                console.error('Login error:', error);
-                showError('❌ حدث خطأ، حاول مرة أخرى');
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<span>دخول</span><span>➜</span>';
-            }
-        }
-
-        function showError(msg) {
-            errorMsg.textContent = msg;
-            errorMsg.style.display = 'block';
-        }
-
-        function hideError() {
-            errorMsg.style.display = 'none';
-        }
-
-        // ============================================================
-        // LOAD USERS
-        // ============================================================
-        function loadUsers() {
-            const usersRef = ref(database, `rooms/${ROOM_ID}/users`);
-            onValue(usersRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                allUsers = data;
-                updateOnlineCount();
-                checkRoomFull();
-            });
-        }
-
-        function updateOnlineCount() {
-            const online = Object.values(allUsers).filter(u => u.online === true).length;
-            const total = Object.keys(allUsers).length;
-            onlineCount.textContent = `👤 ${online}/${MAX_USERS}`;
-
-            // تحديث حالة المستخدم
-            if (online > 1) {
-                statusDot.className = 'status-dot online';
-                statusText.textContent = `متصل (${online} مستخدم)`;
-            } else {
-                statusDot.className = 'status-dot online';
-                statusText.textContent = 'متصل (أنت فقط)';
-            }
-        }
-
-        function checkRoomFull() {
-            const total = Object.keys(allUsers).length;
-            isChatFull = total >= MAX_USERS;
-        }
-
-        // ============================================================
-        // TYPING INDICATOR
-        // ============================================================
-        function setupTypingIndicator() {
-            const typingRef = ref(database, `rooms/${ROOM_ID}/typing`);
-            
-            onValue(typingRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.userId && data.userId !== currentUser?.uid) {
-                    typingIndicator.textContent = `${data.userName} يكتب...`;
-                    typingIndicator.classList.add('show');
-                    clearTimeout(typingTimeout);
-                    typingTimeout = setTimeout(() => {
-                        typingIndicator.classList.remove('show');
-                    }, 3000);
-                } else {
-                    typingIndicator.classList.remove('show');
-                }
-            });
-        }
-
-        messageInput.addEventListener('input', () => {
-            const typingRef = ref(database, `rooms/${ROOM_ID}/typing`);
-            if (messageInput.value.length > 0 && !isTyping) {
-                isTyping = true;
-                set(typingRef, {
-                    userId: currentUser?.uid,
-                    userName: currentUser?.displayName,
-                    timestamp: Date.now()
-                });
-            } else if (messageInput.value.length === 0 && isTyping) {
-                isTyping = false;
-                remove(typingRef);
-            }
-        });
-
-        // ============================================================
-        // MESSAGES
-        // ============================================================
-        function loadMessages() {
-            const messagesRef = query(
-                ref(database, `rooms/${ROOM_ID}/messages`),
-                orderByChild('timestamp'),
-                limitToLast(100)
-            );
-            
-            onChildAdded(messagesRef, (snapshot) => {
-                const message = snapshot.val();
-                if (message) {
-                    displayMessage(message);
-                }
-            });
-        }
-
-        function displayMessage(message) {
-            // إزالة الحالة الفارغة
-            const emptyState = messagesContainer.querySelector('.empty-state');
-            if (emptyState) emptyState.remove();
-
-            const messageDiv = document.createElement('div');
-            const isOwn = message.senderId === currentUser?.uid;
-            messageDiv.className = `message ${isOwn ? 'sent' : 'received'}`;
-            
-            let content = '';
-            
-            if (!isOwn) {
-                content += `
-                    <div class="message-sender">
-                        <img src="${message.senderPhoto || 'https://ui-avatars.com/api/?name=User&background=555&color=fff&size=32'}" class="sender-avatar" />
-                        ${message.senderName || 'مستخدم'}
-                    </div>
-                `;
-            }
-            
-            if (message.text) {
-                content += `<div class="message-text">${escapeHtml(message.text)}</div>`;
-            }
-            
-            if (message.mediaUrl) {
-                if (message.mediaType === 'image') {
-                    content += `<img src="${message.mediaUrl}" class="message-media" alt="صورة" onclick="window.open('${message.mediaUrl}')" loading="lazy" />`;
-                } else if (message.mediaType === 'video') {
-                    content += `<video controls class="message-media" preload="metadata"><source src="${message.mediaUrl}" /></video>`;
-                } else if (message.mediaType === 'audio') {
-                    content += `<audio controls class="message-media" preload="metadata"><source src="${message.mediaUrl}" /></audio>`;
-                } else if (message.mediaType === 'file') {
-                    const icon = getFileIcon(message.fileName || '');
-                    content += `<a href="${message.mediaUrl}" target="_blank" class="message-file">${icon} ${message.fileName || 'ملف'}</a>`;
-                }
-            }
-            
-            const time = new Date(message.timestamp).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            const readStatus = isOwn ? (message.read ? '✓✓' : '✓') : '';
-            content += `
-                <div class="message-time">
-                    ${time}
-                    <span class="read-status">${readStatus}</span>
-                </div>
-            `;
-            
-            messageDiv.innerHTML = content;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // تحديث حالة القراءة
-            if (!isOwn && message.read === false) {
-                const messageRef = ref(database, `rooms/${ROOM_ID}/messages/${message._key || ''}`);
-                update(messageRef, { read: true });
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function getFileIcon(filename) {
-            const ext = filename.split('.').pop()?.toLowerCase() || '';
-            const icons = {
-                pdf: '📄', doc: '📝', docx: '📝', xls: '📊', xlsx: '📊',
-                ppt: '📽️', pptx: '📽️', zip: '📦', rar: '📦', '7z': '📦',
-                txt: '📃', json: '📃', xml: '📃', csv: '📃',
-                mp3: '🎵', wav: '🎵', flac: '🎵', aac: '🎵',
-                mp4: '🎬', avi: '🎬', mkv: '🎬', mov: '🎬',
-                jpg: '🖼️', jpeg: '🖼️', png: '🖼️', gif: '🖼️', svg: '🖼️',
-                exe: '⚙️', dmg: '💿', app: '📱'
+                reader.readAsDataURL(blob);
+                stream.getTracks().forEach(t => t.stop());
+                resetRecorder();
             };
-            return icons[ext] || '📎';
+            state.mediaRecorder.start();
+            state.isRecording = true;
+            startRecordBtn.style.display = 'none';
+            stopRecordBtn.style.display = 'inline-flex';
+            startRecorderTimer();
+        })
+        .catch(() => alert('الرجاء السماح بالوصول إلى الميكروفون'));
+}
+
+function stopRecording() {
+    if (state.mediaRecorder && state.isRecording) {
+        state.mediaRecorder.stop();
+        state.isRecording = false;
+    }
+}
+
+function cancelRecording() {
+    if (state.mediaRecorder && state.isRecording) {
+        state.mediaRecorder.stop();
+        state.isRecording = false;
+        state.audioChunks = [];
+    }
+    resetRecorder();
+}
+
+function resetRecorder() {
+    state.isRecording = false;
+    startRecordBtn.style.display = 'inline-flex';
+    stopRecordBtn.style.display = 'none';
+    state.seconds = 0;
+    recorderTimer.textContent = '00:00';
+    if (recorderTimerInterval) {
+        clearInterval(recorderTimerInterval);
+        recorderTimerInterval = null;
+    }
+    recorderPanel.classList.remove('show');
+}
+
+function startRecorderTimer() {
+    state.seconds = 0;
+    if (recorderTimerInterval) clearInterval(recorderTimerInterval);
+    recorderTimerInterval = setInterval(() => {
+        state.seconds++;
+        recorderTimer.textContent = formatTime(state.seconds);
+        if (state.seconds >= 300) stopRecording(); // 5 min max
+    }, 1000);
+}
+
+// ---------- LOGIN / LOGOUT ----------
+function login(username, isGuest = false) {
+    username = username.trim() || 'زائر';
+    state.currentUser = username;
+    state.username = username;
+    // Load messages
+    try {
+        const saved = localStorage.getItem('chat_messages');
+        if (saved) state.messages = JSON.parse(saved);
+    } catch(e) {}
+    renderMessages();
+    loginScreen.classList.remove('active');
+    chatScreen.classList.add('active');
+    // Welcome message
+    if (state.messages.length === 0) {
+        addMessage('text', `👋 مرحباً ${username}! أهلاً بك في دردشة 2010921`, 'النظام');
+        setTimeout(() => {
+            addMessage('text', '💬 يمكنك إرسال رسائل نصية، صور، فيديوهات، ورسائل صوتية', 'النظام');
+        }, 500);
+    }
+}
+
+function logout() {
+    state.currentUser = null;
+    chatScreen.classList.remove('active');
+    loginScreen.classList.add('active');
+    usernameInput.value = '';
+    passwordInput.value = '';
+    attachMenu.classList.remove('show');
+    emojiPicker.classList.remove('show');
+    recorderPanel.classList.remove('show');
+    resetRecorder();
+}
+
+// ---------- EVENT LISTENERS ----------
+// Login
+loginBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim() || 'زائر';
+    const password = passwordInput.value;
+    if (password && password !== '2010921') {
+        alert('❌ كلمة المرور غير صحيحة');
+        return;
+    }
+    login(username);
+});
+
+guestBtn.addEventListener('click', () => {
+    login('زائر_' + Math.floor(Math.random() * 1000), true);
+});
+
+usernameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginBtn.click(); });
+passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginBtn.click(); });
+
+logoutBtn.addEventListener('click', logout);
+
+// Send
+sendBtn.addEventListener('click', sendText);
+messageInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendText();
+    }
+});
+
+// Emoji
+emojiBtn.addEventListener('click', () => {
+    emojiPicker.classList.toggle('show');
+    attachMenu.classList.remove('show');
+});
+document.querySelectorAll('.emoji-grid span').forEach(el => {
+    el.addEventListener('click', () => {
+        messageInput.value += el.textContent;
+        messageInput.focus();
+        emojiPicker.classList.remove('show');
+    });
+});
+
+// Attach
+attachBtn.addEventListener('click', () => {
+    attachMenu.classList.toggle('show');
+    emojiPicker.classList.remove('show');
+});
+document.querySelectorAll('.attach-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        if (type === 'audio') {
+            attachMenu.classList.remove('show');
+            recorderPanel.classList.add('show');
+            return;
         }
+        fileInput.accept = type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : type === 'file' ? '.*' : '*/*';
+        fileInput.click();
+    });
+});
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) {
+        handleFileUpload(e.target.files);
+        fileInput.value = '';
+    }
+});
 
-        // ============================================================
-        // SEND MESSAGE
-        // ============================================================
-        sendBtn.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+// Recorder
+micBtn.addEventListener('click', () => {
+    recorderPanel.classList.toggle('show');
+    if (!recorderPanel.classList.contains('show')) resetRecorder();
+});
+startRecordBtn.addEventListener('click', startRecording);
+stopRecordBtn.addEventListener('click', stopRecording);
+cancelRecordBtn.addEventListener('click', cancelRecording);
 
-        // تفعيل زر الإرسال
-        messageInput.addEventListener('input', () => {
-            const hasText = messageInput.value.trim().length > 0 || selectedFile !== null;
-            sendBtn.disabled = !hasText;
-        });
+// Viewer
+closeViewer.addEventListener('click', () => {
+    viewerScreen.classList.remove('active');
+    viewerContent.innerHTML = '';
+});
 
-        async function sendMessage() {
-            if (!currentUser) return;
-            
-            const text = messageInput.value.trim();
-            if (!text && !selectedFile) return;
-            
-            sendBtn.disabled = true;
-            
-            const messageData = {
-                senderId: currentUser.uid,
-                senderName: currentUser.displayName,
-                senderPhoto: currentUser.photoURL,
-                timestamp: Date.now(),
-                text: text || '',
-                read: false
-            };
-            
-            if (selectedFile) {
-                try {
-                    const url = await uploadFile(selectedFile, `rooms/${ROOM_ID}/media`);
-                    messageData.mediaUrl = url;
-                    messageData.mediaType = selectedFile.type.startsWith('image/') ? 'image' :
-                                           selectedFile.type.startsWith('video/') ? 'video' :
-                                           selectedFile.type.startsWith('audio/') ? 'audio' : 'file';
-                    messageData.fileName = selectedFile.name;
-                    selectedFile = null;
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    alert('❌ فشل رفع الملف');
-                    sendBtn.disabled = false;
-                    return;
-                }
-            }
-            
-            try {
-                const messageRef = push(ref(database, `rooms/${ROOM_ID}/messages`));
-                messageData._key = messageRef.key;
-                await set(messageRef, messageData);
-                
-                messageInput.value = '';
-                mediaOptions.classList.remove('open');
-                sendBtn.disabled = true;
-                
-                if (isTyping) {
-                    isTyping = false;
-                    remove(ref(database, `rooms/${ROOM_ID}/typing`));
-                }
-            } catch (error) {
-                console.error('Send error:', error);
-                alert('❌ فشل إرسال الرسالة');
-            } finally {
-                sendBtn.disabled = false;
-                messageInput.focus();
-            }
-        }
+// Close menus on outside click
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#emojiPicker') && !e.target.closest('#emojiBtn')) {
+        emojiPicker.classList.remove('show');
+    }
+    if (!e.target.closest('#attachMenu') && !e.target.closest('#attachBtn')) {
+        attachMenu.classList.remove('show');
+    }
+});
 
-        // ============================================================
-        // FILE UPLOAD
-        // ============================================================
-        async function uploadFile(file, path) {
-            return new Promise((resolve, reject) => {
-                const fileRef = storageRef(storage, `${path}/${Date.now()}_${file.name}`);
-                const uploadTask = uploadBytesResumable(fileRef, file);
-                
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log('Upload:', Math.round(progress) + '%');
-                    },
-                    (error) => reject(error),
-                    async () => {
-                        const url = await getDownloadURL(uploadTask.snapshot.ref);
-                        resolve(url);
-                    }
-                );
-            });
-        }
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        emojiPicker.classList.remove('show');
+        attachMenu.classList.remove('show');
+        viewerScreen.classList.remove('active');
+        recorderPanel.classList.remove('show');
+        resetRecorder();
+    }
+});
 
-        // ============================================================
-        // MEDIA OPTIONS
-        // ============================================================
-        attachBtn.addEventListener('click', () => {
-            mediaOptions.classList.toggle('open');
-        });
+// ---------- CHECK FOR SECRET CODE ----------
+console.log('%c🔑 رمز التطبيق السري: 2010921', 'font-size:20px; background:#25D366; color:#fff; padding:10px; border-radius:8px;');
 
-        galleryBtn.addEventListener('click', () => {
-            fileInput.accept = 'image/*,video/*';
-            fileInput.click();
-        });
+// ---------- INIT ----------
+// Auto-login if returning user
+const savedUser = localStorage.getItem('chat_user');
+if (savedUser) {
+    // Optional: auto-login
+}
 
-        fileBtn.addEventListener('click', () => {
-            fileInput.accept = '*/*';
-            fileInput.click();
-        });
+// Show login by default
+loginScreen.classList.add('active');
+</script>
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                selectedFile = e.target.files[0];
-                mediaOptions.classList.remove('open');
-                const icon = selectedFile.type.startsWith('image/') ? '🖼️' :
-                            selectedFile.type.startsWith('video/') ? '🎬' :
-                            selectedFile.type.startsWith('audio/') ? '🎵' : '📎';
-                messageInput.placeholder = `${icon} ${selectedFile.name}`;
-                sendBtn.disabled = false;
-            }
-        });
-
-        // ============================================================
-        // CAMERA
-        // ============================================================
-        cameraBtn.addEventListener('click', async () => {
-            try {
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                    cameraStream = null;
-                }
-                cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' },
-                    audio: false
-                });
-                cameraPreview.srcObject = cameraStream;
-                cameraPreview.style.display = 'block';
-                captureBtn.style.display = 'block';
-                mediaOptions.classList.remove('open');
-            } catch (error) {
-                console.error('Camera error:', error);
-                alert('❌ تعذر الوصول إلى الكاميرا');
-            }
-        });
-
-        captureBtn.addEventListener('click', () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = cameraPreview.videoWidth || 640;
-            canvas.height = cameraPreview.videoHeight || 480;
-            canvas.getContext('2d').drawImage(cameraPreview, 0, 0);
-            canvas.toBlob((blob) => {
-                selectedFile = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' });
-                cameraPreview.style.display = 'none';
-                captureBtn.style.display = 'none';
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                    cameraStream = null;
-                }
-                messageInput.placeholder = '📷 صورة من الكاميرا';
-                sendBtn.disabled = false;
-                mediaOptions.classList.remove('open');
-            }, 'image/jpeg');
-        });
-
-        // ============================================================
-        // RECORDING
-        // ============================================================
-        recordBtn.addEventListener('click', async () => {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                mediaRecorder.stop();
-                isRecording = false;
-                recordBtn.textContent = '🎙️ تسجيل';
-                recordBtn.style.background = '';
-                return;
-            }
-            
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                recordedChunks = [];
-                
-                mediaRecorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) recordedChunks.push(e.data);
-                };
-                
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
-                    selectedFile = new File([blob], `recording_${Date.now()}.webm`, { type: 'audio/webm' });
-                    messageInput.placeholder = '🎙️ تسجيل صوتي';
-                    sendBtn.disabled = false;
-                    stream.getTracks().forEach(track => track.stop());
-                    mediaOptions.classList.remove('open');
-                    isRecording = false;
-                };
-                
-                mediaRecorder.start();
-                isRecording = true;
-                recordBtn.textContent = '⏹️ إيقاف';
-                recordBtn.style.background = '#e74c3c';
-            } catch (error) {
-                console.error('Recording error:', error);
-                alert('❌ تعذر الوصول إلى الميكروفون');
-            }
-        });
-
-        // ============================================================
-        // STORIES
-        // ============================================================
-        function loadStories() {
-            const storiesRef = ref(database, `rooms/${ROOM_ID}/stories`);
-            onValue(storiesRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                storiesData = [];
-                storiesList.innerHTML = '';
-                
-                Object.keys(data).forEach(key => {
-                    const story = data[key];
-                    // حذف القصص القديمة (أكثر من 24 ساعة)
-                    if (Date.now() - story.timestamp > 86400000) {
-                        remove(ref(database, `rooms/${ROOM_ID}/stories/${key}`));
-                        return;
-                    }
-                    storiesData.push({ ...story, id: key });
-                    addStoryItem(story, key);
-                });
-            });
-        }
-
-        function addStoryItem(story, id) {
-            const storyDiv = document.createElement('div');
-            storyDiv.className = 'story-item';
-            storyDiv.setAttribute('data-story-id', id);
-            
-            if (story.mediaType === 'image') {
-                storyDiv.innerHTML = `<img src="${story.mediaUrl}" alt="قصة" loading="lazy" />`;
-            } else if (story.mediaType === 'video') {
-                storyDiv.innerHTML = `<video muted preload="metadata"><source src="${story.mediaUrl}" /></video>`;
-            }
-            
-            // إضافة اسم المستخدم
-            const userSpan = document.createElement('span');
-            userSpan.className = 'story-user';
-            userSpan.textContent = story.userName || 'مستخدم';
-            storyDiv.appendChild(userSpan);
-            
-            storyDiv.addEventListener('click', () => openStoryViewer(id));
-            storiesList.appendChild(storyDiv);
-        }
-
-        storiesBtn.addEventListener('click', () => {
-            storiesContainer.classList.toggle('open');
-        });
-
-        closeStories.addEventListener('click', () => {
-            storiesContainer.classList.remove('open');
-        });
-
-        addStoryBtn.addEventListener('click', () => {
-            storyFileInput.click();
-        });
-
-        storyFileInput.addEventListener('change', async (e) => {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                try {
-                    const url = await uploadFile(file, `rooms/${ROOM_ID}/stories`);
-                    const storyData = {
-                        userId: currentUser?.uid,
-                        userName: currentUser?.displayName,
-                        userPhoto: currentUser?.photoURL,
-                        mediaUrl: url,
-                        mediaType: file.type.startsWith('image/') ? 'image' : 'video',
-                        timestamp: Date.now()
-                    };
-                    const storyRef = push(ref(database, `rooms/${ROOM_ID}/stories`));
-                    await set(storyRef, storyData);
-                    storyFileInput.value = '';
-                    alert('✅ تم نشر القصة');
-                } catch (error) {
-                    console.error('Story upload error:', error);
-                    alert('❌ فشل رفع القصة');
-                }
-            }
-        });
-
-        // ============================================================
-        // STORY VIEWER
-        // ============================================================
-        function openStoryViewer(storyId) {
-            const story = storiesData.find(s => s.id === storyId);
-            if (!story) return;
-            
-            storyViewer.classList.add('open');
-            storyContent.innerHTML = '';
-            
-            if (story.mediaType === 'image') {
-                storyContent.innerHTML = `<img src="${story.mediaUrl}" alt="قصة" />`;
-            } else if (story.mediaType === 'video') {
-                storyContent.innerHTML = `<video controls autoplay><source src="${story.mediaUrl}" /></video>`;
-            }
-            
-            storyUserInfo.textContent = `📸 ${story.userName || 'مستخدم'}`;
-            
-            // مؤشر التقدم
-            storyProgressBar.style.width = '0%';
-            let progress = 0;
-            if (storyInterval) clearInterval(storyInterval);
-            
-            storyInterval = setInterval(() => {
-                progress += 1.5;
-                storyProgressBar.style.width = Math.min(progress, 100) + '%';
-                if (progress >= 100) {
-                    clearInterval(storyInterval);
-                    storyViewer.classList.remove('open');
-                }
-            }, 100);
-        }
-
-        closeStoryViewer.addEventListener('click', () => {
-            storyViewer.classList.remove('open');
-            if (storyInterval) {
-                clearInterval(storyInterval);
-                storyInterval = null;
-            }
-        });
-
-        // ============================================================
-        // EMOJI PICKER
-        // ============================================================
-        const emojis = ['😊', '😂', '❤️', '😍', '👍', '🔥', '🎉', '💯', '🥰', '😘', '💪', '👏', '🙌', '🤗', '😎', '✨', '💫', '🌟'];
-        let emojiPickerVisible = false;
-        let emojiPicker = null;
-
-        emojiBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (emojiPickerVisible) {
-                closeEmojiPicker();
-                return;
-            }
-            createEmojiPicker();
-        });
-
-        function createEmojiPicker() {
-            closeEmojiPicker();
-            
-            emojiPicker = document.createElement('div');
-            emojiPicker.className = 'emoji-picker';
-            
-            emojis.forEach(emoji => {
-                const btn = document.createElement('button');
-                btn.textContent = emoji;
-                btn.onclick = () => {
-                    const start = messageInput.selectionStart;
-                    const end = messageInput.selectionEnd;
-                    const text = messageInput.value;
-                    messageInput.value = text.substring(0, start) + emoji + text.substring(end);
-                    messageInput.focus();
-                    messageInput.selectionStart = messageInput.selectionEnd = start + emoji.length;
-                    sendBtn.disabled = false;
-                };
-                emojiPicker.appendChild(btn);
-            });
-            
-            document.querySelector('.message-input-area').appendChild(emojiPicker);
-            emojiPickerVisible = true;
-        }
-
-        function closeEmojiPicker() {
-            if (emojiPicker) {
-                emojiPicker.remove();
-                emojiPicker = null;
-            }
-            emojiPickerVisible = false;
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.emoji-picker') && !e.target.closest('#emoji-btn')) {
-                closeEmojiPicker();
-            }
-        });
-
-        // ============================================================
-        // CLEAR CHAT
-        // ============================================================
-        clearChatBtn.addEventListener('click', () => {
-            if (confirm('⚠️ هل أنت متأكد من حذف جميع الرسائل؟')) {
-                const messagesRef = ref(database, `rooms/${ROOM_ID}/messages`);
-                remove(messagesRef).then(() => {
-                    messagesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">💬</div>
-                            <div class="empty-title">تم مسح الدردشة</div>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">ابدأ محادثة جديدة</div>
-                        </div>
-                    `;
-                }).catch(err => {
-                    console.error('Clear error:', err);
-                    alert('❌ فشل حذف الرسائل');
-                });
-            }
-        });
-
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        logoutBtn.addEventListener('click', () => {
-            if (confirm('هل أنت متأكد من الخروج؟')) {
-                if (currentUser) {
-                    update(ref(database, `rooms/${ROOM_ID}/users/${currentUser.uid}`), {
-                        online: false,
-                        lastSeen: Date.now()
-                    });
-                }
-                chatScreen.classList.remove('visible');
-                loginScreen.classList.remove('hidden');
-                messagesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">💬</div>
-                        <div class="empty-title">مرحباً بك في غرفة يزيد</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);">ابدأ المحادثة الآن</div>
-                    </div>
-                `;
-                currentUser = null;
-                accessCodeInput.value = '';
-                userNameInput.value = '';
-            }
-        });
-
-        // ============================================================
-        // KEYBOARD SHORTCUTS
-        // ============================================================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                storyViewer.classList.remove('open');
-                storiesContainer.classList.remove('open');
-                mediaOptions.classList.remove('open');
-                closeEmojiPicker();
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                    cameraStream = null;
-                    cameraPreview.style.display = 'none';
-                    captureBtn.style.display = 'none';
-                }
-            }
-        });
-
-        // ============================================================
-        // NOTIFICATIONS
-        // ============================================================
-        let notificationPermission = false;
-
-        if ('Notification' in window) {
-            Notification.requestPermission().then(perm => {
-                notificationPermission = perm === 'granted';
-            });
-        }
-
-        // مراقبة الرسائل للإشعارات
-        const messagesRef = ref(database, `rooms/${ROOM_ID}/messages`);
-        onChildAdded(messagesRef, (snapshot) => {
-            const message = snapshot.val();
-            if (message && message.senderId !== currentUser?.uid && notificationPermission) {
-                const isVisible = !document.hidden;
-                if (!isVisible) {
-                    new Notification('💬 رسالة جديدة', {
-                        body: `${message.senderName}: ${message.text || '📎 ملف'}`,
-                        icon: message.senderPhoto || 'https://ui-avatars.com/api/?name=User&background=128c7e&color=fff&size=128',
-                        tag: 'chat-message',
-                        requireInteraction: true
-                    });
-                }
-            }
-        });
-
-        // ============================================================
-        // AUTO-RESIZE TEXTAREA
-        // ============================================================
-        messageInput.addEventListener('input', () => {
-            messageInput.style.height = 'auto';
-            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
-        });
-
-        // ============================================================
-        // INIT - تحميل البيانات عند فتح التطبيق
-        // ============================================================
-        console.log('💬 تطبيق يزيد - غرفة دردشة خاصة');
-        console.log(`🔑 رمز الدخول: ${ACCESS_CODE}`);
-        console.log(`👥 الحد الأقصى: ${MAX_USERS} مستخدمين`);
-
-        // تحميل المستخدمين مسبقاً
-        loadUsers();
-
-    </script>
 </body>
-    </html>
+</html>

@@ -1,17 +1,130 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎉 عيد ميلاد مريم 🎉</title>
-    
-    <!-- Firebase SDKs -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة إكس أو - Tic Tac Toe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .status {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .cell:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.03);
+        }
+
+        .cell.x {
+            color: #ff4b2b;
+        }
+
+        .cell.o {
+            color: #00d2ff;
+        }
+
+        .btn-restart {
+            margin-top: 25px;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e3c72;
+            background-color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-restart:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-restart:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>لعبة إكس أو (XO)</h1>
+    <div class="status" id="status">دور اللاعب: <span style="color: #ff4b2b;">X</span></div>
+
+    <div class="board" id="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+
+    <button class="btn-restart" id="restartBtn">إعادة اللعب 🔄</button>
+
+    <!-- Firebase SDK (ES Modules) -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getDatabase, ref, set, get, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        // Import Functions from Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -28,862 +141,89 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        const database = getDatabase(app);
-        const storage = getStorage(app);
 
-        // جعل Firebase متاحاً عالمياً
-        window.firebaseApp = app;
-        window.firebaseDB = database;
-        window.firebaseStorage = storage;
-        window.firebaseRef = ref;
-        window.firebaseGet = get;
-        window.firebaseSet = set;
-        window.firebaseOnValue = onValue;
-        window.firebaseStorageRef = storageRef;
-        window.firebaseUploadBytes = uploadBytes;
-        window.firebaseGetDownloadURL = getDownloadURL;
-        window.firebaseListAll = listAll;
-
-        console.log("✅ Firebase initialized successfully!");
-    </script>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Tajawal', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1a0a0a, #2d0a0a);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            direction: rtl;
-        }
-
-        /* تحميل الخط */
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
-
-        /* الحاوية الرئيسية */
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            height: 100vh;
-            max-height: 932px;
-            background: linear-gradient(180deg, #1a0a0a 0%, #2d1515 50%, #1a0a0a 100%);
-            border-radius: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(255, 215, 0, 0.1);
-        }
-
-        /* شاشات التطبيق */
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            transition: all 0.8s ease;
-            opacity: 0;
-            animation: fadeIn 0.8s forwards;
-        }
-
-        .screen.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        @keyframes candleFlicker {
-            0%, 100% { transform: scale(1) rotate(-2deg); }
-            50% { transform: scale(1.1) rotate(2deg); }
-        }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
-        }
-
-        /* ========== الشاشة 1: الترحيب ========== */
-        #welcome-screen {
-            background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0505 100%);
-        }
-
-        .welcome-date {
-            font-size: 4rem;
-            font-weight: 800;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .welcome-title {
-            font-size: 2.5rem;
-            color: #ff6b8a;
-            margin: 20px 0;
-            text-shadow: 0 0 20px rgba(255, 107, 138, 0.3);
-        }
-
-        .welcome-sub {
-            color: #ffb6c1;
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-
-        .btn-start {
-            margin-top: 40px;
-            padding: 18px 50px;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, #ff6b8a, #e91e63);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
-        }
-
-        .btn-start:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.6);
-        }
-
-        /* ========== الشاشة 2: التورتة ========== */
-        #cake-screen {
-            background: radial-gradient(ellipse at bottom, #2d0a0a 0%, #0a0505 100%);
-        }
-
-        .cake-container {
-            text-align: center;
-        }
-
-        .cake-emoji {
-            font-size: 8rem;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(255, 200, 0, 0.3));
-        }
-
-        .candles {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .candle {
-            font-size: 3.5rem;
-            animation: candleFlicker 0.5s ease-in-out infinite;
-            cursor: pointer;
-            transition: all 0.5s;
-            filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.6));
-        }
-
-        .candle.extinguished {
-            opacity: 0.3;
-            transform: scale(0.8);
-            filter: drop-shadow(0 0 5px rgba(100, 100, 100, 0.3));
-        }
-
-        .candle-count {
-            color: #ffd700;
-            font-size: 1.5rem;
-            margin-top: 10px;
-            opacity: 0.8;
-        }
-
-        .btn-blow {
-            margin-top: 20px;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4);
-        }
-
-        .btn-blow:hover {
-            transform: scale(1.05);
-        }
-
-        /* ========== الشاشة 3: التهنئة ========== */
-        #message-screen {
-            background: linear-gradient(135deg, #1a0a0a, #2d0a2d);
-        }
-
-        .message-content {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .message-content h1 {
-            color: #ff6b8a;
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-        }
-
-        .message-content p {
-            color: #ffb6c1;
-            font-size: 1.2rem;
-            line-height: 2;
-            opacity: 0.9;
-        }
-
-        .message-content .heart {
-            color: #ff1744;
-            font-size: 2rem;
-            animation: sparkle 1.5s ease-in-out infinite;
-        }
-
-        /* ========== الشاشة 4: الصور ========== */
-        #gallery-screen {
-            background: linear-gradient(135deg, #0a0a1a, #1a0a0a);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            width: 100%;
-            max-width: 380px;
-            padding: 10px;
-        }
-
-        .gallery-item {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #2d1a1a, #1a0a0a);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            border: 2px solid rgba(255, 215, 0, 0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            border-color: #ffd700;
-        }
-
-        /* ========== الشاشة 5: واتساب ========== */
-        #whatsapp-screen {
-            background: #0a0a0a;
-            padding: 0;
-        }
-
-        .whatsapp-header {
-            width: 100%;
-            background: #075e54;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-
-        .whatsapp-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e91e63, #ff6b8a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            border: 2px solid #fff;
-        }
-
-        .whatsapp-name {
-            color: white;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .whatsapp-status {
-            color: #b0b0b0;
-            font-size: 0.8rem;
-        }
-
-        .whatsapp-call-btn {
-            margin-right: auto;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-call-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .whatsapp-chat {
-            flex: 1;
-            width: 100%;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #0a0a0a;
-        }
-
-        .message-bubble {
-            max-width: 80%;
-            padding: 12px 18px;
-            border-radius: 15px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .message-bubble.received {
-            background: #262626;
-            color: #e0e0e0;
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-
-        .message-bubble.sent {
-            background: #075e54;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-
-        .message-bubble .time {
-            font-size: 0.6rem;
-            opacity: 0.6;
-            margin-top: 5px;
-            display: block;
-        }
-
-        .whatsapp-input {
-            width: 100%;
-            padding: 15px 20px;
-            background: #1a1a1a;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .whatsapp-input input {
-            flex: 1;
-            padding: 12px 18px;
-            border-radius: 25px;
-            border: none;
-            background: #2a2a2a;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .whatsapp-input button {
-            background: #075e54;
-            border: none;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-input button:hover {
-            background: #0a7a6e;
-        }
-
-        /* ========== الشاشة 6: الفيديو ========== */
-        #video-screen {
-            background: #0a0a0a;
-            padding: 20px;
-        }
-
-        .video-container {
-            width: 100%;
-            max-width: 380px;
-            aspect-ratio: 16/9;
-            background: #1a0a0a;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: #ff6b8a;
-            position: relative;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-title {
-            color: #ffd700;
-            font-size: 1.5rem;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        /* ========== زر العودة ========== */
-        .btn-back {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-            z-index: 10;
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* ========== تأثيرات إضافية ========== */
-        .confetti-piece {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            animation: confettiFall 3s linear forwards;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        /* ========== تسجيل الصوت ========== */
-        .audio-recorder {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            width: 100%;
-            max-width: 350px;
-        }
-
-        .audio-recorder .status {
-            color: #ffb6c1;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .audio-recorder audio {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        /* ========== استجابة ========== */
-        @media (max-width: 450px) {
-            .app-container {
-                border-radius: 0;
-                max-height: 100vh;
+        // --- منطق اللعبة (Game Logic) ---
+        const cells = document.querySelectorAll('.cell');
+        const statusText = document.getElementById('status');
+        const restartBtn = document.getElementById('restartBtn');
+
+        let boardState = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let isGameActive = true;
+
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // الصفوف
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // الأعمدة
+            [0, 4, 8], [2, 4, 6]             // الأقطار
+        ];
+
+        function handleCellClick(e) {
+            const cell = e.target;
+            const index = cell.getAttribute('data-index');
+
+            if (boardState[index] !== "" || !isGameActive) {
+                return;
             }
-            
-            .welcome-date { font-size: 3rem; }
-            .welcome-title { font-size: 2rem; }
-            .cake-emoji { font-size: 6rem; }
-            .candle { font-size: 2.8rem; }
-        }
-    </style>
-</head>
-<body>
 
-<div class="app-container" id="app">
-
-    <!-- ===== الشاشة 1: الترحيب ===== -->
-    <div class="screen active" id="welcome-screen">
-        <button class="btn-back" onclick="goToScreen('welcome-screen')" style="display:none;">🏠</button>
-        <div class="welcome-date">🎉 21/9 🎉</div>
-        <div class="welcome-title">عيد ميلاد حبيبتي</div>
-        <div class="welcome-sub">❤️ مريم ❤️</div>
-        <button class="btn-start" onclick="goToScreen('cake-screen')">🎂 إبدي الاحتفال 🎂</button>
-    </div>
-
-    <!-- ===== الشاشة 2: التورتة ===== -->
-    <div class="screen" id="cake-screen">
-        <button class="btn-back" onclick="goToScreen('welcome-screen')">← رجوع</button>
-        <div class="cake-container">
-            <div class="cake-emoji">🎂</div>
-            <div class="candles" id="candlesContainer">
-                <span class="candle" data-index="0">🕯️</span>
-                <span class="candle" data-index="1">🕯️</span>
-                <span class="candle" data-index="2">🕯️</span>
-                <span class="candle" data-index="3">🕯️</span>
-                <span class="candle" data-index="4">🕯️</span>
-            </div>
-            <div class="candle-count" id="candleCount">🔥 5 شموع مضيئة</div>
-            <button class="btn-blow" onclick="blowCandles()">💨 إطفاء الشمع</button>
-            <button class="btn-start" style="margin-top:15px; padding:12px 35px; font-size:1rem;" onclick="goToScreen('message-screen')">📖 التالي</button>
-        </div>
-    </div>
-
-    <!-- ===== الشاشة 3: التهنئة ===== -->
-    <div class="screen" id="message-screen">
-        <button class="btn-back" onclick="goToScreen('cake-screen')">← رجوع</button>
-        <div class="message-content">
-            <h1>💖 كل عام وأنتي حبيبتي 💖</h1>
-            <p>
-                مريم .. أنتي أجمل هدية في حياتي 🌹<br>
-                كل سنة وأنتي طيبة يا بطتي الغالية 🐱<br>
-                ربنا يخليكي ليا ويحقق كل أمانيكي ✨
-                <br><br>
-                <span class="heart">❤️</span> أحبك أكثر من أي شيء <span class="heart">❤️</span>
-            </p>
-            <button class="btn-start" style="margin-top:30px;" onclick="goToScreen('gallery-screen')">🖼️ شوفي الصور</button>
-        </div>
-    </div>
-
-    <!-- ===== الشاشة 4: معرض الصور ===== -->
-    <div class="screen" id="gallery-screen">
-        <button class="btn-back" onclick="goToScreen('message-screen')">← رجوع</button>
-        <h2 style="color:#ffd700; margin-bottom:15px;">📸 ذكرياتنا</h2>
-        <div class="gallery-grid" id="galleryGrid">
-            <div class="gallery-item">🌸</div>
-            <div class="gallery-item">🌹</div>
-            <div class="gallery-item">💕</div>
-            <div class="gallery-item">🐱</div>
-            <div class="gallery-item">✨</div>
-            <div class="gallery-item">🎀</div>
-        </div>
-        <button class="btn-start" style="margin-top:20px; padding:12px 35px; font-size:1rem;" onclick="goToScreen('whatsapp-screen')">💬 واتساب</button>
-    </div>
-
-    <!-- ===== الشاشة 5: واتساب ===== -->
-    <div class="screen" id="whatsapp-screen">
-        <div class="whatsapp-header">
-            <div class="whatsapp-avatar">🐱</div>
-            <div>
-                <div class="whatsapp-name">مريم ❤️</div>
-                <div class="whatsapp-status">🟢 متصلة</div>
-            </div>
-            <button class="whatsapp-call-btn" onclick="showCallNotification()">📞</button>
-            <button class="btn-back" onclick="goToScreen('gallery-screen')" style="position:static; background:transparent; border:1px solid rgba(255,255,255,0.2);">✕</button>
-        </div>
-        
-        <div class="whatsapp-chat" id="whatsappChat">
-            <!-- الرسائل ستظهر هنا ديناميكياً -->
-            <div class="message-bubble received">
-                🎂 كل سنة وأنتي طيبة يا مريم
-                <span class="time">10:00</span>
-            </div>
-            <div class="message-bubble received" id="audioMessage1">
-                🔊 تسجيل صوتي 1
-                <div class="audio-recorder">
-                    <div class="status">🎙️ تسجيل أول مني</div>
-                    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-                </div>
-                <span class="time">10:02</span>
-            </div>
-            <div class="message-bubble received" id="audioMessage2" style="display:none;">
-                🔊 تسجيل صوتي 2
-                <div class="audio-recorder">
-                    <div class="status" style="color:#ff6b8a;">⏳ جاري التسجيل...</div>
-                    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
-                </div>
-                <span class="time">10:05</span>
-            </div>
-        </div>
-
-        <div class="whatsapp-input">
-            <input type="text" id="whatsappInput" placeholder="اكتب رسالة..." />
-            <button onclick="sendWhatsAppMessage()">➤</button>
-        </div>
-    </div>
-
-    <!-- ===== الشاشة 6: الفيديو ===== -->
-    <div class="screen" id="video-screen">
-        <button class="btn-back" onclick="goToScreen('whatsapp-screen')">← رجوع</button>
-        <div class="video-title">🎬 عيد ميلاد أجمل بطه في الدنيا 🎬</div>
-        <div class="video-container" id="videoContainer">
-            <span>🎥</span>
-            <video id="birthdayVideo" controls style="display:none; width:100%; height:100%;">
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            </video>
-        </div>
-        <button class="btn-start" style="margin-top:20px;" onclick="playVideo()">▶️ تشغيل الفيديو</button>
-        <button class="btn-start" style="margin-top:10px; background:linear-gradient(135deg,#ff6b8a,#e91e63);" onclick="goToScreen('welcome-screen')">🏠 العودة للبداية</button>
-    </div>
-
-</div>
-
-<script>
-    // ============================================================
-    // إدارة الشاشات
-    // ============================================================
-    function goToScreen(screenId) {
-        // إخفاء جميع الشاشات
-        document.querySelectorAll('.screen').forEach(s => {
-            s.classList.remove('active');
-            s.style.display = 'none';
-        });
-        
-        // إظهار الشاشة المطلوبة
-        const screen = document.getElementById(screenId);
-        if (screen) {
-            screen.style.display = 'flex';
-            // إعادة تشغيل الأنيميشن
-            screen.style.animation = 'none';
-            setTimeout(() => {
-                screen.style.animation = 'fadeIn 0.8s forwards';
-                screen.classList.add('active');
-            }, 10);
+            updateCell(cell, index);
+            checkResult();
         }
 
-        // تشغيل المؤثرات الخاصة بكل شاشة
-        if (screenId === 'whatsapp-screen') {
-            setTimeout(() => {
-                document.getElementById('audioMessage2').style.display = 'block';
-            }, 3000);
+        function updateCell(cell, index) {
+            boardState[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+            cell.classList.add(currentPlayer.toLowerCase());
         }
-    }
 
-    // ============================================================
-    // إطفاء الشموع
-    // ============================================================
-    let candlesLit = 5;
+        function switchPlayer() {
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            const color = currentPlayer === "X" ? "#ff4b2b" : "#00d2ff";
+            statusText.innerHTML = `دور اللاعب: <span style="color: ${color};">${currentPlayer}</span>`;
+        }
 
-    function blowCandles() {
-        const candles = document.querySelectorAll('.candle');
-        let count = 0;
-        
-        candles.forEach((candle, index) => {
-            setTimeout(() => {
-                if (!candle.classList.contains('extinguished')) {
-                    candle.classList.add('extinguished');
-                    candle.textContent = '🕯️';
-                    count++;
-                    document.getElementById('candleCount').textContent = `🔥 ${candlesLit - count} شموع مضيئة`;
-                    
-                    // تأثير كونفيتي عند إطفاء كل شمعة
-                    createConfetti();
+        function checkResult() {
+            let roundWon = false;
+
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (boardState[a] === "" || boardState[b] === "" || boardState[c] === "") {
+                    continue;
                 }
-            }, index * 400);
-        });
-
-        // إعادة تعيين العد بعد الإطفاء الكامل
-        setTimeout(() => {
-            candlesLit = 0;
-            document.getElementById('candleCount').textContent = '🎉 كل الشموع انطفأت! 🎉';
-            // تشغيل تأثير احتفالي
-            for (let i = 0; i < 30; i++) {
-                setTimeout(createConfetti, i * 100);
+                if (boardState[a] === boardState[b] && boardState[b] === boardState[c]) {
+                    roundWon = true;
+                    break;
+                }
             }
-        }, candles.length * 400 + 500);
-    }
 
-    // ============================================================
-    // كونفيتي
-    // ============================================================
-    function createConfetti() {
-        const colors = ['#ff6b8a', '#ffd700', '#ff1744', '#ff9100', '#00e676', '#2979ff', '#d500f9'];
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti-piece';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.top = '-10px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = (Math.random() * 8 + 4) + 'px';
-        confetti.style.height = (Math.random() * 8 + 4) + 'px';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => {
-            confetti.remove();
-        }, 4000);
-    }
-
-    // ============================================================
-    // واتساب - إرسال رسالة
-    // ============================================================
-    function sendWhatsAppMessage() {
-        const input = document.getElementById('whatsappInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        const chat = document.getElementById('whatsappChat');
-        const bubble = document.createElement('div');
-        bubble.className = 'message-bubble sent';
-        bubble.innerHTML = `${text} <span class="time">${new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</span>`;
-        chat.appendChild(bubble);
-        input.value = '';
-        chat.scrollTop = chat.scrollHeight;
-
-        // التحقق من كلمة "بطتي"
-        if (text.includes('بطتي')) {
-            setTimeout(() => {
-                goToScreen('video-screen');
-            }, 1000);
-        }
-    }
-
-    // ============================================================
-    // واتساب - مكالمة
-    // ============================================================
-    function showCallNotification() {
-        alert('📞 جاري الاتصال بمريم ❤️');
-        // تأثير اهتزاز
-        const header = document.querySelector('.whatsapp-header');
-        header.style.animation = 'shake 0.5s ease';
-        setTimeout(() => {
-            header.style.animation = '';
-        }, 500);
-    }
-
-    // إضافة تأثير اهتزاز
-    const styleShake = document.createElement('style');
-    styleShake.textContent = `
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-    `;
-    document.head.appendChild(styleShake);
-
-    // ============================================================
-    // تشغيل الفيديو
-    // ============================================================
-    function playVideo() {
-        const video = document.getElementById('birthdayVideo');
-        const container = document.getElementById('videoContainer');
-        const span = container.querySelector('span');
-        
-        if (span) span.style.display = 'none';
-        video.style.display = 'block';
-        video.play().catch(e => console.log('Video play error:', e));
-        
-        // عرض رسالة
-        const title = document.querySelector('.video-title');
-        title.textContent = '🎬 عيد ميلاد أجمل بطه في الدنيا 🎬';
-    }
-
-    // ============================================================
-    // تحميل الصور من Firebase (مثال توضيحي)
-    // ============================================================
-    async function loadImagesFromFirebase() {
-        try {
-            const { firebaseStorage, firebaseStorageRef, firebaseListAll, firebaseGetDownloadURL } = window;
-            if (!firebaseStorage) return;
-            
-            const imagesRef = firebaseStorageRef(firebaseStorage, 'images/');
-            const result = await firebaseListAll(imagesRef);
-            const gallery = document.getElementById('galleryGrid');
-            
-            // مسح العناصر الحالية مع الاحتفاظ بالأيقونات الاحتياطية
-            const items = gallery.querySelectorAll('.gallery-item');
-            let index = 0;
-            
-            for (const item of result.items) {
-                if (index >= items.length) break;
-                const url = await firebaseGetDownloadURL(item);
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'صورة';
-                items[index].innerHTML = '';
-                items[index].appendChild(img);
-                index++;
+            if (roundWon) {
+                const color = currentPlayer === "X" ? "#ff4b2b" : "#00d2ff";
+                statusText.innerHTML = `🎉 الفائز هو اللاعب: <span style="color: ${color};">${currentPlayer}</span>!`;
+                isGameActive = false;
+                return;
             }
-        } catch (error) {
-            console.log('⚠️ Firebase images not available, using default icons');
-        }
-    }
 
-    // ============================================================
-    // تحميل البيانات من Firebase (مثال)
-    // ============================================================
-    function loadFromFirebase() {
-        const { firebaseDB, firebaseRef, firebaseGet, firebaseOnValue } = window;
-        if (!firebaseDB) return;
-        
-        // مثال: تحميل رسالة ترحيب من قاعدة البيانات
-        const msgRef = firebaseRef(firebaseDB, 'messages/welcome');
-        firebaseGet(msgRef).then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                console.log('📩 Firebase data:', data);
+            if (!boardState.includes("")) {
+                statusText.innerHTML = "تعادل! 🤝";
+                isGameActive = false;
+                return;
             }
-        }).catch(error => {
-            console.log('ℹ️ Firebase read: no data yet');
-        });
-    }
 
-    // ============================================================
-    // تهيئة التطبيق
-    // ============================================================
-    window.addEventListener('load', function() {
-        console.log('🎉 تطبيق عيد ميلاد مريم جاهز!');
-        
-        // تحميل البيانات من Firebase
-        setTimeout(loadFromFirebase, 500);
-        setTimeout(loadImagesFromFirebase, 1000);
-        
-        // إظهار الشاشة الأولى
-        goToScreen('welcome-screen');
-    });
+            switchPlayer();
+        }
 
-    // ============================================================
-    // دعم Firebase من أي مكان
-    // ============================================================
-    console.log('✅ جاهز للاستخدام مع Firebase!');
-    console.log('📁 قم برفع الصور إلى مجلد "images/" في Firebase Storage');
-    console.log('📝 يمكنك حفظ البيانات في Firebase Database تحت مسار "messages/"');
+        function restartGame() {
+            boardState = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            isGameActive = true;
+            statusText.innerHTML = `دور اللاعب: <span style="color: #ff4b2b;">X</span>`;
+            cells.forEach(cell => {
+                cell.textContent = "";
+                cell.classList.remove('x', 'o');
+            });
+        }
 
-    // تصدير الدوال للاستخدام العالمي
-    window.goToScreen = goToScreen;
-    window.blowCandles = blowCandles;
-    window.sendWhatsAppMessage = sendWhatsAppMessage;
-    window.showCallNotification = showCallNotification;
-    window.playVideo = playVideo;
-    window.createConfetti = createConfetti;
-</script>
-
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        restartBtn.addEventListener('click', restartGame);
+    </script>
 </body>
 </html>

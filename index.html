@@ -1,2278 +1,889 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>سنتر سيجما التعليمي</title>
-  
-  <meta name="theme-color" content="#2563eb">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="سيجما">
-  
-  <link rel="manifest" href="data:application/json,{
-    &quot;name&quot;:&quot;سنتر سيجما التعليمي&quot;,
-    &quot;short_name&quot;:&quot;سيجما&quot;,
-    &quot;start_url&quot;:&quot;.&quot;,
-    &quot;display&quot;:&quot;standalone&quot;,
-    &quot;background_color&quot;:&quot;#f8fafc&quot;,
-    &quot;theme_color&quot;:&quot;#2563eb&quot;,
-    &quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%232563eb'/%3E%3Ctext x='256' y='350' font-size='300' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'%3E%CE%A3%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any maskable&quot;}]
-  }">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎉 عيد ميلاد مريم 🎉</title>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getDatabase, ref, set, get, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Cairo', sans-serif; background: #f1f5f9; }
-    .app-container { max-width: 480px; margin: 0 auto; background: #f8fafc; min-height: 100vh; position: relative; }
-    .slide-up { animation: slideUp 0.3s ease-out; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .stat-card { background: white; border-radius: 12px; padding: 10px 8px; text-align: center; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
-    .stat-card:active { transform: scale(0.96); }
-    .stat-number { font-size: 18px; font-weight: 800; }
-    .stat-label { font-size: 9px; color: #64748b; margin-top: 2px; }
-    
-    .profile-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; cursor: pointer; }
-    .subject-chip { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 9px; font-weight: 600; margin: 2px; background: rgba(255,255,255,0.2); color: white; }
-    
-    .option-btn { padding: 6px 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .option-btn.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
-    
-    .admin-panel-section { background: white; border-radius: 16px; padding: 12px; border: 1px solid #e2e8f0; margin-bottom: 8px; }
-    .admin-panel-section .header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 4px 0; }
-    .admin-panel-section .header h4 { font-size: 13px; font-weight: 700; color: #1e293b; }
-    .admin-panel-section .content { margin-top: 10px; display: none; }
-    .admin-panel-section .content.open { display: block; }
-    
-    .complaint-card { background: #f8fafc; border-radius: 10px; padding: 10px; border-right: 3px solid #f59e0b; margin-bottom: 6px; }
-    .complaint-card .name { font-weight: 700; font-size: 13px; color: #1e293b; }
-    .complaint-card .phone { color: #2563eb; font-size: 11px; }
-    .complaint-card .text { color: #475569; font-size: 12px; margin-top: 3px; }
-    .complaint-card .date { color: #94a3b8; font-size: 9px; }
-    
-    .toast { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; padding: 10px 20px; border-radius: 10px; color: white; font-weight: 600; font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); animation: slideDown 0.4s ease; max-width: 90%; text-align: center; }
-    .toast-success { background: #22c55e; }
-    .toast-error { background: #ef4444; }
-    .toast-warning { background: #f59e0b; }
-    .toast-info { background: #3b82f6; }
-    @keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-    
-    .install-btn { background: rgba(255,255,255,0.2); padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 11px; cursor: pointer; display: none; align-items: center; gap: 4px; }
-    .install-btn.show { display: flex; }
-    
-    .settings-card { background: white; border-radius: 16px; padding: 14px; border: 1px solid #e2e8f0; margin-bottom: 8px; }
-    .settings-card .title { font-size: 13px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .settings-card .title i { width: 20px; text-align: center; }
-    
-    .image-viewer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 99999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.3s ease;
-    }
-    .image-viewer.show { display: flex; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .image-viewer img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; }
-    .image-viewer .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      font-size: 28px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .image-viewer .close-btn:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
-    .image-viewer .download-btn {
-      position: absolute;
-      bottom: 30px;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .image-viewer .download-btn:hover { background: rgba(255,255,255,0.3); }
-    .image-viewer .info {
-      position: absolute;
-      bottom: 90px;
-      color: rgba(255,255,255,0.6);
-      font-size: 12px;
-      text-align: center;
-    }
-    
-    .schedule-item { background: white; border-radius: 12px; padding: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; }
-    .schedule-item .subject { font-weight: 700; font-size: 13px; }
-    .schedule-item .time { font-weight: 700; color: #d97706; }
-    .schedule-item .teacher { font-size: 11px; color: #64748b; }
-    .schedule-item img, .news-item img, .notif-item img { cursor: pointer; transition: all 0.2s; }
-    .schedule-item img:hover, .news-item img:hover, .notif-item img:hover { opacity: 0.9; transform: scale(1.02); }
-    
-    .pwa-install-banner { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .pwa-install-banner .icon { font-size: 24px; }
-    .pwa-install-banner .text { flex: 1; margin: 0 10px; font-size: 12px; }
-    .pwa-install-banner .text strong { display: block; font-size: 14px; }
-    .pwa-install-banner .btn-install { background: #2563eb; color: white; border: none; padding: 6px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
-    .pwa-install-banner .btn-close { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; }
-    
-    .exam-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; margin-bottom: 8px; }
-    .exam-card .exam-title { font-weight: 700; font-size: 14px; color: #1e293b; }
-    .exam-card .exam-info { font-size: 11px; color: #64748b; }
-    .result-card { background: #f0fdf4; border-radius: 12px; padding: 12px; border: 1px solid #bbf7d0; margin-bottom: 8px; }
-    .result-card .result-subject { font-weight: 700; font-size: 13px; }
-    .result-card .result-score { font-size: 16px; font-weight: 800; color: #16a34a; }
-    
-    .login-section { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; text-align: center; }
-    .login-section .logo { font-size: 48px; color: #2563eb; margin-bottom: 10px; }
-    .login-section h2 { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 5px; }
-    .login-section p { font-size: 12px; color: #64748b; margin-bottom: 15px; }
-    .login-section .input-group { margin-bottom: 12px; text-align: right; }
-    .login-section .input-group label { font-size: 11px; font-weight: 600; color: #475569; display: block; margin-bottom: 3px; }
-    .login-section .input-group input { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; transition: all 0.2s; }
-    .login-section .input-group input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    .login-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .login-btn:active { transform: scale(0.98); }
-    
-    .dark-mode .app-container { background: #0f172a; }
-    .dark-mode .bg-white { background: #1e293b !important; }
-    .dark-mode .text-slate-800 { color: #e2e8f0 !important; }
-    .dark-mode .text-slate-600 { color: #94a3b8 !important; }
-    .dark-mode .border-slate-100 { border-color: #334155 !important; }
-    .dark-mode .bg-slate-50 { background: #0f172a !important; }
-    .dark-mode .stat-card { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .stat-label { color: #94a3b8 !important; }
-    .dark-mode .admin-panel-section { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .settings-card { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .complaint-card { background: #0f172a !important; }
-    .dark-mode .option-btn { background: #1e293b !important; border-color: #334155 !important; color: #e2e8f0 !important; }
-    .dark-mode .option-btn.active { background: #1e3a5f !important; border-color: #2563eb !important; color: #60a5fa !important; }
-    .dark-mode .schedule-item { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .schedule-item .teacher { color: #94a3b8 !important; }
-    .dark-mode .pwa-install-banner { background: linear-gradient(135deg, #334155, #1e293b); }
-    .dark-mode .login-section { background: #1e293b !important; border-color: #334155 !important; }
-    .dark-mode .login-section h2 { color: #e2e8f0 !important; }
-    .dark-mode .login-section p { color: #94a3b8 !important; }
-    .dark-mode .login-section .input-group label { color: #94a3b8 !important; }
-    .dark-mode .login-section .input-group input { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
-    
-    @media (max-width: 400px) {
-      .stat-number { font-size: 15px; }
-      .stat-label { font-size: 8px; }
-      .subject-chip { font-size: 8px; padding: 1px 6px; }
-      .profile-avatar { width: 36px; height: 36px; }
-    }
-  </style>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB5jFiYrMnH_tvaJAq5QmATI43Pu3F0Yaw",
+            authDomain: "my-project-f00cd.firebaseapp.com",
+            databaseURL: "https://my-project-f00cd-default-rtdb.firebaseio.com",
+            projectId: "my-project-f00cd",
+            storageBucket: "my-project-f00cd.firebasestorage.app",
+            messagingSenderId: "346249386295",
+            appId: "1:346249386295:web:5652b6b2309b795c89a2b2",
+            measurementId: "G-0XL21X43PR"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        // جعل Firebase متاحاً عالمياً
+        window.firebaseApp = app;
+        window.firebaseDB = database;
+        window.firebaseStorage = storage;
+        window.firebaseRef = ref;
+        window.firebaseGet = get;
+        window.firebaseSet = set;
+        window.firebaseOnValue = onValue;
+        window.firebaseStorageRef = storageRef;
+        window.firebaseUploadBytes = uploadBytes;
+        window.firebaseGetDownloadURL = getDownloadURL;
+        window.firebaseListAll = listAll;
+
+        console.log("✅ Firebase initialized successfully!");
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a0a0a, #2d0a0a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        /* تحميل الخط */
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
+
+        /* الحاوية الرئيسية */
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            max-height: 932px;
+            background: linear-gradient(180deg, #1a0a0a 0%, #2d1515 50%, #1a0a0a 100%);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 215, 0, 0.1);
+        }
+
+        /* شاشات التطبيق */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: all 0.8s ease;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        .screen.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        @keyframes candleFlicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
+        }
+
+        /* ========== الشاشة 1: الترحيب ========== */
+        #welcome-screen {
+            background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0505 100%);
+        }
+
+        .welcome-date {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            color: #ff6b8a;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255, 107, 138, 0.3);
+        }
+
+        .welcome-sub {
+            color: #ffb6c1;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .btn-start {
+            margin-top: 40px;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #ff6b8a, #e91e63);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.6);
+        }
+
+        /* ========== الشاشة 2: التورتة ========== */
+        #cake-screen {
+            background: radial-gradient(ellipse at bottom, #2d0a0a 0%, #0a0505 100%);
+        }
+
+        .cake-container {
+            text-align: center;
+        }
+
+        .cake-emoji {
+            font-size: 8rem;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 20px 40px rgba(255, 200, 0, 0.3));
+        }
+
+        .candles {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .candle {
+            font-size: 3.5rem;
+            animation: candleFlicker 0.5s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.5s;
+            filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.6));
+        }
+
+        .candle.extinguished {
+            opacity: 0.3;
+            transform: scale(0.8);
+            filter: drop-shadow(0 0 5px rgba(100, 100, 100, 0.3));
+        }
+
+        .candle-count {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .btn-blow {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-blow:hover {
+            transform: scale(1.05);
+        }
+
+        /* ========== الشاشة 3: التهنئة ========== */
+        #message-screen {
+            background: linear-gradient(135deg, #1a0a0a, #2d0a2d);
+        }
+
+        .message-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .message-content h1 {
+            color: #ff6b8a;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .message-content p {
+            color: #ffb6c1;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0.9;
+        }
+
+        .message-content .heart {
+            color: #ff1744;
+            font-size: 2rem;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        /* ========== الشاشة 4: الصور ========== */
+        #gallery-screen {
+            background: linear-gradient(135deg, #0a0a1a, #1a0a0a);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 380px;
+            padding: 10px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2d1a1a, #1a0a0a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 2px solid rgba(255, 215, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: #ffd700;
+        }
+
+        /* ========== الشاشة 5: واتساب ========== */
+        #whatsapp-screen {
+            background: #0a0a0a;
+            padding: 0;
+        }
+
+        .whatsapp-header {
+            width: 100%;
+            background: #075e54;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .whatsapp-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e91e63, #ff6b8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            border: 2px solid #fff;
+        }
+
+        .whatsapp-name {
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .whatsapp-status {
+            color: #b0b0b0;
+            font-size: 0.8rem;
+        }
+
+        .whatsapp-call-btn {
+            margin-right: auto;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-call-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .whatsapp-chat {
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #0a0a0a;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .message-bubble.received {
+            background: #262626;
+            color: #e0e0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-bubble.sent {
+            background: #075e54;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-bubble .time {
+            font-size: 0.6rem;
+            opacity: 0.6;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .whatsapp-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #1a1a1a;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .whatsapp-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 25px;
+            border: none;
+            background: #2a2a2a;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .whatsapp-input button {
+            background: #075e54;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-input button:hover {
+            background: #0a7a6e;
+        }
+
+        /* ========== الشاشة 6: الفيديو ========== */
+        #video-screen {
+            background: #0a0a0a;
+            padding: 20px;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 16/9;
+            background: #1a0a0a;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #ff6b8a;
+            position: relative;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-title {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* ========== زر العودة ========== */
+        .btn-back {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ========== تأثيرات إضافية ========== */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            animation: confettiFall 3s linear forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ========== تسجيل الصوت ========== */
+        .audio-recorder {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .audio-recorder .status {
+            color: #ffb6c1;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .audio-recorder audio {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* ========== استجابة ========== */
+        @media (max-width: 450px) {
+            .app-container {
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            
+            .welcome-date { font-size: 3rem; }
+            .welcome-title { font-size: 2rem; }
+            .cake-emoji { font-size: 6rem; }
+            .candle { font-size: 2.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="app" class="app-container flex flex-col pb-16">
+<div class="app-container" id="app">
 
-  <!-- HEADER -->
-  <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-3 shadow-lg sticky top-0 z-30 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-extrabold text-xl border border-white/30 shadow-lg">Σ</div>
-      <div>
-        <h1 class="font-extrabold text-sm leading-tight">سنتر سيجما</h1>
-        <p class="text-[8px] text-blue-100">منصة الطالب الذكية</p>
-      </div>
+    <!-- ===== الشاشة 1: الترحيب ===== -->
+    <div class="screen active" id="welcome-screen">
+        <button class="btn-back" onclick="goToScreen('welcome-screen')" style="display:none;">🏠</button>
+        <div class="welcome-date">🎉 21/9 🎉</div>
+        <div class="welcome-title">عيد ميلاد حبيبتي</div>
+        <div class="welcome-sub">❤️ مريم ❤️</div>
+        <button class="btn-start" onclick="goToScreen('cake-screen')">🎂 إبدي الاحتفال 🎂</button>
     </div>
-    <div class="flex items-center gap-1">
-      <button id="installBtn" class="install-btn" onclick="installApp()"><i class="fa-solid fa-download text-xs"></i> تثبيت</button>
-      <button onclick="switchTab('notifications')" class="relative p-2 rounded-full hover:bg-white/10">
-        <i class="fa-solid fa-bell text-lg"></i>
-        <span id="notifBadge" class="hidden absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
-      </button>
-      <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-white/10">
-        <i id="darkIcon" class="fa-solid fa-moon text-lg"></i>
-      </button>
+
+    <!-- ===== الشاشة 2: التورتة ===== -->
+    <div class="screen" id="cake-screen">
+        <button class="btn-back" onclick="goToScreen('welcome-screen')">← رجوع</button>
+        <div class="cake-container">
+            <div class="cake-emoji">🎂</div>
+            <div class="candles" id="candlesContainer">
+                <span class="candle" data-index="0">🕯️</span>
+                <span class="candle" data-index="1">🕯️</span>
+                <span class="candle" data-index="2">🕯️</span>
+                <span class="candle" data-index="3">🕯️</span>
+                <span class="candle" data-index="4">🕯️</span>
+            </div>
+            <div class="candle-count" id="candleCount">🔥 5 شموع مضيئة</div>
+            <button class="btn-blow" onclick="blowCandles()">💨 إطفاء الشمع</button>
+            <button class="btn-start" style="margin-top:15px; padding:12px 35px; font-size:1rem;" onclick="goToScreen('message-screen')">📖 التالي</button>
+        </div>
     </div>
-  </header>
 
-  <!-- IMAGE VIEWER -->
-  <div id="imageViewer" class="image-viewer" onclick="closeImageViewer()">
-    <button class="close-btn" onclick="closeImageViewer()">✕</button>
-    <img id="viewerImage" src="" alt="صورة">
-    <button class="download-btn" onclick="downloadImage()">
-      <i class="fa-solid fa-download"></i> تحميل الصورة
-    </button>
-    <div class="info" id="imageInfo"></div>
-  </div>
-
-  <!-- MAIN -->
-  <main class="flex-1 p-3 space-y-3 overflow-y-auto" style="padding-bottom: 70px;">
-
-    <!-- ===== LOGIN ===== -->
-    <section id="tab-login" class="slide-up">
-      <div class="login-section">
-        <div class="logo">Σ</div>
-        <h2>مرحباً بك في سنتر سيجما</h2>
-        <p>سجل دخولك باستخدام رقم الهاتف أو البريد الإلكتروني</p>
-        
-        <div class="input-group">
-          <label>📧 البريد الإلكتروني أو رقم الهاتف</label>
-          <input type="text" id="loginEmail" placeholder="example@email.com أو 01012345678">
+    <!-- ===== الشاشة 3: التهنئة ===== -->
+    <div class="screen" id="message-screen">
+        <button class="btn-back" onclick="goToScreen('cake-screen')">← رجوع</button>
+        <div class="message-content">
+            <h1>💖 كل عام وأنتي حبيبتي 💖</h1>
+            <p>
+                مريم .. أنتي أجمل هدية في حياتي 🌹<br>
+                كل سنة وأنتي طيبة يا بطتي الغالية 🐱<br>
+                ربنا يخليكي ليا ويحقق كل أمانيكي ✨
+                <br><br>
+                <span class="heart">❤️</span> أحبك أكثر من أي شيء <span class="heart">❤️</span>
+            </p>
+            <button class="btn-start" style="margin-top:30px;" onclick="goToScreen('gallery-screen')">🖼️ شوفي الصور</button>
         </div>
-        
-        <div class="input-group">
-          <label>🔒 كلمة المرور</label>
-          <input type="password" id="loginPassword" placeholder="••••••••">
-        </div>
-        
-        <button class="login-btn" onclick="loginUser()">🚀 تسجيل الدخول</button>
-        
-        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
-          ليس لديك حساب؟ 
-          <span onclick="switchTab('register')" style="color: #2563eb; cursor: pointer; font-weight: 600;">إنشاء حساب جديد</span>
-        </div>
-      </div>
-    </section>
+    </div>
 
-    <!-- ===== REGISTER ===== -->
-    <section id="tab-register" class="hidden slide-up">
-      <div class="login-section">
-        <div class="logo">Σ</div>
-        <h2>إنشاء حساب جديد</h2>
-        <p>أدخل بياناتك للتسجيل في منصة سيجما</p>
-        
-        <div class="input-group">
-          <label>👤 الاسم الكامل</label>
-          <input type="text" id="regName" placeholder="أحمد محمد">
+    <!-- ===== الشاشة 4: معرض الصور ===== -->
+    <div class="screen" id="gallery-screen">
+        <button class="btn-back" onclick="goToScreen('message-screen')">← رجوع</button>
+        <h2 style="color:#ffd700; margin-bottom:15px;">📸 ذكرياتنا</h2>
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-item">🌸</div>
+            <div class="gallery-item">🌹</div>
+            <div class="gallery-item">💕</div>
+            <div class="gallery-item">🐱</div>
+            <div class="gallery-item">✨</div>
+            <div class="gallery-item">🎀</div>
+        </div>
+        <button class="btn-start" style="margin-top:20px; padding:12px 35px; font-size:1rem;" onclick="goToScreen('whatsapp-screen')">💬 واتساب</button>
+    </div>
+
+    <!-- ===== الشاشة 5: واتساب ===== -->
+    <div class="screen" id="whatsapp-screen">
+        <div class="whatsapp-header">
+            <div class="whatsapp-avatar">🐱</div>
+            <div>
+                <div class="whatsapp-name">مريم ❤️</div>
+                <div class="whatsapp-status">🟢 متصلة</div>
+            </div>
+            <button class="whatsapp-call-btn" onclick="showCallNotification()">📞</button>
+            <button class="btn-back" onclick="goToScreen('gallery-screen')" style="position:static; background:transparent; border:1px solid rgba(255,255,255,0.2);">✕</button>
         </div>
         
-        <div class="input-group">
-          <label>📧 البريد الإلكتروني</label>
-          <input type="email" id="regEmail" placeholder="example@email.com">
-        </div>
-        
-        <div class="input-group">
-          <label>📱 رقم الهاتف</label>
-          <input type="tel" id="regPhone" placeholder="01012345678">
-        </div>
-        
-        <div class="input-group">
-          <label>🔒 كلمة المرور</label>
-          <input type="password" id="regPassword" placeholder="•••••••• (6 أحرف على الأقل)">
-        </div>
-        
-        <div class="input-group">
-          <label>📄 صورة البطاقة الشخصية أو شهادة الميلاد</label>
-          <input type="file" id="regIdImage" accept="image/*" style="padding: 8px;">
-        </div>
-        
-        <button class="login-btn" onclick="registerUser()">📝 إنشاء حساب</button>
-        
-        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
-          لديك حساب بالفعل؟ 
-          <span onclick="switchTab('login')" style="color: #2563eb; cursor: pointer; font-weight: 600;">تسجيل الدخول</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== HOME ===== -->
-    <section id="tab-home" class="hidden space-y-3 slide-up">
-      
-      <div id="pwaBanner" class="pwa-install-banner" style="display:none;">
-        <span class="icon">📱</span>
-        <div class="text">
-          <strong>ثبّت تطبيق سيجما</strong>
-          <span>للوصول السريع والإشعارات الفورية</span>
-        </div>
-        <button class="btn-install" onclick="installApp()">تثبيت</button>
-        <button class="btn-close" onclick="closePwaBanner()">✕</button>
-      </div>
-
-      <div id="userCard" class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-4 text-white shadow-lg">
-        <div id="userContent" class="flex items-center gap-3">
-          <img id="userAvatar" src="" class="profile-avatar" onclick="openProfile()" style="display:none;">
-          <div class="flex-1">
-            <div class="flex items-center justify-between">
-              <h2 id="userName" class="font-bold text-sm">مرحباً بك</h2>
-              <button id="loginBtn" onclick="logoutUser()" class="bg-red-500/80 hover:bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl transition">
-                <i class="fa-solid fa-sign-out-alt"></i> خروج
-              </button>
+        <div class="whatsapp-chat" id="whatsappChat">
+            <!-- الرسائل ستظهر هنا ديناميكياً -->
+            <div class="message-bubble received">
+                🎂 كل سنة وأنتي طيبة يا مريم
+                <span class="time">10:00</span>
             </div>
-            <p id="userSubtitle" class="text-xs text-blue-100">أكمل بياناتك</p>
-            <div id="userSubjects" class="mt-1"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-2">
-        <div class="stat-card" onclick="switchTab('schedule')">
-          <div class="text-blue-600 text-lg"><i class="fa-solid fa-calendar-check"></i></div>
-          <div class="stat-number text-blue-600" id="todayCount">0</div>
-          <div class="stat-label">حصص اليوم</div>
-        </div>
-        <div class="stat-card" onclick="switchTab('library')">
-          <div class="text-purple-600 text-lg"><i class="fa-solid fa-book"></i></div>
-          <div class="stat-number text-purple-600" id="materialCount">0</div>
-          <div class="stat-label">الملفات</div>
-        </div>
-        <div class="stat-card" onclick="switchTab('notifications')">
-          <div class="text-amber-500 text-lg"><i class="fa-solid fa-bell"></i></div>
-          <div class="stat-number text-amber-500" id="notifCount">0</div>
-          <div class="stat-label">تنبيهات</div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-xs text-slate-800"><i class="fa-solid fa-clock text-blue-600 ml-1"></i> حصصي اليوم</h3>
-          <button onclick="switchTab('schedule')" class="text-[10px] text-blue-600 font-bold">عرض الكل</button>
-        </div>
-        <div id="myScheduleToday" class="space-y-1.5">
-          <div class="text-center py-3 text-slate-400 text-xs">جاري التحميل...</div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-xs text-slate-800"><i class="fa-solid fa-newspaper text-blue-600 ml-1"></i> آخر الأخبار</h3>
-          <button onclick="switchTab('news')" class="text-[10px] text-blue-600 font-bold">عرض الكل</button>
-        </div>
-        <div id="homeNewsContainer" class="space-y-2">
-          <div class="text-center py-3 text-slate-400 text-xs">جاري التحميل...</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCHEDULE -->
-    <section id="tab-schedule" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-calendar-days text-blue-600 ml-1"></i> جدول السنتر</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div class="flex bg-slate-200/80 p-1 rounded-xl text-[10px] font-bold text-slate-600">
-        <button onclick="filterSchedule('today')" id="btnToday" class="flex-1 py-1.5 rounded-lg bg-white text-blue-600 shadow-sm">اليوم</button>
-        <button onclick="filterSchedule('tomorrow')" id="btnTomorrow" class="flex-1 py-1.5 rounded-lg">غداً</button>
-        <button onclick="filterSchedule('all')" id="btnAll" class="flex-1 py-1.5 rounded-lg">الأسبوع</button>
-      </div>
-      <div id="scheduleContainer" class="space-y-2">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- LIBRARY -->
-    <section id="tab-library" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-book-open text-purple-600 ml-1"></i> المكتبة الرقمية</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="libraryContainer" class="space-y-2">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- NEWS -->
-    <section id="tab-news" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-newspaper text-blue-600 ml-1"></i> الأخبار</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="allNewsContainer" class="space-y-3">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- NOTIFICATIONS -->
-    <section id="tab-notifications" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-bell text-amber-500 ml-1"></i> الإشعارات</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="notificationsContainer" class="space-y-2">
-        <div class="text-center py-6 text-slate-400 text-xs"><i class="fa-regular fa-bell-slash text-2xl block mb-1"></i> لا توجد إشعارات</div>
-      </div>
-    </section>
-
-    <!-- EXAMS -->
-    <section id="tab-exams" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-pen-to-square text-red-600 ml-1"></i> نظام الامتحانات</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="examsContainer" class="space-y-2">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- RESULTS -->
-    <section id="tab-results" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-chart-simple text-green-600 ml-1"></i> لوحة النتائج</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="resultsContainer" class="space-y-2">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- TEACHERS -->
-    <section id="tab-teachers" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-chalkboard-user text-indigo-600 ml-1"></i> المدرسين</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-      <div id="teachersContainer" class="space-y-2">
-        <div class="text-center py-4 text-slate-400 text-xs">جاري التحميل...</div>
-      </div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section id="tab-settings" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-gear text-slate-600 ml-1"></i> الإعدادات</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-user text-blue-600"></i> معلوماتي</div>
-        <div id="studentInfo" class="space-y-1 text-xs">
-          <p><span class="text-slate-500">الاسم:</span> <span id="infoName" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">البريد:</span> <span id="infoEmail" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">الهاتف:</span> <span id="infoPhone" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">ولي الأمر:</span> <span id="infoParentPhone" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">المدرسة:</span> <span id="infoSchool" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">المرحلة:</span> <span id="infoStage" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">الصف:</span> <span id="infoGrade" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">المواد:</span> <span id="infoSubjects" class="font-bold text-slate-800">-</span></p>
-          <p><span class="text-slate-500">حالة البيانات:</span> <span id="infoStatus" class="font-bold text-amber-600">قيد المراجعة</span></p>
-        </div>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-pen text-emerald-600"></i> تعديل البيانات</div>
-        <div class="space-y-2">
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">المدرسة:</label>
-            <input type="text" id="profSchool" placeholder="اسم المدرسة" class="w-full p-2 bg-slate-50 border rounded-xl text-sm mt-0.5 focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">رقم ولي الأمر:</label>
-            <input type="tel" id="profParentPhone" placeholder="رقم ولي الأمر" class="w-full p-2 bg-slate-50 border rounded-xl text-sm mt-0.5 focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">المرحلة:</label>
-            <select id="profStage" class="w-full p-2 bg-slate-50 border rounded-xl text-sm mt-0.5 focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="ثانوي">ثانوي</option>
-              <option value="إعدادي">إعدادي</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">الصف:</label>
-            <select id="profGrade" class="w-full p-2 bg-slate-50 border rounded-xl text-sm mt-0.5 focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="1">الصف الأول</option>
-              <option value="2">الصف الثاني</option>
-              <option value="3">الصف الثالث</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">رقم الهاتف:</label>
-            <input type="tel" id="profPhone" placeholder="مثال: 01012345678" class="w-full p-2 bg-slate-50 border rounded-xl text-sm mt-0.5 focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-slate-500">المواد:</label>
-            <div id="subjectsCheckbox" class="mt-1 grid grid-cols-2 gap-1"></div>
-          </div>
-          <button onclick="saveProfile()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm mt-2">
-            <i class="fa-solid fa-save"></i> حفظ التغييرات
-          </button>
-        </div>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-phone text-green-600"></i> أرقام السنتر</div>
-        <div id="centerContacts" class="space-y-1.5"></div>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-headset text-cyan-600"></i> الدعم الفني</div>
-        <div id="supportContacts" class="space-y-1.5"></div>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-comment text-amber-500"></i> تقديم شكوى</div>
-        <textarea id="complaintText" placeholder="اكتب شكواك هنا..." class="w-full p-2 bg-slate-50 border rounded-xl text-sm h-16 focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
-        <button onclick="sendComplaint()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-2 rounded-xl text-sm">
-          <i class="fa-solid fa-paper-plane"></i> إرسال
-        </button>
-      </div>
-
-      <div class="settings-card">
-        <div class="title"><i class="fa-solid fa-trash text-red-500"></i> حذف الحساب</div>
-        <button onclick="deleteAccount()" class="w-full bg-red-500 text-white font-bold py-2.5 rounded-xl text-sm">
-          <i class="fa-solid fa-trash-can"></i> حذف حسابي نهائياً
-        </button>
-        <p class="text-[9px] text-red-400 text-center mt-1">⚠️ هذا الإجراء لا يمكن التراجع عنه</p>
-      </div>
-    </section>
-
-    <!-- ADMIN -->
-    <section id="tab-admin" class="hidden space-y-3 slide-up">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-user-shield text-blue-600 ml-1"></i> لوحة الإدارة</h2>
-        <button onclick="switchTab('home')" class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-      </div>
-
-      <div id="adminDenied" class="hidden bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
-        <i class="fa-solid fa-ban text-red-500 text-4xl mb-2"></i>
-        <h3 class="font-bold text-red-700 text-sm">⛔ غير مصرح بالدخول</h3>
-        <p class="text-xs text-red-600 mt-1">هذه الصفحة للإداريين فقط</p>
-        <button onclick="switchTab('home')" class="mt-3 bg-red-600 text-white px-4 py-1.5 rounded-xl text-xs">الرجوع</button>
-      </div>
-
-      <div id="adminLogin" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-        <div class="flex items-center gap-2 text-sm font-bold text-slate-700"><i class="fa-solid fa-lock text-amber-500"></i> دخول الإدارة</div>
-        <div class="relative mt-2">
-          <input type="password" id="adminPass" placeholder="كلمة السر" class="w-full p-2.5 bg-slate-50 border rounded-xl text-sm pr-10 focus:ring-2 focus:ring-blue-500 outline-none">
-          <i class="fa-solid fa-key absolute left-3 top-3 text-slate-400"></i>
-        </div>
-        <button onclick="adminLogin()" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm">دخول</button>
-      </div>
-
-      <div id="adminPanel" class="hidden space-y-2">
-        
-        <!-- إحصائيات -->
-        <div class="admin-panel-section" onclick="toggleStats()" style="cursor:pointer;">
-          <div class="header">
-            <h4><i class="fa-solid fa-chart-line text-blue-400"></i> الإحصائيات اللحظية</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down" id="statsArrow"></i></span>
-          </div>
-          <div class="content" id="statsContent">
-            <div class="grid grid-cols-2 gap-2 text-white bg-slate-800 rounded-xl p-3">
-              <div><div class="text-xl font-bold" id="statUsers">0</div><div class="text-[10px] opacity-70">👥 الطلاب</div></div>
-              <div><div class="text-xl font-bold" id="statActive">0</div><div class="text-[10px] opacity-70">🟢 نشطاء</div></div>
-              <div><div class="text-xl font-bold" id="statBoys">0</div><div class="text-[10px] opacity-70">🧑 أولاد</div></div>
-              <div><div class="text-xl font-bold" id="statGirls">0</div><div class="text-[10px] opacity-70">👧 بنات</div></div>
-              <div><div class="text-xl font-bold" id="statSchedules">0</div><div class="text-[10px] opacity-70">📚 حصص</div></div>
-              <div><div class="text-xl font-bold" id="statMaterials">0</div><div class="text-[10px] opacity-70">📄 ملفات</div></div>
-              <div><div class="text-xl font-bold" id="statTeachers">0</div><div class="text-[10px] opacity-70">👨‍🏫 مدرسين</div></div>
-              <div><div class="text-xl font-bold" id="statExams">0</div><div class="text-[10px] opacity-70">📝 امتحانات</div></div>
-              <div><div class="text-xl font-bold" id="statResults">0</div><div class="text-[10px] opacity-70">📊 نتائج</div></div>
-              <div><div class="text-xl font-bold" id="statNotifs">0</div><div class="text-[10px] opacity-70">🔔 إشعارات</div></div>
+            <div class="message-bubble received" id="audioMessage1">
+                🔊 تسجيل صوتي 1
+                <div class="audio-recorder">
+                    <div class="status">🎙️ تسجيل أول مني</div>
+                    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                </div>
+                <span class="time">10:02</span>
             </div>
-          </div>
+            <div class="message-bubble received" id="audioMessage2" style="display:none;">
+                🔊 تسجيل صوتي 2
+                <div class="audio-recorder">
+                    <div class="status" style="color:#ff6b8a;">⏳ جاري التسجيل...</div>
+                    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+                </div>
+                <span class="time">10:05</span>
+            </div>
         </div>
 
-        <!-- طلبات تعديل البيانات -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-user-check text-amber-500"></i> طلبات تعديل البيانات</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div id="profileRequestsList" class="max-h-40 overflow-y-auto space-y-1.5">
-              <div class="text-center py-3 text-slate-400 text-xs">لا توجد طلبات</div>
-            </div>
-          </div>
+        <div class="whatsapp-input">
+            <input type="text" id="whatsappInput" placeholder="اكتب رسالة..." />
+            <button onclick="sendWhatsAppMessage()">➤</button>
         </div>
+    </div>
 
-        <!-- إدارة المدرسين -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-chalkboard-user text-indigo-600"></i> إدارة المدرسين</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="grid grid-cols-2 gap-1">
-              <input type="text" id="teacherName" placeholder="اسم المدرس" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <input type="text" id="teacherSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-            </div>
-            <button onclick="addTeacher()" class="w-full mt-1 bg-indigo-600 text-white font-bold py-1.5 rounded-lg text-xs">➕ إضافة مدرس</button>
-            <div id="teachersList" class="mt-2 space-y-1"></div>
-          </div>
+    <!-- ===== الشاشة 6: الفيديو ===== -->
+    <div class="screen" id="video-screen">
+        <button class="btn-back" onclick="goToScreen('whatsapp-screen')">← رجوع</button>
+        <div class="video-title">🎬 عيد ميلاد أجمل بطه في الدنيا 🎬</div>
+        <div class="video-container" id="videoContainer">
+            <span>🎥</span>
+            <video id="birthdayVideo" controls style="display:none; width:100%; height:100%;">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
         </div>
-
-        <!-- إدارة الامتحانات -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-pen-to-square text-red-600"></i> إدارة الامتحانات</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <input type="text" id="examTitle" placeholder="عنوان الامتحان" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-            <div class="grid grid-cols-2 gap-1 mt-1">
-              <input type="text" id="examSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <input type="date" id="examDate" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-            </div>
-            <button onclick="addExam()" class="w-full mt-2 bg-red-600 text-white font-bold py-1.5 rounded-lg text-xs">➕ إضافة امتحان</button>
-            <div id="examsList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- إدارة النتائج -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-chart-simple text-green-600"></i> إدارة النتائج</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <select id="resultStudent" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <option value="">اختر الطالب</option>
-            </select>
-            <div class="grid grid-cols-2 gap-1 mt-1">
-              <input type="text" id="resultSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <input type="number" id="resultScore" placeholder="الدرجة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-            </div>
-            <button onclick="addResult()" class="w-full mt-2 bg-green-600 text-white font-bold py-1.5 rounded-lg text-xs">➕ إضافة نتيجة</button>
-            <div id="resultsList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- المتابعة الأسبوعية -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-calendar-week text-cyan-600"></i> المتابعة الأسبوعية</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <select id="weeklyStudent" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <option value="">اختر الطالب</option>
-            </select>
-            <div class="grid grid-cols-2 gap-1 mt-1">
-              <input type="text" id="weeklySubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <input type="text" id="weeklyNote" placeholder="الملاحظة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-            </div>
-            <button onclick="addWeeklyFollow()" class="w-full mt-2 bg-cyan-600 text-white font-bold py-1.5 rounded-lg text-xs">➕ إضافة متابعة</button>
-            <div id="weeklyList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- إضافة حصة -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-plus-circle text-blue-600"></i> إضافة حصة</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="flex gap-1 mb-2">
-              <button onclick="setOption('full')" id="optFull" class="option-btn active flex-1 text-center">📝 كامل</button>
-              <button onclick="setOption('text')" id="optText" class="option-btn flex-1 text-center">📝 نص</button>
-              <button onclick="setOption('image')" id="optImage" class="option-btn flex-1 text-center">🖼️ صورة</button>
-            </div>
-            <div class="flex gap-1 mb-2">
-              <button onclick="setScheduleDay('today')" id="dayToday" class="option-btn active flex-1 text-center">اليوم</button>
-              <button onclick="setScheduleDay('tomorrow')" id="dayTomorrow" class="option-btn flex-1 text-center">غداً</button>
-              <button onclick="setScheduleDay('week')" id="dayWeek" class="option-btn flex-1 text-center">الأسبوع</button>
-            </div>
-            <div id="scheduleFields">
-              <div class="grid grid-cols-2 gap-1.5">
-                <select id="schDay" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                  <option value="الأحد">الأحد</option><option value="الإثنين">الإثنين</option>
-                  <option value="الثلاثاء">الثلاثاء</option><option value="الأربعاء">الأربعاء</option>
-                  <option value="الخميس">الخميس</option><option value="الجمعة">الجمعة</option>
-                  <option value="السبت">السبت</option>
-                </select>
-                <input type="text" id="schSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              </div>
-              <div class="grid grid-cols-2 gap-1.5 mt-1.5">
-                <input type="text" id="schTeacher" placeholder="المدرس" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                <input type="time" id="schTime" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              </div>
-              <div class="grid grid-cols-2 gap-1.5 mt-1.5">
-                <input type="text" id="schRoom" placeholder="القاعة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                <select id="schStage" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                  <option value="ثانوي">ثانوي</option><option value="إعدادي">إعدادي</option>
-                </select>
-              </div>
-            </div>
-            <div id="scheduleImageField" class="mt-1.5">
-              <label class="text-[10px] text-slate-500">صورة (حتى 20MB):</label>
-              <input type="file" id="schImage" accept="image/*" class="w-full text-xs p-1 bg-slate-50 rounded-lg border">
-            </div>
-            <button onclick="addSchedule()" class="w-full mt-2 bg-blue-600 text-white font-bold py-1.5 rounded-lg text-xs">💾 حفظ الحصة</button>
-            <div id="scheduleList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- إرسال إشعار -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-paper-plane text-amber-500"></i> إرسال إشعار</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="flex gap-1 mb-2">
-              <button onclick="setNotifOption('full')" id="notifOptFull" class="option-btn active flex-1 text-center">📝 كامل</button>
-              <button onclick="setNotifOption('text')" id="notifOptText" class="option-btn flex-1 text-center">📝 نص</button>
-              <button onclick="setNotifOption('image')" id="notifOptImage" class="option-btn flex-1 text-center">🖼️ صورة</button>
-            </div>
-            <input type="text" id="notifTitle" placeholder="العنوان" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-            <div id="notifTextField">
-              <textarea id="notifBody" placeholder="النص..." class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs h-12 mt-1"></textarea>
-            </div>
-            <div id="notifImageField">
-              <input type="file" id="notifImage" accept="image/*" class="w-full text-xs p-1 bg-slate-50 rounded-lg border mt-1">
-            </div>
-            <div class="grid grid-cols-3 gap-1 mt-1">
-              <select id="notifStage" class="p-1.5 bg-slate-50 border rounded-lg text-[10px]">
-                <option value="الكل">الكل</option><option value="ثانوي">ثانوي</option><option value="إعدادي">إعدادي</option>
-              </select>
-              <select id="notifGrade" class="p-1.5 bg-slate-50 border rounded-lg text-[10px]">
-                <option value="الكل">الكل</option><option value="1">الأول</option><option value="2">الثاني</option><option value="3">الثالث</option>
-              </select>
-              <input type="text" id="notifSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-[10px]">
-            </div>
-            <button onclick="sendNotif()" class="w-full mt-2 bg-amber-500 text-white font-bold py-1.5 rounded-lg text-xs">📨 إرسال</button>
-            <div id="notifList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- نشر خبر -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-image text-emerald-600"></i> نشر خبر</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <input type="text" id="newsTitle" placeholder="عنوان الخبر" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-            <textarea id="newsContent" placeholder="التفاصيل..." class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs h-12 mt-1"></textarea>
-            <input type="file" id="newsImage" accept="image/*" class="w-full text-xs p-1 bg-slate-50 rounded-lg border mt-1">
-            <button onclick="addNews()" class="w-full mt-2 bg-emerald-600 text-white font-bold py-1.5 rounded-lg text-xs">📢 نشر</button>
-            <div id="newsList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- رفع مذكرة -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-file-arrow-up text-purple-600"></i> رفع مذكرة</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <input type="text" id="matTitle" placeholder="اسم الملف" class="w-full p-1.5 bg-slate-50 border rounded-lg text-xs">
-            <div class="grid grid-cols-2 gap-1 mt-1">
-              <input type="text" id="matSubject" placeholder="المادة" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <select id="matType" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                <option value="pdf">PDF</option><option value="image">صورة</option>
-              </select>
-            </div>
-            <input type="file" id="matFile" class="w-full text-xs p-1 bg-slate-50 rounded-lg border mt-1">
-            <button onclick="uploadMat()" class="w-full mt-2 bg-purple-600 text-white font-bold py-1.5 rounded-lg text-xs">📤 رفع</button>
-            <div id="matList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- أرقام السنتر والدعم -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-address-book text-green-600"></i> أرقام السنتر والدعم</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="flex gap-1">
-              <input type="text" id="newContact" placeholder="رقم الهاتف" class="flex-1 p-1.5 bg-slate-50 border rounded-lg text-xs">
-              <select id="contactType" class="p-1.5 bg-slate-50 border rounded-lg text-xs">
-                <option value="phone">📞 سنتر</option>
-                <option value="whatsapp">💬 سنتر</option>
-                <option value="support">🛠️ دعم</option>
-              </select>
-              <button onclick="addContact()" class="bg-green-600 text-white px-3 rounded-lg text-xs">+</button>
-            </div>
-            <div id="contactsList" class="mt-2 space-y-1"></div>
-          </div>
-        </div>
-
-        <!-- الشكاوى -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-message text-amber-500"></i> رسائل الشكاوى</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div id="complaintsList" class="max-h-40 overflow-y-auto space-y-1.5">
-              <div class="text-center py-3 text-slate-400 text-xs">لا توجد شكاوى</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- حذف الكل -->
-        <div class="admin-panel-section">
-          <div class="header" onclick="toggleSection(this)">
-            <h4><i class="fa-solid fa-trash-can text-red-500"></i> حذف الكل</h4>
-            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-down"></i></span>
-          </div>
-          <div class="content">
-            <div class="grid grid-cols-2 gap-1">
-              <button onclick="deleteAll('notifications')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل الإشعارات</button>
-              <button onclick="deleteAll('news')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل الأخبار</button>
-              <button onclick="deleteAll('schedules')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل الحصص</button>
-              <button onclick="deleteAll('materials')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل الملفات</button>
-              <button onclick="deleteAll('exams')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل الامتحانات</button>
-              <button onclick="deleteAll('results')" class="bg-red-500 text-white font-bold py-1.5 rounded-lg text-xs">🗑️ حذف كل النتائج</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- BOTTOM NAV -->
-  <nav class="fixed bottom-0 w-full max-w-[480px] bg-white/95 backdrop-blur-sm border-t border-slate-200 py-1 px-2 flex justify-around items-center z-30 shadow-lg" style="left:50%;transform:translateX(-50%);">
-    <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-house text-lg"></i><span>الرئيسية</span></button>
-    <button onclick="switchTab('schedule')" id="nav-schedule" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-calendar-days text-lg"></i><span>الجدول</span></button>
-    <button onclick="switchTab('library')" id="nav-library" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-book-open text-lg"></i><span>المكتبة</span></button>
-    <button onclick="switchTab('exams')" id="nav-exams" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-pen-to-square text-lg"></i><span>امتحانات</span></button>
-    <button onclick="switchTab('settings')" id="nav-settings" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-gear text-lg"></i><span>الإعدادات</span></button>
-    <button onclick="switchTab('admin')" id="nav-admin" class="flex flex-col items-center text-[9px] font-bold text-slate-400"><i class="fa-solid fa-user-shield text-lg"></i><span>الإدارة</span></button>
-  </nav>
+        <button class="btn-start" style="margin-top:20px;" onclick="playVideo()">▶️ تشغيل الفيديو</button>
+        <button class="btn-start" style="margin-top:10px; background:linear-gradient(135deg,#ff6b8a,#e91e63);" onclick="goToScreen('welcome-screen')">🏠 العودة للبداية</button>
+    </div>
 
 </div>
 
-<!-- FIREBASE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCoHGEyhlsjmB_diUNm-R8SXB0Gm0kXw0A",
-    authDomain: "sigma-6f162.firebaseapp.com",
-    databaseURL: "https://sigma-6f162-default-rtdb.firebaseio.com",
-    projectId: "sigma-6f162",
-    storageBucket: "sigma-6f162.firebasestorage.app",
-    messagingSenderId: "420365348074",
-    appId: "1:420365348074:web:0aaecb71ec613bb32abb93"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const auth = getAuth(app);
-
-  await setPersistence(auth, browserLocalPersistence);
-
-  window.db = db; window.auth = auth;
-  window.ref = ref; window.push = push; window.set = set; window.remove = remove; window.update = update; window.onValue = onValue;
-  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-  window.signOut = signOut;
-  window.onAuthStateChanged = onAuthStateChanged;
-  window.deleteUser = deleteUser;
-</script>
-
-<!-- APPLICATION -->
 <script>
-// ===== المتغيرات العامة =====
-let currentUser = null, userData = null, scheduleData = [];
-let currentFilter = 'today', isAdmin = false, darkMode = false, deferredPrompt;
-let allUsers = {}, contacts = [], complaints = [], scheduleOption = 'full';
-let scheduleDayOption = 'today', notifOption = 'full';
-let currentViewerImage = '';
-
-const ADMIN_UIDS = ['WCyUdR31uZOxJwtYzXx85K7E0Cf2', 'ADMIN_UID_2', 'ADMIN_UID_3'];
-const MAX_FILE_SIZE = 20 * 1024 * 1024;
-
-const subjectsByStage = {
-  'ثانوي': ['فيزياء', 'كيمياء', 'رياضيات', 'أحياء', 'لغة عربية', 'لغة إنجليزية', 'فرنسية', 'تاريخ', 'جغرافيا', 'فلسفة'],
-  'إعدادي': ['رياضيات', 'علوم', 'لغة عربية', 'لغة إنجليزية', 'دراسات', 'حاسب آلي']
-};
-
-// ===== عرض الصور =====
-function openImageViewer(imageSrc, title = 'صورة') {
-  const viewer = document.getElementById('imageViewer');
-  const img = document.getElementById('viewerImage');
-  const info = document.getElementById('imageInfo');
-  if (!viewer || !img) return;
-  currentViewerImage = imageSrc;
-  img.src = imageSrc;
-  if (info) info.textContent = title;
-  viewer.classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeImageViewer() {
-  const viewer = document.getElementById('imageViewer');
-  if (viewer) viewer.classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-function downloadImage() {
-  if (currentViewerImage) {
-    const link = document.createElement('a');
-    link.href = currentViewerImage;
-    link.download = 'sigma_image_' + Date.now() + '.jpg';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast('✅ جاري تحميل الصورة', 'success');
-  }
-}
-
-// ===== PWA =====
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn')?.classList.add('show');
-  document.getElementById('pwaBanner').style.display = 'flex';
-});
-
-window.addEventListener('appinstalled', () => {
-  document.getElementById('installBtn')?.classList.remove('show');
-  document.getElementById('pwaBanner').style.display = 'none';
-});
-
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(r => {
-      if (r.outcome === 'accepted') {
-        showToast('✅ تم تثبيت التطبيق!', 'success');
-        document.getElementById('pwaBanner').style.display = 'none';
-      } else {
-        showToast('تم تخطي التثبيت', 'warning');
-      }
-      deferredPrompt = null;
-      document.getElementById('installBtn')?.classList.remove('show');
-    });
-  } else {
-    const isAndroid = /android/i.test(navigator.userAgent);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    let msg = '📱 لتثبيت التطبيق:\n\n';
-    if (isAndroid) {
-      msg += '1. اضغط ⋮ (القائمة)\n2. اختر "تثبيت التطبيق"\n3. اضغط "تثبيت"';
-    } else if (isIOS) {
-      msg += '1. اضغط □↑ (مشاركة)\n2. اختر "إضافة للشاشة الرئيسية"\n3. اضغط "إضافة"';
-    } else {
-      msg += 'استخدم Chrome أو Safari\nوابحث عن خيار "تثبيت التطبيق" في القائمة';
-    }
-    alert(msg);
-  }
-}
-
-function closePwaBanner() {
-  document.getElementById('pwaBanner').style.display = 'none';
-}
-
-function showToast(msg, type = 'info') {
-  const old = document.querySelector('.toast');
-  if (old) old.remove();
-  const t = document.createElement('div');
-  t.className = `toast toast-${type}`;
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
-}
-
-// ===== Service Worker =====
-if ('serviceWorker' in navigator) {
-  const sw = `self.addEventListener('install',e=>e.waitUntil(caches.open('v1').then(c=>c.add(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
-  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw], {type:'application/javascript'})));
-}
-
-// ===== انتظار Firebase =====
-function waitForFirebase() {
-  return new Promise(resolve => {
-    if (window.db && window.auth) { resolve(); return; }
-    const check = setInterval(() => {
-      if (window.db && window.auth) { clearInterval(check); resolve(); }
-    }, 100);
-  });
-}
-
-waitForFirebase().then(() => {
-  console.log('🚀 Starting...');
-  initApp();
-});
-
-// ===== التبويبات =====
-function switchTab(id) {
-  document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-  document.getElementById(`tab-${id}`)?.classList.remove('hidden');
-  document.querySelectorAll('nav button').forEach(b => {
-    b.classList.remove('text-blue-600');
-    b.classList.add('text-slate-400');
-  });
-  const nav = document.getElementById(`nav-${id}`);
-  if (nav) { nav.classList.remove('text-slate-400'); nav.classList.add('text-blue-600'); }
-  if (id === 'admin') handleAdminTab();
-}
-
-function handleAdminTab() {
-  const denied = document.getElementById('adminDenied');
-  const login = document.getElementById('adminLogin');
-  const panel = document.getElementById('adminPanel');
-  if (!currentUser || !ADMIN_UIDS.includes(currentUser.uid)) {
-    if (denied) denied.classList.remove('hidden');
-    if (login) login.classList.add('hidden');
-    if (panel) panel.classList.add('hidden');
-  } else if (!isAdmin) {
-    if (denied) denied.classList.add('hidden');
-    if (login) login.classList.remove('hidden');
-    if (panel) panel.classList.add('hidden');
-  } else {
-    if (denied) denied.classList.add('hidden');
-    if (login) login.classList.add('hidden');
-    if (panel) panel.classList.remove('hidden');
-    loadAdminData();
-  }
-}
-
-// ===== المصادقة =====
-function initApp() {
-  // التحقق من حالة المستخدم
-  window.onAuthStateChanged(window.auth, user => {
-    if (user) {
-      currentUser = user;
-      // جلب بيانات المستخدم
-      window.onValue(window.ref(window.db, `users/${user.uid}`), snap => {
-        userData = snap.val();
-        renderUser();
-        updateInfo();
-        if (!userData) {
-          setTimeout(() => { switchTab('settings'); showToast('📝 أكمل بياناتك', 'warning'); }, 1000);
-        }
-        // إظهار التبويب الرئيسي وإخفاء تسجيل الدخول
-        document.getElementById('tab-login').classList.add('hidden');
-        document.getElementById('tab-register').classList.add('hidden');
-        document.getElementById('tab-home').classList.remove('hidden');
-        // تحديث شريط التنقل
-        document.querySelectorAll('nav button').forEach(b => {
-          b.classList.remove('text-blue-600');
-          b.classList.add('text-slate-400');
+    // ============================================================
+    // إدارة الشاشات
+    // ============================================================
+    function goToScreen(screenId) {
+        // إخفاء جميع الشاشات
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.style.display = 'none';
         });
-        const nav = document.getElementById('nav-home');
-        if (nav) { nav.classList.remove('text-slate-400'); nav.classList.add('text-blue-600'); }
-      });
-      window.set(window.ref(window.db, `users/${user.uid}/online`), true);
-      window.set(window.ref(window.db, `users/${user.uid}/lastSeen`), Date.now());
-    } else {
-      currentUser = null; userData = null; isAdmin = false;
-      // إظهار شاشة تسجيل الدخول
-      document.getElementById('tab-login').classList.remove('hidden');
-      document.getElementById('tab-register').classList.add('hidden');
-      document.getElementById('tab-home').classList.add('hidden');
-      document.getElementById('tab-schedule').classList.add('hidden');
-      document.getElementById('tab-library').classList.add('hidden');
-      document.getElementById('tab-news').classList.add('hidden');
-      document.getElementById('tab-notifications').classList.add('hidden');
-      document.getElementById('tab-exams').classList.add('hidden');
-      document.getElementById('tab-results').classList.add('hidden');
-      document.getElementById('tab-teachers').classList.add('hidden');
-      document.getElementById('tab-settings').classList.add('hidden');
-      document.getElementById('tab-admin').classList.add('hidden');
-      // تحديث شريط التنقل
-      document.querySelectorAll('nav button').forEach(b => {
-        b.classList.remove('text-blue-600');
-        b.classList.add('text-slate-400');
-      });
-      renderUser();
-      document.getElementById('adminDenied').classList.add('hidden');
-      document.getElementById('adminLogin').classList.remove('hidden');
-      document.getElementById('adminPanel').classList.add('hidden');
-    }
-  });
-  initListeners();
-  loadContacts();
-  loadComplaints();
-  loadSubjects();
-  loadTeachers();
-  loadExams();
-  loadResults();
-  loadWeeklyFollow();
-  loadProfileRequests();
-}
-
-// ===== تسجيل الدخول =====
-function loginUser() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  
-  if (!email || !password) {
-    showToast('⚠️ يرجى ملء جميع الحقول', 'error');
-    return;
-  }
-  
-  // التحقق إذا كان الإدخال رقم هاتف أو بريد إلكتروني
-  const isPhone = /^[0-9]{10,11}$/.test(email);
-  let loginEmail = email;
-  
-  // إذا كان رقم هاتف، نحوله لبريد وهمي للتسجيل
-  if (isPhone) {
-    loginEmail = `user_${email}@sigma-center.com`;
-  }
-  
-  window.signInWithEmailAndPassword(window.auth, loginEmail, password)
-    .then(result => {
-      showToast('✅ تم تسجيل الدخول بنجاح', 'success');
-    })
-    .catch(error => {
-      if (error.code === 'auth/user-not-found') {
-        showToast('❌ لا يوجد حساب بهذا البريد أو الرقم', 'error');
-      } else if (error.code === 'auth/wrong-password') {
-        showToast('❌ كلمة المرور غير صحيحة', 'error');
-      } else {
-        showToast('❌ ' + error.message, 'error');
-      }
-    });
-}
-
-// ===== إنشاء حساب جديد =====
-function registerUser() {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const phone = document.getElementById('regPhone').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const idFile = document.getElementById('regIdImage').files[0];
-  
-  if (!name || !email || !phone || !password) {
-    showToast('⚠️ يرجى ملء جميع الحقول', 'error');
-    return;
-  }
-  
-  if (password.length < 6) {
-    showToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
-    return;
-  }
-  
-  if (!idFile) {
-    showToast('⚠️ يرجى رفع صورة البطاقة أو شهادة الميلاد', 'error');
-    return;
-  }
-  
-  // قراءة صورة البطاقة
-  const reader = new FileReader();
-  reader.readAsDataURL(idFile);
-  reader.onload = async function() {
-    const idImage = reader.result;
-    
-    try {
-      // إنشاء حساب في Firebase Auth
-      const result = await window.createUserWithEmailAndPassword(window.auth, email, password);
-      const user = result.user;
-      
-      // حفظ بيانات المستخدم في قاعدة البيانات مع الصورة
-      await window.set(window.ref(window.db, `users/${user.uid}`), {
-        name: name,
-        email: email,
-        phone: phone,
-        idImage: idImage,
-        stage: '',
-        grade: '',
-        subjects: [],
-        school: '',
-        parentPhone: '',
-        profileStatus: 'pending',
-        createdAt: new Date().toISOString(),
-        online: true,
-        lastSeen: Date.now()
-      });
-      
-      showToast('✅ تم إنشاء الحساب بنجاح! انتظر موافقة الإدارة', 'success');
-      
-      // تنظيف الحقول
-      document.getElementById('regName').value = '';
-      document.getElementById('regEmail').value = '';
-      document.getElementById('regPhone').value = '';
-      document.getElementById('regPassword').value = '';
-      document.getElementById('regIdImage').value = '';
-      
-      // التبديل لتسجيل الدخول
-      switchTab('login');
-      
-    } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        showToast('❌ هذا البريد الإلكتروني مستخدم بالفعل', 'error');
-      } else {
-        showToast('❌ ' + error.message, 'error');
-      }
-    }
-  };
-}
-
-// ===== تسجيل الخروج =====
-function logoutUser() {
-  if (currentUser) {
-    window.set(window.ref(window.db, `users/${currentUser.uid}/online`), false);
-  }
-  window.signOut(window.auth);
-  showToast('👋 تم تسجيل الخروج', 'warning');
-}
-
-// ===== حذف الحساب =====
-function deleteAccount() {
-  if (!currentUser) return showToast('⚠️ سجل دخول أولاً', 'error');
-  
-  if (confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟ لا يمكن التراجع عن هذا الإجراء!')) {
-    const uid = currentUser.uid;
-    
-    // حذف بيانات المستخدم من قاعدة البيانات
-    window.remove(window.ref(window.db, `users/${uid}`))
-      .then(() => {
-        // حذف المستخدم من Firebase Auth
-        return window.deleteUser(currentUser);
-      })
-      .then(() => {
-        showToast('✅ تم حذف الحساب بنجاح', 'success');
-        // إعادة تحميل الصفحة لتحديث الحالة
-        window.location.reload();
-      })
-      .catch(error => {
-        // قد يحتاج المستخدم لإعادة المصادقة
-        if (error.code === 'auth/requires-recent-login') {
-          showToast('⚠️ يرجى تسجيل الدخول مرة أخرى ثم المحاولة', 'warning');
-          logoutUser();
-        } else {
-          showToast('❌ ' + error.message, 'error');
+        
+        // إظهار الشاشة المطلوبة
+        const screen = document.getElementById(screenId);
+        if (screen) {
+            screen.style.display = 'flex';
+            // إعادة تشغيل الأنيميشن
+            screen.style.animation = 'none';
+            setTimeout(() => {
+                screen.style.animation = 'fadeIn 0.8s forwards';
+                screen.classList.add('active');
+            }, 10);
         }
-      });
-  }
-}
 
-function renderUser() {
-  const avatar = document.getElementById('userAvatar');
-  const name = document.getElementById('userName');
-  const sub = document.getElementById('userSubtitle');
-  const subjects = document.getElementById('userSubjects');
-  const btn = document.getElementById('loginBtn');
-
-  if (currentUser && userData) {
-    avatar.src = userData.idImage || 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
-    avatar.style.display = 'block';
-    name.textContent = `مرحباً، ${userData.name || 'طالب'}`;
-    sub.textContent = `${userData.stage || ''} • صف ${userData.grade || ''}`;
-    subjects.innerHTML = (userData.subjects || []).map(s => `<span class="subject-chip">${s}</span>`).join('');
-    btn.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i> خروج';
-    btn.onclick = logoutUser;
-    btn.className = 'bg-red-500/80 hover:bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl';
-  } else if (currentUser) {
-    avatar.src = 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff';
-    avatar.style.display = 'block';
-    name.textContent = `مرحباً، ${currentUser.email || 'طالب'}`;
-    sub.textContent = 'أكمل بياناتك';
-    subjects.innerHTML = '';
-    btn.innerHTML = '<i class="fa-solid fa-sign-out-alt"></i> خروج';
-    btn.onclick = logoutUser;
-    btn.className = 'bg-red-500/80 hover:bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl';
-  } else {
-    avatar.style.display = 'none';
-    name.textContent = 'مرحباً بك';
-    sub.textContent = 'سجل دخولك';
-    subjects.innerHTML = '';
-  }
-}
-
-function openProfile() { if (currentUser) switchTab('settings'); else showToast('⚠️ سجل دخول', 'error'); }
-
-// ===== حفظ الملف الشخصي =====
-function saveProfile() {
-  if (!currentUser) return showToast('⚠️ سجل دخول', 'error');
-  
-  const stage = document.getElementById('profStage').value;
-  const grade = document.getElementById('profGrade').value;
-  const phone = document.getElementById('profPhone').value;
-  const school = document.getElementById('profSchool').value;
-  const parentPhone = document.getElementById('profParentPhone').value;
-  const checked = document.querySelectorAll('.subject-check:checked');
-  const subjects = Array.from(checked).map(cb => cb.value);
-  
-  if (!subjects.length) return showToast('⚠️ اختر مادة', 'error');
-
-  window.update(window.ref(window.db, `users/${currentUser.uid}`), {
-    stage, grade, subjects,
-    phone: phone,
-    school: school,
-    parentPhone: parentPhone,
-    profileStatus: userData?.profileStatus || 'pending',
-    updatedAt: new Date().toISOString()
-  }).then(() => { 
-    showToast('✅ تم حفظ البيانات', 'success'); 
-    renderUser(); 
-    updateInfo(); 
-  });
-}
-
-function loadSubjects() {
-  const container = document.getElementById('subjectsCheckbox');
-  if (!container) return;
-  container.innerHTML = '';
-  const stage = document.getElementById('profStage').value;
-  (subjectsByStage[stage] || []).forEach(s => {
-    const checked = userData?.subjects?.includes(s) || false;
-    container.innerHTML += `<label class="flex items-center gap-1.5 p-1.5 bg-slate-50 rounded-lg text-xs cursor-pointer"><input type="checkbox" value="${s}" class="subject-check" ${checked?'checked':''}> ${s}</label>`;
-  });
-  document.getElementById('profStage').onchange = loadSubjects;
-}
-
-function updateInfo() {
-  if (currentUser && userData) {
-    document.getElementById('infoName').textContent = userData.name || '-';
-    document.getElementById('infoEmail').textContent = userData.email || '-';
-    document.getElementById('infoPhone').textContent = userData.phone || '-';
-    document.getElementById('infoParentPhone').textContent = userData.parentPhone || '-';
-    document.getElementById('infoSchool').textContent = userData.school || '-';
-    document.getElementById('infoStage').textContent = userData.stage || '-';
-    document.getElementById('infoGrade').textContent = userData.grade || '-';
-    document.getElementById('infoSubjects').textContent = (userData.subjects || []).join('، ') || '-';
-    document.getElementById('infoStatus').textContent = userData.profileStatus === 'approved' ? '✅ معتمدة' : '⏳ قيد المراجعة';
-    document.getElementById('infoStatus').className = userData.profileStatus === 'approved' ? 'font-bold text-green-600' : 'font-bold text-amber-600';
-    
-    document.getElementById('profPhone').value = userData.phone || '';
-    document.getElementById('profSchool').value = userData.school || '';
-    document.getElementById('profParentPhone').value = userData.parentPhone || '';
-  }
-}
-
-// ===== خيارات الإضافة =====
-function setOption(opt) {
-  scheduleOption = opt;
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`opt${opt.charAt(0).toUpperCase()+opt.slice(1)}`).classList.add('active');
-  document.getElementById('scheduleFields').style.display = (opt === 'image') ? 'none' : 'block';
-  document.getElementById('scheduleImageField').style.display = (opt === 'text') ? 'none' : 'block';
-}
-
-function setScheduleDay(day) {
-  scheduleDayOption = day;
-  document.querySelectorAll('#tab-admin .option-btn').forEach(b => {
-    if (b.id === 'dayToday' || b.id === 'dayTomorrow' || b.id === 'dayWeek') {
-      b.classList.remove('active');
-    }
-  });
-  document.getElementById(`day${day.charAt(0).toUpperCase()+day.slice(1)}`).classList.add('active');
-  
-  const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  const today = days[new Date().getDay()];
-  const tomorrow = days[(new Date().getDay()+1)%7];
-  
-  if (day === 'today') {
-    document.getElementById('schDay').value = today;
-  } else if (day === 'tomorrow') {
-    document.getElementById('schDay').value = tomorrow;
-  }
-}
-
-function setNotifOption(opt) {
-  notifOption = opt;
-  document.querySelectorAll('#tab-admin .option-btn').forEach(b => {
-    if (b.id === 'notifOptFull' || b.id === 'notifOptText' || b.id === 'notifOptImage') {
-      b.classList.remove('active');
-    }
-  });
-  document.getElementById(`notifOpt${opt.charAt(0).toUpperCase()+opt.slice(1)}`).classList.add('active');
-  document.getElementById('notifTextField').style.display = (opt === 'image') ? 'none' : 'block';
-  document.getElementById('notifImageField').style.display = (opt === 'text') ? 'none' : 'block';
-}
-
-// ===== إدارة =====
-function adminLogin() {
-  const pass = document.getElementById('adminPass').value;
-  if (!currentUser) return showToast('⚠️ سجل دخول بحساب إداري', 'error');
-  if (!ADMIN_UIDS.includes(currentUser.uid)) {
-    showToast('⛔ ليس إدارياً', 'error');
-    document.getElementById('adminDenied').classList.remove('hidden');
-    document.getElementById('adminLogin').classList.add('hidden');
-    return;
-  }
-  if (pass === 'Sigma@2024') {
-    isAdmin = true;
-    document.getElementById('adminLogin').classList.add('hidden');
-    document.getElementById('adminPanel').classList.remove('hidden');
-    document.getElementById('adminPass').value = '';
-    loadAdminData();
-    showToast('✅ مرحباً في لوحة التحكم', 'success');
-  } else {
-    showToast('❌ كلمة السر خاطئة', 'error');
-  }
-}
-
-function toggleStats() {
-  const content = document.getElementById('statsContent');
-  const arrow = document.getElementById('statsArrow');
-  content.classList.toggle('open');
-  arrow.className = content.classList.contains('open') ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
-  if (content.classList.contains('open')) loadStats();
-}
-
-function toggleSection(el) {
-  const content = el.closest('.admin-panel-section').querySelector('.content');
-  const arrow = el.querySelector('.fa-chevron-down, .fa-chevron-up');
-  content.classList.toggle('open');
-  arrow.className = content.classList.contains('open') ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
-}
-
-function loadAdminData() {
-  loadStats();
-  loadManage('schedules', 'scheduleList', renderScheduleItem);
-  loadManage('notifications', 'notifList', renderNotifItem);
-  loadManage('news', 'newsList', renderNewsItem);
-  loadManage('materials', 'matList', renderMatItem);
-}
-
-function loadStats() {
-  window.onValue(window.ref(window.db, 'users'), snap => {
-    const data = snap.val();
-    allUsers = data || {};
-    const total = Object.keys(allUsers).length;
-    let active = 0, boys = 0, girls = 0;
-    const now = Date.now();
-    Object.keys(allUsers).forEach(k => {
-      const u = allUsers[k];
-      if (u.online === true || (u.lastSeen && u.lastSeen > now - 86400000)) active++;
-      const name = (u.name || '').toLowerCase();
-      if (['ahmed','mohamed','khaled','ali','hassan','mostafa','omar','youssef','ibrahim'].some(m => name.includes(m))) boys++;
-      else if (name) girls++;
-    });
-    document.getElementById('statUsers').textContent = total;
-    document.getElementById('statActive').textContent = active;
-    document.getElementById('statBoys').textContent = boys || Math.floor(total * 0.6);
-    document.getElementById('statGirls').textContent = girls || Math.floor(total * 0.4);
-  });
-  window.onValue(window.ref(window.db, 'schedules'), snap => {
-    const d = snap.val();
-    document.getElementById('statSchedules').textContent = d ? Object.keys(d).length : 0;
-  });
-  window.onValue(window.ref(window.db, 'materials'), snap => {
-    const d = snap.val();
-    document.getElementById('statMaterials').textContent = d ? Object.keys(d).length : 0;
-  });
-  window.onValue(window.ref(window.db, 'teachers'), snap => {
-    const d = snap.val();
-    document.getElementById('statTeachers').textContent = d ? Object.keys(d).length : 0;
-  });
-  window.onValue(window.ref(window.db, 'exams'), snap => {
-    const d = snap.val();
-    document.getElementById('statExams').textContent = d ? Object.keys(d).length : 0;
-  });
-  window.onValue(window.ref(window.db, 'results'), snap => {
-    const d = snap.val();
-    document.getElementById('statResults').textContent = d ? Object.keys(d).length : 0;
-  });
-  window.onValue(window.ref(window.db, 'notifications'), snap => {
-    const d = snap.val();
-    document.getElementById('statNotifs').textContent = d ? Object.keys(d).length : 0;
-  });
-}
-
-function loadManage(path, containerId, renderFn) {
-  window.onValue(window.ref(window.db, path), snap => {
-    const data = snap.val();
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = '';
-    if (!data) return;
-    Object.keys(data).reverse().forEach(k => container.innerHTML += renderFn(k, data[k]));
-  });
-}
-
-function renderScheduleItem(k, i) {
-  return `<div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs"><span class="font-bold">${i.subject||'صورة'}</span><span class="text-slate-500">${i.day}</span><button onclick="deleteItem('schedules','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>`;
-}
-function renderNotifItem(k, i) {
-  return `<div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs"><span class="font-bold">${i.title}</span><button onclick="deleteItem('notifications','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>`;
-}
-function renderNewsItem(k, i) {
-  return `<div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs"><span class="font-bold">${i.title}</span><button onclick="deleteItem('news','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>`;
-}
-function renderMatItem(k, i) {
-  return `<div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs"><span class="font-bold">${i.title}</span><button onclick="deleteItem('materials','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>`;
-}
-
-function deleteItem(path, key) {
-  if (!isAdmin) return;
-  if (confirm('حذف هذا العنصر؟')) {
-    window.remove(window.ref(window.db, `${path}/${key}`));
-    showToast('✅ تم الحذف', 'success');
-  }
-}
-
-function deleteAll(path) {
-  if (!isAdmin) return;
-  const names = {
-    'notifications': 'الإشعارات',
-    'news': 'الأخبار',
-    'schedules': 'الحصص',
-    'materials': 'الملفات',
-    'exams': 'الامتحانات',
-    'results': 'النتائج'
-  };
-  if (confirm(`⚠️ هل أنت متأكد من حذف كل ${names[path] || path}؟`)) {
-    window.set(window.ref(window.db, path), null);
-    showToast(`✅ تم حذف كل ${names[path] || path}`, 'success');
-  }
-}
-
-// ===== إدارة المدرسين =====
-function loadTeachers() {
-  window.onValue(window.ref(window.db, 'teachers'), snap => {
-    const data = snap.val();
-    const container = document.getElementById('teachersContainer');
-    const list = document.getElementById('teachersList');
-    
-    if (container) {
-      container.innerHTML = '';
-      if (!data) {
-        container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا يوجد مدرسين</div>';
-        return;
-      }
-      Object.keys(data).reverse().forEach(k => {
-        const t = data[k];
-        container.innerHTML += `
-          <div class="bg-white rounded-xl p-3 border border-slate-200">
-            <div class="flex justify-between">
-              <div>
-                <span class="font-bold text-sm">${t.name}</span>
-                <span class="text-xs text-slate-500 block">${t.subject}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-    
-    if (list) {
-      list.innerHTML = '';
-      if (!data) return;
-      Object.keys(data).reverse().forEach(k => {
-        const t = data[k];
-        list.innerHTML += `
-          <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs">
-            <span><strong>${t.name}</strong> - ${t.subject}</span>
-            <button onclick="deleteItem('teachers','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      });
-    }
-  });
-}
-
-function addTeacher() {
-  if (!isAdmin) return;
-  const name = document.getElementById('teacherName').value;
-  const subject = document.getElementById('teacherSubject').value;
-  if (!name || !subject) return showToast('⚠️ اكتب الاسم والمادة', 'error');
-  window.push(window.ref(window.db, 'teachers'), { name, subject });
-  document.getElementById('teacherName').value = '';
-  document.getElementById('teacherSubject').value = '';
-  showToast('✅ تم إضافة المدرس', 'success');
-}
-
-// ===== نظام الامتحانات =====
-function loadExams() {
-  window.onValue(window.ref(window.db, 'exams'), snap => {
-    const data = snap.val();
-    const container = document.getElementById('examsContainer');
-    const list = document.getElementById('examsList');
-    
-    if (container) {
-      container.innerHTML = '';
-      if (!data) {
-        container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد امتحانات</div>';
-        return;
-      }
-      Object.keys(data).reverse().forEach(k => {
-        const e = data[k];
-        container.innerHTML += `
-          <div class="exam-card">
-            <div class="flex justify-between">
-              <div>
-                <div class="exam-title">${e.title}</div>
-                <div class="exam-info">📚 ${e.subject} • 📅 ${e.date}</div>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-    
-    if (list) {
-      list.innerHTML = '';
-      if (!data) return;
-      Object.keys(data).reverse().forEach(k => {
-        const e = data[k];
-        list.innerHTML += `
-          <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs">
-            <span><strong>${e.title}</strong> - ${e.subject} (${e.date})</span>
-            <button onclick="deleteItem('exams','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      });
-    }
-  });
-}
-
-function addExam() {
-  if (!isAdmin) return;
-  const title = document.getElementById('examTitle').value;
-  const subject = document.getElementById('examSubject').value;
-  const date = document.getElementById('examDate').value;
-  if (!title || !subject || !date) return showToast('⚠️ املأ جميع الحقول', 'error');
-  window.push(window.ref(window.db, 'exams'), { title, subject, date });
-  document.getElementById('examTitle').value = '';
-  document.getElementById('examSubject').value = '';
-  document.getElementById('examDate').value = '';
-  showToast('✅ تم إضافة الامتحان', 'success');
-}
-
-// ===== نظام النتائج =====
-function loadResults() {
-  window.onValue(window.ref(window.db, 'results'), snap => {
-    const data = snap.val();
-    const container = document.getElementById('resultsContainer');
-    const list = document.getElementById('resultsList');
-    const select = document.getElementById('resultStudent');
-    
-    if (select) {
-      select.innerHTML = '<option value="">اختر الطالب</option>';
-      window.onValue(window.ref(window.db, 'users'), snap2 => {
-        const users = snap2.val();
-        if (users) {
-          Object.keys(users).forEach(k => {
-            const u = users[k];
-            select.innerHTML += `<option value="${k}">${u.name || 'طالب'}</option>`;
-          });
+        // تشغيل المؤثرات الخاصة بكل شاشة
+        if (screenId === 'whatsapp-screen') {
+            setTimeout(() => {
+                document.getElementById('audioMessage2').style.display = 'block';
+            }, 3000);
         }
-      });
     }
-    
-    if (container) {
-      container.innerHTML = '';
-      if (!data) {
-        container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد نتائج</div>';
-        return;
-      }
-      if (currentUser) {
-        let found = false;
-        Object.keys(data).reverse().forEach(k => {
-          const r = data[k];
-          if (r.userId === currentUser.uid) {
-            found = true;
-            container.innerHTML += `
-              <div class="result-card">
-                <div class="flex justify-between">
-                  <div>
-                    <div class="result-subject">${r.subject}</div>
-                    <div class="text-xs text-slate-500">${r.date || ''}</div>
-                  </div>
-                  <div class="result-score">${r.score}%</div>
-                </div>
-              </div>
-            `;
-          }
+
+    // ============================================================
+    // إطفاء الشموع
+    // ============================================================
+    let candlesLit = 5;
+
+    function blowCandles() {
+        const candles = document.querySelectorAll('.candle');
+        let count = 0;
+        
+        candles.forEach((candle, index) => {
+            setTimeout(() => {
+                if (!candle.classList.contains('extinguished')) {
+                    candle.classList.add('extinguished');
+                    candle.textContent = '🕯️';
+                    count++;
+                    document.getElementById('candleCount').textContent = `🔥 ${candlesLit - count} شموع مضيئة`;
+                    
+                    // تأثير كونفيتي عند إطفاء كل شمعة
+                    createConfetti();
+                }
+            }, index * 400);
         });
-        if (!found) {
-          container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد نتائج لك</div>';
+
+        // إعادة تعيين العد بعد الإطفاء الكامل
+        setTimeout(() => {
+            candlesLit = 0;
+            document.getElementById('candleCount').textContent = '🎉 كل الشموع انطفأت! 🎉';
+            // تشغيل تأثير احتفالي
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createConfetti, i * 100);
+            }
+        }, candles.length * 400 + 500);
+    }
+
+    // ============================================================
+    // كونفيتي
+    // ============================================================
+    function createConfetti() {
+        const colors = ['#ff6b8a', '#ffd700', '#ff1744', '#ff9100', '#00e676', '#2979ff', '#d500f9'];
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 8 + 4) + 'px';
+        confetti.style.height = (Math.random() * 8 + 4) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => {
+            confetti.remove();
+        }, 4000);
+    }
+
+    // ============================================================
+    // واتساب - إرسال رسالة
+    // ============================================================
+    function sendWhatsAppMessage() {
+        const input = document.getElementById('whatsappInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const chat = document.getElementById('whatsappChat');
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble sent';
+        bubble.innerHTML = `${text} <span class="time">${new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</span>`;
+        chat.appendChild(bubble);
+        input.value = '';
+        chat.scrollTop = chat.scrollHeight;
+
+        // التحقق من كلمة "بطتي"
+        if (text.includes('بطتي')) {
+            setTimeout(() => {
+                goToScreen('video-screen');
+            }, 1000);
         }
-      }
     }
-    
-    if (list) {
-      list.innerHTML = '';
-      if (!data) return;
-      Object.keys(data).reverse().forEach(k => {
-        const r = data[k];
-        list.innerHTML += `
-          <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs">
-            <span><strong>${r.subject}</strong> - ${r.score}%</span>
-            <button onclick="deleteItem('results','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      });
+
+    // ============================================================
+    // واتساب - مكالمة
+    // ============================================================
+    function showCallNotification() {
+        alert('📞 جاري الاتصال بمريم ❤️');
+        // تأثير اهتزاز
+        const header = document.querySelector('.whatsapp-header');
+        header.style.animation = 'shake 0.5s ease';
+        setTimeout(() => {
+            header.style.animation = '';
+        }, 500);
     }
-  });
-}
 
-function addResult() {
-  if (!isAdmin) return;
-  const userId = document.getElementById('resultStudent').value;
-  const subject = document.getElementById('resultSubject').value;
-  const score = document.getElementById('resultScore').value;
-  if (!userId || !subject || !score) return showToast('⚠️ املأ جميع الحقول', 'error');
-  window.push(window.ref(window.db, 'results'), { userId, subject, score, date: new Date().toLocaleDateString('ar-EG') });
-  document.getElementById('resultSubject').value = '';
-  document.getElementById('resultScore').value = '';
-  showToast('✅ تم إضافة النتيجة', 'success');
-}
-
-// ===== المتابعة الأسبوعية =====
-function loadWeeklyFollow() {
-  window.onValue(window.ref(window.db, 'weekly_follow'), snap => {
-    const data = snap.val();
-    const list = document.getElementById('weeklyList');
-    const select = document.getElementById('weeklyStudent');
-    
-    if (select) {
-      select.innerHTML = '<option value="">اختر الطالب</option>';
-      window.onValue(window.ref(window.db, 'users'), snap2 => {
-        const users = snap2.val();
-        if (users) {
-          Object.keys(users).forEach(k => {
-            const u = users[k];
-            select.innerHTML += `<option value="${k}">${u.name || 'طالب'}</option>`;
-          });
+    // إضافة تأثير اهتزاز
+    const styleShake = document.createElement('style');
+    styleShake.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
-      });
-    }
-    
-    if (list) {
-      list.innerHTML = '';
-      if (!data) {
-        list.innerHTML = '<div class="text-center py-2 text-slate-400 text-xs">لا توجد متابعات</div>';
-        return;
-      }
-      Object.keys(data).reverse().forEach(k => {
-        const f = data[k];
-        list.innerHTML += `
-          <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs">
-            <span><strong>${f.subject}</strong> - ${f.note}</span>
-            <button onclick="deleteItem('weekly_follow','${k}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      });
-    }
-  });
-}
-
-function addWeeklyFollow() {
-  if (!isAdmin) return;
-  const userId = document.getElementById('weeklyStudent').value;
-  const subject = document.getElementById('weeklySubject').value;
-  const note = document.getElementById('weeklyNote').value;
-  if (!userId || !subject || !note) return showToast('⚠️ املأ جميع الحقول', 'error');
-  window.push(window.ref(window.db, 'weekly_follow'), { userId, subject, note, date: new Date().toLocaleDateString('ar-EG') });
-  document.getElementById('weeklySubject').value = '';
-  document.getElementById('weeklyNote').value = '';
-  showToast('✅ تم إضافة المتابعة', 'success');
-}
-
-// ===== طلبات تعديل البيانات =====
-function loadProfileRequests() {
-  window.onValue(window.ref(window.db, 'profile_requests'), snap => {
-    const data = snap.val();
-    const container = document.getElementById('profileRequestsList');
-    if (!container) return;
-    container.innerHTML = '';
-    if (!data) {
-      container.innerHTML = '<div class="text-center py-3 text-slate-400 text-xs">لا توجد طلبات</div>';
-      return;
-    }
-    Object.keys(data).reverse().forEach(k => {
-      const r = data[k];
-      container.innerHTML += `
-        <div class="p-2 bg-slate-50 rounded-lg text-xs">
-          <div class="flex justify-between">
-            <span class="font-bold">${r.userName || 'طالب'}</span>
-            <span class="${r.status === 'pending' ? 'text-amber-500' : 'text-green-500'}">${r.status === 'pending' ? '⏳ قيد المراجعة' : '✅ تم الموافقة'}</span>
-          </div>
-          <div class="text-slate-500">🏫 ${r.school} • 📱 ${r.parentPhone}</div>
-          <div class="text-[10px] text-slate-400">${r.date}</div>
-          ${r.idImage ? `<img src="${r.idImage}" class="w-16 h-16 object-cover rounded mt-1 cursor-pointer" onclick="openImageViewer('${r.idImage}','بطاقة الطالب')">` : ''}
-          ${r.status === 'pending' ? `
-            <div class="flex gap-1 mt-1">
-              <button onclick="approveProfile('${k}')" class="bg-green-500 text-white px-2 py-0.5 rounded text-[10px]">✅ موافقة</button>
-              <button onclick="rejectProfile('${k}')" class="bg-red-500 text-white px-2 py-0.5 rounded text-[10px]">❌ رفض</button>
-            </div>
-          ` : ''}
-        </div>
-      `;
-    });
-  });
-}
-
-function approveProfile(key) {
-  if (!isAdmin) return;
-  window.update(window.ref(window.db, `profile_requests/${key}/status`), 'approved');
-  showToast('✅ تم الموافقة على الطلب', 'success');
-}
-
-function rejectProfile(key) {
-  if (!isAdmin) return;
-  window.update(window.ref(window.db, `profile_requests/${key}/status`), 'rejected');
-  showToast('❌ تم رفض الطلب', 'warning');
-}
-
-// ===== Base64 =====
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.readAsDataURL(file);
-    r.onload = () => resolve(r.result);
-    r.onerror = () => reject(r.error);
-  });
-}
-
-function compressImage(base64, maxWidth = 1200, quality = 0.8) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.src = base64;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-      if (width > maxWidth) {
-        height = (height * maxWidth) / width;
-        width = maxWidth;
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL('image/jpeg', quality));
-    };
-  });
-}
-
-// ===== إضافة حصة =====
-async function addSchedule() {
-  if (!isAdmin) return showToast('⚠️ غير مصرح', 'error');
-  
-  let day = document.getElementById('schDay').value;
-  let subject = document.getElementById('schSubject').value;
-  let teacher = document.getElementById('schTeacher').value;
-  let time = document.getElementById('schTime').value;
-  let room = document.getElementById('schRoom').value;
-  let stage = document.getElementById('schStage').value;
-  let imageData = '';
-  
-  if (scheduleDayOption === 'today') {
-    const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    day = days[new Date().getDay()];
-  } else if (scheduleDayOption === 'tomorrow') {
-    const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    day = days[(new Date().getDay()+1)%7];
-  }
-  
-  if (scheduleOption !== 'image') {
-    if (!subject && scheduleOption === 'full') return showToast('⚠️ اكتب المادة', 'error');
-  }
-  
-  if (scheduleOption !== 'text') {
-    const file = document.getElementById('schImage').files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        return showToast(`⚠️ الصورة كبيرة (حد أقصى ${MAX_FILE_SIZE/1024/1024}MB)`, 'error');
-      }
-      imageData = await fileToBase64(file);
-      if (imageData.length > 5000000) {
-        imageData = await compressImage(imageData, 1200, 0.7);
-      }
-    } else if (scheduleOption === 'image') return showToast('⚠️ اختر صورة', 'error');
-  }
-  
-  if (!subject && !imageData) return showToast('⚠️ أضف مادة أو صورة', 'error');
-  
-  await window.push(window.ref(window.db, 'schedules'), { day, subject, teacher, time, room, stage, imageData });
-  showToast('✅ تمت الإضافة', 'success');
-  document.getElementById('schSubject').value = '';
-  document.getElementById('schTeacher').value = '';
-  document.getElementById('schTime').value = '';
-  document.getElementById('schRoom').value = '';
-  document.getElementById('schImage').value = '';
-}
-
-// ===== إرسال إشعار =====
-async function sendNotif() {
-  if (!isAdmin) return;
-  const title = document.getElementById('notifTitle').value;
-  let body = '';
-  let imageData = '';
-  
-  if (notifOption !== 'image') {
-    body = document.getElementById('notifBody').value;
-    if (!body) return showToast('⚠️ اكتب النص', 'error');
-  }
-  
-  if (notifOption !== 'text') {
-    const file = document.getElementById('notifImage').files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        return showToast(`⚠️ الصورة كبيرة (حد أقصى ${MAX_FILE_SIZE/1024/1024}MB)`, 'error');
-      }
-      imageData = await fileToBase64(file);
-      if (imageData.length > 5000000) {
-        imageData = await compressImage(imageData, 1200, 0.7);
-      }
-    } else if (notifOption === 'image') return showToast('⚠️ اختر صورة', 'error');
-  }
-  
-  if (!title) return showToast('⚠️ اكتب العنوان', 'error');
-  if (!body && !imageData) return showToast('⚠️ أضف نص أو صورة', 'error');
-  
-  const stage = document.getElementById('notifStage').value;
-  const grade = document.getElementById('notifGrade').value;
-  const subject = document.getElementById('notifSubject').value;
-  
-  await window.push(window.ref(window.db, 'notifications'), { 
-    title, body, stage, grade, subject, imageData,
-    date: new Date().toLocaleDateString('ar-EG'),
-    time: new Date().toLocaleTimeString('ar-EG')
-  });
-  
-  showToast('✅ تم الإرسال', 'success');
-  document.getElementById('notifTitle').value = '';
-  document.getElementById('notifBody').value = '';
-  document.getElementById('notifSubject').value = '';
-  document.getElementById('notifImage').value = '';
-}
-
-// ===== نشر خبر =====
-async function addNews() {
-  if (!isAdmin) return;
-  const title = document.getElementById('newsTitle').value;
-  const content = document.getElementById('newsContent').value;
-  if (!title || !content) return showToast('⚠️ اكتب العنوان والمحتوى', 'error');
-  let imageData = '';
-  const file = document.getElementById('newsImage').files[0];
-  if (file) {
-    if (file.size > MAX_FILE_SIZE) {
-      return showToast(`⚠️ الصورة كبيرة (حد أقصى ${MAX_FILE_SIZE/1024/1024}MB)`, 'error');
-    }
-    imageData = await fileToBase64(file);
-    if (imageData.length > 5000000) {
-      imageData = await compressImage(imageData, 1200, 0.7);
-    }
-  }
-  await window.push(window.ref(window.db, 'news'), { title, content, imageData, date: new Date().toLocaleDateString('ar-EG') });
-  showToast('✅ تم النشر', 'success');
-  document.getElementById('newsTitle').value = '';
-  document.getElementById('newsContent').value = '';
-  document.getElementById('newsImage').value = '';
-}
-
-// ===== رفع مذكرة =====
-async function uploadMat() {
-  if (!isAdmin) return;
-  const title = document.getElementById('matTitle').value;
-  const subject = document.getElementById('matSubject').value;
-  const type = document.getElementById('matType').value;
-  const file = document.getElementById('matFile').files[0];
-  if (!title || !file) return showToast('⚠️ اكتب الاسم واختر ملف', 'error');
-  if (file.size > 20 * 1024 * 1024) return showToast('⚠️ الملف كبير (حد أقصى 20MB)', 'error');
-  const fileData = await fileToBase64(file);
-  await window.push(window.ref(window.db, 'materials'), { title, subject, type, fileData, fileName: file.name, date: new Date().toLocaleDateString('ar-EG') });
-  showToast('✅ تم الرفع', 'success');
-  document.getElementById('matTitle').value = '';
-  document.getElementById('matSubject').value = '';
-  document.getElementById('matFile').value = '';
-}
-
-// ===== أرقام السنتر والدعم =====
-function loadContacts() {
-  window.onValue(window.ref(window.db, 'contacts'), snap => {
-    const data = snap.val();
-    contacts = data ? Object.keys(data).map(k => ({id:k, ...data[k]})) : [];
-    renderContacts();
-  });
-}
-
-function renderContacts() {
-  const container = document.getElementById('contactsList');
-  const center = document.getElementById('centerContacts');
-  const support = document.getElementById('supportContacts');
-  
-  const centerNumbers = contacts.filter(c => c.type === 'phone' || c.type === 'whatsapp');
-  const supportNumbers = contacts.filter(c => c.type === 'support');
-  
-  if (container) {
-    container.innerHTML = contacts.map(c => `
-      <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg text-xs">
-        <span>${c.type === 'whatsapp' ? '💬' : c.type === 'support' ? '🛠️' : '📞'} ${c.number}</span>
-        <button onclick="deleteContact('${c.id}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-      </div>
-    `).join('');
-  }
-  
-  if (center) {
-    center.innerHTML = centerNumbers.length ? centerNumbers.map(c => `
-      <div class="flex items-center gap-2 p-1.5 bg-slate-50 rounded-lg text-xs">
-        <i class="${c.type === 'whatsapp' ? 'fa-brands fa-whatsapp text-green-600' : 'fa-solid fa-phone text-blue-600'}"></i>
-        <span>${c.number}</span>
-      </div>
-    `).join('') : '<p class="text-xs text-slate-400 text-center">لا توجد أرقام</p>';
-  }
-  
-  if (support) {
-    support.innerHTML = supportNumbers.length ? supportNumbers.map(c => `
-      <div class="flex items-center gap-2 p-1.5 bg-slate-50 rounded-lg text-xs">
-        <i class="fa-solid fa-headset text-cyan-600"></i>
-        <span>${c.number}</span>
-      </div>
-    `).join('') : `
-      <div class="flex items-center gap-2 p-1.5 bg-slate-50 rounded-lg text-xs">
-        <i class="fa-solid fa-phone text-blue-600"></i>
-        <span>01012345678</span>
-      </div>
-      <div class="flex items-center gap-2 p-1.5 bg-slate-50 rounded-lg text-xs">
-        <i class="fa-brands fa-whatsapp text-green-600"></i>
-        <span>01012345678</span>
-      </div>
     `;
-  }
-}
+    document.head.appendChild(styleShake);
 
-function addContact() {
-  if (!isAdmin) return;
-  const number = document.getElementById('newContact').value;
-  const type = document.getElementById('contactType').value;
-  if (!number) return showToast('⚠️ اكتب الرقم', 'error');
-  window.push(window.ref(window.db, 'contacts'), { number, type });
-  document.getElementById('newContact').value = '';
-  showToast('✅ تم الإضافة', 'success');
-}
+    // ============================================================
+    // تشغيل الفيديو
+    // ============================================================
+    function playVideo() {
+        const video = document.getElementById('birthdayVideo');
+        const container = document.getElementById('videoContainer');
+        const span = container.querySelector('span');
+        
+        if (span) span.style.display = 'none';
+        video.style.display = 'block';
+        video.play().catch(e => console.log('Video play error:', e));
+        
+        // عرض رسالة
+        const title = document.querySelector('.video-title');
+        title.textContent = '🎬 عيد ميلاد أجمل بطه في الدنيا 🎬';
+    }
 
-function deleteContact(id) {
-  if (!isAdmin || !confirm('حذف الرقم؟')) return;
-  window.remove(window.ref(window.db, `contacts/${id}`));
-  showToast('✅ تم الحذف', 'success');
-}
+    // ============================================================
+    // تحميل الصور من Firebase (مثال توضيحي)
+    // ============================================================
+    async function loadImagesFromFirebase() {
+        try {
+            const { firebaseStorage, firebaseStorageRef, firebaseListAll, firebaseGetDownloadURL } = window;
+            if (!firebaseStorage) return;
+            
+            const imagesRef = firebaseStorageRef(firebaseStorage, 'images/');
+            const result = await firebaseListAll(imagesRef);
+            const gallery = document.getElementById('galleryGrid');
+            
+            // مسح العناصر الحالية مع الاحتفاظ بالأيقونات الاحتياطية
+            const items = gallery.querySelectorAll('.gallery-item');
+            let index = 0;
+            
+            for (const item of result.items) {
+                if (index >= items.length) break;
+                const url = await firebaseGetDownloadURL(item);
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'صورة';
+                items[index].innerHTML = '';
+                items[index].appendChild(img);
+                index++;
+            }
+        } catch (error) {
+            console.log('⚠️ Firebase images not available, using default icons');
+        }
+    }
 
-// ===== الشكاوى =====
-function loadComplaints() {
-  window.onValue(window.ref(window.db, 'complaints'), snap => {
-    const data = snap.val();
-    complaints = data ? Object.keys(data).map(k => ({id:k, ...data[k]})) : [];
-    renderComplaints();
-  });
-}
+    // ============================================================
+    // تحميل البيانات من Firebase (مثال)
+    // ============================================================
+    function loadFromFirebase() {
+        const { firebaseDB, firebaseRef, firebaseGet, firebaseOnValue } = window;
+        if (!firebaseDB) return;
+        
+        // مثال: تحميل رسالة ترحيب من قاعدة البيانات
+        const msgRef = firebaseRef(firebaseDB, 'messages/welcome');
+        firebaseGet(msgRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                console.log('📩 Firebase data:', data);
+            }
+        }).catch(error => {
+            console.log('ℹ️ Firebase read: no data yet');
+        });
+    }
 
-function renderComplaints() {
-  const container = document.getElementById('complaintsList');
-  if (!container) return;
-  if (!complaints.length) {
-    container.innerHTML = '<div class="text-center py-3 text-slate-400 text-xs">لا توجد شكاوى</div>';
-    return;
-  }
-  container.innerHTML = complaints.reverse().map(c => {
-    let phone = c.userPhone || 'غير متوفر';
-    return `<div class="complaint-card"><div class="flex justify-between"><span class="name">${c.userName||'طالب'}</span><span class="phone">📱 ${phone}</span></div><div class="text">${c.text}</div><div class="flex justify-between mt-1"><span class="date">${c.date||''}</span><button onclick="deleteComplaint('${c.id}')" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button></div></div>`;
-  }).join('');
-}
-
-function deleteComplaint(id) {
-  if (!isAdmin || !confirm('حذف الشكوى؟')) return;
-  window.remove(window.ref(window.db, `complaints/${id}`));
-  showToast('✅ تم الحذف', 'success');
-}
-
-function sendComplaint() {
-  const text = document.getElementById('complaintText').value;
-  if (!text) return showToast('⚠️ اكتب الشكوى', 'error');
-  if (!currentUser) return showToast('⚠️ سجل دخول أولاً', 'error');
-  window.push(window.ref(window.db, 'complaints'), {
-    text, userId: currentUser.uid, userName: userData?.name || currentUser.email,
-    userEmail: currentUser.email, userPhone: userData?.phone || '',
-    date: new Date().toLocaleString('ar-EG'), timestamp: Date.now()
-  });
-  document.getElementById('complaintText').value = '';
-  showToast('✅ تم الإرسال', 'success');
-}
-
-// ===== الجدول =====
-function filterSchedule(type) {
-  currentFilter = type;
-  document.querySelectorAll('#tab-schedule .flex button').forEach(b => {
-    b.classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
-  });
-  const map = {today:'btnToday', tomorrow:'btnTomorrow', all:'btnAll'};
-  const btn = document.getElementById(map[type]);
-  if (btn) btn.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
-  renderSchedule();
-}
-
-function renderSchedule() {
-  const container = document.getElementById('scheduleContainer');
-  if (!container) return;
-  if (!scheduleData.length) {
-    container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد حصص</div>';
-    return;
-  }
-  const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  const today = days[new Date().getDay()];
-  const tomorrow = days[(new Date().getDay()+1)%7];
-  let items = [...scheduleData];
-  if (currentFilter === 'today') items = items.filter(i => i.day === today);
-  if (currentFilter === 'tomorrow') items = items.filter(i => i.day === tomorrow);
-  if (!items.length) {
-    container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد حصص</div>';
-    return;
-  }
-  container.innerHTML = items.map(i => `
-    <div class="schedule-item">
-      ${i.imageData ? `<img src="${i.imageData}" class="w-full h-24 object-cover rounded-lg mb-2" onclick="event.stopPropagation();openImageViewer('${i.imageData}','${i.subject||'صورة الحصة'}')">` : ''}
-      <div class="flex justify-between">
-        <div>
-          <div class="flex gap-1 mb-0.5">
-            <span class="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">${i.day}</span>
-            <span class="text-[9px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">${i.stage||''}</span>
-          </div>
-          <div class="subject">${i.subject||'صورة'}</div>
-          <div class="teacher"><i class="fa-solid fa-chalkboard-user"></i> ${i.teacher||''}</div>
-        </div>
-        <div class="text-center">
-          <div class="time">${i.time||''}</div>
-          <div class="text-[9px] text-slate-400">${i.room||''}</div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderMySchedule() {
-  const container = document.getElementById('myScheduleToday');
-  if (!container) return;
-  if (!scheduleData.length || !userData) {
-    container.innerHTML = '<div class="text-center py-3 text-slate-400 text-xs">لا توجد حصص لك اليوم</div>';
-    return;
-  }
-  const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  const today = days[new Date().getDay()];
-  
-  const my = scheduleData.filter(i => {
-    const dayMatch = i.day === today;
-    const stageMatch = i.stage === userData.stage || !i.stage;
-    const subjectMatch = !i.subject || (userData.subjects && userData.subjects.includes(i.subject));
-    return dayMatch && stageMatch && subjectMatch;
-  });
-  
-  if (!my.length) {
-    container.innerHTML = '<div class="text-center py-3 text-slate-400 text-xs">📭 لا توجد حصص لك اليوم</div>';
-    return;
-  }
-  
-  container.innerHTML = my.map(i => `
-    <div class="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-100">
-      <div>
-        <span class="font-bold text-sm">${i.subject||'صورة'}</span>
-        <span class="text-xs text-slate-500 block">${i.teacher||''}</span>
-      </div>
-      <div class="text-center">
-        <span class="text-sm font-extrabold text-amber-600">${i.time||''}</span>
-        <span class="text-[9px] text-slate-400 block">${i.room||''}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ===== المستمعات =====
-function initListeners() {
-  window.onValue(window.ref(window.db, 'schedules'), snap => {
-    const d = snap.val();
-    scheduleData = d ? Object.keys(d).map(k => ({id:k, ...d[k]})) : [];
-    renderSchedule();
-    renderMySchedule();
-    const days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    const today = days[new Date().getDay()];
-    document.getElementById('todayCount').textContent = scheduleData.filter(i => i.day === today).length;
-  });
-  
-  window.onValue(window.ref(window.db, 'materials'), snap => {
-    const d = snap.val();
-    document.getElementById('materialCount').textContent = d ? Object.keys(d).length : 0;
-    const container = document.getElementById('libraryContainer');
-    if (!container) return;
-    if (!d) { container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">لا توجد ملفات</div>'; return; }
-    container.innerHTML = Object.keys(d).reverse().map(k => {
-      const i = d[k];
-      const isImage = i.type === 'image' || (i.fileData && i.fileData.startsWith('data:image'));
-      return `<div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-10 h-10 rounded-xl ${i.type==='pdf'?'bg-red-50':'bg-green-50'} flex items-center justify-center">
-            <i class="fa-solid ${i.type==='pdf'?'fa-file-pdf text-red-500':'fa-image text-green-500'} text-xl"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm">${i.title}</h4>
-            <p class="text-[9px] text-slate-400">${i.subject||''} • ${i.date||''}</p>
-          </div>
-        </div>
-        ${isImage ? `<button onclick="openImageViewer('${i.fileData}','${i.title}')" class="bg-blue-50 text-blue-600 font-bold px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-eye"></i> عرض</button>` : 
-        `<a href="${i.fileData||'#'}" ${i.fileData ? `download="${i.fileName||'file'}"` : 'onclick="event.preventDefault();showToast(\'⚠️ لا يوجد ملف\',\'error\')"'} target="_blank" class="bg-blue-50 text-blue-600 font-bold px-3 py-1.5 rounded-lg text-xs">تحميل</a>`}
-      </div>`;
-    }).join('');
-  });
-  
-  window.onValue(window.ref(window.db, 'news'), snap => {
-    const d = snap.val();
-    ['homeNewsContainer', 'allNewsContainer'].forEach(id => {
-      const c = document.getElementById(id);
-      if (!c) return;
-      if (!d) { c.innerHTML = '<div class="text-center py-3 text-slate-400 text-xs">لا توجد أخبار</div>'; return; }
-      const keys = Object.keys(d).reverse();
-      c.innerHTML = keys.map((k, idx) => {
-        if (id === 'homeNewsContainer' && idx > 1) return '';
-        const i = d[k];
-        return `<div class="bg-white rounded-xl overflow-hidden border border-slate-200 news-item">
-          ${i.imageData ? `<img src="${i.imageData}" class="w-full h-28 object-cover cursor-pointer" onclick="openImageViewer('${i.imageData}','${i.title}')">` : ''}
-          <div class="p-3">
-            <div class="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded inline-block">${i.date||''}</div>
-            <h4 class="font-bold text-sm mt-1">${i.title}</h4>
-            <p class="text-xs text-slate-500">${i.content}</p>
-          </div>
-        </div>`;
-      }).join('');
+    // ============================================================
+    // تهيئة التطبيق
+    // ============================================================
+    window.addEventListener('load', function() {
+        console.log('🎉 تطبيق عيد ميلاد مريم جاهز!');
+        
+        // تحميل البيانات من Firebase
+        setTimeout(loadFromFirebase, 500);
+        setTimeout(loadImagesFromFirebase, 1000);
+        
+        // إظهار الشاشة الأولى
+        goToScreen('welcome-screen');
     });
-  });
-  
-  window.onValue(window.ref(window.db, 'notifications'), snap => {
-    const d = snap.val();
-    const container = document.getElementById('notificationsContainer');
-    const badge = document.getElementById('notifBadge');
-    if (!container) return;
-    if (!d) { badge?.classList.add('hidden'); container.innerHTML = '<div class="text-center py-6 text-slate-400 text-xs"><i class="fa-regular fa-bell-slash text-2xl block mb-1"></i>لا توجد إشعارات</div>'; return; }
-    let found = false;
-    badge?.classList.remove('hidden');
-    container.innerHTML = Object.keys(d).reverse().map(k => {
-      const i = d[k];
-      let target = true;
-      if (userData) {
-        if (i.stage !== 'الكل' && i.stage !== userData.stage) target = false;
-        if (i.grade !== 'الكل' && i.grade !== userData.grade) target = false;
-      }
-      if (!target) return '';
-      found = true;
-      return `<div class="bg-white p-3 rounded-xl border border-slate-200 notif-item">
-        <div class="flex gap-2">
-          ${i.imageData ? `<img src="${i.imageData}" class="w-12 h-12 rounded-lg object-cover cursor-pointer" onclick="openImageViewer('${i.imageData}','${i.title}')">` : ''}
-          <div>
-            <h4 class="font-bold text-sm">${i.title}</h4>
-            <p class="text-xs text-slate-600">${i.body}</p>
-            <div class="flex gap-1 mt-1">
-              <span class="text-[8px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">${i.stage} • صف ${i.grade}</span>
-              ${i.subject ? `<span class="text-[8px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">${i.subject}</span>` : ''}
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-    if (!found) { container.innerHTML = '<div class="text-center py-6 text-slate-400 text-xs">لا توجد إشعارات لك</div>'; badge?.classList.add('hidden'); }
-  });
-}
 
-// ===== وضع الليل =====
-function toggleDarkMode() {
-  darkMode = !darkMode;
-  document.getElementById('app').classList.toggle('dark-mode', darkMode);
-  document.getElementById('darkIcon').className = darkMode ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
-}
+    // ============================================================
+    // دعم Firebase من أي مكان
+    // ============================================================
+    console.log('✅ جاهز للاستخدام مع Firebase!');
+    console.log('📁 قم برفع الصور إلى مجلد "images/" في Firebase Storage');
+    console.log('📝 يمكنك حفظ البيانات في Firebase Database تحت مسار "messages/"');
 
-console.log('✅ سنتر سيجما - النسخة النهائية جاهزة!');
+    // تصدير الدوال للاستخدام العالمي
+    window.goToScreen = goToScreen;
+    window.blowCandles = blowCandles;
+    window.sendWhatsAppMessage = sendWhatsAppMessage;
+    window.showCallNotification = showCallNotification;
+    window.playVideo = playVideo;
+    window.createConfetti = createConfetti;
 </script>
+
 </body>
-  </html>
+</html>

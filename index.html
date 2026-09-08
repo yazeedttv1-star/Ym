@@ -1,132 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة إكس أو - Tic Tac Toe</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .status {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-        }
-
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .cell {
-            width: 100px;
-            height: 100px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-
-        .cell:hover {
-            background-color: #f0f0f0;
-            transform: scale(1.03);
-        }
-
-        .cell.x {
-            color: #ff4b2b;
-        }
-
-        .cell.o {
-            color: #00d2ff;
-        }
-
-        .btn-restart {
-            margin-top: 25px;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #1e3c72;
-            background-color: #fff;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-        .btn-restart:hover {
-            background-color: #f0f0f0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn-restart:active {
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body>
-
-    <h1>لعبة إكس أو (XO)</h1>
-    <div class="status" id="status">دور اللاعب: <span style="color: #ff4b2b;">X</span></div>
-
-    <div class="board" id="board">
-        <div class="cell" data-index="0"></div>
-        <div class="cell" data-index="1"></div>
-        <div class="cell" data-index="2"></div>
-        <div class="cell" data-index="3"></div>
-        <div class="cell" data-index="4"></div>
-        <div class="cell" data-index="5"></div>
-        <div class="cell" data-index="6"></div>
-        <div class="cell" data-index="7"></div>
-        <div class="cell" data-index="8"></div>
-    </div>
-
-    <button class="btn-restart" id="restartBtn">إعادة اللعب 🔄</button>
-
-    <!-- Firebase SDK (ES Modules) -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دردشتي - تطبيق الدردشة</title>
+    
+    <!-- Firebase SDKs -->
     <script type="module">
-        // Import Functions from Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-
-        // Your web app's Firebase configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getDatabase, ref, push, onChildAdded, set, update, remove, onValue, query, orderByChild, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyB5jFiYrMnH_tvaJAq5QmATI43Pu3F0Yaw",
             authDomain: "my-project-f00cd.firebaseapp.com",
@@ -141,89 +27,1392 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
 
-        // --- منطق اللعبة (Game Logic) ---
-        const cells = document.querySelectorAll('.cell');
-        const statusText = document.getElementById('status');
-        const restartBtn = document.getElementById('restartBtn');
+        // ========== DOM Elements ==========
+        const loginScreen = document.getElementById('login-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const accessCodeInput = document.getElementById('access-code');
+        const loginBtn = document.getElementById('login-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const userNameInput = document.getElementById('user-name-input');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const userAvatar = document.getElementById('user-avatar');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const attachBtn = document.getElementById('attach-btn');
+        const mediaOptions = document.getElementById('media-options');
+        const cameraBtn = document.getElementById('camera-btn');
+        const recordBtn = document.getElementById('record-btn');
+        const galleryBtn = document.getElementById('gallery-btn');
+        const fileBtn = document.getElementById('file-btn');
+        const fileInput = document.getElementById('file-input');
+        const cameraPreview = document.getElementById('camera-preview');
+        const captureBtn = document.getElementById('capture-btn');
+        const storiesContainer = document.getElementById('stories-container');
+        const storiesList = document.getElementById('stories-list');
+        const addStoryBtn = document.getElementById('add-story-btn');
+        const storyFileInput = document.getElementById('story-file-input');
+        const storiesBtn = document.getElementById('stories-btn');
+        const closeStories = document.getElementById('close-stories');
+        const storyViewer = document.getElementById('story-viewer');
+        const storyContent = document.getElementById('story-content');
+        const closeStoryViewer = document.getElementById('close-story-viewer');
+        const storyProgress = document.getElementById('story-progress');
+        const emojiBtn = document.getElementById('emoji-btn');
+        const onlineCount = document.getElementById('online-count');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const clearChatBtn = document.getElementById('clear-chat-btn');
 
-        let boardState = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X";
-        let isGameActive = true;
+        // ========== State ==========
+        let currentUser = null;
+        let selectedFile = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let storyInterval = null;
+        let currentStoryIndex = 0;
+        let storiesData = [];
+        let isTyping = false;
+        let typingTimeout = null;
+        let users = {};
 
-        const winningConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // الصفوف
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // الأعمدة
-            [0, 4, 8], [2, 4, 6]             // الأقطار
-        ];
+        // ========== LOGIN ==========
+        const ACCESS_CODE = '2010921';
 
-        function handleCellClick(e) {
-            const cell = e.target;
-            const index = cell.getAttribute('data-index');
+        loginBtn.addEventListener('click', handleLogin);
+        accessCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        userNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
 
-            if (boardState[index] !== "" || !isGameActive) {
+        function handleLogin() {
+            const code = accessCodeInput.value.trim();
+            const name = userNameInput.value.trim() || 'مستخدم';
+
+            if (code !== ACCESS_CODE) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = '⚠️ رمز الدخول غير صحيح';
                 return;
             }
 
-            updateCell(cell, index);
-            checkResult();
+            errorMsg.style.display = 'none';
+            
+            // إنشاء مستخدم فريد
+            const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            currentUser = {
+                uid: userId,
+                displayName: name,
+                photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=128c7e&color=fff&size=128`,
+                online: true,
+                lastSeen: Date.now()
+            };
+
+            // حفظ المستخدم في قاعدة البيانات
+            const userRef = ref(database, `users/${userId}`);
+            set(userRef, {
+                displayName: name,
+                photoURL: currentUser.photoURL,
+                online: true,
+                lastSeen: Date.now()
+            });
+
+            // عند إغلاق الصفحة أو المغادرة
+            window.addEventListener('beforeunload', () => {
+                update(ref(database, `users/${userId}`), {
+                    online: false,
+                    lastSeen: Date.now()
+                });
+            });
+
+            loginScreen.style.display = 'none';
+            chatScreen.style.display = 'flex';
+            userNameDisplay.textContent = name;
+            userAvatar.src = currentUser.photoURL;
+            
+            loadMessages();
+            loadStories();
+            loadUsers();
+            setupTypingIndicator();
         }
 
-        function updateCell(cell, index) {
-            boardState[index] = currentPlayer;
-            cell.textContent = currentPlayer;
-            cell.classList.add(currentPlayer.toLowerCase());
-        }
-
-        function switchPlayer() {
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            const color = currentPlayer === "X" ? "#ff4b2b" : "#00d2ff";
-            statusText.innerHTML = `دور اللاعب: <span style="color: ${color};">${currentPlayer}</span>`;
-        }
-
-        function checkResult() {
-            let roundWon = false;
-
-            for (let i = 0; i < winningConditions.length; i++) {
-                const [a, b, c] = winningConditions[i];
-                if (boardState[a] === "" || boardState[b] === "" || boardState[c] === "") {
-                    continue;
-                }
-                if (boardState[a] === boardState[b] && boardState[b] === boardState[c]) {
-                    roundWon = true;
-                    break;
-                }
-            }
-
-            if (roundWon) {
-                const color = currentPlayer === "X" ? "#ff4b2b" : "#00d2ff";
-                statusText.innerHTML = `🎉 الفائز هو اللاعب: <span style="color: ${color};">${currentPlayer}</span>!`;
-                isGameActive = false;
-                return;
-            }
-
-            if (!boardState.includes("")) {
-                statusText.innerHTML = "تعادل! 🤝";
-                isGameActive = false;
-                return;
-            }
-
-            switchPlayer();
-        }
-
-        function restartGame() {
-            boardState = ["", "", "", "", "", "", "", "", ""];
-            currentPlayer = "X";
-            isGameActive = true;
-            statusText.innerHTML = `دور اللاعب: <span style="color: #ff4b2b;">X</span>`;
-            cells.forEach(cell => {
-                cell.textContent = "";
-                cell.classList.remove('x', 'o');
+        // ========== LOAD USERS ==========
+        function loadUsers() {
+            const usersRef = ref(database, 'users');
+            onValue(usersRef, (snapshot) => {
+                const data = snapshot.val();
+                users = data || {};
+                updateOnlineCount();
             });
         }
 
-        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-        restartBtn.addEventListener('click', restartGame);
+        function updateOnlineCount() {
+            const online = Object.values(users).filter(u => u.online === true).length;
+            onlineCount.textContent = `🟢 ${online} متصل`;
+        }
+
+        // ========== TYPING INDICATOR ==========
+        function setupTypingIndicator() {
+            const typingRef = ref(database, 'typing');
+            
+            onValue(typingRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.userId && data.userId !== currentUser.uid) {
+                    typingIndicator.textContent = `${data.userName} يكتب...`;
+                    typingIndicator.style.display = 'block';
+                    clearTimeout(typingTimeout);
+                    typingTimeout = setTimeout(() => {
+                        typingIndicator.style.display = 'none';
+                    }, 3000);
+                } else {
+                    typingIndicator.style.display = 'none';
+                }
+            });
+        }
+
+        messageInput.addEventListener('input', () => {
+            const typingRef = ref(database, 'typing');
+            if (messageInput.value.length > 0 && !isTyping) {
+                isTyping = true;
+                set(typingRef, {
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName,
+                    timestamp: Date.now()
+                });
+            } else if (messageInput.value.length === 0 && isTyping) {
+                isTyping = false;
+                remove(typingRef);
+            }
+        });
+
+        // ========== MESSAGES ==========
+        function loadMessages() {
+            const messagesRef = query(
+                ref(database, 'messages'),
+                orderByChild('timestamp'),
+                limitToLast(100)
+            );
+            
+            onChildAdded(messagesRef, (snapshot) => {
+                const message = snapshot.val();
+                if (message) {
+                    displayMessage(message);
+                }
+            });
+        }
+
+        function displayMessage(message) {
+            const messageDiv = document.createElement('div');
+            const isOwn = message.senderId === currentUser.uid;
+            messageDiv.className = `message ${isOwn ? 'sent' : 'received'}`;
+            
+            let content = '';
+            
+            // اسم المرسل
+            if (!isOwn) {
+                content += `<div class="message-sender">${message.senderName || 'مستخدم'}</div>`;
+            }
+            
+            // النص
+            if (message.text) {
+                content += `<p>${message.text}</p>`;
+            }
+            
+            // الميديا
+            if (message.mediaUrl) {
+                if (message.mediaType === 'image') {
+                    content += `<img src="${message.mediaUrl}" class="message-media" alt="صورة" onclick="window.open('${message.mediaUrl}')" />`;
+                } else if (message.mediaType === 'video') {
+                    content += `<video controls class="message-media"><source src="${message.mediaUrl}" /></video>`;
+                } else if (message.mediaType === 'audio') {
+                    content += `<audio controls class="message-media"><source src="${message.mediaUrl}" /></audio>`;
+                } else if (message.mediaType === 'file') {
+                    content += `<a href="${message.mediaUrl}" target="_blank" class="message-file">📎 ${message.fileName || 'ملف'}</a>`;
+                }
+            }
+            
+            // وقت الرسالة وحالة القراءة
+            const time = new Date(message.timestamp).toLocaleTimeString('ar-EG');
+            content += `<div class="message-time">${time} ${isOwn ? (message.read ? '✓✓' : '✓') : ''}</div>`;
+            
+            messageDiv.innerHTML = content;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // تحديث حالة القراءة
+            if (!isOwn) {
+                const messageRef = ref(database, `messages/${snapshot.key}`);
+                update(messageRef, { read: true });
+            }
+        }
+
+        // ========== SEND MESSAGE ==========
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text && !selectedFile) return;
+            
+            const messageData = {
+                senderId: currentUser.uid,
+                senderName: currentUser.displayName,
+                senderPhoto: currentUser.photoURL,
+                timestamp: Date.now(),
+                text: text || '',
+                read: false
+            };
+            
+            if (selectedFile) {
+                try {
+                    const url = await uploadFile(selectedFile, 'messages');
+                    messageData.mediaUrl = url;
+                    messageData.mediaType = selectedFile.type.startsWith('image/') ? 'image' :
+                                           selectedFile.type.startsWith('video/') ? 'video' :
+                                           selectedFile.type.startsWith('audio/') ? 'audio' : 'file';
+                    messageData.fileName = selectedFile.name;
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    alert('❌ فشل رفع الملف');
+                    return;
+                }
+                selectedFile = null;
+            }
+            
+            const messageRef = push(ref(database, 'messages'));
+            await set(messageRef, messageData);
+            
+            messageInput.value = '';
+            mediaOptions.style.display = 'none';
+            
+            // إزالة حالة الكتابة
+            if (isTyping) {
+                isTyping = false;
+                remove(ref(database, 'typing'));
+            }
+        }
+
+        // ========== FILE UPLOAD ==========
+        async function uploadFile(file, path) {
+            return new Promise((resolve, reject) => {
+                const fileRef = storageRef(storage, `${path}/${Date.now()}_${file.name}`);
+                const uploadTask = uploadBytesResumable(fileRef, file);
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload progress:', progress + '%');
+                    },
+                    (error) => reject(error),
+                    async () => {
+                        const url = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve(url);
+                    }
+                );
+            });
+        }
+
+        // ========== MEDIA OPTIONS ==========
+        attachBtn.addEventListener('click', () => {
+            mediaOptions.style.display = mediaOptions.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        galleryBtn.addEventListener('click', () => {
+            fileInput.accept = 'image/*,video/*';
+            fileInput.click();
+        });
+
+        fileBtn.addEventListener('click', () => {
+            fileInput.accept = '*/*';
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                mediaOptions.style.display = 'none';
+                messageInput.placeholder = `📎 ${selectedFile.name}`;
+                if (selectedFile.type.startsWith('image/')) {
+                    messageInput.placeholder = `🖼️ ${selectedFile.name}`;
+                } else if (selectedFile.type.startsWith('video/')) {
+                    messageInput.placeholder = `🎬 ${selectedFile.name}`;
+                } else if (selectedFile.type.startsWith('audio/')) {
+                    messageInput.placeholder = `🎵 ${selectedFile.name}`;
+                }
+            }
+        });
+
+        // ========== CAMERA ==========
+        let cameraStream = null;
+
+        cameraBtn.addEventListener('click', async () => {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' },
+                    audio: false
+                });
+                cameraPreview.srcObject = cameraStream;
+                cameraPreview.style.display = 'block';
+                captureBtn.style.display = 'block';
+                mediaOptions.style.display = 'none';
+            } catch (error) {
+                console.error('Camera error:', error);
+                alert('❌ تعذر الوصول إلى الكاميرا');
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraPreview.videoWidth || 640;
+            canvas.height = cameraPreview.videoHeight || 480;
+            canvas.getContext('2d').drawImage(cameraPreview, 0, 0);
+            canvas.toBlob((blob) => {
+                selectedFile = new File([blob], 'camera_photo.jpg', { type: 'image/jpeg' });
+                cameraPreview.style.display = 'none';
+                captureBtn.style.display = 'block';
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+                messageInput.placeholder = '📷 صورة من الكاميرا';
+                mediaOptions.style.display = 'none';
+            }, 'image/jpeg');
+        });
+
+        // ========== RECORDING ==========
+        recordBtn.addEventListener('click', async () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                recordBtn.textContent = '🎙️ تسجيل';
+                recordBtn.style.background = '#333';
+                return;
+            }
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                recordedChunks = [];
+                
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+                    selectedFile = new File([blob], `recording_${Date.now()}.webm`, { type: 'audio/webm' });
+                    messageInput.placeholder = '🎙️ تسجيل صوتي';
+                    stream.getTracks().forEach(track => track.stop());
+                    mediaOptions.style.display = 'none';
+                };
+                
+                mediaRecorder.start();
+                recordBtn.textContent = '⏹️ إيقاف';
+                recordBtn.style.background = '#e74c3c';
+            } catch (error) {
+                console.error('Recording error:', error);
+                alert('❌ تعذر الوصول إلى الميكروفون');
+            }
+        });
+
+        // ========== STORIES ==========
+        function loadStories() {
+            const storiesRef = ref(database, 'stories');
+            onValue(storiesRef, (snapshot) => {
+                const data = snapshot.val();
+                storiesData = [];
+                storiesList.innerHTML = '';
+                
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        const story = data[key];
+                        // حذف القصص القديمة (أكثر من 24 ساعة)
+                        if (Date.now() - story.timestamp > 86400000) {
+                            remove(ref(database, `stories/${key}`));
+                            return;
+                        }
+                        storiesData.push({ ...story, id: key });
+                        addStoryItem(story);
+                    });
+                }
+            });
+        }
+
+        function addStoryItem(story) {
+            const storyDiv = document.createElement('div');
+            storyDiv.className = 'story-item';
+            storyDiv.setAttribute('data-story-id', story.id);
+            
+            if (story.mediaType === 'image') {
+                storyDiv.innerHTML = `<img src="${story.mediaUrl}" alt="قصة" />`;
+            } else if (story.mediaType === 'video') {
+                storyDiv.innerHTML = `<video muted><source src="${story.mediaUrl}" /></video>`;
+            }
+            
+            storyDiv.addEventListener('click', () => openStoryViewer(story.id));
+            storiesList.appendChild(storyDiv);
+        }
+
+        storiesBtn.addEventListener('click', () => {
+            storiesContainer.style.display = storiesContainer.style.display === 'none' ? 'block' : 'none';
+        });
+
+        closeStories.addEventListener('click', () => {
+            storiesContainer.style.display = 'none';
+        });
+
+        addStoryBtn.addEventListener('click', () => {
+            storyFileInput.click();
+        });
+
+        storyFileInput.addEventListener('change', async (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                try {
+                    const url = await uploadFile(file, 'stories');
+                    const storyData = {
+                        userId: currentUser.uid,
+                        userName: currentUser.displayName,
+                        userPhoto: currentUser.photoURL,
+                        mediaUrl: url,
+                        mediaType: file.type.startsWith('image/') ? 'image' : 'video',
+                        timestamp: Date.now()
+                    };
+                    const storyRef = push(ref(database, 'stories'));
+                    await set(storyRef, storyData);
+                    storyFileInput.value = '';
+                } catch (error) {
+                    console.error('Story upload error:', error);
+                    alert('❌ فشل رفع القصة');
+                }
+            }
+        });
+
+        // ========== STORY VIEWER ==========
+        function openStoryViewer(storyId) {
+            const story = storiesData.find(s => s.id === storyId);
+            if (!story) return;
+            
+            storyViewer.style.display = 'flex';
+            storyContent.innerHTML = '';
+            
+            if (story.mediaType === 'image') {
+                storyContent.innerHTML = `<img src="${story.mediaUrl}" alt="قصة" />`;
+            } else if (story.mediaType === 'video') {
+                storyContent.innerHTML = `<video controls autoplay><source src="${story.mediaUrl}" /></video>`;
+            }
+            
+            // مؤشر التقدم
+            storyProgress.innerHTML = '<div class="progress-bar" style="width: 0%"></div>';
+            const progressBar = storyProgress.querySelector('.progress-bar');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    storyViewer.style.display = 'none';
+                }
+            }, 100);
+        }
+
+        closeStoryViewer.addEventListener('click', () => {
+            storyViewer.style.display = 'none';
+        });
+
+        // ========== EMOJI PICKER ==========
+        const emojis = ['😊', '😂', '❤️', '😍', '👍', '🔥', '🎉', '💯', '🥰', '😘', '💪', '👏', '🙌', '🤗', '😎'];
+        let emojiPickerVisible = false;
+        let emojiPicker = null;
+
+        emojiBtn.addEventListener('click', () => {
+            if (!emojiPickerVisible) {
+                createEmojiPicker();
+                emojiPickerVisible = true;
+            } else {
+                if (emojiPicker) {
+                    emojiPicker.remove();
+                    emojiPicker = null;
+                }
+                emojiPickerVisible = false;
+            }
+        });
+
+        function createEmojiPicker() {
+            if (emojiPicker) {
+                emojiPicker.remove();
+                emojiPicker = null;
+            }
+            
+            emojiPicker = document.createElement('div');
+            emojiPicker.className = 'emoji-picker';
+            emojiPicker.style.cssText = `
+                position: absolute;
+                bottom: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #2d2d2d;
+                border-radius: 15px;
+                padding: 15px;
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+                z-index: 100;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                border: 1px solid #444;
+            `;
+            
+            emojis.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.textContent = emoji;
+                btn.style.cssText = `
+                    background: none;
+                    border: none;
+                    font-size: 1.8rem;
+                    cursor: pointer;
+                    padding: 5px;
+                    border-radius: 8px;
+                    transition: background 0.2s;
+                `;
+                btn.onmouseover = () => btn.style.background = '#444';
+                btn.onmouseout = () => btn.style.background = 'none';
+                btn.onclick = () => {
+                    messageInput.value += emoji;
+                    messageInput.focus();
+                    if (emojiPicker) {
+                        emojiPicker.remove();
+                        emojiPicker = null;
+                    }
+                    emojiPickerVisible = false;
+                };
+                emojiPicker.appendChild(btn);
+            });
+            
+            document.querySelector('.message-input-area').appendChild(emojiPicker);
+        }
+
+        // ========== CLEAR CHAT ==========
+        clearChatBtn.addEventListener('click', () => {
+            if (confirm('⚠️ هل أنت متأكد من حذف جميع الرسائل؟')) {
+                const messagesRef = ref(database, 'messages');
+                remove(messagesRef).then(() => {
+                    messagesContainer.innerHTML = '';
+                    alert('✅ تم حذف جميع الرسائل');
+                }).catch(err => {
+                    console.error('Clear error:', err);
+                    alert('❌ فشل حذف الرسائل');
+                });
+            }
+        });
+
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            // Ctrl + Enter لإرسال رسالة
+            if (e.ctrlKey && e.key === 'Enter') {
+                sendMessage();
+            }
+            // Esc لإغلاق النوافذ
+            if (e.key === 'Escape') {
+                storyViewer.style.display = 'none';
+                storiesContainer.style.display = 'none';
+                mediaOptions.style.display = 'none';
+                if (emojiPicker) {
+                    emojiPicker.remove();
+                    emojiPicker = null;
+                    emojiPickerVisible = false;
+                }
+            }
+        });
+
+        // ========== NOTIFICATIONS ==========
+        let notificationPermission = false;
+
+        if ('Notification' in window) {
+            Notification.requestPermission().then(perm => {
+                notificationPermission = perm === 'granted';
+            });
+        }
+
+        // مراقبة الرسائل الجديدة للإشعارات
+        const messagesRef = ref(database, 'messages');
+        onChildAdded(messagesRef, (snapshot) => {
+            const message = snapshot.val();
+            if (message && message.senderId !== currentUser.uid && notificationPermission) {
+                new Notification('📩 رسالة جديدة', {
+                    body: `${message.senderName}: ${message.text || 'ملف'}`,
+                    icon: message.senderPhoto || 'https://ui-avatars.com/api/?name=User&background=128c7e&color=fff&size=128'
+                });
+            }
+        });
+
+        // ========== RESPONSIVE FIXES ==========
+        // إغلاق القوائم عند النقر خارجها
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.stories-container') && !e.target.closest('#stories-btn')) {
+                // storiesContainer.style.display = 'none';
+            }
+            if (!e.target.closest('.media-options') && !e.target.closest('#attach-btn')) {
+                // mediaOptions.style.display = 'none';
+            }
+        });
+
+        console.log('✅ تطبيق الدردشة جاهز!');
+        console.log('💡 رمز الدخول: 2010921');
+    </script>
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        /* ===== SCREENS ===== */
+        .screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #login-screen {
+            background: linear-gradient(135deg, #075e54, #128c7e);
+        }
+
+        #chat-screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            background: #1a1a1a;
+            position: relative;
+        }
+
+        /* ===== LOGIN ===== */
+        .login-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-container .logo {
+            margin-bottom: 2rem;
+        }
+
+        .login-container .logo img {
+            width: 80px;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-container .logo h1 {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .login-container .logo p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .login-container input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .login-container input:focus {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .login-container .btn-primary {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #fff;
+            color: #075e54;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-container .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(255,255,255,0.2);
+        }
+
+        #error-msg {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .login-hint {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        /* ===== HEADER ===== */
+        .chat-header {
+            background: #075e54;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 60px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .header-center #online-count {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ===== STORIES ===== */
+        .stories-container {
+            background: #111;
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        .stories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stories-header h3 {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .stories-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .story-item {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #128c7e;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .story-item:hover {
+            transform: scale(1.1);
+        }
+
+        .story-item img, .story-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .add-story-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .add-story-btn {
+            background: #128c7e;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .add-story-btn:hover {
+            background: #075e54;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        /* ===== CHAT AREA ===== */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #0d0d0d;
+        }
+
+        /* ===== MESSAGES ===== */
+        .message {
+            max-width: 75%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            word-wrap: break-word;
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background: #128c7e;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background: #2d2d2d;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message .message-sender {
+            font-size: 0.75rem;
+            color: #128c7e;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .message .message-time {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+            text-align: left;
+        }
+
+        .message .message-media {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .message .message-media video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .message .message-media audio {
+            width: 100%;
+        }
+
+        .message .message-file {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .message .message-file:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== TYPING INDICATOR ===== */
+        #typing-indicator {
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            color: #888;
+            font-style: italic;
+            display: none;
+            min-height: 25px;
+        }
+
+        /* ===== INPUT AREA ===== */
+        .message-input-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: none;
+            background: #2d2d2d;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        #message-input:focus {
+            background: #3d3d3d;
+        }
+
+        #message-input::placeholder {
+            color: #666;
+        }
+
+        .send-btn {
+            background: #128c7e;
+            color: #fff;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: #075e54;
+            transform: scale(1.05);
+        }
+
+        /* ===== MEDIA OPTIONS ===== */
+        .media-options {
+            display: none;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .media-options button {
+            background: #2d2d2d;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .media-options button:hover {
+            background: #3d3d3d;
+        }
+
+        /* ===== CAMERA PREVIEW ===== */
+        #camera-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            background: #000;
+            border-radius: 10px;
+            margin: 5px 0;
+            display: none;
+        }
+
+        #capture-btn {
+            display: none;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px auto;
+        }
+
+        #capture-btn:hover {
+            background: #c0392b;
+        }
+
+        /* ===== STORY VIEWER ===== */
+        .story-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .story-viewer #story-content {
+            max-width: 90%;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .story-viewer #story-content img,
+        .story-viewer #story-content video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        #story-progress {
+            width: 80%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #story-progress .progress-bar {
+            height: 100%;
+            background: #128c7e;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .story-viewer .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            z-index: 1001;
+        }
+
+        /* ===== EMOJI PICKER ===== */
+        .emoji-picker {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid #444;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .chat-header {
+                padding: 8px 12px;
+            }
+            
+            .header-center #online-count {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+            }
+            
+            .stories-list {
+                gap: 8px;
+            }
+            
+            .story-item {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .login-container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .message-input-area {
+                padding: 8px 10px;
+                gap: 5px;
+            }
+            
+            #message-input {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            
+            .send-btn {
+                width: 38px;
+                height: 38px;
+            }
+            
+            .icon-btn {
+                padding: 5px;
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== LOADING ===== */
+        .loading-dots::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div id="login-screen" class="screen">
+        <div class="login-container">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/5969/5969022.png" alt="Chat Logo" />
+                <h1>دردشتي</h1>
+                <p>تطبيق الدردشة المتكامل</p>
+            </div>
+            
+            <input 
+                type="text" 
+                id="user-name-input" 
+                placeholder="👤 اسم المستخدم" 
+                value="مستخدم"
+                maxlength="20"
+            />
+            
+            <input 
+                type="password" 
+                id="access-code" 
+                placeholder="🔑 رمز الدخول" 
+                autofocus
+            />
+            
+            <button id="login-btn" class="btn-primary">
+                🚀 دخول
+            </button>
+            
+            <div id="error-msg"></div>
+            
+            <div class="login-hint">
+                💡 رمز الدخول: 2010921
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CHAT SCREEN ===== -->
+    <div id="chat-screen" class="screen">
+        <!-- HEADER -->
+        <header class="chat-header">
+            <div class="header-left">
+                <img id="user-avatar" src="" alt="User" class="avatar-small" />
+                <span id="user-name-display">المستخدم</span>
+            </div>
+            
+            <div class="header-center">
+                <span id="online-count">🟢 0 متصل</span>
+            </div>
+            
+            <div class="header-right">
+                <button id="stories-btn" class="icon-btn" title="القصص">📸</button>
+                <button id="clear-chat-btn" class="icon-btn" title="مسح الدردشة">🗑️</button>
+            </div>
+        </header>
+
+        <!-- STORIES -->
+        <div id="stories-container" class="stories-container">
+            <div class="stories-header">
+                <h3>📸 القصص</h3>
+                <button id="close-stories" class="close-btn">✕</button>
+            </div>
+            <div id="stories-list" class="stories-list"></div>
+            <div class="add-story-container">
+                <button id="add-story-btn" class="add-story-btn">+ إضافة قصة</button>
+                <input type="file" id="story-file-input" accept="image/*,video/*" style="display:none" />
+            </div>
+        </div>
+
+        <!-- CHAT MAIN -->
+        <div class="chat-main">
+            <!-- TYPING INDICATOR -->
+            <div id="typing-indicator"></div>
+            
+            <!-- MESSAGES -->
+            <div id="messages-container" class="messages-container">
+                <div style="text-align:center;color:#555;padding:40px 20px;font-size:0.9rem;">
+                    👋 مرحباً بك في دردشتي!<br />
+                    <span style="font-size:0.8rem;color:#444;">يمكنك إرسال رسائل، صور، فيديو، تسجيلات، ومشاركة الملفات</span>
+                </div>
+            </div>
+
+            <!-- MEDIA OPTIONS -->
+            <div id="media-options" class="media-options">
+                <button id="camera-btn">📷 كاميرا</button>
+                <button id="record-btn">🎙️ تسجيل</button>
+                <button id="gallery-btn">🖼️ معرض</button>
+                <button id="file-btn">📁 ملف</button>
+            </div>
+
+            <!-- CAMERA PREVIEW -->
+            <video id="camera-preview" autoplay muted></video>
+            <button id="capture-btn">📸 التقاط</button>
+
+            <!-- MESSAGE INPUT -->
+            <div class="message-input-area">
+                <button id="attach-btn" class="icon-btn" title="مرفقات">📎</button>
+                <input type="text" id="message-input" placeholder="اكتب رسالة..." />
+                <button id="emoji-btn" class="icon-btn" title="إيموجي">😊</button>
+                <button id="send-btn" class="send-btn" title="إرسال (Ctrl+Enter)">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" stroke-width="2"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STORY VIEWER ===== -->
+    <div id="story-viewer" class="story-viewer">
+        <button id="close-story-viewer" class="close-btn">✕</button>
+        <div id="story-content"></div>
+        <div id="story-progress"></div>
+    </div>
+
+    <!-- ===== HIDDEN FILE INPUT ===== -->
+    <input type="file" id="file-input" accept="*/*" style="display:none" multiple />
+
+    <script>
+        // تحذير للمتصفحات القديمة
+        if (!('Promise' in window)) {
+            alert('⚠️ متصفحك قديم، يرجى تحديثه للحصول على أفضل تجربة');
+        }
     </script>
 </body>
 </html>

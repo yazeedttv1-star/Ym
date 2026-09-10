@@ -27,55 +27,64 @@ button:active,.chat-item:active,.nav-btn:active,.story-card:active{opacity:.75;t
 input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:text}
 
 /* المصادقة */
-.auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#00a884,#008069,#005c4b);display:flex;justify-content:center;align-items:center;z-index:1000;padding:16px;overflow-y:auto;transition:opacity .3s,visibility .3s}
+.auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#00a884,#008069,#005c4b);display:flex;justify-content:center;align-items:center;z-index:1000;padding:12px;overflow-y:auto;transition:opacity .3s,visibility .3s}
 .auth-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.auth-box{background:var(--bg-panel);padding:24px 20px;border-radius:18px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,.35);margin:auto;animation:slideUp .45s cubic-bezier(.2,.9,.3,1.1)}
+.auth-box{background:var(--bg-panel);padding:20px 18px;border-radius:16px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,.35);margin:auto;animation:slideUp .45s cubic-bezier(.2,.9,.3,1.1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.auth-box .logo{width:64px;height:64px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:18px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;box-shadow:0 6px 16px rgba(0,168,132,.4)}
-.auth-box h1{color:var(--text);margin-bottom:4px;font-size:20px;text-align:center;font-weight:700}
-.auth-box p.subtitle{color:var(--text-muted);margin-bottom:18px;font-size:12.5px;text-align:center}
-.auth-tabs{display:flex;background:var(--bg-app);border-radius:10px;padding:3px;margin-bottom:16px}
+.auth-box .logo{width:56px;height:56px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:16px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;box-shadow:0 6px 16px rgba(0,168,132,.4)}
+.auth-box h1{color:var(--text);margin-bottom:3px;font-size:18px;text-align:center;font-weight:700}
+.auth-box p.subtitle{color:var(--text-muted);margin-bottom:14px;font-size:11.5px;text-align:center}
+.auth-tabs{display:flex;background:var(--bg-app);border-radius:10px;padding:3px;margin-bottom:14px}
 [data-theme="dark"] .auth-tabs{background:#202c33}
-.auth-tab{flex:1;padding:9px;background:transparent;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-muted);transition:all .2s}
+.auth-tab{flex:1;padding:8px;background:transparent;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-muted);transition:all .2s}
 .auth-tab.active{background:var(--bg-panel);color:var(--green);box-shadow:var(--shadow-sm)}
-.auth-box .input-group{position:relative;margin-bottom:10px}
-.auth-box .input-group i{position:absolute;top:50%;right:14px;transform:translateY(-50%);color:var(--text-muted);font-size:13px;pointer-events:none}
-.auth-box input{width:100%;padding:12px 40px 12px 14px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:10px;font-size:14px;outline:none;text-align:right;font-family:inherit}
+.auth-box .input-group{position:relative;margin-bottom:8px}
+.auth-box .input-group i{position:absolute;top:50%;right:12px;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none}
+.auth-box input{width:100%;padding:10px 34px 10px 12px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:9px;font-size:13px;outline:none;text-align:right;font-family:inherit}
 .auth-box input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,168,132,.1)}
-.btn-primary{width:100%;padding:12px;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 3px 10px rgba(0,168,132,.3)}
+
+/* صورة البروفايل الإجبارية */
+.required-avatar{width:80px;height:80px;border-radius:50%;background:var(--bg-app);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;cursor:pointer;overflow:hidden;position:relative;transition:border-color .2s}
+.required-avatar:hover{border-color:var(--green)}
+.required-avatar.filled{border-style:solid;border-color:var(--green)}
+.required-avatar img{width:100%;height:100%;object-fit:cover}
+.required-avatar i{font-size:28px;color:var(--text-muted)}
+.required-avatar .overlay{position:absolute;inset:0;background:rgba(0,168,132,.7);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.required-avatar:hover .overlay{opacity:1}
+.required-avatar .overlay i{color:#fff;font-size:22px}
+.required-avatar input{display:none}
+.avatar-hint{font-size:10.5px;color:var(--text-muted);text-align:center;margin-bottom:12px}
+
+.btn-primary{width:100%;padding:11px;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;border:none;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 3px 10px rgba(0,168,132,.3)}
 .btn-primary:active{transform:scale(.98)}
 .btn-primary:disabled{background:#b1b3b5;box-shadow:none;cursor:not-allowed}
-.btn-google{width:100%;padding:11px;background:var(--bg-panel);color:var(--text);border:2px solid var(--border);border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;font-family:inherit}
-.btn-google svg{width:18px;height:18px}
-.error-msg{background:rgba(234,0,56,.1);color:var(--red);padding:10px 12px;border-radius:9px;font-size:12.5px;margin-bottom:12px;display:none;text-align:right;border-right:3px solid var(--red);font-weight:500}
+.error-msg{background:rgba(234,0,56,.1);color:var(--red);padding:8px 10px;border-radius:8px;font-size:11.5px;margin-bottom:10px;display:none;text-align:right;border-right:3px solid var(--red);font-weight:500}
 .error-msg.show{display:block}
-.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text-muted);font-size:11.5px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* التطبيق */
-.app{width:100%;max-width:440px;height:100vh;height:100dvh;background:var(--bg-panel);display:none;flex-direction:column;overflow:hidden;position:relative;color:var(--text)}
+.app{width:100%;max-width:400px;height:100vh;height:100dvh;background:var(--bg-panel);display:none;flex-direction:column;overflow:hidden;position:relative;color:var(--text)}
 .app.active{display:flex}
-@media(min-width:900px){.app{max-width:1200px;height:92vh;max-height:900px;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.5)}}
+@media(min-width:900px){.app{max-width:1100px;height:92vh;max-height:850px;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.5)}}
 
-.app-header{background:var(--green-dark);color:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;position:relative;z-index:30;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.app-header{background:var(--green-dark);color:#fff;padding:8px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative;z-index:30;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 [data-theme="dark"] .app-header{background:#202c33}
-.app-header .menu-btn,.app-header .camera-btn{background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;padding:7px;border-radius:50%;flex-shrink:0}
+.app-header .menu-btn,.app-header .camera-btn{background:transparent;border:none;color:#fff;font-size:15px;cursor:pointer;padding:6px;border-radius:50%;flex-shrink:0}
 .app-header .menu-btn:active,.app-header .camera-btn:active{background:rgba(255,255,255,.2)}
-.app-header .logo-title{flex:1;font-size:16px;font-weight:700;color:#fff;text-align:right;display:flex;align-items:center;gap:8px;justify-content:flex-end}
-.app-header .logo-title .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.app-header .logo-title{flex:1;font-size:14px;font-weight:700;color:#fff;text-align:right;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.app-header .logo-title .logo-icon{width:26px;height:26px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
 
-.dropdown-menu{position:absolute;top:50px;left:12px;background:var(--bg-panel);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px 0;min-width:200px;display:none;z-index:100;color:var(--text);border:1px solid var(--border)}
+.dropdown-menu{position:absolute;top:46px;left:10px;background:var(--bg-panel);border-radius:11px;box-shadow:var(--shadow-lg);padding:5px 0;min-width:190px;display:none;z-index:100;color:var(--text);border:1px solid var(--border)}
 .dropdown-menu.show{display:block;animation:dropIn .2s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes dropIn{from{opacity:0;transform:translateY(-10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-.dropdown-menu button{display:flex;width:100%;padding:11px 15px;background:transparent;border:none;text-align:right;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:10px}
+.dropdown-menu button{display:flex;width:100%;padding:9px 14px;background:transparent;border:none;text-align:right;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:9px}
 .dropdown-menu button:active{background:var(--hover)}
-.dropdown-menu button i{width:18px;text-align:center;color:var(--green);font-size:13px}
-.dropdown-menu hr{border:none;border-top:1px solid var(--border);margin:5px 0}
+.dropdown-menu button i{width:16px;text-align:center;color:var(--green);font-size:12px}
+.dropdown-menu hr{border:none;border-top:1px solid var(--border);margin:4px 0}
 
-.search-box{padding:8px 12px;background:var(--bg-panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.search-box{padding:6px 10px;background:var(--bg-panel);border-bottom:1px solid var(--border);flex-shrink:0}
 .search-box .wrap{position:relative}
-.search-box .wrap i{position:absolute;top:50%;right:12px;transform:translateY(-50%);color:var(--text-muted);font-size:13px;pointer-events:none}
-.search-box input{width:100%;padding:9px 36px 9px 12px;border:none;background:var(--bg-app);color:var(--text);border-radius:10px;font-size:13.5px;outline:none;text-align:right;font-family:inherit}
+.search-box .wrap i{position:absolute;top:50%;right:10px;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none}
+.search-box input{width:100%;padding:7px 30px 7px 10px;border:none;background:var(--bg-app);color:var(--text);border-radius:9px;font-size:12.5px;outline:none;text-align:right;font-family:inherit}
 [data-theme="dark"] .search-box input{background:#202c33}
 
 .sections{flex:1;position:relative;overflow:hidden;background:var(--bg-panel)}
@@ -84,124 +93,122 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 .chat-list{flex:1;overflow-y:auto}
-.chat-item{display:flex;align-items:center;gap:11px;padding:11px 13px;cursor:pointer;position:relative;transition:background .15s}
+.chat-item{display:flex;align-items:center;gap:9px;padding:9px 11px;cursor:pointer;position:relative;transition:background .15s}
 .chat-item:active{background:var(--hover)}
-.chat-item .avatar{width:46px;height:46px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px;flex-shrink:0;overflow:hidden;position:relative}
+.chat-item .avatar{width:42px;height:42px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;flex-shrink:0;overflow:hidden;position:relative}
 .chat-item .avatar img{width:100%;height:100%;object-fit:cover}
-.chat-item .avatar .online-dot{position:absolute;bottom:1px;left:1px;width:11px;height:11px;background:var(--green-light);border-radius:50%;border:2px solid var(--bg-panel)}
-.chat-item .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54)}
+.chat-item .avatar .online-dot{position:absolute;bottom:1px;left:1px;width:10px;height:10px;background:var(--green-light);border-radius:50%;border:2px solid var(--bg-panel)}
+.chat-item .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54);font-size:18px}
 .chat-item .details{flex:1;min-width:0}
-.chat-item .details .name-row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:2px}
-.chat-item .details .name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-item .details .time{font-size:11px;color:var(--text-muted);flex-shrink:0}
-.chat-item .details .last-msg{font-size:12.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px}
-.chat-item .details .last-msg .check{color:var(--green-light);font-size:11px}
+.chat-item .details .name-row{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-bottom:1px}
+.chat-item .details .name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-item .details .time{font-size:10px;color:var(--text-muted);flex-shrink:0}
+.chat-item .details .last-msg{font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+.chat-item .details .last-msg .check{color:var(--green-light);font-size:10px}
 .chat-item .details .last-msg .check.read{color:var(--blue)}
-.chat-item .meta{display:flex;flex-direction:column;align-items:flex-start;gap:5px;flex-shrink:0}
-.chat-item .meta .badge{background:var(--green-light);color:#fff;font-size:10.5px;min-width:19px;height:19px;padding:0 6px;border-radius:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.chat-item .meta .mute-icon{font-size:11px;color:var(--text-muted)}
-.chat-item.group-chat{background:rgba(0,168,132,.04)}
-[data-theme="dark"] .chat-item.group-chat{background:rgba(0,168,132,.06)}
-.empty-state{padding:40px 20px;text-align:center;color:var(--text-muted);font-size:13px}
-.empty-state .big-icon{font-size:44px;opacity:.3;margin-bottom:12px}
+.chat-item .meta{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex-shrink:0}
+.chat-item .meta .badge{background:var(--green-light);color:#fff;font-size:10px;min-width:17px;height:17px;padding:0 5px;border-radius:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.chat-item .meta .mute-icon{font-size:10px;color:var(--text-muted)}
+.chat-item.group-chat{background:rgba(0,168,132,.06)}
+[data-theme="dark"] .chat-item.group-chat{background:rgba(0,168,132,.08)}
+.empty-state{padding:30px 16px;text-align:center;color:var(--text-muted);font-size:12px}
+.empty-state .big-icon{font-size:38px;opacity:.3;margin-bottom:10px}
 
-.fab{position:absolute;bottom:76px;left:16px;width:52px;height:52px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:16px;border:none;color:#fff;font-size:19px;cursor:pointer;box-shadow:0 6px 18px rgba(0,168,132,.45);display:flex;align-items:center;justify-content:center;z-index:25;transition:transform .2s;transform:rotate(-5deg)}
+.fab{position:absolute;bottom:70px;left:14px;width:46px;height:46px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:14px;border:none;color:#fff;font-size:17px;cursor:pointer;box-shadow:0 6px 18px rgba(0,168,132,.45);display:flex;align-items:center;justify-content:center;z-index:25;transition:transform .2s;transform:rotate(-5deg)}
 .fab:active{transform:rotate(0) scale(.95)}
-@media(min-width:900px){.fab{bottom:20px}}
+@media(min-width:900px){.fab{bottom:18px}}
 
-.stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;padding:14px}
-.story-card{aspect-ratio:9/15;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;background:linear-gradient(135deg,#00a884,#005c4b);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;box-shadow:var(--shadow-md);background-size:cover;background-position:center}
+.stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;padding:12px}
+.story-card{aspect-ratio:9/15;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:linear-gradient(135deg,#00a884,#005c4b);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;box-shadow:var(--shadow-md);background-size:cover;background-position:center}
 .story-card:active{transform:scale(.97)}
 .story-card.add{background:linear-gradient(135deg,rgba(0,168,132,.15),rgba(37,211,102,.15));color:var(--green);justify-content:center;align-items:center;border:2px dashed rgba(0,168,132,.4)}
-.story-card.add .plus{font-size:30px;margin-bottom:4px}
-.story-card .story-avatar{width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;overflow:hidden;margin-bottom:6px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.story-card.add .plus{font-size:26px;margin-bottom:3px}
+.story-card .story-avatar{width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;overflow:hidden;margin-bottom:5px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
 .story-card .story-avatar img{width:100%;height:100%;object-fit:cover}
-.story-card .story-name{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.5)}
-.story-card .delete-story{position:absolute;top:6px;left:6px;width:24px;height:24px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;z-index:3;cursor:pointer;backdrop-filter:blur(6px)}
-.story-card .my-story-badge{position:absolute;top:6px;right:6px;background:var(--green-light);color:#fff;font-size:9px;padding:2px 7px;border-radius:8px;font-weight:700;z-index:3}
+.story-card .story-name{font-size:10.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.story-card .delete-story{position:absolute;top:5px;left:5px;width:22px;height:22px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;z-index:3;cursor:pointer;backdrop-filter:blur(6px)}
+.story-card .my-story-badge{position:absolute;top:5px;right:5px;background:var(--green-light);color:#fff;font-size:8.5px;padding:2px 6px;border-radius:7px;font-weight:700;z-index:3}
 
-.call-section-title{padding:12px 14px 6px;font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.6px}
-.call-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-bottom:1px solid var(--border);cursor:pointer}
+.call-section-title{padding:10px 12px 5px;font-size:10.5px;font-weight:700;color:var(--text-muted);letter-spacing:.5px}
+.call-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-bottom:1px solid var(--border);cursor:pointer}
 .call-item:active{background:var(--hover)}
-.call-item .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;overflow:hidden}
+.call-item .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;overflow:hidden}
 .call-item .avatar img{width:100%;height:100%;object-fit:cover}
 .call-item .info{flex:1;min-width:0}
-.call-item .info .name{font-weight:600;font-size:13.5px}
-.call-item .info .meta{font-size:11.5px;color:var(--text-muted);margin-top:3px;display:flex;align-items:center;gap:5px}
+.call-item .info .name{font-weight:600;font-size:12.5px}
+.call-item .info .meta{font-size:10.5px;color:var(--text-muted);margin-top:2px;display:flex;align-items:center;gap:4px}
 .call-item .info .meta .in{color:var(--green-light)}
 .call-item .info .meta .out{color:var(--blue)}
 .call-item .info .meta .missed{color:var(--red)}
-.call-item .call-back-btn{background:transparent;border:none;color:var(--green);font-size:16px;cursor:pointer;padding:8px;border-radius:50%}
+.call-item .call-back-btn{background:transparent;border:none;color:var(--green);font-size:14px;cursor:pointer;padding:6px;border-radius:50%}
 
 .chat-view{position:absolute;inset:0;background:var(--bg-chat);display:none;flex-direction:column;z-index:40;animation:slideIn .25s cubic-bezier(.2,.9,.3,1.1)}
 .chat-view.active{display:flex}
 @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
 [data-theme="dark"] .chat-view{background:#0b141a}
-.chat-view .header{background:var(--green-dark);color:#fff;padding:8px 10px;display:flex;align-items:center;gap:8px;flex-shrink:0;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.chat-view .header{background:var(--green-dark);color:#fff;padding:7px 9px;display:flex;align-items:center;gap:7px;flex-shrink:0;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 [data-theme="dark"] .chat-view .header{background:#202c33}
-.chat-view .header .back-btn{background:transparent;border:none;color:#fff;font-size:17px;cursor:pointer;padding:6px;border-radius:50%}
-.chat-view .header .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0;cursor:pointer}
+.chat-view .header .back-btn{background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;padding:5px;border-radius:50%}
+.chat-view .header .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;overflow:hidden;flex-shrink:0;cursor:pointer}
 .chat-view .header .avatar img{width:100%;height:100%;object-fit:cover}
-.chat-view .header .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54)}
+.chat-view .header .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54);font-size:14px}
 .chat-view .header .info{flex:1;min-width:0;cursor:pointer}
-.chat-view .header .info .name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-view .header .info .status{font-size:10.5px;opacity:.85;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-view .header .info .status.online::before{content:'';width:6px;height:6px;background:var(--green-light);border-radius:50%;flex-shrink:0}
-.chat-view .header .icon-btn{background:transparent;border:none;color:#fff;font-size:15px;cursor:pointer;padding:7px;border-radius:50%;flex-shrink:0}
+.chat-view .header .info .name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-view .header .info .status{font-size:9.5px;opacity:.85;display:flex;align-items:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-view .header .info .status.online::before{content:'';width:5px;height:5px;background:var(--green-light);border-radius:50%;flex-shrink:0}
+.chat-view .header .icon-btn{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:6px;border-radius:50%;flex-shrink:0}
 .chat-view .header .icon-btn:active{background:rgba(255,255,255,.15)}
 
-.selection-bar{position:absolute;top:0;left:0;right:0;background:var(--green-dark);color:#fff;padding:10px 12px;display:none;align-items:center;gap:12px;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.selection-bar{position:absolute;top:0;left:0;right:0;background:var(--green-dark);color:#fff;padding:8px 10px;display:none;align-items:center;gap:10px;z-index:60;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .selection-bar.show{display:flex}
-.selection-bar .close-sel{background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:5px}
-.selection-bar .count{flex:1;font-weight:600;font-size:14.5px}
-.selection-bar .action{background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;padding:8px;border-radius:50%}
-.selection-bar .action:active{background:rgba(255,255,255,.2)}
+.selection-bar .close-sel{background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;padding:4px}
+.selection-bar .count{flex:1;font-weight:600;font-size:13px}
+.selection-bar .action{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:7px;border-radius:50%}
 
-.chat-dropdown{position:absolute;top:46px;left:10px;background:var(--bg-panel);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px 0;min-width:200px;display:none;z-index:50;color:var(--text);border:1px solid var(--border)}
+.chat-dropdown{position:absolute;top:42px;left:9px;background:var(--bg-panel);border-radius:11px;box-shadow:var(--shadow-lg);padding:5px 0;min-width:180px;display:none;z-index:50;color:var(--text);border:1px solid var(--border)}
 .chat-dropdown.show{display:block;animation:dropIn .2s}
-.chat-dropdown button{display:flex;width:100%;padding:11px 15px;background:transparent;border:none;text-align:right;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:10px}
-.chat-dropdown button:active{background:var(--hover)}
-.chat-dropdown button i{width:18px;text-align:center;color:var(--green);font-size:13px}
+.chat-dropdown button{display:flex;width:100%;padding:9px 14px;background:transparent;border:none;text-align:right;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:9px}
+.chat-dropdown button i{width:16px;text-align:center;color:var(--green);font-size:12px}
 
-.messages-area{flex:1;padding:14px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;touch-action:pan-y}
+.messages-area{flex:1;padding:12px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;touch-action:pan-y}
 .message-row{display:flex;width:100%;animation:msgIn .25s cubic-bezier(.2,.9,.3,1.1);position:relative}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .message-row.mine{justify-content:flex-start}
 .message-row.other{justify-content:flex-end}
-.message-row.group .sender-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0;align-self:flex-end;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-left:4px}
+.message-row.group .sender-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px;overflow:hidden;flex-shrink:0;align-self:flex-end;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-left:3px}
 .message-row.group .sender-avatar img{width:100%;height:100%;object-fit:cover}
-.message{max-width:80%;padding:7px 10px 5px;border-radius:12px;font-size:13.5px;word-wrap:break-word;box-shadow:var(--shadow-sm);line-height:1.4;position:relative;cursor:pointer;user-select:none;transition:transform .15s,background .2s,box-shadow .2s}
+.message{max-width:82%;padding:6px 9px 4px;border-radius:11px;font-size:12.5px;word-wrap:break-word;box-shadow:var(--shadow-sm);line-height:1.35;position:relative;cursor:pointer;user-select:none;transition:transform .15s,background .2s,box-shadow .2s}
 .message:active{transform:scale(.97)}
 .message.mine{background:var(--green-pale);border-top-right-radius:3px}
 [data-theme="dark"] .message.mine{background:#005c4b;color:#e9edef}
 .message.other{background:var(--bg-panel);border-top-left-radius:3px}
 [data-theme="dark"] .message.other{background:#202c33;color:#e9edef}
 .message.selected{background:rgba(0,168,132,.35) !important;box-shadow:0 0 0 2px var(--green)}
-.message .sender-name{font-size:12px;font-weight:700;color:var(--green);margin-bottom:3px;display:block}
+.message .sender-name{font-size:11px;font-weight:700;color:var(--green);margin-bottom:2px;display:block}
 [data-theme="dark"] .message .sender-name{color:var(--green-light)}
-.message .msg-meta{font-size:10px;color:var(--text-muted);margin-top:3px;display:flex;justify-content:flex-start;align-items:center;gap:4px}
-.message .check{font-size:11px;color:var(--green-light)}
+.message .msg-meta{font-size:9.5px;color:var(--text-muted);margin-top:2px;display:flex;justify-content:flex-start;align-items:center;gap:3px}
+.message .check{font-size:10px;color:var(--green-light)}
 .message .check.read{color:var(--blue)}
-.message .encrypted-badge{font-size:9.5px;color:var(--green);margin-left:5px}
-.message .edited-tag{font-size:9.5px;color:var(--text-muted);font-style:italic}
-.message .reply-preview{background:rgba(0,0,0,.08);border-right:3px solid var(--green);padding:5px 8px;border-radius:6px;margin-bottom:5px;font-size:11.5px;color:var(--text-muted);cursor:pointer}
+.message .encrypted-badge{font-size:9px;color:var(--green);margin-left:4px}
+.message .edited-tag{font-size:9px;color:var(--text-muted);font-style:italic}
+.message .reply-preview{background:rgba(0,0,0,.08);border-right:3px solid var(--green);padding:4px 7px;border-radius:6px;margin-bottom:4px;font-size:10.5px;color:var(--text-muted);cursor:pointer}
 [data-theme="dark"] .message .reply-preview{background:rgba(255,255,255,.08)}
-.message .reply-preview .reply-name{font-weight:600;color:var(--green);font-size:11px;margin-bottom:2px}
-.message img.msg-image,.message video.msg-video{max-width:260px;width:100%;border-radius:8px;margin-bottom:4px;display:block}
-.date-separator{align-self:center;background:var(--bg-panel);color:var(--text-muted);font-size:10.5px;padding:5px 11px;border-radius:9px;box-shadow:var(--shadow-sm);margin:6px 0;font-weight:500}
+.message .reply-preview .reply-name{font-weight:600;color:var(--green);font-size:10px;margin-bottom:2px}
+.message img.msg-image,.message video.msg-video{max-width:240px;width:100%;border-radius:7px;margin-bottom:3px;display:block}
+.date-separator{align-self:center;background:var(--bg-panel);color:var(--text-muted);font-size:10px;padding:4px 10px;border-radius:8px;box-shadow:var(--shadow-sm);margin:5px 0;font-weight:500}
 
-.audio-message{display:flex;align-items:center;gap:9px;min-width:190px}
-.audio-message button{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.audio-message{display:flex;align-items:center;gap:8px;min-width:170px}
+.audio-message button{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
 .audio-message .audio-progress{flex:1;height:3px;background:rgba(0,0,0,.12);border-radius:3px;position:relative;overflow:hidden}
 [data-theme="dark"] .audio-message .audio-progress{background:rgba(255,255,255,.15)}
 .audio-message .audio-progress .fill{position:absolute;top:0;right:0;height:100%;width:0%;background:var(--green)}
-.audio-message .duration{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.audio-message .duration{font-size:10px;color:var(--text-muted);font-variant-numeric:tabular-nums}
 
-.chat-view .input-area{display:flex;padding:8px 10px;background:var(--bg-panel);gap:5px;align-items:center;flex-shrink:0;border-top:1px solid var(--border);padding-bottom:max(8px,env(safe-area-inset-bottom))}
+.chat-view .input-area{display:flex;padding:6px 8px;background:var(--bg-panel);gap:4px;align-items:center;flex-shrink:0;border-top:1px solid var(--border);padding-bottom:max(6px,env(safe-area-inset-bottom))}
 [data-theme="dark"] .chat-view .input-area{background:#202c33}
-.chat-view .input-area .icon-btn-sm{width:38px;height:38px;border-radius:50%;background:transparent;color:var(--text-muted);border:none;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-view .input-area .icon-btn-sm{width:34px;height:34px;border-radius:50%;background:transparent;color:var(--text-muted);border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-view .input-area .icon-btn-sm:active{background:var(--hover);color:var(--green)}
-.chat-view .input-area input{flex:1;padding:10px 14px;border:none;border-radius:22px;outline:none;font-size:14px;background:var(--bg-app);color:var(--text);text-align:right;font-family:inherit;min-width:0}
+.chat-view .input-area input{flex:1;padding:8px 12px;border:none;border-radius:20px;outline:none;font-size:12.5px;background:var(--bg-app);color:var(--text);text-align:right;font-family:inherit;min-width:0}
 [data-theme="dark"] .chat-view .input-area input{background:#2a3942}
 .chat-view .input-area .mic-btn{background:linear-gradient(135deg,#25d366,#00a884);color:#fff}
 .chat-view .input-area .mic-btn.recording{background:var(--red);animation:pulse-rec .8s infinite}
@@ -209,91 +216,103 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .chat-view .input-area .send-btn.show{display:flex}
 .chat-view .input-area .mic-btn.hide{display:none}
 @keyframes pulse-rec{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.recording-indicator{position:absolute;bottom:76px;right:14px;background:var(--red);color:#fff;padding:9px 14px;border-radius:20px;font-size:12.5px;display:none;align-items:center;gap:8px;z-index:5;box-shadow:0 4px 12px rgba(234,0,56,.4)}
+.recording-indicator{position:absolute;bottom:60px;right:12px;background:var(--red);color:#fff;padding:7px 12px;border-radius:18px;font-size:11.5px;display:none;align-items:center;gap:7px;z-index:5;box-shadow:0 4px 12px rgba(234,0,56,.4)}
 .recording-indicator.show{display:flex}
-.recording-indicator .dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse-rec .8s infinite}
+.recording-indicator .dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:pulse-rec .8s infinite}
 
-.reply-bar{display:none;background:var(--bg-panel);border-top:1px solid var(--border);padding:8px 12px;align-items:center;gap:10px;flex-shrink:0}
+.reply-bar{display:none;background:var(--bg-panel);border-top:1px solid var(--border);padding:6px 10px;align-items:center;gap:8px;flex-shrink:0}
 .reply-bar.show{display:flex}
-.reply-bar .content{flex:1;border-right:3px solid var(--green);padding:4px 8px;min-width:0}
-.reply-bar .content .reply-name{font-size:11.5px;font-weight:600;color:var(--green);margin-bottom:2px}
-.reply-bar .content .reply-text{font-size:12.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.reply-bar .close-reply{background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:6px}
+.reply-bar .content{flex:1;border-right:3px solid var(--green);padding:3px 7px;min-width:0}
+.reply-bar .content .reply-name{font-size:10.5px;font-weight:600;color:var(--green);margin-bottom:1px}
+.reply-bar .content .reply-text{font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reply-bar .close-reply{background:transparent;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:5px}
 
-.emoji-picker{position:absolute;bottom:64px;right:10px;background:var(--bg-panel);border-radius:14px;box-shadow:var(--shadow-lg);padding:10px;width:290px;max-height:320px;overflow-y:auto;display:none;z-index:60;grid-template-columns:repeat(7,1fr);gap:3px;border:1px solid var(--border);touch-action:pan-y}
-.emoji-picker.show{display:grid}
-.emoji-picker .emoji{font-size:22px;cursor:pointer;text-align:center;padding:5px;border-radius:6px}
-.emoji-picker .emoji:active{background:var(--hover);transform:scale(1.15)}
+/* منتقي الإيموجي كـ لوحة مفاتيح مصغرة */
+.emoji-keyboard{position:absolute;bottom:0;left:0;right:0;background:var(--bg-panel);border-top:1px solid var(--border);display:none;flex-direction:column;z-index:65;max-height:240px;box-shadow:0 -2px 10px rgba(0,0,0,.1)}
+.emoji-keyboard.show{display:flex;animation:slideUpKb .25s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes slideUpKb{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.emoji-keyboard .kb-header{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--bg-app)}
+[data-theme="dark"] .emoji-keyboard .kb-header{background:#202c33}
+.emoji-keyboard .kb-header button{background:transparent;border:none;color:var(--text-muted);font-size:15px;cursor:pointer;padding:5px 8px;border-radius:50%}
+.emoji-keyboard .kb-header button.active{color:var(--green);background:rgba(0,168,132,.1)}
+.emoji-keyboard .kb-body{flex:1;overflow-y:auto;padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;touch-action:pan-y}
+.emoji-keyboard .emoji{font-size:22px;cursor:pointer;text-align:center;padding:4px;border-radius:6px;user-select:none;transition:transform .1s}
+.emoji-keyboard .emoji:active{background:var(--hover);transform:scale(1.2)}
+.emoji-keyboard .kb-footer{padding:6px 8px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg-panel)}
+[data-theme="dark"] .emoji-keyboard .kb-footer{background:#202c33}
+.emoji-keyboard .kb-footer input{flex:1;padding:7px 12px;border:none;border-radius:18px;outline:none;font-size:12.5px;background:var(--bg-app);color:var(--text);text-align:right;font-family:inherit}
+[data-theme="dark"] .emoji-keyboard .kb-footer input{background:#2a3942}
+.emoji-keyboard .kb-footer .send-kb{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);color:#fff;border:none;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-.context-menu{position:fixed;background:var(--bg-panel);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px 0;min-width:190px;display:none;z-index:700;color:var(--text);border:1px solid var(--border);animation:popIn .15s}
+.context-menu{position:fixed;background:var(--bg-panel);border-radius:11px;box-shadow:var(--shadow-lg);padding:5px 0;min-width:180px;display:none;z-index:700;color:var(--text);border:1px solid var(--border);animation:popIn .15s}
 .context-menu.show{display:block}
 @keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.context-menu button{display:flex;width:100%;padding:11px 15px;background:transparent;border:none;text-align:right;font-size:13.5px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:12px}
+.context-menu button{display:flex;width:100%;padding:9px 14px;background:transparent;border:none;text-align:right;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:10px}
 .context-menu button:active{background:var(--hover)}
-.context-menu button i{width:20px;text-align:center;font-size:14px;color:var(--text-muted)}
+.context-menu button i{width:18px;text-align:center;font-size:13px;color:var(--text-muted)}
 .context-menu button.danger{color:var(--red)}
 .context-menu button.danger i{color:var(--red)}
 
-.bottom-nav{display:flex;background:var(--bg-panel);flex-shrink:0;height:60px;border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+.bottom-nav{display:flex;background:var(--bg-panel);flex-shrink:0;height:54px;border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
 [data-theme="dark"] .bottom-nav{background:#202c33}
-.bottom-nav .nav-btn{flex:1;background:transparent;border:none;color:var(--text-muted);font-size:10.5px;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
+.bottom-nav .nav-btn{flex:1;background:transparent;border:none;color:var(--text-muted);font-size:10px;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative}
 .bottom-nav .nav-btn.active{color:var(--green)}
 .bottom-nav .nav-btn.active::before{content:'';position:absolute;top:0;left:30%;right:30%;height:3px;background:var(--green);border-radius:0 0 3px 3px}
-.bottom-nav .nav-btn .icon{font-size:18px}
+.bottom-nav .nav-btn .icon{font-size:16px}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;z-index:500;padding:16px;backdrop-filter:blur(4px)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;z-index:500;padding:14px;backdrop-filter:blur(4px)}
 .modal-overlay.active{display:flex;animation:fadeIn .2s}
-.modal{background:var(--bg-panel);color:var(--text);border-radius:16px;padding:20px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;animation:popIn .3s cubic-bezier(.2,.9,.3,1.1);border:1px solid var(--border);touch-action:pan-y}
-.modal h3{color:var(--text);font-size:17px;margin-bottom:16px;text-align:center;font-weight:700}
-.modal .profile-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff;font-weight:700;margin:0 auto 16px;overflow:hidden;position:relative;cursor:pointer;box-shadow:0 4px 16px rgba(0,168,132,.3)}
+.modal{background:var(--bg-panel);color:var(--text);border-radius:15px;padding:18px;width:100%;max-width:380px;max-height:88vh;overflow-y:auto;animation:popIn .3s cubic-bezier(.2,.9,.3,1.1);border:1px solid var(--border);touch-action:pan-y}
+.modal h3{color:var(--text);font-size:15px;margin-bottom:14px;text-align:center;font-weight:700}
+.modal .profile-avatar{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;font-weight:700;margin:0 auto 14px;overflow:hidden;position:relative;cursor:pointer;box-shadow:0 4px 16px rgba(0,168,132,.3)}
 .modal .profile-avatar img{width:100%;height:100%;object-fit:cover}
-.modal .profile-avatar .edit-badge{position:absolute;bottom:1px;left:1px;width:30px;height:30px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2.5px solid var(--bg-panel);font-size:12px;color:#fff}
+.modal .profile-avatar .edit-badge{position:absolute;bottom:1px;left:1px;width:26px;height:26px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2.5px solid var(--bg-panel);font-size:10px;color:#fff}
 .modal .profile-avatar input{display:none}
-.modal label{display:block;font-size:12.5px;color:var(--text-muted);margin-bottom:5px;margin-top:12px;font-weight:600}
-.modal input[type=text],.modal input[type=tel],.modal input[type=email],.modal textarea{width:100%;padding:11px 13px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:10px;font-size:13.5px;outline:none;text-align:right;font-family:inherit}
+.modal label{display:block;font-size:11.5px;color:var(--text-muted);margin-bottom:4px;margin-top:10px;font-weight:600}
+.modal input[type=text],.modal input[type=tel],.modal input[type=email],.modal textarea{width:100%;padding:9px 12px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:9px;font-size:12.5px;outline:none;text-align:right;font-family:inherit}
 .modal input:focus,.modal textarea:focus{border-color:var(--green)}
 .modal input:disabled{opacity:.6}
-.modal .lang-options,.modal .theme-options{display:flex;gap:8px;margin-top:6px}
-.modal .lang-option,.modal .theme-option{flex:1;padding:11px;background:var(--bg-app);border:2px solid transparent;border-radius:10px;font-size:13px;cursor:pointer;text-align:center;font-family:inherit;color:var(--text);font-weight:600}
+.modal .lang-options,.modal .theme-options{display:flex;gap:6px;margin-top:5px}
+.modal .lang-option,.modal .theme-option{flex:1;padding:9px;background:var(--bg-app);border:2px solid transparent;border-radius:9px;font-size:12px;cursor:pointer;text-align:center;font-family:inherit;color:var(--text);font-weight:600}
 [data-theme="dark"] .modal .lang-option,[data-theme="dark"] .modal .theme-option{background:#202c33}
 .modal .lang-option.active,.modal .theme-option.active{border-color:var(--green);background:rgba(0,168,132,.1);color:var(--green)}
-.modal .theme-option{display:flex;flex-direction:column;align-items:center;gap:5px}
-.modal .theme-option i{font-size:18px}
-.modal .btn-secondary{width:100%;padding:11px;background:var(--bg-app);color:var(--text);border:none;border-radius:10px;font-size:13.5px;cursor:pointer;font-family:inherit;margin-top:14px;font-weight:600}
+.modal .theme-option{display:flex;flex-direction:column;align-items:center;gap:4px}
+.modal .theme-option i{font-size:16px}
+.modal .btn-secondary{width:100%;padding:9px;background:var(--bg-app);color:var(--text);border:none;border-radius:9px;font-size:12.5px;cursor:pointer;font-family:inherit;margin-top:12px;font-weight:600}
 [data-theme="dark"] .modal .btn-secondary{background:#202c33}
-.modal .user-search-item{display:flex;align-items:center;gap:11px;padding:10px;border-radius:11px;cursor:pointer}
+.modal .user-search-item{display:flex;align-items:center;gap:9px;padding:9px;border-radius:10px;cursor:pointer}
 .modal .user-search-item:active{background:var(--hover)}
-.modal .user-search-item .avatar{width:44px;height:44px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;overflow:hidden;flex-shrink:0}
+.modal .user-search-item .avatar{width:40px;height:40px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0}
 .modal .user-search-item .avatar img{width:100%;height:100%;object-fit:cover}
 .modal .user-search-item .details{flex:1;min-width:0}
-.modal .user-search-item .details .name{font-weight:600;font-size:13.5px}
-.modal .user-search-item .details .email{font-size:11.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.modal .user-search-item .details .name{font-weight:600;font-size:12.5px}
+.modal .user-search-item .details .phone{font-size:11px;color:var(--text-muted);margin-top:1px}
 
 .story-viewer{position:fixed;inset:0;background:#000;z-index:800;display:none;flex-direction:column}
 .story-viewer.active{display:flex;animation:fadeIn .25s}
-.story-viewer .progress-bar{position:absolute;top:12px;left:12px;right:12px;height:3px;background:rgba(255,255,255,.3);border-radius:3px;overflow:hidden;z-index:5}
+.story-viewer .progress-bar{position:absolute;top:10px;left:10px;right:10px;height:3px;background:rgba(255,255,255,.3);border-radius:3px;overflow:hidden;z-index:5}
 .story-viewer .progress-bar .fill{height:100%;background:#fff;width:0%;animation:progress 5s linear forwards}
 @keyframes progress{from{width:0%}to{width:100%}}
-.story-viewer .story-header{position:absolute;top:24px;left:14px;right:14px;display:flex;align-items:center;gap:11px;color:#fff;z-index:5;cursor:pointer}
-.story-viewer .story-header .avatar{width:38px;height:38px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;border:2px solid #fff}
+.story-viewer .story-header{position:absolute;top:20px;left:12px;right:12px;display:flex;align-items:center;gap:9px;color:#fff;z-index:5;cursor:pointer}
+.story-viewer .story-header .avatar{width:34px;height:34px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;border:2px solid #fff}
 .story-viewer .story-header .avatar img{width:100%;height:100%;object-fit:cover}
-.story-viewer .story-header .name{font-weight:600;font-size:14px}
-.story-viewer .story-header .time{font-size:11.5px;opacity:.8}
-.story-viewer .story-header .tap-hint{font-size:10px;opacity:.7;margin-top:2px}
-.story-viewer .close-btn{position:absolute;top:24px;left:14px;background:rgba(0,0,0,.4);border:none;color:#fff;font-size:22px;cursor:pointer;z-index:10;padding:6px;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.story-viewer .story-content{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;padding:30px;text-align:center;word-break:break-word;background:linear-gradient(135deg,#00a884,#005c4b);font-weight:500}
+.story-viewer .story-header .name{font-weight:600;font-size:13px}
+.story-viewer .story-header .time{font-size:10.5px;opacity:.8}
+.story-viewer .story-header .tap-hint{font-size:9.5px;opacity:.7;margin-top:1px}
+.story-viewer .close-btn{position:absolute;top:20px;left:12px;background:rgba(0,0,0,.4);border:none;color:#fff;font-size:20px;cursor:pointer;z-index:10;padding:5px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.story-viewer .story-content{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;padding:24px;text-align:center;word-break:break-word;background:linear-gradient(135deg,#00a884,#005c4b);font-weight:500}
 .story-viewer img,.story-viewer video{max-width:100%;max-height:100%;object-fit:contain}
 
-.call-screen{position:fixed;inset:0;background:linear-gradient(135deg,#005c4b,#0a1014);z-index:900;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:20px}
+.call-screen{position:fixed;inset:0;background:linear-gradient(135deg,#005c4b,#0a1014);z-index:900;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:18px}
 .call-screen.active{display:flex}
-.call-screen .call-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;font-size:50px;font-weight:700;margin-bottom:22px;animation:pulse 2s infinite;overflow:hidden;border:3px solid rgba(255,255,255,.15)}
+.call-screen .call-avatar{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;margin-bottom:18px;animation:pulse 2s infinite;overflow:hidden;border:3px solid rgba(255,255,255,.15)}
 .call-screen .call-avatar img{width:100%;height:100%;object-fit:cover}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 32px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
-.call-screen .call-name{font-size:22px;font-weight:700;margin-bottom:8px;text-align:center}
-.call-screen .call-status{font-size:14px;opacity:.85;margin-bottom:10px;text-align:center}
-.call-screen .call-timer{font-size:14px;opacity:.7;margin-bottom:34px;font-variant-numeric:tabular-nums}
-.call-screen .call-actions{display:flex;gap:26px}
-.call-screen .call-actions button{width:62px;height:62px;border-radius:50%;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 30px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+.call-screen .call-name{font-size:20px;font-weight:700;margin-bottom:6px;text-align:center}
+.call-screen .call-status{font-size:13px;opacity:.85;margin-bottom:8px;text-align:center}
+.call-screen .call-timer{font-size:13px;opacity:.7;margin-bottom:30px;font-variant-numeric:tabular-nums}
+.call-screen .call-actions{display:flex;gap:22px}
+.call-screen .call-actions button{width:56px;height:56px;border-radius:50%;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .call-screen .end-call{background:linear-gradient(135deg,#ea0038,#c1002e);color:#fff;box-shadow:0 6px 20px rgba(234,0,56,.4)}
 .call-screen .mute-call{background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.2)}
 .call-screen .mute-call.active{background:#fff;color:var(--green-deep)}
@@ -301,12 +320,12 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .call-screen.video-call .video-container{display:block}
 .call-screen.video-call .call-avatar,.call-screen.video-call .call-name,.call-screen.video-call .call-status,.call-screen.video-call .call-timer{display:none}
 .call-screen .remote-video{width:100%;height:100%;object-fit:cover;background:#000}
-.call-screen .local-video{position:absolute;top:20px;left:20px;width:90px;height:120px;object-fit:cover;border-radius:12px;border:2px solid rgba(255,255,255,.3);background:#000;z-index:2}
-.call-screen .video-overlay{position:absolute;bottom:120px;left:0;right:0;text-align:center;z-index:3}
-.call-screen .video-overlay .call-name{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:18px}
-.call-screen .video-overlay .call-timer{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:12.5px;margin-top:5px}
+.call-screen .local-video{position:absolute;top:16px;left:16px;width:80px;height:108px;object-fit:cover;border-radius:10px;border:2px solid rgba(255,255,255,.3);background:#000;z-index:2}
+.call-screen .video-overlay{position:absolute;bottom:110px;left:0;right:0;text-align:center;z-index:3}
+.call-screen .video-overlay .call-name{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:16px}
+.call-screen .video-overlay .call-timer{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:11.5px;margin-top:4px}
 
-::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:rgba(134,150,160,.4);border-radius:3px}
 ::-webkit-scrollbar-track{background:transparent}
 </style>
@@ -318,22 +337,29 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
   <div class="auth-box">
     <div class="logo"><i class="fas fa-comments"></i></div>
     <h1>Chat Pro</h1>
-    <p class="subtitle" id="formSubtitle">سجّل دخولك للانضمام إلى المحادثات</p>
+    <p class="subtitle" id="formSubtitle">سجّل دخولك للانضمام</p>
     <div class="error-msg" id="errorMsg"></div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabLogin">دخول</button>
       <button class="auth-tab" id="tabSignup">حساب جديد</button>
     </div>
+
+    <!-- صورة البروفايل (تظهر في التسجيل فقط) -->
+    <div id="signupAvatarGroup" style="display:none;">
+      <div class="required-avatar" id="requiredAvatar" onclick="document.getElementById('signupAvatarInput').click()">
+        <i class="fas fa-user"></i>
+        <div class="overlay"><i class="fas fa-camera"></i></div>
+        <input type="file" id="signupAvatarInput" accept="image/*">
+      </div>
+      <div class="avatar-hint">اضغط لاختيار صورة <span style="color:var(--red);">*</span></div>
+    </div>
+
     <div class="input-group"><input type="email" id="emailInput" placeholder="البريد الإلكتروني"><i class="fas fa-envelope"></i></div>
-    <div class="input-group"><input type="password" id="passwordInput" placeholder="كلمة المرور"><i class="fas fa-lock"></i></div>
+    <div class="input-group"><input type="password" id="passwordInput" placeholder="كلمة المرور" minlength="6"><i class="fas fa-lock"></i></div>
     <div class="input-group" id="nameGroup" style="display:none;"><input type="text" id="displayNameInput" placeholder="الاسم الظاهر" maxlength="30"><i class="fas fa-user"></i></div>
-    <div class="input-group" id="phoneGroup" style="display:none;"><input type="tel" id="phoneInput" placeholder="رقم الهاتف (للبحث)" maxlength="20"><i class="fas fa-phone"></i></div>
+    <div class="input-group" id="phoneGroup" style="display:none;"><input type="tel" id="phoneInput" placeholder="رقم الهاتف (إجباري)" maxlength="20"><i class="fas fa-phone"></i></div>
+
     <button class="btn-primary" id="authBtn">تسجيل الدخول</button>
-    <div class="divider">أو المتابعة بـ</div>
-    <button class="btn-google" id="googleBtn">
-      <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
-      Google
-    </button>
   </div>
 </div>
 
@@ -406,8 +432,6 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
       <button class="close-reply" id="closeReply"><i class="fas fa-times"></i></button>
     </div>
 
-    <div class="emoji-picker" id="emojiPicker"></div>
-
     <div class="input-area">
       <button class="icon-btn-sm" id="emojiBtn"><i class="fas fa-face-smile"></i></button>
       <button class="icon-btn-sm" id="cameraChatBtn"><i class="fas fa-camera"></i></button>
@@ -415,6 +439,19 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
       <button class="icon-btn-sm mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
       <button class="icon-btn-sm send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
       <input type="file" id="chatMediaInput" accept="image/*,video/*" style="display:none;">
+    </div>
+
+    <!-- لوحة الإيموجي (تحل مكان لوحة المفاتيح) -->
+    <div class="emoji-keyboard" id="emojiKeyboard">
+      <div class="kb-header">
+        <button id="kbClose"><i class="fas fa-keyboard"></i></button>
+        <div style="flex:1;text-align:center;font-size:12px;color:var(--text-muted);font-weight:600;">الإيموجي</div>
+      </div>
+      <div class="kb-body" id="kbBody"></div>
+      <div class="kb-footer">
+        <input type="text" id="kbInput" placeholder="اكتب رسالة...">
+        <button class="send-kb" id="kbSend"><i class="fas fa-paper-plane"></i></button>
+      </div>
     </div>
   </div>
 </div>
@@ -437,7 +474,7 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
     <input type="tel" id="profilePhone" maxlength="20">
     <label>البريد الإلكتروني</label>
     <input type="email" id="profileEmail" disabled>
-    <button class="btn-primary" id="saveProfileBtn" style="margin-top:16px;">حفظ التعديلات</button>
+    <button class="btn-primary" id="saveProfileBtn" style="margin-top:14px;">حفظ التعديلات</button>
     <button class="btn-secondary" id="closeProfileBtn">إلغاء</button>
   </div>
 </div>
@@ -456,16 +493,17 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
       <button class="theme-option" data-theme="light"><i class="fas fa-sun"></i> فاتح</button>
       <button class="theme-option active" data-theme="dark"><i class="fas fa-moon"></i> داكن</button>
     </div>
-    <button class="btn-secondary" id="closeSettingsBtn" style="margin-top:16px;">إغلاق</button>
+    <button class="btn-secondary" id="closeSettingsBtn" style="margin-top:14px;">إغلاق</button>
   </div>
 </div>
 
-<!-- نافذة دردشة جديدة -->
+<!-- نافذة دردشة جديدة (بحث بالرقم فقط) -->
 <div class="modal-overlay" id="newChatModal">
   <div class="modal">
     <h3>ابحث عن مستخدم</h3>
-    <input type="text" id="userSearchInput" placeholder="ابحث بالرقم أو الاسم..." style="width:100%;padding:11px 13px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:10px;font-size:13.5px;outline:none;text-align:right;font-family:inherit;">
-    <div id="usersList" style="margin-top:10px;max-height:340px;overflow-y:auto;"></div>
+    <p style="text-align:center;font-size:11.5px;color:var(--text-muted);margin-bottom:10px;">ابحث برقم الهاتف فقط</p>
+    <input type="tel" id="userSearchInput" placeholder="أدخل رقم الهاتف..." style="width:100%;padding:9px 12px;border:2px solid var(--border);background:var(--bg-panel);color:var(--text);border-radius:9px;font-size:12.5px;outline:none;text-align:right;font-family:inherit;">
+    <div id="usersList" style="margin-top:10px;max-height:320px;overflow-y:auto;"></div>
     <button class="btn-secondary" id="closeNewChatBtn">إلغاء</button>
   </div>
 </div>
@@ -474,10 +512,10 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 <div class="modal-overlay" id="addStoryModal">
   <div class="modal">
     <h3>إضافة استوري</h3>
-    <textarea id="storyTextInput" placeholder="اكتب نص الاستوري..." style="min-height:100px;resize:vertical;"></textarea>
-    <label style="display:block;margin-top:12px;font-size:12.5px;color:var(--text-muted);font-weight:600;">أو اختر صورة/فيديو:</label>
-    <input type="file" id="storyMediaInput" accept="image/*,video/*" style="margin-top:6px;font-size:12.5px;width:100%;color:var(--text);">
-    <button class="btn-primary" id="publishStoryBtn" style="margin-top:14px;">نشر</button>
+    <textarea id="storyTextInput" placeholder="اكتب نص الاستوري..." style="min-height:80px;resize:vertical;"></textarea>
+    <label style="display:block;margin-top:10px;font-size:11.5px;color:var(--text-muted);font-weight:600;">أو اختر صورة/فيديو:</label>
+    <input type="file" id="storyMediaInput" accept="image/*,video/*" style="margin-top:5px;font-size:11.5px;width:100%;color:var(--text);">
+    <button class="btn-primary" id="publishStoryBtn" style="margin-top:12px;">نشر</button>
     <button class="btn-secondary" id="closeStoryBtn">إلغاء</button>
   </div>
 </div>
@@ -486,8 +524,8 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 <div class="modal-overlay" id="editMsgModal">
   <div class="modal">
     <h3>تعديل الرسالة</h3>
-    <textarea id="editMsgInput" style="min-height:100px;resize:vertical;"></textarea>
-    <button class="btn-primary" id="saveEditBtn" style="margin-top:14px;">حفظ</button>
+    <textarea id="editMsgInput" style="min-height:80px;resize:vertical;"></textarea>
+    <button class="btn-primary" id="saveEditBtn" style="margin-top:12px;">حفظ</button>
     <button class="btn-secondary" id="closeEditBtn">إلغاء</button>
   </div>
 </div>
@@ -527,10 +565,10 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 <!-- نافذة استقبال مكالمة -->
 <div class="modal-overlay" id="incomingCallModal">
   <div class="modal" style="text-align:center;">
-    <div style="font-size:54px;color:var(--green-light);margin-bottom:14px;animation:pulse 1.5s infinite;"><i class="fas fa-phone-volume"></i></div>
+    <div style="font-size:48px;color:var(--green-light);margin-bottom:12px;animation:pulse 1.5s infinite;"><i class="fas fa-phone-volume"></i></div>
     <h3 id="incomingCallerName">...</h3>
-    <p style="color:var(--text-muted);margin-bottom:20px;font-size:13px;" id="incomingCallType">مكالمة واردة</p>
-    <div style="display:flex;gap:10px;">
+    <p style="color:var(--text-muted);margin-bottom:18px;font-size:12px;" id="incomingCallType">مكالمة واردة</p>
+    <div style="display:flex;gap:9px;">
       <button class="btn-primary" id="acceptCallBtn" style="background:linear-gradient(135deg,#25d366,#00a884);"><i class="fas fa-phone"></i> قبول</button>
       <button class="btn-primary" id="rejectCallBtn" style="background:linear-gradient(135deg,#ea0038,#c1002e);"><i class="fas fa-phone-slash"></i> رفض</button>
     </div>
@@ -539,7 +577,7 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, remove, query, get, limitToLast, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -555,14 +593,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
-const googleProvider = new GoogleAuthProvider();
 const $ = id => document.getElementById(id);
 
-/* ============ إعدادات غرفة يزيد ============ */
 const ROOM_ID = 'yezid';
 const ROOM_NAME = 'يزيد';
 
-/* ============ bindTap موحّد ============ */
+/* ============ bindTap ============ */
 function bindTap(el, handler){
   if(!el || el.dataset.tapBound) return;
   el.dataset.tapBound = '1';
@@ -581,10 +617,11 @@ function bindTap(el, handler){
 /* ============ الحالة ============ */
 let isSignUp = false, currentUser = null, currentUserData = null, currentChatUser = null, allUsers = {};
 let unsubMessages = null, unsubChats = null, unsubStories = null, unsubCalls = null;
-let unsubRoomMessages = null, unsubRoomOnline = null, unsubRoomTyping = null;
+let unsubRoomMessages = null, unsubRoomOnline = null;
 let appTheme = localStorage.getItem('app_theme') || 'dark';
 let appLanguage = localStorage.getItem('app_lang') || 'ar';
 let pendingAvatarBase64 = null;
+let signupAvatarBase64 = null;
 let mutedChats = {};
 let currentMessages = {};
 let selectedMessages = new Set();
@@ -593,14 +630,10 @@ let replyingTo = null;
 let currentContextMsgId = null;
 let currentContextMsgData = null;
 
-/* بيانات الغرفة */
 let roomMessages = {};
 let roomOnlineUsers = {};
-let roomTypingUsers = {};
-let currentChatMode = null; // 'private' أو 'room'
+let currentChatMode = null;
 let roomSelectedMessages = new Set();
-let roomIsSelectionMode = false;
-let roomReplyingTo = null;
 
 /* ============ الثيم ============ */
 function applyTheme(){
@@ -615,6 +648,62 @@ function toggleTheme(){
   applyTheme();
 }
 
+/* ============ ضغط الصور بقوة ============ */
+async function compressImage(file, maxSize = 1000, quality = 0.75){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if(w > maxSize || h > maxSize){
+          if(w > h){ h = (h / w) * maxSize; w = maxSize; }
+          else { w = (w / h) * maxSize; h = maxSize; }
+        }
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(blob => {
+          if(blob) resolve(new File([blob], 'compressed.jpg', {type:'image/jpeg'}));
+          else reject(new Error('فشل ضغط الصورة'));
+        }, 'image/jpeg', quality);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ضغط صورة البروفايل - حجم صغير جداً */
+async function compressAvatar(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const size = 150; // حجم صغير
+        const ratio = Math.min(size / img.width, size / img.height);
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob => {
+          if(blob) resolve(new File([blob], 'avatar.jpg', {type:'image/jpeg'}));
+          else reject(new Error('فشل ضغط الصورة'));
+        }, 'image/jpeg', 0.7);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 /* ============ المصادقة ============ */
 bindTap($('tabLogin'), () => switchAuth(false));
 bindTap($('tabSignup'), () => switchAuth(true));
@@ -624,10 +713,17 @@ function switchAuth(signup){
   $('tabSignup').classList.toggle('active', signup);
   $('formSubtitle').textContent = signup ? 'أنشئ حسابك الجديد' : 'سجّل دخولك للانضمام';
   $('authBtn').textContent = signup ? 'إنشاء حساب' : 'تسجيل الدخول';
+  $('signupAvatarGroup').style.display = signup ? 'block' : 'none';
   $('nameGroup').style.display = signup ? 'block' : 'none';
   $('phoneGroup').style.display = signup ? 'block' : 'none';
   $('errorMsg').classList.remove('show');
+  signupAvatarBase64 = null;
+  const av = $('requiredAvatar');
+  av.classList.remove('filled');
+  av.innerHTML = '<i class="fas fa-user"></i><div class="overlay"><i class="fas fa-camera"></i></div><input type="file" id="signupAvatarInput" accept="image/*">';
+  $('signupAvatarInput').onchange = handleSignupAvatarChange;
 }
+
 function showError(m){ $('errorMsg').textContent = m; $('errorMsg').classList.add('show'); }
 function hideError(){ $('errorMsg').classList.remove('show'); }
 function translateAuthError(code){
@@ -636,9 +732,23 @@ function translateAuthError(code){
     'auth/weak-password':'كلمة المرور ضعيفة (6+)','auth/user-not-found':'لا يوجد حساب',
     'auth/wrong-password':'كلمة المرور خاطئة','auth/invalid-credential':'البيانات خاطئة',
     'auth/too-many-requests':'محاولات كثيرة','auth/operation-not-allowed':'الطريقة غير مفعّلة',
-    'auth/unauthorized-domain':'النطاق غير مصرّح','auth/popup-closed-by-user':'تم إغلاق النافذة'
+    'auth/unauthorized-domain':'النطاق غير مصرّح'
   };
   return e[code] || 'حدث خطأ، حاول مرة أخرى';
+}
+
+async function handleSignupAvatarChange(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  try {
+    const compressed = await compressAvatar(file);
+    const b64 = await fileToBase64(compressed);
+    signupAvatarBase64 = b64;
+    const av = $('requiredAvatar');
+    av.innerHTML = `<img src="${b64}"><div class="overlay"><i class="fas fa-camera"></i></div><input type="file" id="signupAvatarInput" accept="image/*">`;
+    av.classList.add('filled');
+    $('signupAvatarInput').onchange = handleSignupAvatarChange;
+  } catch(e){ alert('فشل معالجة الصورة'); }
 }
 
 bindTap($('authBtn'), async () => {
@@ -649,15 +759,19 @@ bindTap($('authBtn'), async () => {
   const phone = $('phoneInput').value.trim();
   if(!email || !password) return showError('أدخل البريد وكلمة المرور');
   if(password.length < 6) return showError('كلمة المرور 6+ أحرف');
-  if(isSignUp && name.length < 2) return showError('أدخل اسماً صحيحاً');
+  if(isSignUp){
+    if(name.length < 2) return showError('أدخل اسماً صحيحاً');
+    if(phone.length < 6) return showError('رقم الهاتف إجباري');
+    if(!signupAvatarBase64) return showError('صورة البروفايل إجبارية');
+  }
   $('authBtn').disabled = true;
   try {
     if(isSignUp){
       const r = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(r.user, {displayName: name});
       await set(ref(db,'users/'+r.user.uid), {
-        uid: r.user.uid, name, email, phone: phone || null, photoURL: null,
-        customPhoto: false, language: appLanguage, createdAt: Date.now()
+        uid: r.user.uid, name, email, phone, photoURL: signupAvatarBase64,
+        customPhoto: true, language: appLanguage, createdAt: Date.now()
       });
     } else {
       await signInWithEmailAndPassword(auth, email, password);
@@ -665,30 +779,13 @@ bindTap($('authBtn'), async () => {
       if(!snap.exists()){
         await set(ref(db,'users/'+auth.currentUser.uid), {
           uid: auth.currentUser.uid, name: auth.currentUser.displayName || email.split('@')[0],
-          email, phone: null, photoURL: auth.currentUser.photoURL || null, customPhoto: false,
+          email, phone: null, photoURL: null, customPhoto: false,
           language: appLanguage, createdAt: Date.now()
         });
       }
     }
   } catch(e){ showError(translateAuthError(e.code)); }
   finally { $('authBtn').disabled = false; }
-});
-
-bindTap($('googleBtn'), async () => {
-  hideError();
-  $('googleBtn').disabled = true;
-  try {
-    const r = await signInWithPopup(auth, googleProvider);
-    const snap = await get(ref(db,'users/'+r.user.uid));
-    if(!snap.exists()){
-      await set(ref(db,'users/'+r.user.uid), {
-        uid: r.user.uid, name: r.user.displayName || r.user.email.split('@')[0],
-        email: r.user.email, phone: null, photoURL: r.user.photoURL || null,
-        customPhoto: false, language: appLanguage, createdAt: Date.now()
-      });
-    }
-  } catch(e){ showError(translateAuthError(e.code)); }
-  finally { $('googleBtn').disabled = false; }
 });
 
 onAuthStateChanged(auth, async user => {
@@ -711,7 +808,7 @@ onAuthStateChanged(auth, async user => {
     currentUser = null; currentUserData = null;
     $('app').classList.remove('active');
     $('authScreen').classList.remove('hidden');
-    [unsubChats, unsubStories, unsubCalls, unsubRoomMessages, unsubRoomOnline, unsubRoomTyping].forEach(u => u && u());
+    [unsubChats, unsubStories, unsubCalls, unsubRoomMessages, unsubRoomOnline].forEach(u => u && u());
   }
 });
 
@@ -723,7 +820,7 @@ async function loadCurrentUser(){
   } else {
     currentUserData = {
       uid: currentUser.uid, name: currentUser.displayName || currentUser.email.split('@')[0],
-      email: currentUser.email, phone: null, photoURL: currentUser.photoURL || null, customPhoto: false
+      email: currentUser.email, phone: null, photoURL: null, customPhoto: false
     };
   }
 }
@@ -741,7 +838,7 @@ function bindAllButtons(){
   bindTap($('chatBack'), () => closeChat());
   bindTap($('sendBtn'), () => sendMessage());
   bindTap($('micBtn'), () => toggleMic());
-  bindTap($('emojiBtn'), e => { e.stopPropagation(); $('emojiPicker').classList.toggle('show'); });
+  bindTap($('emojiBtn'), e => { e.stopPropagation(); toggleEmojiKeyboard(); });
   bindTap($('cameraChatBtn'), () => $('chatMediaInput').click());
   bindTap($('closeReply'), () => cancelReply());
   bindTap($('closeSel'), () => exitSelectionMode());
@@ -765,6 +862,26 @@ function bindAllButtons(){
   bindTap($('storyHeaderClick'), () => openStoryUserChat());
   bindTap($('chatInfo'), () => viewChatUserProfile());
   bindTap($('chatAvatar'), () => viewChatUserProfile());
+
+  // لوحة الإيموجي
+  bindTap($('kbClose'), () => {
+    $('emojiKeyboard').classList.remove('show');
+    $('messageInput').focus();
+  });
+  bindTap($('kbSend'), () => {
+    const text = $('kbInput').value.trim();
+    if(!text) return;
+    $('messageInput').value = text;
+    $('kbInput').value = '';
+    sendMessage();
+  });
+  $('kbInput').addEventListener('keypress', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); $('kbSend').click(); }
+  });
+  $('kbInput').addEventListener('input', e => {
+    $('messageInput').value = e.target.value;
+    $('messageInput').dispatchEvent(new Event('input'));
+  });
 
   document.querySelectorAll('#mainMenu button[data-action]').forEach(btn => {
     bindTap(btn, () => {
@@ -812,6 +929,38 @@ document.addEventListener('click', e => {
   }
 });
 
+/* ============ لوحة الإيموجي (تظهر كـ لوحة المفاتيح) ============ */
+const emojis = ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','😐','😑','😶','😏','😒','🙄','😬','😌','😔','😪','😴','😷','🤒','🤕','🤢','🥵','🥶','😵','🤯','🤠','🥳','😎','🤓','😕','😟','🙁','😮','😯','😲','😳','🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','😤','😡','😠','🤬','😈','💀','💩','🤡','👻','👽','🤖','😺','😸','😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','💕','💞','💓','💗','💖','💘','💝','👍','👎','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','👇','✋','🤚','🖐','🖖','👋','🤝','🙏','✍️','💪','👀','👁','👄'];
+function buildEmojiKeyboard(){
+  const kb = $('kbBody');
+  kb.innerHTML = emojis.map(e => `<div class="emoji" data-emoji="${e}">${e}</div>`).join('');
+  kb.querySelectorAll('.emoji').forEach(el => {
+    bindTap(el, () => {
+      const inp = $('kbInput');
+      inp.value += el.dataset.emoji;
+      $('messageInput').value = inp.value;
+      $('messageInput').dispatchEvent(new Event('input'));
+      inp.focus();
+    });
+  });
+}
+function toggleEmojiKeyboard(){
+  const kb = $('emojiKeyboard');
+  const isOpen = kb.classList.contains('show');
+  if(isOpen){
+    kb.classList.remove('show');
+    $('messageInput').focus();
+  } else {
+    kb.classList.add('show');
+    $('kbInput').value = $('messageInput').value;
+    setTimeout(() => $('kbInput').focus(), 100);
+    setTimeout(() => {
+      const area = $('messagesArea');
+      area.scrollTop = area.scrollHeight;
+    }, 300);
+  }
+}
+
 /* ============ الملف الشخصي ============ */
 function openProfileModal(){
   if(!currentUserData) return;
@@ -831,19 +980,21 @@ function openProfileModal(){
 async function handleAvatarChange(e){
   const file = e.target.files[0];
   if(!file) return;
-  if(file.size > 5 * 1024 * 1024) return alert('الصورة كبيرة جداً. اختر صورة أصغر من 5MB');
-  const b64 = await fileToBase64(file);
-  if(b64.length > 700000) return alert('الصورة كبيرة جداً بعد الترميز');
-  pendingAvatarBase64 = b64;
-  const el = $('profileAvatar');
-  el.innerHTML = `<img src="${b64}"><div class="edit-badge"><i class="fas fa-camera"></i></div><input type="file" id="avatarInput" accept="image/*">`;
-  $('avatarInput').onchange = handleAvatarChange;
+  try {
+    const compressed = await compressAvatar(file);
+    const b64 = await fileToBase64(compressed);
+    pendingAvatarBase64 = b64;
+    const el = $('profileAvatar');
+    el.innerHTML = `<img src="${b64}"><div class="edit-badge"><i class="fas fa-camera"></i></div><input type="file" id="avatarInput" accept="image/*">`;
+    $('avatarInput').onchange = handleAvatarChange;
+  } catch(e){ alert('فشل معالجة الصورة'); }
 }
 async function saveProfile(){
   const name = $('profileName').value.trim();
   const phone = $('profilePhone').value.trim();
   if(name.length < 2) return alert('أدخل اسماً صحيحاً');
-  const updates = { name, phone: phone || null };
+  if(!phone || phone.length < 6) return alert('رقم الهاتف إجباري');
+  const updates = { name, phone };
   if(pendingAvatarBase64){ updates.photoURL = pendingAvatarBase64; updates.customPhoto = true; }
   await update(ref(db,'users/'+currentUser.uid), updates);
   if(currentUser) await updateProfile(currentUser, {displayName: name});
@@ -882,7 +1033,6 @@ function buildSections(){
   const html = `
     <div class="section active" data-section="chats" id="chatsSection">
       <div class="chat-list" id="chatsList">
-        <!-- غرفة يزيد تظهر دائماً في الأعلى -->
         <div class="chat-item group-chat" id="yezidRoomItem">
           <div class="avatar group-avatar">👥</div>
           <div class="details">
@@ -892,7 +1042,6 @@ function buildSections(){
             </div>
             <div class="last-msg" id="roomLastMsg">اضغط للدخول إلى الغرفة</div>
           </div>
-          <div class="meta"><span class="badge" id="roomUnreadBadge" style="display:none;">0</span></div>
         </div>
         <div id="privateChatsContainer"></div>
       </div>
@@ -974,40 +1123,11 @@ function b64Decode(b64){
   for(let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
   return arr;
 }
-async function compressImage(file, maxSize = 1600, quality = 0.85){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        if(w > maxSize || h > maxSize){
-          if(w > h){ h = (h / w) * maxSize; w = maxSize; }
-          else { w = (w / h) * maxSize; h = maxSize; }
-        }
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-        canvas.toBlob(blob => {
-          if(blob) resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), {type:'image/jpeg'}));
-          else reject(new Error('فشل ضغط الصورة'));
-        }, 'image/jpeg', quality);
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
 
 /* ============ غرفة يزيد ============ */
 function loadRoomData(){
-  // الاستماع لآخر رسالة في الغرفة
   if(unsubRoomMessages) unsubRoomMessages();
-  const roomMessagesRef = query(ref(db,'rooms/'+ROOM_ID+'/messages'), limitToLast(1));
-  unsubRoomMessages = onValue(roomMessagesRef, async snap => {
+  unsubRoomMessages = onValue(query(ref(db,'rooms/'+ROOM_ID+'/messages'), limitToLast(1)), async snap => {
     const val = snap.val();
     if(!val){
       $('roomLastMsg').textContent = 'اضغط للدخول إلى الغرفة';
@@ -1041,12 +1161,9 @@ function openRoomChat(){
   $('chatAvatar').classList.add('group-avatar');
   $('chatStatus').textContent = '...';
   $('chatView').classList.add('active');
-
-  // إخفاء أزرار المكالمة في الغرفة (لا معنى لها)
   $('startVoiceCall').style.display = 'none';
   $('startVideoCall').style.display = 'none';
 
-  // الاستماع للأعضاء المتصلين
   if(unsubRoomOnline) unsubRoomOnline();
   unsubRoomOnline = onValue(ref(db,'onlineUsers'), snap => {
     roomOnlineUsers = snap.val() || {};
@@ -1066,7 +1183,6 @@ function loadRoomMessages(){
   roomMessages = {};
   roomSelectedMessages.clear();
   exitSelectionMode();
-
   unsubMessages = onChildAdded(ref(db,'rooms/'+ROOM_ID+'/messages'), async snap => {
     const data = snap.val();
     if(!data) return;
@@ -1080,7 +1196,6 @@ function loadRoomMessages(){
 async function renderRoomMessage(key, data, area){
   const existing = area.querySelector(`[data-msg-id="${key}"]`);
   if(existing) existing.remove();
-
   const isMine = data.senderId === currentUser.uid;
   const msgDate = new Date(data.timestamp);
   const dateStr = formatDate(msgDate);
@@ -1091,69 +1206,45 @@ async function renderRoomMessage(key, data, area){
     sep.textContent = dateStr;
     area.appendChild(sep);
   }
-
   const row = document.createElement('div');
   row.className = 'message-row group ' + (isMine ? 'mine' : 'other');
-
-  // أفاتار المرسل
   if(!isMine){
     const senderAvatar = document.createElement('div');
     senderAvatar.className = 'sender-avatar';
-    if(data.senderPhoto){
-      senderAvatar.innerHTML = `<img src="${data.senderPhoto}">`;
-    } else {
-      senderAvatar.textContent = (data.senderName || 'U').charAt(0).toUpperCase();
-    }
+    if(data.senderPhoto){ senderAvatar.innerHTML = `<img src="${data.senderPhoto}">`; }
+    else { senderAvatar.textContent = (data.senderName || 'U').charAt(0).toUpperCase(); }
     row.appendChild(senderAvatar);
   }
-
   const msg = document.createElement('div');
   msg.className = 'message ' + (isMine ? 'mine' : 'other');
   msg.dataset.msgId = key;
-
   if(data.deletedForAll){
     msg.innerHTML = `<div style="font-style:italic;opacity:.6;"><i class="fas fa-ban"></i> تم حذف هذه الرسالة</div>
       <div class="msg-meta"><span>${formatTime(msgDate)}</span></div>`;
   } else {
     let senderNameHtml = '';
-    if(!isMine){
-      senderNameHtml = `<span class="sender-name">${escapeHtml(data.senderName || 'مستخدم')}</span>`;
-    }
+    if(!isMine){ senderNameHtml = `<span class="sender-name">${escapeHtml(data.senderName || 'مستخدم')}</span>`; }
     const encBadge = data.encrypted ? '<span class="encrypted-badge"><i class="fas fa-lock"></i></span>' : '';
     const editedTag = data.edited ? '<span class="edited-tag">(تم التعديل)</span>' : '';
     const check = isMine ? `<span class="check"><i class="fas fa-check"></i></span>` : '';
-
     if(data.type === 'audio' && data.audio){
-      msg.innerHTML = senderNameHtml + `
-        <div class="audio-message">
-          <button class="audio-play-btn" data-audio="${data.audio}"><i class="fas fa-play"></i></button>
-          <div class="audio-progress"><div class="fill"></div></div>
-          <div class="duration">${formatDuration(data.duration||0)}</div>
-        </div>
-        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+      msg.innerHTML = senderNameHtml + `<div class="audio-message"><button class="audio-play-btn" data-audio="${data.audio}"><i class="fas fa-play"></i></button><div class="audio-progress"><div class="fill"></div></div><div class="duration">${formatDuration(data.duration||0)}</div></div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
     } else if(data.type === 'image' && data.media){
       try {
         const buf = await decryptBuffer(data.media, ROOM_ID);
         const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'image/jpeg'}));
-        msg.innerHTML = senderNameHtml + `<img class="msg-image" src="${url}">
-          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
-      } catch(e){
-        msg.innerHTML = senderNameHtml + `<div>[صورة]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
-      }
+        msg.innerHTML = senderNameHtml + `<img class="msg-image" src="${url}"><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){ msg.innerHTML = senderNameHtml + `<div>[صورة]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`; }
     } else if(data.type === 'video' && data.media){
       try {
         const buf = await decryptBuffer(data.media, ROOM_ID);
         const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'video/mp4'}));
-        msg.innerHTML = senderNameHtml + `<video class="msg-video" src="${url}" controls></video>
-          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
-      } catch(e){
-        msg.innerHTML = senderNameHtml + `<div>[فيديو]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
-      }
+        msg.innerHTML = senderNameHtml + `<video class="msg-video" src="${url}" controls></video><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){ msg.innerHTML = senderNameHtml + `<div>[فيديو]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`; }
     } else {
       let text = data.text || '';
       if(data.encrypted && text) text = await decryptText(text, ROOM_ID);
-      msg.innerHTML = senderNameHtml + `<span>${escapeHtml(text)}</span>
-        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+      msg.innerHTML = senderNameHtml + `<span>${escapeHtml(text)}</span><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
     }
   }
   row.appendChild(msg);
@@ -1164,7 +1255,7 @@ async function renderRoomMessage(key, data, area){
 /* ============ المحادثات الخاصة ============ */
 function loadMyChats(){
   if(unsubChats) unsubChats();
-  loadRoomData(); // تحميل بيانات غرفة يزيد
+  loadRoomData();
   unsubChats = onValue(ref(db,'userChats/'+currentUser.uid), snap => {
     renderChats(snap.val() || {});
   });
@@ -1173,10 +1264,7 @@ async function renderChats(chats){
   const container = $('privateChatsContainer');
   if(!container) return;
   const ids = Object.keys(chats);
-  if(!ids.length){
-    container.innerHTML = '';
-    return;
-  }
+  if(!ids.length){ container.innerHTML = ''; return; }
   const onlineSnap = await get(ref(db,'onlineUsers'));
   const online = onlineSnap.val() || {};
   const results = await Promise.all(ids.map(async otherId => {
@@ -1244,8 +1332,6 @@ function openChat(uid, name, photo){
   $('chatAvatar').classList.remove('group-avatar');
   $('chatStatus').textContent = 'غير متصل';
   $('chatView').classList.add('active');
-
-  // إظهار أزرار المكالمة
   $('startVoiceCall').style.display = 'flex';
   $('startVideoCall').style.display = 'flex';
 
@@ -1295,8 +1381,7 @@ async function clearChatHistory(){
 
 function viewChatUserProfile(){
   if(currentChatMode === 'room'){
-    const count = Object.keys(roomOnlineUsers).length;
-    alert(`غرفة ${ROOM_NAME}\nالأعضاء المتصلون: ${count}`);
+    alert(`غرفة ${ROOM_NAME}\nالأعضاء المتصلون: ${Object.keys(roomOnlineUsers).length}`);
     return;
   }
   if(!currentChatUser) return;
@@ -1348,50 +1433,33 @@ async function renderMessage(key, data, area, chatId){
   msg.dataset.msgId = key;
 
   if(data.deletedForAll){
-    msg.innerHTML = `<div style="font-style:italic;opacity:.6;"><i class="fas fa-ban"></i> تم حذف هذه الرسالة</div>
-      <div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
+    msg.innerHTML = `<div style="font-style:italic;opacity:.6;"><i class="fas fa-ban"></i> تم حذف هذه الرسالة</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
   } else {
     let replyHtml = '';
     if(data.replyTo){
       const rn = data.replyTo.senderId === currentUser.uid ? 'أنت' : (currentChatUser?.name || 'مستخدم');
       let rt = data.replyTo.text || '📎 مرفق';
       if(data.replyTo.encrypted){ try { rt = await decryptText(data.replyTo.text, chatId); } catch(e){} }
-      replyHtml = `<div class="reply-preview">
-        <div class="reply-name">${escapeHtml(rn)}</div>
-        <div>${escapeHtml(rt).substring(0,80)}</div>
-      </div>`;
+      replyHtml = `<div class="reply-preview"><div class="reply-name">${escapeHtml(rn)}</div><div>${escapeHtml(rt).substring(0,80)}</div></div>`;
     }
     if(data.type === 'audio' && data.audio){
-      msg.innerHTML = replyHtml + `
-        <div class="audio-message">
-          <button class="audio-play-btn" data-audio="${data.audio}"><i class="fas fa-play"></i></button>
-          <div class="audio-progress"><div class="fill"></div></div>
-          <div class="duration">${formatDuration(data.duration||0)}</div>
-        </div>
-        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+      msg.innerHTML = replyHtml + `<div class="audio-message"><button class="audio-play-btn" data-audio="${data.audio}"><i class="fas fa-play"></i></button><div class="audio-progress"><div class="fill"></div></div><div class="duration">${formatDuration(data.duration||0)}</div></div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
     } else if(data.type === 'image' && data.media){
       try {
         const buf = await decryptBuffer(data.media, chatId);
         const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'image/jpeg'}));
-        msg.innerHTML = replyHtml + `<img class="msg-image" src="${url}">
-          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
-      } catch(e){
-        msg.innerHTML = replyHtml + `<div>[صورة]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
-      }
+        msg.innerHTML = replyHtml + `<img class="msg-image" src="${url}"><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){ msg.innerHTML = replyHtml + `<div>[صورة]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`; }
     } else if(data.type === 'video' && data.media){
       try {
         const buf = await decryptBuffer(data.media, chatId);
         const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'video/mp4'}));
-        msg.innerHTML = replyHtml + `<video class="msg-video" src="${url}" controls></video>
-          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
-      } catch(e){
-        msg.innerHTML = replyHtml + `<div>[فيديو]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
-      }
+        msg.innerHTML = replyHtml + `<video class="msg-video" src="${url}" controls></video><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){ msg.innerHTML = replyHtml + `<div>[فيديو]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`; }
     } else {
       let text = data.text || '';
       if(data.encrypted && text) text = await decryptText(text, chatId);
-      msg.innerHTML = replyHtml + `<span>${escapeHtml(text)}</span>
-        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+      msg.innerHTML = replyHtml + `<span>${escapeHtml(text)}</span><div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
     }
   }
   row.appendChild(msg);
@@ -1418,14 +1486,8 @@ function attachLongPress(el, msgId, mode){
       if(navigator.vibrate) navigator.vibrate(30);
     }, 500);
   };
-  const move = (x, y) => {
-    if(Math.abs(x - startX) > 12 || Math.abs(y - startY) > 12){ moved = true; cancel(); }
-  };
-  const end = () => {
-    cancel();
-    if(fired || moved) return;
-    if(isSelectionMode) toggleMessageSelection(msgId, mode);
-  };
+  const move = (x, y) => { if(Math.abs(x - startX) > 12 || Math.abs(y - startY) > 12){ moved = true; cancel(); } };
+  const end = () => { cancel(); if(fired || moved) return; if(isSelectionMode) toggleMessageSelection(msgId, mode); };
   el.addEventListener('touchstart', e => { const t = e.touches[0]; start(t.clientX, t.clientY); }, {passive: true});
   el.addEventListener('touchmove', e => { const t = e.touches[0]; move(t.clientX, t.clientY); }, {passive: true});
   el.addEventListener('touchend', end);
@@ -1449,17 +1511,11 @@ function showContextMenu(msgId, x, y, mode){
   const canDeleteAll = isMine && !data.deletedForAll;
   let html = '';
   html += `<button data-ctx="reply"><i class="fas fa-reply"></i> رد</button>`;
-  if(data.text && !data.deletedForAll){
-    html += `<button data-ctx="copy"><i class="fas fa-copy"></i> نسخ</button>`;
-  }
-  if(canEdit){
-    html += `<button data-ctx="edit"><i class="fas fa-edit"></i> تعديل</button>`;
-  }
+  if(data.text && !data.deletedForAll) html += `<button data-ctx="copy"><i class="fas fa-copy"></i> نسخ</button>`;
+  if(canEdit) html += `<button data-ctx="edit"><i class="fas fa-edit"></i> تعديل</button>`;
   html += `<button data-ctx="select"><i class="fas fa-check-square"></i> تحديد</button>`;
   html += `<button data-ctx="deleteMe" class="danger"><i class="fas fa-trash"></i> حذف لدي</button>`;
-  if(canDeleteAll){
-    html += `<button data-ctx="deleteAll" class="danger"><i class="fas fa-trash-alt"></i> حذف للجميع</button>`;
-  }
+  if(canDeleteAll) html += `<button data-ctx="deleteAll" class="danger"><i class="fas fa-trash-alt"></i> حذف للجميع</button>`;
   const cm = $('contextMenu');
   cm.innerHTML = html;
   cm.style.visibility = 'hidden';
@@ -1475,10 +1531,7 @@ function showContextMenu(msgId, x, y, mode){
   cm.style.top = top + 'px';
   cm.style.visibility = '';
   cm.querySelectorAll('button').forEach(btn => {
-    bindTap(btn, () => {
-      cm.classList.remove('show');
-      handleContextAction(btn.dataset.ctx);
-    });
+    bindTap(btn, () => { cm.classList.remove('show'); handleContextAction(btn.dataset.ctx); });
   });
 }
 
@@ -1498,9 +1551,7 @@ async function handleContextAction(action){
     if(data.type === 'audio') preview = '🎤 رسالة صوتية';
     else if(data.type === 'image') preview = '📷 صورة';
     else if(data.type === 'video') preview = '🎥 فيديو';
-    else if(data.text){
-      try { preview = await decryptText(data.text, chatId); } catch(e){}
-    }
+    else if(data.text){ try { preview = await decryptText(data.text, chatId); } catch(e){} }
     $('replyText').textContent = preview.substring(0, 80);
     $('messageInput').focus();
   } else if(action === 'copy'){
@@ -1518,9 +1569,7 @@ async function handleContextAction(action){
       const newText = $('editMsgInput').value.trim();
       if(!newText) return;
       const enc = await encryptText(newText, chatId);
-      await update(ref(db, messagesPath+'/'+msgId), {
-        text: enc, edited: true, editedAt: Date.now()
-      });
+      await update(ref(db, messagesPath+'/'+msgId), { text: enc, edited: true, editedAt: Date.now() });
       $('editMsgModal').classList.remove('active');
     });
   } else if(action === 'select'){
@@ -1531,9 +1580,7 @@ async function handleContextAction(action){
     const el = document.querySelector(`[data-msg-id="${msgId}"]`);
     if(el) el.remove();
   } else if(action === 'deleteAll'){
-    await update(ref(db, messagesPath+'/'+msgId), {
-      deletedForAll: true, text: null, media: null, audio: null
-    });
+    await update(ref(db, messagesPath+'/'+msgId), { deletedForAll: true, text: null, media: null, audio: null });
   }
   currentContextMsgId = null;
   currentContextMsgData = null;
@@ -1556,8 +1603,7 @@ function exitSelectionMode(){
 }
 function toggleMessageSelection(msgId, mode){
   const set = mode === 'room' ? roomSelectedMessages : selectedMessages;
-  if(set.has(msgId)) set.delete(msgId);
-  else set.add(msgId);
+  if(set.has(msgId)) set.delete(msgId); else set.add(msgId);
   const el = document.querySelector(`.message[data-msg-id="${msgId}"]`);
   if(el) el.classList.toggle('selected', set.has(msgId));
   updateSelectionUI();
@@ -1572,7 +1618,6 @@ async function deleteSelected(){
   if(total === 0) return;
   if(!confirm(`حذف ${total} رسالة للجميع؟`)) return;
   const updates = {};
-  // المحادثة الخاصة
   if(selectedMessages.size && currentChatUser){
     const chatId = getChatId(currentUser.uid, currentChatUser.uid);
     for(const id of selectedMessages){
@@ -1588,7 +1633,6 @@ async function deleteSelected(){
       }
     }
   }
-  // الغرفة
   if(roomSelectedMessages.size){
     for(const id of roomSelectedMessages){
       const data = roomMessages[id];
@@ -1636,10 +1680,7 @@ async function copySelected(){
   }
   exitSelectionMode();
 }
-function forwardSelected(){
-  alert('اختر محادثة من القائمة لإعادة التوجيه');
-  exitSelectionMode();
-}
+function forwardSelected(){ alert('اختر محادثة من القائمة لإعادة التوجيه'); exitSelectionMode(); }
 
 /* ============ إرسال ============ */
 $('messageInput').addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
@@ -1647,17 +1688,7 @@ $('messageInput').addEventListener('input', e => {
   const hasText = e.target.value.trim().length > 0;
   $('sendBtn').classList.toggle('show', hasText);
   $('micBtn').classList.toggle('hide', hasText);
-  // مؤشر كتابة في الغرفة
-  if(currentChatMode === 'room' && hasText && currentUserData){
-    set(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid), {
-      name: currentUserData.name,
-      at: Date.now()
-    });
-    clearTimeout(window._roomTypingTimeout);
-    window._roomTypingTimeout = setTimeout(() => {
-      remove(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid));
-    }, 2500);
-  }
+  if($('kbInput')) $('kbInput').value = e.target.value;
 });
 
 async function sendMessage(){
@@ -1667,21 +1698,13 @@ async function sendMessage(){
 
   if(currentChatMode === 'room'){
     const encrypted = await encryptText(text, ROOM_ID);
-    const payload = {
+    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), {
       text: encrypted, encrypted: true,
       senderId: currentUser.uid,
       senderName: currentUserData.name,
       senderPhoto: currentUserData.photoURL || null,
       timestamp: Date.now()
-    };
-    if(replyingTo && replyingTo.mode === 'room'){
-      payload.replyTo = {
-        id: replyingTo.id, senderId: replyingTo.senderId,
-        text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type
-      };
-    }
-    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), payload);
-    remove(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid));
+    });
   } else {
     if(!currentChatUser) return;
     const chatId = getChatId(currentUser.uid, currentChatUser.uid);
@@ -1703,17 +1726,16 @@ async function sendMessage(){
     await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
   }
   $('messageInput').value = '';
+  if($('kbInput')) $('kbInput').value = '';
   $('sendBtn').classList.remove('show');
   $('micBtn').classList.remove('hide');
   cancelReply();
   $('messageInput').focus();
 }
-function cancelReply(){
-  replyingTo = null;
-  $('replyBar').classList.remove('show');
-}
+function cancelReply(){ replyingTo = null; $('replyBar').classList.remove('show'); }
 function closeChat(){
   if(isSelectionMode){ exitSelectionMode(); return; }
+  $('emojiKeyboard').classList.remove('show');
   $('chatView').classList.remove('active');
   if(unsubMessages) unsubMessages();
   if(unsubRoomOnline) { unsubRoomOnline(); unsubRoomOnline = null; }
@@ -1737,19 +1759,17 @@ async function sendMediaToChat(file){
   const isImage = file.type.startsWith('image');
   if(!isVideo && !isImage) return alert('نوع الملف غير مدعوم');
   let processedFile = file;
-  if(isImage && file.size > 500 * 1024){
-    try { processedFile = await compressImage(file, 1600, 0.82); } catch(e){}
+  if(isImage){
+    try { processedFile = await compressImage(file, 900, 0.7); } catch(e){}
   }
-  const maxSize = isVideo ? 8 * 1024 * 1024 : 6 * 1024 * 1024;
-  if(processedFile.size > maxSize) return alert(`الملف كبير جداً. الحد الأقصى ${isVideo ? '8' : '6'} ميجابايت`);
-
+  const maxSize = isVideo ? 4 * 1024 * 1024 : 2 * 1024 * 1024;
+  if(processedFile.size > maxSize) return alert(`الملف كبير جداً. الحد الأقصى ${isVideo ? '4' : '2'} ميجابايت`);
   const chatId = currentChatMode === 'room' ? ROOM_ID : getChatId(currentUser.uid, currentChatUser.uid);
   const ab = await processedFile.arrayBuffer();
   let encMedia;
   try { encMedia = await encryptBuffer(ab, chatId); }
   catch(e){ return alert('فشل معالجة الملف'); }
-  if(encMedia.length > 900000) return alert('الملف كبير جداً بعد التشفير. جرب ملفاً أصغر');
-
+  if(encMedia.length > 600000) return alert('الملف كبير جداً بعد التشفير. جرب ملفاً أصغر');
   if(currentChatMode === 'room'){
     await push(ref(db,'rooms/'+ROOM_ID+'/messages'), {
       type: isVideo ? 'video' : 'image',
@@ -1771,24 +1791,6 @@ async function sendMediaToChat(file){
     await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
   }
 }
-
-/* ============ الإيموجي ============ */
-const emojis = ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','😐','😑','😶','😏','😒','🙄','😬','😌','😔','😪','😴','😷','🤒','🤕','🤢','🥵','🥶','😵','🤯','🤠','🥳','😎','🤓','😕','😟','🙁','😮','😯','😲','😳','🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','😤','😡','😠','🤬','😈','💀','💩','🤡','👻','👽','🤖','😺','😸','😹','😻','😼','😽','🙀','😿','😾','❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','💕','💞','💓','💗','💖','💘','💝','👍','👎','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','👇','✋','🤚','🖐','🖖','👋','🤝','🙏','✍️','💪','👀','👁','👄'];
-function buildEmojiPicker(){
-  const p = $('emojiPicker');
-  p.innerHTML = emojis.map(e => `<div class="emoji" data-emoji="${e}">${e}</div>`).join('');
-  p.querySelectorAll('.emoji').forEach(el => {
-    bindTap(el, () => {
-      const inp = $('messageInput');
-      inp.value += el.dataset.emoji;
-      inp.focus();
-      inp.dispatchEvent(new Event('input'));
-    });
-  });
-}
-document.addEventListener('click', e => {
-  if(!e.target.closest('#emojiPicker') && !e.target.closest('#emojiBtn')) $('emojiPicker').classList.remove('show');
-});
 
 /* ============ الصوت ============ */
 let mediaRecorder = null, audioChunks = [], recordingStartTime = 0, recordingTimer = null, isRecording = false;
@@ -1831,30 +1833,19 @@ async function sendAudioMessage(blob){
   const ab = await blob.arrayBuffer();
   const encAudio = await encryptBuffer(ab, chatId);
   if(encAudio.length > 700000){ alert('التسجيل طويل جداً'); return; }
-
   if(currentChatMode === 'room'){
-    const payload = {
+    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), {
       type: 'audio', audio: encAudio, duration, encrypted: true,
       senderId: currentUser.uid,
       senderName: currentUserData.name,
       senderPhoto: currentUserData.photoURL || null,
       timestamp: Date.now()
-    };
-    if(replyingTo && replyingTo.mode === 'room'){
-      payload.replyTo = { id: replyingTo.id, senderId: replyingTo.senderId, text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type };
-      cancelReply();
-    }
-    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), payload);
+    });
   } else {
-    const payload = {
+    await push(ref(db,'chats/'+chatId+'/messages'), {
       type: 'audio', audio: encAudio, duration, encrypted: true,
       senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
-    };
-    if(replyingTo){
-      payload.replyTo = { id: replyingTo.id, senderId: replyingTo.senderId, text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type };
-      cancelReply();
-    }
-    await push(ref(db,'chats/'+chatId+'/messages'), payload);
+    });
     await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
     await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
     const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
@@ -1887,23 +1878,27 @@ document.addEventListener('click', async e => {
   } catch(e){ alert('تعذّر التشغيل'); }
 });
 
-/* ============ الدردشة الجديدة ============ */
+/* ============ الدردشة الجديدة (بحث بالرقم فقط) ============ */
 function openNewChatModal(){
   $('newChatModal').classList.add('active');
-  renderUsersList('');
+  $('usersList').innerHTML = '';
   $('userSearchInput').value = '';
   setTimeout(() => $('userSearchInput').focus(), 100);
 }
 $('userSearchInput').oninput = e => renderUsersList(e.target.value);
 function renderUsersList(q){
   const list = $('usersList');
-  q = q.trim().toLowerCase();
+  q = q.trim();
+  if(!q || q.length < 3){
+    list.innerHTML = '<div class="empty-state" style="padding:20px 10px;">أدخل 3 أرقام على الأقل</div>';
+    return;
+  }
   const users = Object.values(allUsers).filter(u =>
     u.uid !== currentUser.uid &&
-    (!q || (u.name?.toLowerCase().includes(q) || (u.phone && u.phone.includes(q))))
+    u.phone && u.phone.includes(q)
   );
   if(!users.length){
-    list.innerHTML = `<div class="empty-state" style="padding:20px 10px;">لا يوجد مستخدمون مطابقون</div>`;
+    list.innerHTML = '<div class="empty-state" style="padding:20px 10px;">لا يوجد مستخدم بهذا الرقم</div>';
     return;
   }
   list.innerHTML = users.map(u => {
@@ -1913,7 +1908,7 @@ function renderUsersList(q){
       <div class="avatar">${avatar}</div>
       <div class="details">
         <div class="name">${escapeHtml(u.name || 'مستخدم')}</div>
-        <div class="email">${escapeHtml(u.phone || u.email || '')}</div>
+        <div class="phone">${escapeHtml(u.phone || '')}</div>
       </div>
     </div>`;
   }).join('');
@@ -1947,15 +1942,9 @@ function renderStories(stories){
     const isMine = s.uid === currentUser.uid;
     const del = isMine ? `<div class="delete-story" data-del="${s.id}"><i class="fas fa-trash"></i></div>` : '';
     const badge = isMine ? '<div class="my-story-badge">أنا</div>' : '';
-    return `<div class="story-card" data-story-id="${s.id}" style="${bg}">${del}${badge}
-      <div class="story-avatar">${avatar}</div>
-      <div class="story-name">${escapeHtml(s.name)}</div>
-    </div>`;
+    return `<div class="story-card" data-story-id="${s.id}" style="${bg}">${del}${badge}<div class="story-avatar">${avatar}</div><div class="story-name">${escapeHtml(s.name)}</div></div>`;
   }).join('');
-  grid.innerHTML = `<div class="story-card add" id="addStoryBtn">
-    <div class="plus">＋</div>
-    <div style="font-size:11px;margin-top:4px;">إضافة</div>
-  </div>${html}`;
+  grid.innerHTML = `<div class="story-card add" id="addStoryBtn"><div class="plus">＋</div><div style="font-size:10.5px;margin-top:3px;">إضافة</div></div>${html}`;
   bindTap($('addStoryBtn'), () => $('addStoryModal').classList.add('active'));
   grid.querySelectorAll('.story-card[data-story-id]').forEach(card => {
     bindTap(card, () => viewStory(card.dataset.storyId, stories));
@@ -1975,12 +1964,12 @@ async function publishStory(){
   let media = null, mediaType = null;
   if(file){
     let processedFile = file;
-    if(file.type.startsWith('image') && file.size > 400 * 1024){
-      try { processedFile = await compressImage(file, 1400, 0.8); } catch(e){}
+    if(file.type.startsWith('image')){
+      try { processedFile = await compressImage(file, 900, 0.7); } catch(e){}
     }
-    if(processedFile.size > 6 * 1024 * 1024) return alert('الملف كبير جداً (6MB max)');
+    if(processedFile.size > 3 * 1024 * 1024) return alert('الملف كبير جداً (3MB max)');
     media = await fileToBase64(processedFile);
-    if(media.length > 900000) return alert('الملف كبير جداً بعد الترميز');
+    if(media.length > 600000) return alert('الملف كبير جداً بعد الترميز');
     mediaType = processedFile.type.startsWith('video') ? 'video' : 'image';
   }
   await push(ref(db,'stories'), {
@@ -2057,18 +2046,7 @@ function renderCallItem(c){
   const icon = c.type === 'video' ? 'fa-video' : 'fa-phone';
   const dirIcon = c.direction === 'out' ? 'fa-arrow-up out' : (c.missed ? 'fa-arrow-down missed' : 'fa-arrow-down in');
   const dur = c.duration ? ` • ${formatDuration(c.duration)}` : '';
-  return `<div class="call-item">
-    <div class="avatar">${initial}</div>
-    <div class="info">
-      <div class="name">${escapeHtml(name)}</div>
-      <div class="meta">
-        <i class="fas ${dirIcon}"></i>
-        <i class="fas ${icon}"></i>
-        <span>${formatTimeShort(new Date(c.timestamp))}${dur}</span>
-      </div>
-    </div>
-    <button class="call-back-btn"><i class="fas fa-phone"></i></button>
-  </div>`;
+  return `<div class="call-item"><div class="avatar">${initial}</div><div class="info"><div class="name">${escapeHtml(name)}</div><div class="meta"><i class="fas ${dirIcon}"></i><i class="fas ${icon}"></i><span>${formatTimeShort(new Date(c.timestamp))}${dur}</span></div></div><button class="call-back-btn"><i class="fas fa-phone"></i></button></div>`;
 }
 
 /* ============ WebRTC ============ */
@@ -2338,8 +2316,8 @@ function escapeHtml(t){
 applyTheme();
 document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === appLanguage));
 document.documentElement.dir = appLanguage === 'ar' ? 'rtl' : 'ltr';
-buildEmojiPicker();
-console.log('✅ Chat Pro loaded - Room "يزيد" enabled');
+buildEmojiKeyboard();
+console.log('✅ Chat Pro loaded');
 </script>
 </body>
-  </html>
+</html>

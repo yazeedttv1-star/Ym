@@ -4,16 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a1014">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Chat Pro">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Chat Pro">
-<meta name="description" content="تطبيق دردشة احترافي - رسائل، مكالمات، استوري">
 <title>Chat Pro</title>
-<link rel="manifest" id="appManifest">
-<link rel="apple-touch-icon" id="appleIcon">
-<link rel="icon" id="favIcon">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -73,7 +64,7 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .app-header .logo-title{flex:1;font-size:16px;font-weight:700;color:#fff;text-align:right;display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .app-header .logo-title .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
 
-.dropdown-menu{position:absolute;top:50px;left:12px;background:var(--bg-panel);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px 0;min-width:210px;display:none;z-index:100;color:var(--text);border:1px solid var(--border)}
+.dropdown-menu{position:absolute;top:50px;left:12px;background:var(--bg-panel);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px 0;min-width:200px;display:none;z-index:100;color:var(--text);border:1px solid var(--border)}
 .dropdown-menu.show{display:block;animation:dropIn .2s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes dropIn{from{opacity:0;transform:translateY(-10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .dropdown-menu button{display:flex;width:100%;padding:11px 15px;background:transparent;border:none;text-align:right;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text);align-items:center;gap:10px}
@@ -98,6 +89,7 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .chat-item .avatar{width:46px;height:46px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px;flex-shrink:0;overflow:hidden;position:relative}
 .chat-item .avatar img{width:100%;height:100%;object-fit:cover}
 .chat-item .avatar .online-dot{position:absolute;bottom:1px;left:1px;width:11px;height:11px;background:var(--green-light);border-radius:50%;border:2px solid var(--bg-panel)}
+.chat-item .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54)}
 .chat-item .details{flex:1;min-width:0}
 .chat-item .details .name-row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:2px}
 .chat-item .details .name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -108,6 +100,8 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .chat-item .meta{display:flex;flex-direction:column;align-items:flex-start;gap:5px;flex-shrink:0}
 .chat-item .meta .badge{background:var(--green-light);color:#fff;font-size:10.5px;min-width:19px;height:19px;padding:0 6px;border-radius:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .chat-item .meta .mute-icon{font-size:11px;color:var(--text-muted)}
+.chat-item.group-chat{background:rgba(0,168,132,.04)}
+[data-theme="dark"] .chat-item.group-chat{background:rgba(0,168,132,.06)}
 .empty-state{padding:40px 20px;text-align:center;color:var(--text-muted);font-size:13px}
 .empty-state .big-icon{font-size:44px;opacity:.3;margin-bottom:12px}
 
@@ -148,6 +142,7 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .chat-view .header .back-btn{background:transparent;border:none;color:#fff;font-size:17px;cursor:pointer;padding:6px;border-radius:50%}
 .chat-view .header .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0;cursor:pointer}
 .chat-view .header .avatar img{width:100%;height:100%;object-fit:cover}
+.chat-view .header .avatar.group-avatar{background:linear-gradient(135deg,#128c7e,#075e54)}
 .chat-view .header .info{flex:1;min-width:0;cursor:pointer}
 .chat-view .header .info .name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chat-view .header .info .status{font-size:10.5px;opacity:.85;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -173,6 +168,8 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 @keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .message-row.mine{justify-content:flex-start}
 .message-row.other{justify-content:flex-end}
+.message-row.group .sender-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#25d366,#00a884);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0;align-self:flex-end;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-left:4px}
+.message-row.group .sender-avatar img{width:100%;height:100%;object-fit:cover}
 .message{max-width:80%;padding:7px 10px 5px;border-radius:12px;font-size:13.5px;word-wrap:break-word;box-shadow:var(--shadow-sm);line-height:1.4;position:relative;cursor:pointer;user-select:none;transition:transform .15s,background .2s,box-shadow .2s}
 .message:active{transform:scale(.97)}
 .message.mine{background:var(--green-pale);border-top-right-radius:3px}
@@ -180,6 +177,8 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .message.other{background:var(--bg-panel);border-top-left-radius:3px}
 [data-theme="dark"] .message.other{background:#202c33;color:#e9edef}
 .message.selected{background:rgba(0,168,132,.35) !important;box-shadow:0 0 0 2px var(--green)}
+.message .sender-name{font-size:12px;font-weight:700;color:var(--green);margin-bottom:3px;display:block}
+[data-theme="dark"] .message .sender-name{color:var(--green-light)}
 .message .msg-meta{font-size:10px;color:var(--text-muted);margin-top:3px;display:flex;justify-content:flex-start;align-items:center;gap:4px}
 .message .check{font-size:11px;color:var(--green-light)}
 .message .check.read{color:var(--blue)}
@@ -307,17 +306,6 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
 .call-screen .video-overlay .call-name{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:18px}
 .call-screen .video-overlay .call-timer{display:block;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);font-size:12.5px;margin-top:5px}
 
-/* PWA Install Banner */
-.install-banner{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-panel);padding:12px 16px;border-radius:14px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;z-index:400;transition:transform .4s cubic-bezier(.2,.9,.3,1.2);border:1px solid var(--border);max-width:calc(100% - 24px);width:380px}
-.install-banner.show{transform:translateX(-50%) translateY(0)}
-.install-banner .icon{width:44px;height:44px;background:linear-gradient(135deg,#25d366,#00a884);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
-.install-banner .text{flex:1;min-width:0}
-.install-banner .text .title{font-weight:700;font-size:13.5px}
-.install-banner .text .desc{font-size:11.5px;color:var(--text-muted);margin-top:2px}
-.install-banner button{padding:8px 14px;border-radius:9px;border:none;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0}
-.install-banner .install-btn{background:linear-gradient(135deg,#25d366,#00a884);color:#fff}
-.install-banner .close-install{background:transparent;color:var(--text-muted);font-size:16px;padding:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
-
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:rgba(134,150,160,.4);border-radius:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -361,7 +349,6 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
       <button data-action="settings"><i class="fas fa-cog"></i> الإعدادات</button>
       <hr>
       <button data-action="theme"><i class="fas fa-moon"></i> <span id="themeBtnText">الوضع الفاتح</span></button>
-      <button data-action="install"><i class="fas fa-download"></i> تثبيت التطبيق</button>
       <button data-action="logout"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
     </div>
   </div>
@@ -550,17 +537,6 @@ input,textarea{touch-action:manipulation;-webkit-user-select:text;user-select:te
   </div>
 </div>
 
-<!-- شريط التثبيت -->
-<div class="install-banner" id="installBanner">
-  <div class="icon">📱</div>
-  <div class="text">
-    <div class="title">تثبيت Chat Pro</div>
-    <div class="desc">ثبّت التطبيق للوصول السريع</div>
-  </div>
-  <button class="install-btn" id="installBtn">تثبيت</button>
-  <button class="close-install" id="closeInstall"><i class="fas fa-times"></i></button>
-</div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -582,6 +558,10 @@ const db = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 const $ = id => document.getElementById(id);
 
+/* ============ إعدادات غرفة يزيد ============ */
+const ROOM_ID = 'yezid';
+const ROOM_NAME = 'يزيد';
+
 /* ============ bindTap موحّد ============ */
 function bindTap(el, handler){
   if(!el || el.dataset.tapBound) return;
@@ -601,6 +581,7 @@ function bindTap(el, handler){
 /* ============ الحالة ============ */
 let isSignUp = false, currentUser = null, currentUserData = null, currentChatUser = null, allUsers = {};
 let unsubMessages = null, unsubChats = null, unsubStories = null, unsubCalls = null;
+let unsubRoomMessages = null, unsubRoomOnline = null, unsubRoomTyping = null;
 let appTheme = localStorage.getItem('app_theme') || 'dark';
 let appLanguage = localStorage.getItem('app_lang') || 'ar';
 let pendingAvatarBase64 = null;
@@ -612,14 +593,21 @@ let replyingTo = null;
 let currentContextMsgId = null;
 let currentContextMsgData = null;
 
+/* بيانات الغرفة */
+let roomMessages = {};
+let roomOnlineUsers = {};
+let roomTypingUsers = {};
+let currentChatMode = null; // 'private' أو 'room'
+let roomSelectedMessages = new Set();
+let roomIsSelectionMode = false;
+let roomReplyingTo = null;
+
 /* ============ الثيم ============ */
 function applyTheme(){
   document.documentElement.setAttribute('data-theme', appTheme);
   document.querySelectorAll('.theme-option').forEach(el => el.classList.toggle('active', el.dataset.theme === appTheme));
   const txt = appTheme === 'dark' ? 'الوضع الفاتح' : 'الوضع الداكن';
   if($('themeBtnText')) $('themeBtnText').textContent = txt;
-  const metaTheme = document.querySelector('meta[name="theme-color"]');
-  if(metaTheme) metaTheme.content = appTheme === 'dark' ? '#202c33' : '#008069';
 }
 function toggleTheme(){
   appTheme = appTheme === 'dark' ? 'light' : 'dark';
@@ -723,7 +711,7 @@ onAuthStateChanged(auth, async user => {
     currentUser = null; currentUserData = null;
     $('app').classList.remove('active');
     $('authScreen').classList.remove('hidden');
-    [unsubChats, unsubStories, unsubCalls].forEach(u => u && u());
+    [unsubChats, unsubStories, unsubCalls, unsubRoomMessages, unsubRoomOnline, unsubRoomTyping].forEach(u => u && u());
   }
 });
 
@@ -777,8 +765,6 @@ function bindAllButtons(){
   bindTap($('storyHeaderClick'), () => openStoryUserChat());
   bindTap($('chatInfo'), () => viewChatUserProfile());
   bindTap($('chatAvatar'), () => viewChatUserProfile());
-  bindTap($('installBtn'), () => installPWA());
-  bindTap($('closeInstall'), () => hideInstallBanner());
 
   document.querySelectorAll('#mainMenu button[data-action]').forEach(btn => {
     bindTap(btn, () => {
@@ -788,7 +774,6 @@ function bindAllButtons(){
       else if(action === 'readall') markAllAsRead();
       else if(action === 'settings') $('settingsModal').classList.add('active');
       else if(action === 'theme') toggleTheme();
-      else if(action === 'install') installPWA();
       else if(action === 'logout') logout();
     });
   });
@@ -886,7 +871,7 @@ function openCameraForChat(){
   input.onchange = async e => {
     const file = e.target.files[0];
     if(!file) return;
-    if(currentChatUser) await sendMediaToChat(file);
+    if(currentChatUser || currentChatMode === 'room') await sendMediaToChat(file);
     else alert('افتح محادثة أولاً');
   };
   input.click();
@@ -897,11 +882,19 @@ function buildSections(){
   const html = `
     <div class="section active" data-section="chats" id="chatsSection">
       <div class="chat-list" id="chatsList">
-        <div class="empty-state">
-          <div class="big-icon"><i class="fas fa-comments"></i></div>
-          <div>لا توجد محادثات بعد</div>
-          <div style="font-size:12px;margin-top:8px;opacity:.8;">اضغط ✏️ لبدء محادثة</div>
+        <!-- غرفة يزيد تظهر دائماً في الأعلى -->
+        <div class="chat-item group-chat" id="yezidRoomItem">
+          <div class="avatar group-avatar">👥</div>
+          <div class="details">
+            <div class="name-row">
+              <span class="name">${ROOM_NAME}</span>
+              <span class="time" id="roomTime"></span>
+            </div>
+            <div class="last-msg" id="roomLastMsg">اضغط للدخول إلى الغرفة</div>
+          </div>
+          <div class="meta"><span class="badge" id="roomUnreadBadge" style="display:none;">0</span></div>
         </div>
+        <div id="privateChatsContainer"></div>
       </div>
     </div>
     <div class="section" data-section="stories">
@@ -912,6 +905,7 @@ function buildSections(){
     </div>`;
   $('sections').innerHTML = html;
   $('searchInput').oninput = e => filterChats(e.target.value);
+  bindTap($('yezidRoomItem'), () => openRoomChat());
 }
 function switchTab(tab){
   document.querySelectorAll('.nav-btn').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
@@ -921,7 +915,7 @@ function switchTab(tab){
 function filterChats(q){
   q = q.trim().toLowerCase();
   document.querySelectorAll('.chat-item').forEach(el => {
-    el.style.display = (el.dataset.name||'').toLowerCase().includes(q) || (el.dataset.phone||'').includes(q) ? 'flex' : 'none';
+    el.style.display = (el.dataset.name||'').toLowerCase().includes(q) || (el.dataset.phone||'').includes(q) || (el.id === 'yezidRoomItem' && 'يزيد'.includes(q)) ? 'flex' : 'none';
   });
 }
 
@@ -1008,19 +1002,179 @@ async function compressImage(file, maxSize = 1600, quality = 0.85){
   });
 }
 
-/* ============ المحادثات ============ */
+/* ============ غرفة يزيد ============ */
+function loadRoomData(){
+  // الاستماع لآخر رسالة في الغرفة
+  if(unsubRoomMessages) unsubRoomMessages();
+  const roomMessagesRef = query(ref(db,'rooms/'+ROOM_ID+'/messages'), limitToLast(1));
+  unsubRoomMessages = onValue(roomMessagesRef, async snap => {
+    const val = snap.val();
+    if(!val){
+      $('roomLastMsg').textContent = 'اضغط للدخول إلى الغرفة';
+      $('roomTime').textContent = '';
+      return;
+    }
+    const keys = Object.keys(val);
+    const lastMsg = val[keys[keys.length - 1]];
+    if(lastMsg){
+      let text = '📎 مرفق';
+      if(lastMsg.type === 'audio') text = '🎤 رسالة صوتية';
+      else if(lastMsg.type === 'image') text = '📷 صورة';
+      else if(lastMsg.type === 'video') text = '🎥 فيديو';
+      else if(lastMsg.text){
+        try {
+          const decrypted = await decryptText(lastMsg.text, ROOM_ID);
+          text = `${lastMsg.senderName}: ${decrypted}`;
+        } catch(e){ text = `${lastMsg.senderName}: [رسالة]`; }
+      }
+      $('roomLastMsg').textContent = text.substring(0, 50);
+      $('roomTime').textContent = formatTimeShort(new Date(lastMsg.timestamp));
+    }
+  });
+}
+
+function openRoomChat(){
+  currentChatMode = 'room';
+  currentChatUser = null;
+  $('chatName').textContent = ROOM_NAME;
+  $('chatAvatar').innerHTML = '👥';
+  $('chatAvatar').classList.add('group-avatar');
+  $('chatStatus').textContent = '...';
+  $('chatView').classList.add('active');
+
+  // إخفاء أزرار المكالمة في الغرفة (لا معنى لها)
+  $('startVoiceCall').style.display = 'none';
+  $('startVideoCall').style.display = 'none';
+
+  // الاستماع للأعضاء المتصلين
+  if(unsubRoomOnline) unsubRoomOnline();
+  unsubRoomOnline = onValue(ref(db,'onlineUsers'), snap => {
+    roomOnlineUsers = snap.val() || {};
+    const count = Object.keys(roomOnlineUsers).length;
+    $('chatStatus').textContent = `${count} متصل الآن`;
+    $('chatStatus').classList.add('online');
+  });
+
+  loadRoomMessages();
+  setTimeout(() => $('messageInput').focus(), 300);
+}
+
+function loadRoomMessages(){
+  if(unsubMessages) unsubMessages();
+  const area = $('messagesArea');
+  area.innerHTML = '';
+  roomMessages = {};
+  roomSelectedMessages.clear();
+  exitSelectionMode();
+
+  unsubMessages = onChildAdded(ref(db,'rooms/'+ROOM_ID+'/messages'), async snap => {
+    const data = snap.val();
+    if(!data) return;
+    roomMessages[snap.key] = data;
+    if(data.deletedFor && data.deletedFor[currentUser.uid]) return;
+    await renderRoomMessage(snap.key, data, area);
+    area.scrollTop = area.scrollHeight;
+  });
+}
+
+async function renderRoomMessage(key, data, area){
+  const existing = area.querySelector(`[data-msg-id="${key}"]`);
+  if(existing) existing.remove();
+
+  const isMine = data.senderId === currentUser.uid;
+  const msgDate = new Date(data.timestamp);
+  const dateStr = formatDate(msgDate);
+  const lastChild = area.lastElementChild;
+  if(!lastChild || !lastChild.classList.contains('date-separator') || lastChild.textContent !== dateStr){
+    const sep = document.createElement('div');
+    sep.className = 'date-separator';
+    sep.textContent = dateStr;
+    area.appendChild(sep);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'message-row group ' + (isMine ? 'mine' : 'other');
+
+  // أفاتار المرسل
+  if(!isMine){
+    const senderAvatar = document.createElement('div');
+    senderAvatar.className = 'sender-avatar';
+    if(data.senderPhoto){
+      senderAvatar.innerHTML = `<img src="${data.senderPhoto}">`;
+    } else {
+      senderAvatar.textContent = (data.senderName || 'U').charAt(0).toUpperCase();
+    }
+    row.appendChild(senderAvatar);
+  }
+
+  const msg = document.createElement('div');
+  msg.className = 'message ' + (isMine ? 'mine' : 'other');
+  msg.dataset.msgId = key;
+
+  if(data.deletedForAll){
+    msg.innerHTML = `<div style="font-style:italic;opacity:.6;"><i class="fas fa-ban"></i> تم حذف هذه الرسالة</div>
+      <div class="msg-meta"><span>${formatTime(msgDate)}</span></div>`;
+  } else {
+    let senderNameHtml = '';
+    if(!isMine){
+      senderNameHtml = `<span class="sender-name">${escapeHtml(data.senderName || 'مستخدم')}</span>`;
+    }
+    const encBadge = data.encrypted ? '<span class="encrypted-badge"><i class="fas fa-lock"></i></span>' : '';
+    const editedTag = data.edited ? '<span class="edited-tag">(تم التعديل)</span>' : '';
+    const check = isMine ? `<span class="check"><i class="fas fa-check"></i></span>` : '';
+
+    if(data.type === 'audio' && data.audio){
+      msg.innerHTML = senderNameHtml + `
+        <div class="audio-message">
+          <button class="audio-play-btn" data-audio="${data.audio}"><i class="fas fa-play"></i></button>
+          <div class="audio-progress"><div class="fill"></div></div>
+          <div class="duration">${formatDuration(data.duration||0)}</div>
+        </div>
+        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+    } else if(data.type === 'image' && data.media){
+      try {
+        const buf = await decryptBuffer(data.media, ROOM_ID);
+        const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'image/jpeg'}));
+        msg.innerHTML = senderNameHtml + `<img class="msg-image" src="${url}">
+          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){
+        msg.innerHTML = senderNameHtml + `<div>[صورة]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
+      }
+    } else if(data.type === 'video' && data.media){
+      try {
+        const buf = await decryptBuffer(data.media, ROOM_ID);
+        const url = URL.createObjectURL(new Blob([buf], {type: data.mime || 'video/mp4'}));
+        msg.innerHTML = senderNameHtml + `<video class="msg-video" src="${url}" controls></video>
+          <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
+      } catch(e){
+        msg.innerHTML = senderNameHtml + `<div>[فيديو]</div><div class="msg-meta"><span>${formatTime(msgDate)}</span>${check}</div>`;
+      }
+    } else {
+      let text = data.text || '';
+      if(data.encrypted && text) text = await decryptText(text, ROOM_ID);
+      msg.innerHTML = senderNameHtml + `<span>${escapeHtml(text)}</span>
+        <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${editedTag}${check}</div>`;
+    }
+  }
+  row.appendChild(msg);
+  area.appendChild(row);
+  attachLongPress(msg, key, 'room');
+}
+
+/* ============ المحادثات الخاصة ============ */
 function loadMyChats(){
   if(unsubChats) unsubChats();
+  loadRoomData(); // تحميل بيانات غرفة يزيد
   unsubChats = onValue(ref(db,'userChats/'+currentUser.uid), snap => {
     renderChats(snap.val() || {});
   });
 }
 async function renderChats(chats){
-  const list = $('chatsList');
-  if(!list) return;
+  const container = $('privateChatsContainer');
+  if(!container) return;
   const ids = Object.keys(chats);
   if(!ids.length){
-    list.innerHTML = `<div class="empty-state"><div class="big-icon"><i class="fas fa-comments"></i></div><div>لا توجد محادثات بعد</div><div style="font-size:12px;margin-top:8px;opacity:.8;">اضغط ✏️ لبدء محادثة</div></div>`;
+    container.innerHTML = '';
     return;
   }
   const onlineSnap = await get(ref(db,'onlineUsers'));
@@ -1073,8 +1227,8 @@ async function renderChats(chats){
       <div class="meta">${muteIcon}${badge}</div>
     </div>`;
   }));
-  list.innerHTML = html.join('');
-  document.querySelectorAll('.chat-item').forEach(item => {
+  container.innerHTML = html.join('');
+  document.querySelectorAll('#privateChatsContainer .chat-item').forEach(item => {
     bindTap(item, () => openChat(item.dataset.uid, item.dataset.name, item.dataset.photo));
   });
 }
@@ -1082,12 +1236,19 @@ async function renderChats(chats){
 function getChatId(a,b){return [a,b].sort().join('_')}
 
 function openChat(uid, name, photo){
+  currentChatMode = 'private';
   currentChatUser = {uid, name, photoURL: photo};
   $('chatName').textContent = name;
   const initial = name.charAt(0).toUpperCase();
   $('chatAvatar').innerHTML = photo ? `<img src="${photo}">` : initial;
+  $('chatAvatar').classList.remove('group-avatar');
   $('chatStatus').textContent = 'غير متصل';
   $('chatView').classList.add('active');
+
+  // إظهار أزرار المكالمة
+  $('startVoiceCall').style.display = 'flex';
+  $('startVideoCall').style.display = 'flex';
+
   onValue(ref(db,'onlineUsers/'+uid), s => {
     if(s.exists()){
       $('chatStatus').textContent = 'متصل الآن';
@@ -1115,6 +1276,17 @@ async function toggleMuteChat(){
 }
 
 async function clearChatHistory(){
+  if(currentChatMode === 'room'){
+    if(!confirm('مسح كل رسائل الغرفة من جهازك فقط؟')) return;
+    const updates = {};
+    for(const id of Object.keys(roomMessages)){
+      updates[`rooms/${ROOM_ID}/messages/${id}/deletedFor/${currentUser.uid}`] = true;
+    }
+    await update(ref(db), updates);
+    $('messagesArea').innerHTML = '';
+    roomMessages = {};
+    return;
+  }
   if(!currentChatUser) return;
   if(!confirm('مسح كل الرسائل في هذه المحادثة؟')) return;
   const chatId = getChatId(currentUser.uid, currentChatUser.uid);
@@ -1122,13 +1294,18 @@ async function clearChatHistory(){
 }
 
 function viewChatUserProfile(){
+  if(currentChatMode === 'room'){
+    const count = Object.keys(roomOnlineUsers).length;
+    alert(`غرفة ${ROOM_NAME}\nالأعضاء المتصلون: ${count}`);
+    return;
+  }
   if(!currentChatUser) return;
   const u = allUsers[currentChatUser.uid];
   if(!u) return;
   alert(`الاسم: ${u.name}\nالهاتف: ${u.phone || 'غير محدد'}\nالبريد: ${u.email || ''}`);
 }
 
-/* ============ الرسائل ============ */
+/* ============ الرسائل الخاصة ============ */
 function loadChatMessages(otherUid){
   if(unsubMessages) unsubMessages();
   const chatId = getChatId(currentUser.uid, otherUid);
@@ -1219,14 +1396,14 @@ async function renderMessage(key, data, area, chatId){
   }
   row.appendChild(msg);
   area.appendChild(row);
-  attachLongPress(msg, key);
+  attachLongPress(msg, key, 'private');
   if(!isMine && currentChatUser){
     update(ref(db,'chats/'+chatId+'/messages/'+key+'/readBy'), {[currentUser.uid]: true});
   }
 }
 
 /* ============ الضغط الطويل ============ */
-function attachLongPress(el, msgId){
+function attachLongPress(el, msgId, mode){
   if(!el || el.dataset.lpBound) return;
   el.dataset.lpBound = '1';
   let startX = 0, startY = 0, moved = false, fired = false, timer = null;
@@ -1236,8 +1413,8 @@ function attachLongPress(el, msgId){
     cancel();
     timer = setTimeout(() => {
       fired = true; timer = null;
-      if(isSelectionMode) toggleMessageSelection(msgId);
-      else showContextMenu(msgId, x, y);
+      if(isSelectionMode) toggleMessageSelection(msgId, mode);
+      else showContextMenu(msgId, x, y, mode);
       if(navigator.vibrate) navigator.vibrate(30);
     }, 500);
   };
@@ -1247,7 +1424,7 @@ function attachLongPress(el, msgId){
   const end = () => {
     cancel();
     if(fired || moved) return;
-    if(isSelectionMode) toggleMessageSelection(msgId);
+    if(isSelectionMode) toggleMessageSelection(msgId, mode);
   };
   el.addEventListener('touchstart', e => { const t = e.touches[0]; start(t.clientX, t.clientY); }, {passive: true});
   el.addEventListener('touchmove', e => { const t = e.touches[0]; move(t.clientX, t.clientY); }, {passive: true});
@@ -1261,11 +1438,12 @@ function attachLongPress(el, msgId){
 }
 
 /* ============ قائمة السياق ============ */
-function showContextMenu(msgId, x, y){
+function showContextMenu(msgId, x, y, mode){
   currentContextMsgId = msgId;
-  const data = currentMessages[msgId];
+  const data = mode === 'room' ? roomMessages[msgId] : currentMessages[msgId];
   if(!data) return;
   currentContextMsgData = data;
+  currentContextMsgData._mode = mode;
   const isMine = data.senderId === currentUser.uid;
   const canEdit = isMine && data.text && !data.deletedForAll && (Date.now() - data.timestamp < 15 * 60 * 1000);
   const canDeleteAll = isMine && !data.deletedForAll;
@@ -1308,11 +1486,14 @@ async function handleContextAction(action){
   if(!currentContextMsgId || !currentContextMsgData) return;
   const msgId = currentContextMsgId;
   const data = currentContextMsgData;
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  const mode = data._mode || 'private';
+  const chatId = mode === 'room' ? ROOM_ID : getChatId(currentUser.uid, currentChatUser.uid);
+  const messagesPath = mode === 'room' ? `rooms/${ROOM_ID}/messages` : `chats/${chatId}/messages`;
+
   if(action === 'reply'){
-    replyingTo = { id: msgId, senderId: data.senderId, text: data.text || '', encrypted: data.encrypted, type: data.type };
+    replyingTo = { id: msgId, senderId: data.senderId, text: data.text || '', encrypted: data.encrypted, type: data.type, mode };
     $('replyBar').classList.add('show');
-    $('replyName').textContent = data.senderId === currentUser.uid ? 'أنت' : currentChatUser.name;
+    $('replyName').textContent = data.senderId === currentUser.uid ? 'أنت' : (mode === 'room' ? (data.senderName || 'مستخدم') : currentChatUser.name);
     let preview = '📎 مرفق';
     if(data.type === 'audio') preview = '🎤 رسالة صوتية';
     else if(data.type === 'image') preview = '📷 صورة';
@@ -1337,20 +1518,20 @@ async function handleContextAction(action){
       const newText = $('editMsgInput').value.trim();
       if(!newText) return;
       const enc = await encryptText(newText, chatId);
-      await update(ref(db,'chats/'+chatId+'/messages/'+msgId), {
+      await update(ref(db, messagesPath+'/'+msgId), {
         text: enc, edited: true, editedAt: Date.now()
       });
       $('editMsgModal').classList.remove('active');
     });
   } else if(action === 'select'){
     enterSelectionMode();
-    toggleMessageSelection(msgId);
+    toggleMessageSelection(msgId, mode);
   } else if(action === 'deleteMe'){
-    await update(ref(db,'chats/'+chatId+'/messages/'+msgId+'/deletedFor'), {[currentUser.uid]: true});
+    await update(ref(db, messagesPath+'/'+msgId+'/deletedFor'), {[currentUser.uid]: true});
     const el = document.querySelector(`[data-msg-id="${msgId}"]`);
     if(el) el.remove();
   } else if(action === 'deleteAll'){
-    await update(ref(db,'chats/'+chatId+'/messages/'+msgId), {
+    await update(ref(db, messagesPath+'/'+msgId), {
       deletedForAll: true, text: null, media: null, audio: null
     });
   }
@@ -1362,45 +1543,69 @@ async function handleContextAction(action){
 function enterSelectionMode(){
   isSelectionMode = true;
   selectedMessages.clear();
+  roomSelectedMessages.clear();
   $('selectionBar').classList.add('show');
   updateSelectionUI();
 }
 function exitSelectionMode(){
   isSelectionMode = false;
   selectedMessages.clear();
+  roomSelectedMessages.clear();
   $('selectionBar').classList.remove('show');
   document.querySelectorAll('.message.selected').forEach(m => m.classList.remove('selected'));
 }
-function toggleMessageSelection(msgId){
-  if(selectedMessages.has(msgId)) selectedMessages.delete(msgId);
-  else selectedMessages.add(msgId);
+function toggleMessageSelection(msgId, mode){
+  const set = mode === 'room' ? roomSelectedMessages : selectedMessages;
+  if(set.has(msgId)) set.delete(msgId);
+  else set.add(msgId);
   const el = document.querySelector(`.message[data-msg-id="${msgId}"]`);
-  if(el) el.classList.toggle('selected', selectedMessages.has(msgId));
+  if(el) el.classList.toggle('selected', set.has(msgId));
   updateSelectionUI();
 }
 function updateSelectionUI(){
-  $('selCount').textContent = `${selectedMessages.size} محدد`;
-  if(selectedMessages.size === 0) exitSelectionMode();
+  const total = selectedMessages.size + roomSelectedMessages.size;
+  $('selCount').textContent = `${total} محدد`;
+  if(total === 0) exitSelectionMode();
 }
 async function deleteSelected(){
-  if(selectedMessages.size === 0) return;
-  if(!confirm(`حذف ${selectedMessages.size} رسالة للجميع؟`)) return;
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  const total = selectedMessages.size + roomSelectedMessages.size;
+  if(total === 0) return;
+  if(!confirm(`حذف ${total} رسالة للجميع؟`)) return;
   const updates = {};
-  for(const id of selectedMessages){
-    const data = currentMessages[id];
-    if(!data) continue;
-    if(data.senderId === currentUser.uid){
-      updates[`chats/${chatId}/messages/${id}/deletedForAll`] = true;
-      updates[`chats/${chatId}/messages/${id}/text`] = null;
-      updates[`chats/${chatId}/messages/${id}/media`] = null;
-      updates[`chats/${chatId}/messages/${id}/audio`] = null;
-    } else {
-      updates[`chats/${chatId}/messages/${id}/deletedFor/${currentUser.uid}`] = true;
+  // المحادثة الخاصة
+  if(selectedMessages.size && currentChatUser){
+    const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+    for(const id of selectedMessages){
+      const data = currentMessages[id];
+      if(!data) continue;
+      if(data.senderId === currentUser.uid){
+        updates[`chats/${chatId}/messages/${id}/deletedForAll`] = true;
+        updates[`chats/${chatId}/messages/${id}/text`] = null;
+        updates[`chats/${chatId}/messages/${id}/media`] = null;
+        updates[`chats/${chatId}/messages/${id}/audio`] = null;
+      } else {
+        updates[`chats/${chatId}/messages/${id}/deletedFor/${currentUser.uid}`] = true;
+      }
+    }
+  }
+  // الغرفة
+  if(roomSelectedMessages.size){
+    for(const id of roomSelectedMessages){
+      const data = roomMessages[id];
+      if(!data) continue;
+      if(data.senderId === currentUser.uid){
+        updates[`rooms/${ROOM_ID}/messages/${id}/deletedForAll`] = true;
+        updates[`rooms/${ROOM_ID}/messages/${id}/text`] = null;
+        updates[`rooms/${ROOM_ID}/messages/${id}/media`] = null;
+        updates[`rooms/${ROOM_ID}/messages/${id}/audio`] = null;
+      } else {
+        updates[`rooms/${ROOM_ID}/messages/${id}/deletedFor/${currentUser.uid}`] = true;
+      }
     }
   }
   await update(ref(db), updates);
-  loadChatMessages(currentChatUser.uid);
+  if(currentChatMode === 'room') loadRoomMessages();
+  else if(currentChatUser) loadChatMessages(currentChatUser.uid);
 }
 async function copySelected(){
   const texts = [];
@@ -1411,6 +1616,15 @@ async function copySelected(){
         const chatId = getChatId(currentUser.uid, currentChatUser.uid);
         const t = data.encrypted ? await decryptText(data.text, chatId) : data.text;
         texts.push(t);
+      } catch(e){}
+    }
+  }
+  for(const id of roomSelectedMessages){
+    const data = roomMessages[id];
+    if(data && data.text){
+      try {
+        const t = data.encrypted ? await decryptText(data.text, ROOM_ID) : data.text;
+        texts.push(`${data.senderName}: ${t}`);
       } catch(e){}
     }
   }
@@ -1433,28 +1647,61 @@ $('messageInput').addEventListener('input', e => {
   const hasText = e.target.value.trim().length > 0;
   $('sendBtn').classList.toggle('show', hasText);
   $('micBtn').classList.toggle('hide', hasText);
+  // مؤشر كتابة في الغرفة
+  if(currentChatMode === 'room' && hasText && currentUserData){
+    set(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid), {
+      name: currentUserData.name,
+      at: Date.now()
+    });
+    clearTimeout(window._roomTypingTimeout);
+    window._roomTypingTimeout = setTimeout(() => {
+      remove(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid));
+    }, 2500);
+  }
 });
+
 async function sendMessage(){
-  if(!currentUser || !currentChatUser) return;
+  if(!currentUser || !currentUserData) return;
   const text = $('messageInput').value.trim();
   if(!text || text.length > 1000) return;
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
-  const encrypted = await encryptText(text, chatId);
-  const payload = {
-    text: encrypted, encrypted: true, senderId: currentUser.uid,
-    timestamp: Date.now(), readBy: {}
-  };
-  if(replyingTo){
-    payload.replyTo = {
-      id: replyingTo.id, senderId: replyingTo.senderId,
-      text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type
+
+  if(currentChatMode === 'room'){
+    const encrypted = await encryptText(text, ROOM_ID);
+    const payload = {
+      text: encrypted, encrypted: true,
+      senderId: currentUser.uid,
+      senderName: currentUserData.name,
+      senderPhoto: currentUserData.photoURL || null,
+      timestamp: Date.now()
     };
+    if(replyingTo && replyingTo.mode === 'room'){
+      payload.replyTo = {
+        id: replyingTo.id, senderId: replyingTo.senderId,
+        text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type
+      };
+    }
+    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), payload);
+    remove(ref(db, 'rooms/'+ROOM_ID+'/typing/'+currentUser.uid));
+  } else {
+    if(!currentChatUser) return;
+    const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+    const encrypted = await encryptText(text, chatId);
+    const payload = {
+      text: encrypted, encrypted: true, senderId: currentUser.uid,
+      timestamp: Date.now(), readBy: {}
+    };
+    if(replyingTo){
+      payload.replyTo = {
+        id: replyingTo.id, senderId: replyingTo.senderId,
+        text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type
+      };
+    }
+    await push(ref(db,'chats/'+chatId+'/messages'), payload);
+    await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
+    await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
+    const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
+    await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
   }
-  await push(ref(db,'chats/'+chatId+'/messages'), payload);
-  await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
-  await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
-  const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
-  await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
   $('messageInput').value = '';
   $('sendBtn').classList.remove('show');
   $('micBtn').classList.remove('hide');
@@ -1469,8 +1716,12 @@ function closeChat(){
   if(isSelectionMode){ exitSelectionMode(); return; }
   $('chatView').classList.remove('active');
   if(unsubMessages) unsubMessages();
+  if(unsubRoomOnline) { unsubRoomOnline(); unsubRoomOnline = null; }
   currentChatUser = null;
+  currentChatMode = null;
   cancelReply();
+  $('startVoiceCall').style.display = 'flex';
+  $('startVideoCall').style.display = 'flex';
 }
 
 /* ============ الوسائط ============ */
@@ -1481,7 +1732,7 @@ $('chatMediaInput').addEventListener('change', async e => {
   e.target.value = '';
 });
 async function sendMediaToChat(file){
-  if(!currentChatUser) return alert('افتح محادثة أولاً');
+  if(!currentChatUser && currentChatMode !== 'room') return alert('افتح محادثة أولاً');
   const isVideo = file.type.startsWith('video');
   const isImage = file.type.startsWith('image');
   if(!isVideo && !isImage) return alert('نوع الملف غير مدعوم');
@@ -1491,21 +1742,34 @@ async function sendMediaToChat(file){
   }
   const maxSize = isVideo ? 8 * 1024 * 1024 : 6 * 1024 * 1024;
   if(processedFile.size > maxSize) return alert(`الملف كبير جداً. الحد الأقصى ${isVideo ? '8' : '6'} ميجابايت`);
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+
+  const chatId = currentChatMode === 'room' ? ROOM_ID : getChatId(currentUser.uid, currentChatUser.uid);
   const ab = await processedFile.arrayBuffer();
   let encMedia;
   try { encMedia = await encryptBuffer(ab, chatId); }
   catch(e){ return alert('فشل معالجة الملف'); }
   if(encMedia.length > 900000) return alert('الملف كبير جداً بعد التشفير. جرب ملفاً أصغر');
-  await push(ref(db,'chats/'+chatId+'/messages'), {
-    type: isVideo ? 'video' : 'image',
-    media: encMedia, mime: processedFile.type, encrypted: true,
-    senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
-  });
-  await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
-  await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
-  const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
-  await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
+
+  if(currentChatMode === 'room'){
+    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), {
+      type: isVideo ? 'video' : 'image',
+      media: encMedia, mime: processedFile.type, encrypted: true,
+      senderId: currentUser.uid,
+      senderName: currentUserData.name,
+      senderPhoto: currentUserData.photoURL || null,
+      timestamp: Date.now()
+    });
+  } else {
+    await push(ref(db,'chats/'+chatId+'/messages'), {
+      type: isVideo ? 'video' : 'image',
+      media: encMedia, mime: processedFile.type, encrypted: true,
+      senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
+    });
+    await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
+    await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
+    const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
+    await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
+  }
 }
 
 /* ============ الإيموجي ============ */
@@ -1561,25 +1825,41 @@ function stopRecording(){
 }
 function toggleMic(){ isRecording ? stopRecording() : startRecording(); }
 async function sendAudioMessage(blob){
-  if(!currentChatUser) return;
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  if(!currentChatUser && currentChatMode !== 'room') return;
+  const chatId = currentChatMode === 'room' ? ROOM_ID : getChatId(currentUser.uid, currentChatUser.uid);
   const duration = Math.round((Date.now() - recordingStartTime) / 1000);
   const ab = await blob.arrayBuffer();
   const encAudio = await encryptBuffer(ab, chatId);
   if(encAudio.length > 700000){ alert('التسجيل طويل جداً'); return; }
-  const payload = {
-    type: 'audio', audio: encAudio, duration, encrypted: true,
-    senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
-  };
-  if(replyingTo){
-    payload.replyTo = { id: replyingTo.id, senderId: replyingTo.senderId, text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type };
-    cancelReply();
+
+  if(currentChatMode === 'room'){
+    const payload = {
+      type: 'audio', audio: encAudio, duration, encrypted: true,
+      senderId: currentUser.uid,
+      senderName: currentUserData.name,
+      senderPhoto: currentUserData.photoURL || null,
+      timestamp: Date.now()
+    };
+    if(replyingTo && replyingTo.mode === 'room'){
+      payload.replyTo = { id: replyingTo.id, senderId: replyingTo.senderId, text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type };
+      cancelReply();
+    }
+    await push(ref(db,'rooms/'+ROOM_ID+'/messages'), payload);
+  } else {
+    const payload = {
+      type: 'audio', audio: encAudio, duration, encrypted: true,
+      senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
+    };
+    if(replyingTo){
+      payload.replyTo = { id: replyingTo.id, senderId: replyingTo.senderId, text: replyingTo.text, encrypted: replyingTo.encrypted, type: replyingTo.type };
+      cancelReply();
+    }
+    await push(ref(db,'chats/'+chatId+'/messages'), payload);
+    await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
+    await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
+    const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
+    await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
   }
-  await push(ref(db,'chats/'+chatId+'/messages'), payload);
-  await set(ref(db,'userChats/'+currentUser.uid+'/'+currentChatUser.uid), true);
-  await set(ref(db,'userChats/'+currentChatUser.uid+'/'+currentUser.uid), true);
-  const unreadSnap = await get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid));
-  await set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (unreadSnap.exists() ? unreadSnap.val() : 0) + 1);
 }
 
 document.addEventListener('click', async e => {
@@ -1593,7 +1873,7 @@ document.addEventListener('click', async e => {
   }
   if(window.currentAudio) window.currentAudio.pause();
   document.querySelectorAll('.audio-play-btn i').forEach(i => i.className = 'fas fa-play');
-  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  const chatId = currentChatMode === 'room' ? ROOM_ID : getChatId(currentUser.uid, currentChatUser.uid);
   try {
     const buf = await decryptBuffer(btn.dataset.audio, chatId);
     const url = URL.createObjectURL(new Blob([buf], {type: 'audio/webm'}));
@@ -2054,103 +2334,12 @@ function escapeHtml(t){
   return d.innerHTML;
 }
 
-/* ============ PWA ============ */
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  setTimeout(() => showInstallBanner(), 3000);
-});
-function showInstallBanner(){
-  if(localStorage.getItem('install_dismissed') === 'true') return;
-  if(window.matchMedia('(display-mode: standalone)').matches) return;
-  if(window.navigator.standalone) return;
-  $('installBanner').classList.add('show');
-}
-function hideInstallBanner(){
-  $('installBanner').classList.remove('show');
-  localStorage.setItem('install_dismissed', 'true');
-}
-async function installPWA(){
-  hideInstallBanner();
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log('Install outcome:', outcome);
-    deferredPrompt = null;
-  } else {
-    alert('لتثبيت التطبيق:\n\n• Android: القائمة (⋮) → "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"\n\n• iPhone (Safari): زر المشاركة 📤 → "إضافة إلى الشاشة الرئيسية"\n\n• Chrome/Edge على الحاسوب: أيقونة التثبيت في شريط العنوان');
-  }
-}
-window.addEventListener('appinstalled', () => {
-  console.log('App installed');
-  hideInstallBanner();
-});
-
-/* ============ Manifest ديناميكي ============ */
-function generateManifest(){
-  const iconSvg192 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#25d366"/><stop offset="100%" stop-color="#00a884"/></linearGradient></defs><rect width="192" height="192" rx="42" fill="url(#g)"/><text x="96" y="130" font-size="110" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">💬</text></svg>`;
-  const iconSvg512 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#25d366"/><stop offset="100%" stop-color="#00a884"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#g)"/><text x="256" y="350" font-size="290" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">💬</text></svg>`;
-  const icon192 = 'data:image/svg+xml;base64,' + btoa(iconSvg192);
-  const icon512 = 'data:image/svg+xml;base64,' + btoa(iconSvg512);
-  const manifest = {
-    name: 'Chat Pro',
-    short_name: 'ChatPro',
-    description: 'تطبيق دردشة احترافي - رسائل، مكالمات، استوري',
-    start_url: '.',
-    scope: '.',
-    display: 'standalone',
-    orientation: 'portrait',
-    background_color: '#0a1014',
-    theme_color: '#008069',
-    lang: 'ar',
-    dir: 'rtl',
-    categories: ['social', 'communication'],
-    icons: [
-      { src: icon192, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
-      { src: icon512, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
-    ]
-  };
-  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  $('appManifest').href = url;
-  $('appleIcon').href = icon192;
-  $('favIcon').href = icon192;
-}
-
-/* ============ Service Worker ============ */
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    const swCode = `
-      const CACHE = 'chatpro-v1';
-      self.addEventListener('install', e => { self.skipWaiting(); });
-      self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
-      self.addEventListener('fetch', e => {
-        if(e.request.method !== 'GET') return;
-        e.respondWith(
-          caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-            if(res && res.status === 200 && res.type === 'basic'){
-              const clone = res.clone();
-              caches.open(CACHE).then(c => c.put(e.request, clone)).catch(()=>{});
-            }
-            return res;
-          }).catch(() => cached))
-        );
-      });
-    `;
-    const swBlob = new Blob([swCode], {type:'application/javascript'});
-    const swUrl = URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl).catch(() => {});
-  });
-}
-
 /* ============ التهيئة ============ */
 applyTheme();
 document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === appLanguage));
 document.documentElement.dir = appLanguage === 'ar' ? 'rtl' : 'ltr';
 buildEmojiPicker();
-generateManifest();
-console.log('✅ Chat Pro (PWA) loaded');
+console.log('✅ Chat Pro loaded - Room "يزيد" enabled');
 </script>
 </body>
-          </html>
+  </html>

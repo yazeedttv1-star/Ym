@@ -10,15 +10,14 @@
 :root{
   --green-dark:#075e54;--green:#128c7e;--green-light:#25d366;
   --green-pale:#d9fdd3;--bg-chat:#efeae2;--bg-panel:#f0f2f5;
-  --text:#111b21;--text-muted:#667781;--border:#e0e0e0;
-  --red:#ff4444;
+  --text:#111b21;--text-muted:#667781;--border:#e0e0e0;--red:#ff4444;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#0b141a}
 body{display:flex;justify-content:center;align-items:center}
 
-/* شاشة المصادقة */
-.auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#075e54,#128c7e,#25d366);display:flex;justify-content:center;align-items:center;z-index:1000;padding:20px;overflow-y:auto}
+/* ===== شاشة المصادقة ===== */
+.auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#075e54,#128c7e,#25d366);display:flex;justify-content:center;align-items:center;z-index:1000;padding:20px;overflow-y:auto;transition:opacity .3s}
 .auth-screen.hidden{opacity:0;pointer-events:none}
 .auth-box{background:#fff;padding:30px 25px;border-radius:15px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:auto}
 .auth-box .logo{width:70px;height:70px;background:var(--green-light);border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff}
@@ -38,11 +37,10 @@ body{display:flex;justify-content:center;align-items:center}
 .divider{display:flex;align-items:center;gap:10px;margin:15px 0;color:#999;font-size:12px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* التطبيق */
+/* ===== التطبيق ===== */
 .app{width:100%;max-width:480px;height:100vh;height:100dvh;background:#fff;display:none;flex-direction:column;overflow:hidden;position:relative}
 .app.active{display:flex}
 @media(min-width:900px){.app{max-width:1100px;height:90vh;max-height:850px;border-radius:15px;box-shadow:0 20px 60px rgba(0,0,0,.6);flex-direction:row}}
-
 .app-header{background:var(--green-dark);color:#fff;padding:12px 15px;display:flex;align-items:center;gap:12px;flex-shrink:0}
 .app-header .user-avatar{width:42px;height:42px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden}
 .app-header .user-avatar img{width:100%;height:100%;object-fit:cover}
@@ -51,7 +49,6 @@ body{display:flex;justify-content:center;align-items:center}
 .app-header .user-info .sub{font-size:11.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .app-header .icon-btn{background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:8px;border-radius:50%}
 .app-header .icon-btn:hover{background:rgba(255,255,255,.15)}
-
 .app-content{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;background:#fff}
 .tabs{display:flex;background:var(--green-dark);flex-shrink:0}
 .tab{flex:1;padding:12px 8px;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:13px;font-weight:600;cursor:pointer;position:relative;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px}
@@ -63,6 +60,7 @@ body{display:flex;justify-content:center;align-items:center}
 .section.active{display:flex}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+/* ===== قوائم ===== */
 .search-box{padding:10px 15px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0}
 .search-box input{width:100%;padding:9px 14px;border:none;background:var(--bg-panel);border-radius:20px;font-size:14px;outline:none;text-align:right;font-family:inherit}
 .chat-list{flex:1;overflow-y:auto}
@@ -78,11 +76,10 @@ body{display:flex;justify-content:center;align-items:center}
 .chat-item .meta .badge{background:var(--green-light);color:#fff;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:bold}
 .empty-state{padding:50px 20px;text-align:center;color:var(--text-muted);font-size:14px}
 .empty-state .big-icon{font-size:50px;opacity:.3;margin-bottom:15px}
-
 .fab{position:absolute;bottom:20px;left:20px;width:56px;height:56px;background:var(--green-light);border-radius:50%;border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 12px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;z-index:5}
 .fab:hover{transform:scale(1.08)}
 
-/* الاستوري */
+/* ===== الاستوري ===== */
 .stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:12px;padding:15px}
 .story-card{aspect-ratio:9/14;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:linear-gradient(135deg,#075e54,#25d366);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);background-size:cover;background-position:center}
 .story-card.add{background:linear-gradient(135deg,#e0e0e0,#b1b3b5);color:#555;justify-content:center;align-items:center;font-size:40px}
@@ -90,7 +87,7 @@ body{display:flex;justify-content:center;align-items:center}
 .story-card .story-avatar img{width:100%;height:100%;object-fit:cover}
 .story-card .story-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* المكالمات */
+/* ===== المكالمات ===== */
 .call-item{display:flex;align-items:center;gap:12px;padding:14px 15px;border-bottom:1px solid #f5f5f5}
 .call-item .avatar{width:48px;height:48px;border-radius:50%;background:var(--green-light);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;flex-shrink:0;overflow:hidden}
 .call-item .avatar img{width:100%;height:100%;object-fit:cover}
@@ -100,7 +97,7 @@ body{display:flex;justify-content:center;align-items:center}
 .call-item .info .meta .in{color:#25d366}
 .call-item .info .meta .out{color:#ff4444}
 
-/* المحادثة */
+/* ===== المحادثة ===== */
 .chat-view{position:absolute;inset:0;background:var(--bg-chat);display:none;flex-direction:column;z-index:20;animation:slideIn .25s ease}
 .chat-view.active{display:flex}
 @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
@@ -125,28 +122,22 @@ body{display:flex;justify-content:center;align-items:center}
 .message .check.read{color:#34b7f1}
 .message .encrypted-badge{font-size:9.5px;color:var(--green);margin-left:5px}
 .date-separator{align-self:center;background:#fff;color:var(--text-muted);font-size:11.5px;padding:5px 12px;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.08);margin:8px 0;font-weight:500}
-
-/* مشغل الصوت */
 .audio-message{display:flex;align-items:center;gap:10px;min-width:200px}
 .audio-message button{width:38px;height:38px;border-radius:50%;background:var(--green-light);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
 .audio-message .audio-progress{flex:1;height:3px;background:rgba(0,0,0,.15);border-radius:3px;position:relative;overflow:hidden}
 .audio-message .audio-progress .fill{position:absolute;top:0;right:0;height:100%;width:0%;background:var(--green-light);transition:width .1s}
 .audio-message .duration{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums}
-
-/* منطقة الإدخال */
 .chat-view .input-area{display:flex;padding:8px 10px;background:var(--bg-panel);gap:6px;align-items:center;flex-shrink:0}
 .chat-view .input-area input{flex:1;padding:11px 15px;border:none;border-radius:25px;outline:none;font-size:15px;background:#fff;text-align:right;font-family:inherit}
 .chat-view .input-area button{width:44px;height:44px;border-radius:50%;background:var(--green-light);color:#fff;border:none;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-view .input-area .mic-btn{background:#fff;color:var(--green-dark)}
 .chat-view .input-area .mic-btn.recording{background:var(--red);color:#fff;animation:pulse-rec .8s infinite}
 @keyframes pulse-rec{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-
-/* مؤشر التسجيل */
 .recording-indicator{position:absolute;bottom:70px;right:15px;background:var(--red);color:#fff;padding:10px 15px;border-radius:20px;font-size:13px;display:none;align-items:center;gap:8px;z-index:5}
 .recording-indicator.show{display:flex}
 .recording-indicator .dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse-rec .8s infinite}
 
-/* نوافذ */
+/* ===== نوافذ ===== */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;z-index:500;padding:20px}
 .modal-overlay.active{display:flex}
 .modal{background:#fff;border-radius:15px;padding:22px;width:100%;max-width:400px;max-height:85vh;overflow-y:auto;animation:popIn .25s ease}
@@ -161,7 +152,7 @@ body{display:flex;justify-content:center;align-items:center}
 .modal .user-search-item .details .email{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .modal .btn-secondary{width:100%;padding:12px;background:#f0f2f5;color:var(--text);border:none;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit;margin-top:15px}
 
-/* عارض الاستوري */
+/* ===== عارض الاستوري ===== */
 .story-viewer{position:fixed;inset:0;background:#000;z-index:800;display:none;flex-direction:column}
 .story-viewer.active{display:flex}
 .story-viewer .progress-bar{position:absolute;top:12px;left:12px;right:12px;height:3px;background:rgba(255,255,255,.3);border-radius:3px;overflow:hidden;z-index:5}
@@ -175,7 +166,7 @@ body{display:flex;justify-content:center;align-items:center}
 .story-viewer .close-btn{position:absolute;top:25px;left:15px;background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer;z-index:10;padding:5px}
 .story-viewer .story-content{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;padding:30px;text-align:center;word-break:break-word;background:linear-gradient(135deg,#075e54,#128c7e,#25d366)}
 
-/* شاشة المكالمة */
+/* ===== شاشة المكالمة ===== */
 .call-screen{position:fixed;inset:0;background:linear-gradient(135deg,#075e54,#0b141a);z-index:900;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:20px}
 .call-screen.active{display:flex}
 .call-screen .call-avatar{width:130px;height:130px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:55px;font-weight:bold;margin-bottom:25px;box-shadow:0 0 0 0 rgba(37,211,102,.7);animation:pulse 2s infinite;overflow:hidden}
@@ -189,8 +180,6 @@ body{display:flex;justify-content:center;align-items:center}
 .call-screen .end-call{background:var(--red);color:#fff}
 .call-screen .mute-call{background:rgba(255,255,255,.2);color:#fff}
 .call-screen .mute-call.active{background:#fff;color:var(--green-dark)}
-
-/* فيديو المكالمة */
 .call-screen .video-container{position:absolute;inset:0;display:none}
 .call-screen.video-call .video-container{display:block}
 .call-screen.video-call .call-avatar,
@@ -202,22 +191,20 @@ body{display:flex;justify-content:center;align-items:center}
 .call-screen .video-overlay .call-name{display:block;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.8)}
 .call-screen .video-overlay .call-timer{display:block;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.8)}
 
-/* شريط سفلي */
+/* ===== شريط سفلي ===== */
 .bottom-nav{display:flex;background:var(--green-dark);flex-shrink:0;height:60px;border-top:1px solid rgba(255,255,255,.1)}
 @media(min-width:900px){.bottom-nav{display:none}}
 .bottom-nav .nav-btn{flex:1;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:11.5px;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
 .bottom-nav .nav-btn.active{color:#fff}
 .bottom-nav .nav-btn .icon{font-size:20px}
 .bottom-nav .nav-btn .badge{position:absolute;top:8px;right:calc(50% - 22px);background:var(--green-light);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-weight:bold;min-width:18px}
-
 @media(min-width:900px){.sidebar{display:flex;width:380px;flex-shrink:0;border-left:1px solid var(--border);background:#fff;flex-direction:column}}
 @media(max-width:899px){.sidebar{display:none}}
 </style>
 </head>
 <body>
-<!-- ... سيتم إضافة HTML في الجزء الثاني ... -->
-</body>
-  <!-- شاشة المصادقة -->
+
+<!-- ===== شاشة المصادقة ===== -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-box">
     <div class="logo"><i class="fas fa-comments"></i></div>
@@ -238,9 +225,8 @@ body{display:flex;justify-content:center;align-items:center}
   </div>
 </div>
 
-<!-- التطبيق -->
+<!-- ===== التطبيق ===== -->
 <div class="app" id="app">
-  <!-- الشريط الجانبي (للحاسوب) -->
   <div class="sidebar">
     <div class="app-header">
       <div class="user-avatar" id="sideAvatar"><i class="fas fa-user"></i></div>
@@ -256,7 +242,6 @@ body{display:flex;justify-content:center;align-items:center}
     <button class="fab" id="newChatFab" title="محادثة جديدة"><i class="fas fa-pen"></i></button>
   </div>
 
-  <!-- المحتوى الرئيسي -->
   <div class="app-content" id="mainContent" style="flex:1;position:relative;">
     <div class="app-header" id="mobileHeader">
       <div class="user-avatar" id="mobileAvatar"><i class="fas fa-user"></i></div>
@@ -271,7 +256,6 @@ body{display:flex;justify-content:center;align-items:center}
     </div>
     <button class="fab" id="newChatFabMobile" title="محادثة جديدة"><i class="fas fa-pen"></i></button>
 
-    <!-- نافذة المحادثة -->
     <div class="chat-view" id="chatView">
       <div class="header">
         <button class="back-btn" id="chatBack"><i class="fas fa-arrow-right"></i></button>
@@ -300,7 +284,7 @@ body{display:flex;justify-content:center;align-items:center}
   </div>
 </div>
 
-<!-- نافذة محادثة جديدة -->
+<!-- ===== نوافذ ===== -->
 <div class="modal-overlay" id="newChatModal">
   <div class="modal">
     <h3>ابحث عن مستخدم</h3>
@@ -311,7 +295,6 @@ body{display:flex;justify-content:center;align-items:center}
   </div>
 </div>
 
-<!-- نافذة الاستوري -->
 <div class="modal-overlay" id="addStoryModal">
   <div class="modal">
     <h3>أضف استوري</h3>
@@ -323,7 +306,6 @@ body{display:flex;justify-content:center;align-items:center}
   </div>
 </div>
 
-<!-- عارض الاستوري -->
 <div class="story-viewer" id="storyViewer">
   <div class="progress-bar"><div class="fill" id="storyProgress"></div></div>
   <button class="close-btn" id="closeStoryViewer"><i class="fas fa-times"></i></button>
@@ -331,7 +313,6 @@ body{display:flex;justify-content:center;align-items:center}
   <div class="story-content" id="storyContent"></div>
 </div>
 
-<!-- شاشة المكالمة -->
 <div class="call-screen" id="callScreen">
   <div class="video-container">
     <video class="remote-video" id="remoteVideo" autoplay playsinline></video>
@@ -351,7 +332,6 @@ body{display:flex;justify-content:center;align-items:center}
   </div>
 </div>
 
-<!-- نافذة استقبال مكالمة -->
 <div class="modal-overlay" id="incomingCallModal">
   <div class="modal" style="text-align:center;">
     <div style="font-size:60px;color:#25d366;margin-bottom:15px;animation:pulse 1.5s infinite;"><i class="fas fa-phone-volume"></i></div>
@@ -363,11 +343,11 @@ body{display:flex;justify-content:center;align-items:center}
     </div>
   </div>
 </div>
-</html>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getDatabase, ref, push, onChildAdded, onValue, set, remove, query, get, limitToLast, update, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, remove, query, get, limitToLast, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
@@ -388,10 +368,9 @@ const $ = id => document.getElementById(id);
 let isSignUp = false, currentUser = null, currentChatUser = null, allUsers = {};
 let unsubMessages = null, unsubChats = null, unsubStories = null, unsubCalls = null;
 
-// ============================================================
-// ============ 1. المصادقة (Auth) ============
-// ============================================================
-
+/* ============================================================
+   1. المصادقة
+   ============================================================ */
 $('toggleBtn').onclick = () => {
   isSignUp = !isSignUp;
   $('formSubtitle').textContent = isSignUp ? 'أنشئ حسابك' : 'سجّل دخولك';
@@ -481,7 +460,6 @@ onAuthStateChanged(auth, async user => {
     updateUI(user);
     set(ref(db,'onlineUsers/'+user.uid), {name:user.displayName||user.email, at:Date.now()});
     window.addEventListener('beforeunload',()=>remove(ref(db,'onlineUsers/'+user.uid)));
-    // الاستماع للمكالمات الواردة
     listenIncomingCalls();
   } else {
     currentUser = null;
@@ -508,10 +486,9 @@ async function loadAllUsers(){
   allUsers = snap.val()||{};
 }
 
-// ============================================================
-// ============ 2. بناء الأقسام ============
-// ============================================================
-
+/* ============================================================
+   2. بناء الأقسام
+   ============================================================ */
 function buildSections(){
   const html = `
     <div class="section active" data-section="chats" id="chatsSection">
@@ -544,11 +521,9 @@ function filterChats(q){
   });
 }
 
-// ============================================================
-// ============ 3. التشفير E2EE ============
-// ============================================================
-
-// توليد مفتاح التشفير من chatId
+/* ============================================================
+   3. التشفير E2EE
+   ============================================================ */
 async function deriveKey(chatId) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
@@ -567,50 +542,39 @@ async function encryptText(text, chatId) {
     const key = await deriveKey(chatId);
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const enc = new TextEncoder();
-    const ciphertext = await crypto.subtle.encrypt(
-      {name:'AES-GCM', iv}, key, enc.encode(text)
-    );
+    const ciphertext = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(text));
     const combined = new Uint8Array(iv.length + ciphertext.byteLength);
-    combined.set(iv);
-    combined.set(new Uint8Array(ciphertext), iv.length);
-    return btoa(String.fromCharCode(...combined));
-  } catch(e) {
-    console.error('Encrypt error:', e);
-    return text; // fallback
-  }
+    combined.set(iv); combined.set(new Uint8Array(ciphertext), iv.length);
+    let binary = '';
+    for (let i = 0; i < combined.length; i += 8192) {
+      binary += String.fromCharCode.apply(null, combined.subarray(i, i + 8192));
+    }
+    return btoa(binary);
+  } catch(e) { console.error('Encrypt error:', e); return text; }
 }
 
 async function decryptText(encrypted, chatId) {
   try {
     const key = await deriveKey(chatId);
-    const combined = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
+    const binary = atob(encrypted);
+    const combined = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) combined[i] = binary.charCodeAt(i);
     const iv = combined.slice(0, 12);
     const ciphertext = combined.slice(12);
-    const decrypted = await crypto.subtle.decrypt(
-      {name:'AES-GCM', iv}, key, ciphertext
-    );
+    const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ciphertext);
     return new TextDecoder().decode(decrypted);
-  } catch(e) {
-    console.error('Decrypt error:', e);
-    return '[رسالة مشفرة - تعذّر فكها]';
-  }
+  } catch(e) { console.error('Decrypt error:', e); return '[رسالة مشفرة - تعذّر فكها]'; }
 }
 
-// تشفير بيانات ثنائية (للرسائل الصوتية)
 async function encryptBuffer(buffer, chatId) {
   const key = await deriveKey(chatId);
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const ciphertext = await crypto.subtle.encrypt(
-    {name:'AES-GCM', iv}, key, buffer
-  );
+  const ciphertext = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, buffer);
   const combined = new Uint8Array(iv.length + ciphertext.byteLength);
-  combined.set(iv);
-  combined.set(new Uint8Array(ciphertext), iv.length);
-  // تحويل إلى base64 بطريقة آمنة للبيانات الكبيرة
+  combined.set(iv); combined.set(new Uint8Array(ciphertext), iv.length);
   let binary = '';
-  const chunk = 8192;
-  for (let i = 0; i < combined.length; i += chunk) {
-    binary += String.fromCharCode.apply(null, combined.subarray(i, i + chunk));
+  for (let i = 0; i < combined.length; i += 8192) {
+    binary += String.fromCharCode.apply(null, combined.subarray(i, i + 8192));
   }
   return btoa(binary);
 }
@@ -625,10 +589,9 @@ async function decryptBuffer(b64, chatId) {
   return crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ciphertext);
 }
 
-// ============================================================
-// ============ 4. المحادثات ============
-// ============================================================
-
+/* ============================================================
+   4. المحادثات
+   ============================================================ */
 function loadMyChats(){
   if(unsubChats) unsubChats();
   unsubChats = onValue(ref(db,'userChats/'+currentUser.uid), snap=>{
@@ -701,14 +664,11 @@ function openChat(uid,name,photo){
   setTimeout(()=>$('messageInput').focus(),300);
 }
 
-async function loadChatMessages(otherUid){
+function loadChatMessages(otherUid){
   if(unsubMessages) unsubMessages();
   const chatId = getChatId(currentUser.uid,otherUid);
   const area = $('messagesArea');
   area.innerHTML = '';
-  let lastDate = '';
-  
-  // جلب كل الرسائل السابقة ثم الاستماع للجديدة
   unsubMessages = onChildAdded(ref(db,'chats/'+chatId+'/messages'), async snap=>{
     const data = snap.val(); if(!data) return;
     await renderMessage(snap.key, data, area, chatId);
@@ -720,10 +680,8 @@ async function renderMessage(key, data, area, chatId){
   const isMine = data.senderId===currentUser.uid;
   const msgDate = new Date(data.timestamp);
   const dateStr = formatDate(msgDate);
-
-  // فاصل التاريخ
   const lastChild = area.lastElementChild;
-  if(!lastChild || lastChild.className !== 'date-separator' || lastChild.textContent !== dateStr){
+  if(!lastChild || !lastChild.classList.contains('date-separator') || lastChild.textContent !== dateStr){
     if(!lastChild || lastChild.textContent !== dateStr){
       const sep = document.createElement('div');
       sep.className='date-separator';
@@ -742,7 +700,6 @@ async function renderMessage(key, data, area, chatId){
   msg.className = 'message '+(isMine?'mine':'other');
 
   if(data.type === 'audio' && data.audio){
-    // رسالة صوتية
     msg.innerHTML = `
       <div class="audio-message">
         <button class="audio-play-btn" data-audio="${data.audio}" data-key="${key}">
@@ -751,34 +708,593 @@ async function renderMessage(key, data, area, chatId){
         <div class="audio-progress"><div class="fill"></div></div>
         <div class="duration">${formatDuration(data.duration||0)}</div>
       </div>
-      <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>
-    `;
+      <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
   } else {
-    // رسالة نصية
     let text = data.text || '';
-    if(data.encrypted && text) {
-      text = await decryptText(text, chatId);
-    }
+    if(data.encrypted && text) text = await decryptText(text, chatId);
     msg.innerHTML = `<span>${escapeHtml(text)}</span>
       <div class="msg-meta"><span>${formatTime(msgDate)}</span>${encBadge}${check}</div>`;
   }
-
   row.appendChild(msg);
   area.appendChild(row);
 
-  // تحديث readBy للرسائل الواردة
   if(!isMine && currentChatUser){
     update(ref(db,'chats/'+chatId+'/messages/'+key+'/readBy'),{[currentUser.uid]:true});
   }
 }
 
-// ============================================================
-// ============ 5. إرسال رسالة نصية (مشفرة) ============
-// ============================================================
-
+/* ============================================================
+   5. إرسال رسالة نصية
+   ============================================================ */
 $('sendBtn').onclick = sendMessage;
 $('messageInput').onkeypress = e=>{if(e.key==='Enter') sendMessage()};
 
 async function sendMessage(){
   if(!currentUser||!currentChatUser) return;
-  const text = $('messageInput').
+  const text = $('messageInput').value.trim();
+  if(!text||text.length>1000) return;
+  const chatId = getChatId(currentUser.uid,currentChatUser.uid);
+  const encrypted = await encryptText(text, chatId);
+  push(ref(db,'chats/'+chatId+'/messages'),{
+    text: encrypted, encrypted: true, senderId: currentUser.uid,
+    timestamp: Date.now(), readBy: {}
+  });
+  get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid)).then(s=>{
+    set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (s.exists()?s.val():0)+1);
+  });
+  $('messageInput').value='';
+  $('messageInput').focus();
+}
+
+$('chatBack').onclick = ()=>{
+  $('chatView').classList.remove('active');
+  if(unsubMessages) unsubMessages();
+  currentChatUser = null;
+};
+
+/* ============================================================
+   6. الرسائل الصوتية
+   ============================================================ */
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingStartTime = 0;
+let recordingTimer = null;
+let isRecording = false;
+
+$('micBtn').onclick = async () => {
+  if(isRecording) stopRecording();
+  else await startRecording();
+};
+
+async function startRecording(){
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    recordingStartTime = Date.now();
+    isRecording = true;
+    mediaRecorder.ondataavailable = e => { if(e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, {type: 'audio/webm'});
+      await sendAudioMessage(blob);
+    };
+    mediaRecorder.start();
+    $('micBtn').classList.add('recording');
+    $('micBtn').innerHTML = '<i class="fas fa-stop"></i>';
+    $('recordingIndicator').classList.add('show');
+    recordingTimer = setInterval(() => {
+      const secs = Math.floor((Date.now()-recordingStartTime)/1000);
+      $('recordingTime').textContent = formatDuration(secs);
+      if(secs >= 60) stopRecording();
+    }, 200);
+  } catch(e) { alert('لا يمكن الوصول إلى الميكروفون: ' + e.message); }
+}
+
+function stopRecording(){
+  if(mediaRecorder && isRecording){
+    mediaRecorder.stop();
+    isRecording = false;
+    clearInterval(recordingTimer);
+    $('micBtn').classList.remove('recording');
+    $('micBtn').innerHTML = '<i class="fas fa-microphone"></i>';
+    $('recordingIndicator').classList.remove('show');
+  }
+}
+
+async function sendAudioMessage(blob){
+  if(!currentChatUser) return;
+  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  const duration = Math.round((Date.now()-recordingStartTime)/1000);
+  const arrayBuffer = await blob.arrayBuffer();
+  const encryptedAudio = await encryptBuffer(arrayBuffer, chatId);
+  if(encryptedAudio.length > 700000){ alert('التسجيل طويل جداً. حاول بأقل من 30 ثانية.'); return; }
+  push(ref(db,'chats/'+chatId+'/messages'),{
+    type: 'audio', audio: encryptedAudio, duration, encrypted: true,
+    senderId: currentUser.uid, timestamp: Date.now(), readBy: {}
+  });
+  get(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid)).then(s=>{
+    set(ref(db,'chats/'+chatId+'/unread/'+currentChatUser.uid), (s.exists()?s.val():0)+1);
+  });
+}
+
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.audio-play-btn');
+  if(!btn) return;
+  const audioEl = btn.querySelector('i');
+  if(audioEl.classList.contains('fa-pause')){
+    if(window.currentAudio){ window.currentAudio.pause(); window.currentAudio = null; }
+    document.querySelectorAll('.audio-play-btn i').forEach(i => { i.className = 'fas fa-play'; });
+    return;
+  }
+  if(window.currentAudio){ window.currentAudio.pause(); }
+  document.querySelectorAll('.audio-play-btn i').forEach(i => { i.className = 'fas fa-play'; });
+  const chatId = getChatId(currentUser.uid, currentChatUser.uid);
+  try {
+    const decryptedBuffer = await decryptBuffer(btn.dataset.audio, chatId);
+    const blob = new Blob([decryptedBuffer], {type: 'audio/webm'});
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    window.currentAudio = audio;
+    audioEl.className = 'fas fa-pause';
+    const progressBar = btn.parentElement.querySelector('.audio-progress .fill');
+    audio.ontimeupdate = () => {
+      progressBar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+    };
+    audio.onended = () => {
+      audioEl.className = 'fas fa-play';
+      progressBar.style.width = '0%';
+      window.currentAudio = null;
+    };
+    audio.play();
+  } catch(e) { alert('تعذّر تشغيل الرسالة الصوتية'); console.error(e); }
+});
+
+/* ============================================================
+   7. البحث عن مستخدمين
+   ============================================================ */
+function openNewChatModal(){
+  $('newChatModal').classList.add('active');
+  renderUsersList('');
+  $('userSearchInput').value='';
+  setTimeout(()=>$('userSearchInput').focus(),100);
+}
+$('newChatFab').onclick = openNewChatModal;
+$('newChatFabMobile').onclick = openNewChatModal;
+$('closeNewChatModal').onclick = ()=>$('newChatModal').classList.remove('active');
+$('userSearchInput').oninput = e=>renderUsersList(e.target.value);
+
+function renderUsersList(q){
+  const list = $('usersList');
+  q = q.trim().toLowerCase();
+  const users = Object.values(allUsers).filter(u=>
+    u.uid!==currentUser.uid &&
+    (!q || (u.name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q) || (u.phone && u.phone.includes(q))))
+  );
+  if(!users.length){ list.innerHTML = `<div class="empty-state" style="padding:30px 10px;">لا يوجد مستخدمون مطابقون</div>`; return; }
+  list.innerHTML = users.map(u=>{
+    const initial = (u.name||'U').charAt(0).toUpperCase();
+    const avatar = u.photoURL ? `<img src="${u.photoURL}">` : initial;
+    return `<div class="user-search-item" data-uid="${u.uid}" data-name="${escapeHtml(u.name)}" data-photo="${u.photoURL||''}">
+      <div class="avatar">${avatar}</div>
+      <div class="details">
+        <div class="name">${escapeHtml(u.name||'مستخدم')}</div>
+        <div class="email">${escapeHtml(u.phone || u.email || '')}</div>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.user-search-item').forEach(item=>{
+    item.onclick = ()=>{
+      $('newChatModal').classList.remove('active');
+      const uid = item.dataset.uid, name = item.dataset.name, photo = item.dataset.photo;
+      set(ref(db,'userChats/'+currentUser.uid+'/'+uid),true);
+      set(ref(db,'userChats/'+uid+'/'+currentUser.uid),true);
+      setTimeout(()=>openChat(uid,name,photo),200);
+    };
+  });
+}
+
+/* ============================================================
+   8. الاستوري
+   ============================================================ */
+function loadStories(){
+  if(unsubStories) unsubStories();
+  unsubStories = onValue(ref(db,'stories'),snap=>renderStories(snap.val()||{}));
+}
+
+function renderStories(stories){
+  const grid = document.querySelectorAll('#storiesGrid');
+  if(!grid.length) return;
+  const now = Date.now(), DAY = 86400000;
+  const list = Object.entries(stories).map(([id,s])=>({id,...s}))
+    .filter(s=>now-s.timestamp<DAY).sort((a,b)=>b.timestamp-a.timestamp);
+  const html = list.map(s=>{
+    const initial = (s.name||'U').charAt(0).toUpperCase();
+    const avatar = s.photoURL?`<img src="${s.photoURL}">`:initial;
+    const bg = s.image ? `background-image:url('${s.image}');` : '';
+    return `<div class="story-card" data-story-id="${s.id}" style="${bg}">
+      <div class="story-avatar">${avatar}</div>
+      <div class="story-name">${escapeHtml(s.name)}</div>
+    </div>`;
+  }).join('');
+  grid.forEach(g=>{
+    g.innerHTML = `<div class="story-card add" onclick="document.getElementById('addStoryModal').classList.add('active')"><i class="fas fa-plus"></i><div style="font-size:12px;margin-top:5px;">إضافة</div></div>${html}`;
+    g.querySelectorAll('.story-card[data-story-id]').forEach(card=>{
+      card.onclick = ()=>viewStory(card.dataset.storyId,stories);
+    });
+  });
+}
+
+$('closeStoryModal').onclick = ()=>$('addStoryModal').classList.remove('active');
+$('publishStoryBtn').onclick = async ()=>{
+  const text = $('storyTextInput').value.trim();
+  const file = $('storyImageInput').files[0];
+  if(!text && !file) return alert('اكتب نصاً أو اختر صورة');
+  const name = currentUser.displayName||currentUser.email.split('@')[0];
+  let image = null;
+  if(file){
+    image = await fileToBase64(file);
+    if(image.length > 700000) return alert('الصورة كبيرة جداً، اختر صورة أصغر من 500KB');
+  }
+  await push(ref(db,'stories'),{
+    text: text||'', uid:currentUser.uid, name, photoURL:currentUser.photoURL||null,
+    image, timestamp:Date.now()
+  });
+  $('storyTextInput').value=''; $('storyImageInput').value='';
+  $('addStoryModal').classList.remove('active');
+};
+
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=>res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function viewStory(id,stories){
+  const s = stories[id]; if(!s) return;
+  if(s.image){
+    $('storyContent').innerHTML = `<img src="${s.image}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
+    $('storyContent').style.background = '#000';
+  } else {
+    $('storyContent').textContent = s.text;
+    $('storyContent').style.background = 'linear-gradient(135deg,#075e54,#128c7e,#25d366)';
+  }
+  $('storyName').textContent = s.name;
+  const initial = s.name.charAt(0).toUpperCase();
+  $('storyAvatar').innerHTML = s.photoURL?`<img src="${s.photoURL}">`:initial;
+  $('storyTime').textContent = formatTimeShort(new Date(s.timestamp));
+  $('storyViewer').classList.add('active');
+  const bar = $('storyProgress');
+  bar.style.animation='none'; void bar.offsetWidth;
+  bar.style.animation='progress 5s linear forwards';
+  clearTimeout(viewStory._t);
+  viewStory._t = setTimeout(()=>$('storyViewer').classList.remove('active'),5000);
+}
+$('closeStoryViewer').onclick = ()=>{$('storyViewer').classList.remove('active'); clearTimeout(viewStory._t)};
+
+/* ============================================================
+   9. WebRTC - المكالمات
+   ============================================================ */
+const rtcConfig = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' }
+  ]
+};
+
+let pc = null, localStream = null, currentCallId = null, callType = null;
+let callTimerInterval = null, callStartTime = 0, unsubCallSignals = null;
+let unsubIncomingCalls = null, isCaller = false, remoteAudio = null;
+
+$('startVoiceCall').onclick = () => startCall('voice');
+$('startVideoCall').onclick = () => startCall('video');
+
+async function startCall(type){
+  if(!currentChatUser) return;
+  isCaller = true; callType = type;
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({
+      audio: true, video: type === 'video'
+    });
+  } catch(e) { alert('لا يمكن الوصول للميكروفون/الكاميرا: ' + e.message); return; }
+  currentCallId = currentUser.uid + '_' + currentChatUser.uid + '_' + Date.now();
+  showCallScreen();
+  $('callStatus').textContent = 'جاري الاتصال...';
+  if(type === 'video') {
+    $('callScreen').classList.add('video-call');
+    $('localVideo').srcObject = localStream;
+    $('videoCallName').textContent = currentChatUser.name;
+  }
+  createPeerConnection();
+  localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  await set(ref(db, `calls_signaling/${currentChatUser.uid}/incoming/${currentCallId}`), {
+    from: currentUser.uid,
+    fromName: currentUser.displayName || currentUser.email.split('@')[0],
+    fromPhoto: currentUser.photoURL || null,
+    type: callType,
+    offer: { type: offer.type, sdp: offer.sdp },
+    timestamp: Date.now()
+  });
+  unsubCallSignals = onValue(ref(db, `calls_signaling/${currentUser.uid}/active/${currentCallId}`), async snap => {
+    const data = snap.val();
+    if(!data) return;
+    if(data.answer && pc && pc.signalingState !== 'stable'){
+      await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+      onCallConnected();
+    }
+    if(data.ended) endCallCleanup();
+  });
+  pc.onicecandidate = async (e) => {
+    if(e.candidate){
+      await push(ref(db, `calls_signaling/${currentChatUser.uid}/active/${currentCallId}/callerCandidates`), e.candidate.toJSON());
+    }
+  };
+  onChildAdded(ref(db, `calls_signaling/${currentUser.uid}/active/${currentCallId}/receiverCandidates`), async snap => {
+    const c = snap.val();
+    if(c && pc){ try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch(e){} }
+  });
+  pc.ontrack = (e) => {
+    if(type === 'video'){ $('remoteVideo').srcObject = e.streams[0]; }
+    else {
+      if(!remoteAudio){ remoteAudio = new Audio(); remoteAudio.autoplay = true; }
+      remoteAudio.srcObject = e.streams[0];
+    }
+    onCallConnected();
+  };
+}
+
+function listenIncomingCalls(){
+  if(unsubIncomingCalls) unsubIncomingCalls();
+  unsubIncomingCalls = onChildAdded(ref(db, `calls_signaling/${currentUser.uid}/incoming`), snap => {
+    const data = snap.val();
+    if(!data) return;
+    if(Date.now() - data.timestamp > 30000){
+      remove(ref(db, `calls_signaling/${currentUser.uid}/incoming/${snap.key}`));
+      return;
+    }
+    if(window.currentIncomingCallId) return;
+    window.currentIncomingCallId = snap.key;
+    window.currentIncomingData = data;
+    $('incomingCallerName').textContent = data.fromName;
+    $('incomingCallType').textContent = data.type === 'video' ? 'مكالمة فيديو واردة' : 'مكالمة صوتية واردة';
+    $('incomingCallModal').classList.add('active');
+  });
+}
+
+$('acceptCallBtn').onclick = async () => {
+  $('incomingCallModal').classList.remove('active');
+  const callId = window.currentIncomingCallId;
+  const data = window.currentIncomingData;
+  if(!callId || !data) return;
+  isCaller = false; callType = data.type; currentCallId = callId;
+  currentChatUser = {uid: data.from, name: data.fromName, photoURL: data.fromPhoto};
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({
+      audio: true, video: callType === 'video'
+    });
+  } catch(e) { alert('لا يمكن الوصول للكاميرا/الميكروفون'); return; }
+  showCallScreen();
+  $('callName').textContent = data.fromName;
+  $('callStatus').textContent = 'جاري الاتصال...';
+  if(callType === 'video'){
+    $('callScreen').classList.add('video-call');
+    $('localVideo').srcObject = localStream;
+    $('videoCallName').textContent = data.fromName;
+  }
+  createPeerConnection();
+  localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+  pc.ontrack = (e) => {
+    if(callType === 'video'){ $('remoteVideo').srcObject = e.streams[0]; }
+    else {
+      if(!remoteAudio){ remoteAudio = new Audio(); remoteAudio.autoplay = true; }
+      remoteAudio.srcObject = e.streams[0];
+    }
+    onCallConnected();
+  };
+  pc.onicecandidate = async (e) => {
+    if(e.candidate){
+      await push(ref(db, `calls_signaling/${data.from}/active/${callId}/receiverCandidates`), e.candidate.toJSON());
+    }
+  };
+  onChildAdded(ref(db, `calls_signaling/${currentUser.uid}/active/${callId}/callerCandidates`), async snap => {
+    const c = snap.val();
+    if(c && pc){ try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch(e){} }
+  });
+  await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  await update(ref(db, `calls_signaling/${data.from}/active/${callId}`), {
+    answer: { type: answer.type, sdp: answer.sdp },
+    receiverId: currentUser.uid
+  });
+  await remove(ref(db, `calls_signaling/${currentUser.uid}/incoming/${callId}`));
+  onValue(ref(db, `calls_signaling/${data.from}/active/${callId}/ended`), snap => {
+    if(snap.exists()) endCallCleanup();
+  });
+  window.currentIncomingCallId = null;
+  window.currentIncomingData = null;
+};
+
+$('rejectCallBtn').onclick = async () => {
+  const callId = window.currentIncomingCallId;
+  const data = window.currentIncomingData;
+  if(callId && data){
+    await update(ref(db, `calls_signaling/${data.from}/active/${callId}`), { ended: true });
+    await remove(ref(db, `calls_signaling/${currentUser.uid}/incoming/${callId}`));
+  }
+  $('incomingCallModal').classList.remove('active');
+  window.currentIncomingCallId = null;
+  window.currentIncomingData = null;
+};
+
+function createPeerConnection(){
+  pc = new RTCPeerConnection(rtcConfig);
+  pc.onconnectionstatechange = () => {
+    if(pc.connectionState === 'disconnected' || pc.connectionState === 'failed'){
+      endCallCleanup();
+    }
+  };
+}
+
+function onCallConnected(){
+  if(callTimerInterval) return;
+  $('callStatus').textContent = 'متصل';
+  callStartTime = Date.now();
+  callTimerInterval = setInterval(() => {
+    const secs = Math.floor((Date.now()-callStartTime)/1000);
+    const t = formatDuration(secs);
+    $('callTimer').textContent = t;
+    $('videoCallTimer').textContent = t;
+  }, 1000);
+}
+
+function showCallScreen(){
+  const initial = (currentChatUser.name||'U').charAt(0).toUpperCase();
+  $('callAvatar').innerHTML = currentChatUser.photoURL ? `<img src="${currentChatUser.photoURL}">` : initial;
+  $('callName').textContent = currentChatUser.name;
+  $('callTimer').textContent = '';
+  $('videoCallTimer').textContent = '';
+  $('callScreen').classList.add('active');
+}
+
+$('endCall').onclick = async () => {
+  if(currentCallId){
+    await update(ref(db, `calls_signaling/${currentChatUser.uid}/active/${currentCallId}`), { ended: true });
+  }
+  endCallCleanup();
+};
+
+function endCallCleanup(){
+  if(callTimerInterval){ clearInterval(callTimerInterval); callTimerInterval = null; }
+  if(pc){ pc.close(); pc = null; }
+  if(localStream){ localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+  if(remoteAudio){ remoteAudio.pause(); remoteAudio = null; }
+  if(currentCallId) remove(ref(db, `calls_signaling/${currentUser.uid}/active/${currentCallId}`));
+  $('callScreen').classList.remove('active');
+  $('callScreen').classList.remove('video-call');
+  $('localVideo').srcObject = null;
+  $('remoteVideo').srcObject = null;
+  if(currentChatUser && callStartTime && callType){
+    const duration = Math.round((Date.now()-callStartTime)/1000);
+    push(ref(db,'calls/'+currentUser.uid),{
+      toUid: currentChatUser.uid, toName: currentChatUser.name,
+      type: callType, direction: 'out', duration, timestamp: Date.now()
+    });
+  }
+  currentCallId = null; callType = null; isCaller = false; callStartTime = 0;
+  window.currentIncomingCallId = null;
+  window.currentIncomingData = null;
+}
+
+$('muteCall').onclick = (e) => {
+  if(!localStream) return;
+  const audioTrack = localStream.getAudioTracks()[0];
+  if(audioTrack){
+    audioTrack.enabled = !audioTrack.enabled;
+    e.currentTarget.classList.toggle('active', !audioTrack.enabled);
+    e.currentTarget.innerHTML = audioTrack.enabled 
+      ? '<i class="fas fa-microphone"></i>' 
+      : '<i class="fas fa-microphone-slash"></i>';
+  }
+};
+
+/* ============================================================
+   10. سجل المكالمات
+   ============================================================ */
+function loadCallHistory(){
+  if(unsubCalls) unsubCalls();
+  unsubCalls = onValue(ref(db,'calls/'+currentUser.uid), snap=>{
+    renderCallHistory(snap.val()||{});
+  });
+}
+
+function renderCallHistory(calls){
+  const lists = document.querySelectorAll('#callsList');
+  if(!lists.length) return;
+  const list = Object.entries(calls).map(([id,c])=>({id,...c}))
+    .sort((a,b)=>b.timestamp-a.timestamp).slice(0,50);
+  if(!list.length){
+    lists.forEach(l => l.innerHTML = `<div class="empty-state"><div class="big-icon"><i class="fas fa-phone"></i></div><div>سجل المكالمات فارغ</div></div>`);
+    return;
+  }
+  const html = list.map(c=>{
+    const name = c.toName || 'مستخدم';
+    const initial = name.charAt(0).toUpperCase();
+    const icon = c.type === 'video' ? 'fa-video' : 'fa-phone';
+    const dirIcon = c.direction === 'out' ? 'fa-arrow-up out' : 'fa-arrow-down in';
+    const dur = c.duration ? ` • ${formatDuration(c.duration)}` : '';
+    return `<div class="call-item">
+      <div class="avatar">${initial}</div>
+      <div class="info">
+        <div class="name">${escapeHtml(name)}</div>
+        <div class="meta">
+          <i class="fas ${dirIcon}"></i>
+          <i class="fas ${icon}"></i>
+          <span>${formatTimeShort(new Date(c.timestamp))}${dur}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  lists.forEach(l => l.innerHTML = html);
+}
+
+/* ============================================================
+   11. تسجيل الخروج
+   ============================================================ */
+['sideLogout','mobileLogout'].forEach(id=>{
+  const el = $(id);
+  if(el) el.onclick = async ()=>{
+    if(!confirm('تسجيل الخروج؟')) return;
+    await remove(ref(db,'onlineUsers/'+currentUser.uid));
+    await signOut(auth);
+    location.reload();
+  };
+});
+
+/* ============================================================
+   12. أدوات
+   ============================================================ */
+function formatTime(d){
+  let h=d.getHours(); const m=String(d.getMinutes()).padStart(2,'0');
+  const p=h>=12?'م':'ص'; h=h%12||12;
+  return `${h}:${m} ${p}`;
+}
+function formatTimeShort(d){
+  const now = new Date();
+  if(now.toDateString()===d.toDateString()) return formatTime(d);
+  return `${d.getDate()}/${d.getMonth()+1}`;
+}
+function formatDate(d){
+  const t = new Date(), y = new Date(); y.setDate(t.getDate()-1);
+  if(d.toDateString()===t.toDateString()) return 'اليوم';
+  if(d.toDateString()===y.toDateString()) return 'أمس';
+  return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+}
+function formatDuration(secs){
+  const m = Math.floor(secs/60);
+  const s = secs % 60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+function escapeHtml(t){
+  const d = document.createElement('div'); d.textContent = t; return d.innerHTML;
+}
+
+window.addEventListener('resize',()=>{
+  const desktop = window.innerWidth>=900;
+  $('mobileHeader').style.display = desktop?'none':'flex';
+  $('newChatFabMobile').style.display = desktop?'none':'flex';
+});
+setTimeout(()=>{
+  const desktop = window.innerWidth>=900;
+  $('mobileHeader').style.display = desktop?'none':'flex';
+  $('newChatFabMobile').style.display = desktop?'none':'flex';
+},100);
+</script>
+</body>
+</html>

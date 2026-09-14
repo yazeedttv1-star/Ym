@@ -3364,5 +3364,47 @@ window.onerror = function(msg, url, line){ console.log('Error:', msg, line); ret
 
 console.log('✅ Chat App Pro loaded - All features enabled');
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+    authDomain: "ym-pro-max.firebaseapp.com",
+    databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com",
+    projectId: "ym-pro-max",
+    storageBucket: "ym-pro-max.firebasestorage.app",
+    messagingSenderId: "174657071953",
+    appId: "1:174657071953:web:5e831fc337df46dbd18170"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then((registration) => {
+        messaging.useServiceWorker(registration);
+        return Notification.requestPermission();
+      })
+      .then((permission) => {
+        if (permission === 'granted') {
+          return messaging.getToken({ 
+            vapidKey: 'BF-CpPIlfbEG9KkCqX-yyy-EzHcIsKxuyP8rFyXFUsUYM26nhzSeHbyTAIf_ryLy94KmRJbTCXRuRGuaYnD5g3Q' 
+          });
+        }
+      })
+      .then((token) => {
+        if (token) {
+          console.log('FCM Token:', token);
+        }
+      })
+      .catch((err) => console.log('Error:', err));
+  }
+
+  messaging.onMessage((payload) => {
+    alert(`إشعار جديد: ${payload.notification.title}\n${payload.notification.body}`);
+  });
+</script>
 </body>
         </html>

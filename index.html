@@ -15,12 +15,8 @@
                 extend: {
                     colors: {
                         brand: {
-                            pink: '#fce7f3',
-                            accent: '#f43f5e',
-                            rose: '#e11d48',
-                            dark: '#881337',
-                            softPink: '#fbcfe8',
-                            bg: '#fdf2f8'
+                            pink: '#fce7f3', accent: '#f43f5e', rose: '#e11d48',
+                            dark: '#881337', softPink: '#fbcfe8', bg: '#fdf2f8'
                         }
                     },
                     fontFamily: {
@@ -36,7 +32,6 @@
 
     <style>
         * { -webkit-tap-highlight-color: transparent; }
-        
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #fdf2f8;
@@ -62,16 +57,9 @@
         .heart-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawHeart 3s ease-in-out forwards; }
         @keyframes drawHeart { to { stroke-dashoffset: 0; } }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(3deg); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
         .animate-float { animation: float 4s ease-in-out infinite; }
-
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(-5deg); }
-        }
+        @keyframes floatSlow { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(-5deg); } }
         .animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
 
         @keyframes riseUp {
@@ -81,74 +69,47 @@
         }
         .floating-heart { position: absolute; bottom: -50px; color: rgba(255, 255, 255, 0.6); pointer-events: none; animation: riseUp linear infinite; }
 
-        @keyframes flameGlow {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px #fbbf24); }
-        }
+        @keyframes flameGlow { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px #fbbf24); } }
         .animate-flame { animation: flameGlow 1.2s ease-in-out infinite; }
 
         .envelope-flap { transform-origin: top; transition: transform 0.6s ease-in-out; z-index: 20; }
         .envelope-flap.open { transform: rotateX(180deg); z-index: 5; }
 
-        @keyframes bounceShort {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
+        @keyframes bounceShort { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .animate-bounce-short { animation: bounceShort 1.5s ease-in-out infinite; }
 
-        /* ====== ADMIN PANEL (Mobile-first) ====== */
+        /* Admin Panel */
         .admin-input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #fbcfe8;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.2s;
-            background: #fff;
-            font-family: 'Cairo', sans-serif;
+            width: 100%; padding: 12px 14px;
+            border: 2px solid #fbcfe8; border-radius: 10px;
+            font-size: 14px; transition: all 0.2s;
+            background: #fff; font-family: 'Cairo', sans-serif;
             -webkit-appearance: none;
         }
         .admin-input:focus { outline: none; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15); }
         
         .admin-tab {
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 12px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            flex-shrink: 0;
+            padding: 10px 14px; border-radius: 10px;
+            font-weight: 700; font-size: 12px;
+            transition: all 0.2s; display: flex; align-items: center;
+            gap: 6px; white-space: nowrap; cursor: pointer;
+            font-family: 'Cairo', sans-serif; flex-shrink: 0;
         }
         .admin-tab.active { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); }
         .admin-tab:not(.active) { background: white; color: #881337; border: 2px solid #fbcfe8; }
         .admin-tab:not(.active):active { background: #fce7f3; }
 
-        /* ====== TOAST (Mobile-friendly) ====== */
+        /* Toast */
         .toast {
-            position: fixed;
-            top: 16px;
-            left: 50%;
+            position: fixed; top: 16px; left: 50%;
             transform: translateX(-50%) translateY(-150px);
-            min-width: 260px;
-            max-width: calc(100vw - 32px);
+            min-width: 260px; max-width: calc(100vw - 32px);
             background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 14px 20px;
-            border-radius: 14px;
-            font-weight: 700;
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.5);
-            z-index: 99999;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            font-family: 'Cairo', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
+            color: white; padding: 14px 20px; border-radius: 14px;
+            font-weight: 700; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.5);
+            z-index: 99999; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Cairo', sans-serif; display: flex; align-items: center;
+            gap: 10px; font-size: 14px;
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 40px rgba(239, 68, 68, 0.5); }
@@ -157,23 +118,14 @@
         .toast-icon { font-size: 20px; flex-shrink: 0; }
         .toast-text { flex: 1; }
 
-        /* Upload zone */
         .upload-zone {
-            border: 3px dashed #fbcfe8;
-            border-radius: 16px;
-            padding: 20px 14px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            background: #fff9fc;
-            font-family: 'Cairo', sans-serif;
+            border: 3px dashed #fbcfe8; border-radius: 16px;
+            padding: 20px 14px; text-align: center;
+            transition: all 0.3s; cursor: pointer;
+            background: #fff9fc; font-family: 'Cairo', sans-serif;
         }
-        .upload-zone:active, .upload-zone.dragover {
-            border-color: #f43f5e;
-            background: #fce7f3;
-        }
+        .upload-zone:active, .upload-zone.dragover { border-color: #f43f5e; background: #fce7f3; }
 
-        /* Toggle switch */
         .toggle-switch { position: relative; display: inline-block; width: 48px; height: 26px; flex-shrink: 0; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 26px; }
@@ -181,60 +133,101 @@
         .toggle-switch input:checked + .toggle-slider { background-color: #f43f5e; }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(22px); }
 
-        /* Range slider */
-        input[type="range"] {
-            -webkit-appearance: none; appearance: none;
-            width: 100%; height: 8px; border-radius: 5px;
-            background: #fbcfe8; outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none;
-            width: 24px; height: 24px; border-radius: 50%;
-            background: #f43f5e; cursor: pointer;
-            box-shadow: 0 2px 6px rgba(244, 63, 94, 0.4);
-        }
-        input[type="range"]::-moz-range-thumb {
-            width: 24px; height: 24px; border-radius: 50%;
-            background: #f43f5e; cursor: pointer; border: none;
-        }
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 5px; background: #fbcfe8; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #f43f5e; cursor: pointer; box-shadow: 0 2px 6px rgba(244, 63, 94, 0.4); }
+        input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #f43f5e; cursor: pointer; border: none; }
 
         .sync-badge {
             display: inline-flex; align-items: center; gap: 5px;
             padding: 5px 10px; border-radius: 999px;
             font-size: 10px; font-weight: 700;
-            font-family: 'Cairo', sans-serif;
-            white-space: nowrap;
+            font-family: 'Cairo', sans-serif; white-space: nowrap;
         }
         .sync-online { background: #d1fae5; color: #065f46; }
         .sync-offline { background: #fee2e2; color: #991b1b; }
         .sync-saving { background: #fef3c7; color: #92400e; }
 
-        .preview-thumb {
-            width: 100%; height: 100px;
-            object-fit: cover; border-radius: 10px;
-            border: 2px solid #fbcfe8;
-        }
+        .preview-thumb { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; border: 2px solid #fbcfe8; }
 
-        /* Mobile responsive */
         @media (max-width: 640px) {
             .admin-tab { padding: 8px 12px; font-size: 11px; }
             .admin-input { padding: 10px 12px; font-size: 14px; }
             .toast { padding: 12px 16px; font-size: 13px; min-width: 220px; }
         }
 
-        /* Gear button pulse */
-        @keyframes pulseGear {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg); }
-        }
+        @keyframes pulseGear { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } }
         .gear-pulse { animation: pulseGear 0.6s ease-in-out; }
 
-        /* Save flash */
         @keyframes flashBorder {
             0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
             100% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
         }
         .flash-success { animation: flashBorder 0.8s ease-out; }
+
+        /* WhatsApp Chat Styles */
+        .chat-bubble-voice {
+            background: #dcf8c6;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 85%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 6px;
+        }
+        .chat-bubble-voice.out {
+            background: #dcf8c6;
+            border-top-right-radius: 4px;
+            align-self: flex-end;
+        }
+        .voice-play-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #25D366; color: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .voice-play-btn:active { transform: scale(0.92); }
+        .voice-play-btn.playing { background: #128C7E; }
+        .voice-wave {
+            display: flex; align-items: center; gap: 2px;
+            height: 24px; flex: 1;
+        }
+        .voice-wave span {
+            display: inline-block; width: 2px; background: #6b7280;
+            border-radius: 2px; transition: height 0.15s;
+        }
+        .voice-duration { font-size: 11px; color: #6b7280; flex-shrink: 0; }
+
+        @keyframes recording-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+        }
+        .recording-pulse { animation: recording-pulse 1.2s ease-in-out infinite; }
+
+        @keyframes fadeInBubble {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bubble-appear { animation: fadeInBubble 0.4s ease-out; }
+
+        @keyframes typingDots {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+        .typing-dot { animation: typingDots 1.2s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .video-card {
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        .video-card:hover { transform: scale(1.02); }
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 min-h-screen relative">
@@ -245,7 +238,7 @@
         <span class="toast-text" id="toastText">تم الحفظ!</span>
     </div>
 
-    <!-- ===== GEAR BUTTON (Only) ===== -->
+    <!-- ===== GEAR BUTTON ===== -->
     <button id="adminToggle" title="الإعدادات"
             class="fixed top-3 left-3 sm:top-4 sm:left-4 z-[100] w-12 h-12 bg-white/95 active:bg-white backdrop-blur-md text-brand-rose rounded-full shadow-lg border-2 border-brand-softPink flex items-center justify-center transition-all duration-300 hover:rotate-90 active:scale-95">
         <i class="fas fa-cog text-xl"></i>
@@ -273,40 +266,24 @@
             
             <!-- Admin Header -->
             <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-lg border-2 border-pink-200 mb-4 sticky top-2 z-30">
-                <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2 sm:gap-3">
                         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center text-white text-lg sm:text-xl shadow-lg">
                             <i class="fas fa-cog"></i>
                         </div>
                         <div>
                             <h1 class="font-bold text-base sm:text-xl text-brand-dark">الإعدادات</h1>
-                            <p class="text-[10px] sm:text-xs text-gray-500">حفظ تلقائي مفعّل ✨</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500">مزامنة تلقائية فورية ✨</p>
                         </div>
                     </div>
                     <button id="adminClose" class="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all">
                         <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
-                
-                <!-- Action buttons (scrollable on mobile) -->
-                <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width: none;">
-                    <button id="adminSync" class="flex-shrink-0 bg-blue-500 active:bg-blue-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
-                        <i class="fas fa-cloud-upload-alt"></i> مزامنة
-                    </button>
-                    <button id="adminExport" class="flex-shrink-0 bg-amber-500 active:bg-amber-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
-                        <i class="fas fa-download"></i> تصدير
-                    </button>
-                    <button id="adminImport" class="flex-shrink-0 bg-purple-500 active:bg-purple-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
-                        <i class="fas fa-upload"></i> استيراد
-                    </button>
-                    <button id="adminReset" class="flex-shrink-0 bg-gray-500 active:bg-gray-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
-                        <i class="fas fa-undo"></i> استعادة
-                    </button>
-                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                <!-- Sidebar Tabs (horizontal scroll on mobile) -->
+                <!-- Sidebar Tabs -->
                 <aside class="lg:col-span-3">
                     <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-lg border-2 border-pink-100 lg:sticky lg:top-32">
                         <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-1 lg:pb-0 lg:overflow-visible" style="scrollbar-width: none;">
@@ -314,6 +291,8 @@
                             <button class="admin-tab" data-tab="messages"><i class="fas fa-comment-dots"></i><span>الرسائل</span></button>
                             <button class="admin-tab" data-tab="letters"><i class="fas fa-heart"></i><span>رسائل الحب</span></button>
                             <button class="admin-tab" data-tab="images"><i class="fas fa-image"></i><span>الصور</span></button>
+                            <button class="admin-tab" data-tab="whatsapp"><i class="fab fa-whatsapp"></i><span>شات واتساب</span></button>
+                            <button class="admin-tab" data-tab="videos"><i class="fas fa-video"></i><span>الفيديوهات</span></button>
                             <button class="admin-tab" data-tab="colors"><i class="fas fa-palette"></i><span>الألوان</span></button>
                             <button class="admin-tab" data-tab="typography"><i class="fas fa-font"></i><span>الخطوط</span></button>
                             <button class="admin-tab" data-tab="effects"><i class="fas fa-magic"></i><span>التأثيرات</span></button>
@@ -321,8 +300,8 @@
                         </nav>
                         <div class="hidden lg:block mt-4 p-3 bg-pink-50 rounded-xl border-2 border-dashed border-pink-300">
                             <p class="text-xs text-brand-dark leading-relaxed">
-                                <i class="fas fa-lightbulb text-amber-500 ml-1"></i>
-                                كل تعديل <strong>يُحفظ تلقائياً</strong> في المتصفح و Firebase.
+                                <i class="fas fa-bolt text-amber-500 ml-1"></i>
+                                كل تعديل <strong>يُزامَن فوراً</strong> مع Firebase ويظهر مباشرة.
                             </p>
                         </div>
                     </div>
@@ -446,21 +425,16 @@
                         <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
                             <i class="fas fa-image text-brand-rose"></i> الصور
                         </h2>
-                        
-                        <!-- Profile Image -->
                         <div class="mb-6">
                             <label class="block text-sm font-bold text-gray-700 mb-2">
-                                <i class="fas fa-user-circle text-brand-rose ml-1"></i>
-                                صورة البروفايل
+                                <i class="fas fa-user-circle text-brand-rose ml-1"></i> صورة البروفايل
                             </label>
-                            
                             <div id="uploadZone" class="upload-zone">
                                 <input type="file" id="imageFileInput" accept="image/*" class="hidden">
                                 <i class="fas fa-cloud-upload-alt text-3xl text-brand-rose mb-2"></i>
                                 <p class="font-bold text-gray-700 text-sm">اضغط لاختيار صورة</p>
-                                <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF — الحد الأقصى 5 MB</p>
+                                <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF</p>
                             </div>
-                            
                             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1.5">أو الصق رابطاً</label>
@@ -472,19 +446,150 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Gallery -->
-                        <div class="border-t-2 border-pink-100 pt-6">
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
-                                <i class="fas fa-images text-brand-rose ml-1"></i>
-                                معرض الصور (اختياري)
-                            </label>
-                            <div id="galleryUploadZone" class="upload-zone">
-                                <input type="file" id="galleryFileInput" accept="image/*" multiple class="hidden">
-                                <i class="fas fa-plus-circle text-3xl text-brand-rose mb-2"></i>
-                                <p class="font-bold text-gray-700 text-sm">أضف صوراً متعددة</p>
+                    <!-- TAB: WHATSAPP CHAT -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-green-100" data-content="whatsapp">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fab fa-whatsapp text-green-500"></i> إعدادات شات واتساب
+                        </h2>
+                        
+                        <!-- Profile Info -->
+                        <div class="p-4 bg-green-50 rounded-xl border-l-4 border-green-400 mb-4">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">👤 معلومات الشخص</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">الاسم في الشات</label>
+                                    <input type="text" id="cfg-waName" class="admin-input" data-auto="true" placeholder="Maryam">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">حالة الاتصال</label>
+                                    <input type="text" id="cfg-waStatus" class="admin-input" data-auto="true" placeholder="متصل الآن">
+                                </div>
                             </div>
-                            <div id="galleryPreview" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 mt-4"></div>
+                            
+                            <div class="mt-4">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">صورة بروفايل الشات</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <div id="waUploadZone" class="upload-zone">
+                                            <input type="file" id="waImageInput" accept="image/*" class="hidden">
+                                            <i class="fas fa-user-circle text-3xl text-green-500 mb-2"></i>
+                                            <p class="font-bold text-gray-700 text-xs">اضغط لاختيار صورة</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center">
+                                        <img id="prev-waImg" src="" class="w-24 h-24 rounded-full object-cover border-4 border-green-300 shadow-lg" onerror="this.src='https://placehold.co/200x200/25D366/ffffff?text=M'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Voice Recording -->
+                        <div class="p-4 bg-red-50 rounded-xl border-l-4 border-red-400 mb-4">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">🎙️ تسجيل رسالة صوتية</h4>
+                            
+                            <div id="recordingStatus" class="hidden mb-3 p-3 bg-white rounded-xl border-2 border-red-300 text-center">
+                                <div class="flex items-center justify-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-red-500 recording-pulse"></div>
+                                    <span class="font-bold text-red-600 text-sm">جاري التسجيل...</span>
+                                    <span id="recordingTime" class="font-mono font-bold text-red-600 text-sm">00:00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <button id="startRecordBtn" class="flex-1 min-w-[120px] bg-red-500 active:bg-red-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                    <i class="fas fa-microphone"></i> بدء التسجيل
+                                </button>
+                                <button id="stopRecordBtn" class="hidden flex-1 min-w-[120px] bg-gray-700 active:bg-gray-900 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                    <i class="fas fa-stop"></i> إيقاف وحفظ
+                                </button>
+                                <button id="cancelRecordBtn" class="hidden flex-1 min-w-[120px] bg-gray-400 active:bg-gray-600 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                    <i class="fas fa-times"></i> إلغاء
+                                </button>
+                            </div>
+                            
+                            <p class="text-xs text-gray-500 mt-3 text-center">
+                                <i class="fas fa-info-circle"></i>
+                                اقصى مدة: 60 ثانية — الجودة منخفضة عشان الحجم يفضل صغير
+                            </p>
+                            
+                            <!-- Upload existing audio file -->
+                            <div class="mt-4 pt-4 border-t-2 border-red-200">
+                                <p class="text-xs font-bold text-gray-600 mb-2">أو ارفع ملف صوتي جاهز (MP3, WAV, M4A):</p>
+                                <input type="file" id="audioFileInput" accept="audio/*" class="admin-input text-xs">
+                            </div>
+                        </div>
+
+                        <!-- Voice Messages List -->
+                        <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-gray-800 text-sm">📼 الرسائل الصوتية (<span id="voiceCount">0</span>)</h4>
+                                <span class="text-xs text-gray-500">اسمع/احذف</span>
+                            </div>
+                            <div id="voiceMessagesList" class="space-y-2"></div>
+                        </div>
+
+                        <!-- Prompt after messages -->
+                        <div class="p-4 bg-purple-50 rounded-xl border-l-4 border-purple-400 mt-4">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">💬 رسالة الرد الأخيرة</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">التلميح اللي يظهر للمستخدم</label>
+                                    <input type="text" id="cfg-waPrompt" class="admin-input" data-auto="true" placeholder="اكتبي اسم دلعك بطتي">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">اسم الدلع الصح (validation)</label>
+                                    <input type="text" id="cfg-waCorrectName" class="admin-input" data-auto="true" placeholder="بطتي">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">رسالة الخطأ لو الاسم غلط</label>
+                                    <input type="text" id="cfg-waWrongNameMsg" class="admin-input" data-auto="true" placeholder="الاسم ده مش صح 🥺">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">رسالة النجاح قبل الانتقال للفيديو</label>
+                                    <input type="text" id="cfg-waSuccessMsg" class="admin-input" data-auto="true" placeholder="يلا نشوف الفيديوهات 🎬">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: VIDEOS -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="videos">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-video text-brand-rose"></i> شاشة الفيديوهات
+                        </h2>
+                        
+                        <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400 mb-4">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">➕ إضافة فيديو</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">رابط يوتيوب</label>
+                                    <input type="url" id="newVideoUrl" class="admin-input" placeholder="https://www.youtube.com/watch?v=...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">عنوان الفيديو</label>
+                                    <input type="text" id="newVideoTitle" class="admin-input" placeholder="عنوان...">
+                                </div>
+                                <button id="addVideoBtn" class="w-full bg-blue-500 active:bg-blue-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                    <i class="fas fa-plus"></i> إضافة الفيديو
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">🎬 الفيديوهات المضافة (<span id="videoCount">0</span>)</h4>
+                            <div id="videosList" class="space-y-3"></div>
+                        </div>
+
+                        <div class="p-4 bg-pink-50 rounded-xl border-l-4 border-pink-400 mt-4">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm">⚙️ إعدادات شاشة الفيديو</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">عنوان شاشة الفيديو</label>
+                                    <input type="text" id="cfg-videoScreenTitle" class="admin-input" data-auto="true" placeholder="فيديوهات خاصة لمريم 🎬">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -613,13 +718,6 @@
                             </label>
                             <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
                                 <div class="flex items-center gap-3">
-                                    <i class="fas fa-sparkles text-brand-rose text-lg"></i>
-                                    <div><p class="font-bold text-sm">اللمعان</p></div>
-                                </div>
-                                <label class="toggle-switch"><input type="checkbox" id="cfg-shine" data-auto="true" checked><span class="toggle-slider"></span></label>
-                            </label>
-                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
-                                <div class="flex items-center gap-3">
                                     <i class="fas fa-music text-brand-rose text-lg"></i>
                                     <div><p class="font-bold text-sm">الموسيقى التلقائية</p></div>
                                 </div>
@@ -642,8 +740,8 @@
                         </h2>
                         <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400 mb-4">
                             <p class="text-sm text-blue-800">
-                                <i class="fas fa-info-circle ml-1"></i>
-                                المزامنة التلقائية مفعّلة. كل تعديل يُرفع تلقائياً.
+                                <i class="fas fa-bolt ml-1"></i>
+                                <strong>مزامنة تلقائية فورية:</strong> كل تعديل يُرفع مباشرة على Firebase ويظهر فوراً لجميع الزوار.
                             </p>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -652,32 +750,23 @@
                                 <p class="font-bold text-brand-dark text-sm">ym-pro-max</p>
                             </div>
                             <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
-                                <p class="text-xs font-bold text-gray-500 mb-1">قاعدة البيانات</p>
-                                <p class="font-bold text-brand-dark text-sm">Realtime DB</p>
+                                <p class="text-xs font-bold text-gray-500 mb-1">حالة الاتصال</p>
+                                <p class="font-bold text-brand-dark text-sm" id="fbConnStatus">جاري الاتصال...</p>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <button id="fbPushBtn" class="w-full bg-blue-500 active:bg-blue-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
-                                <i class="fas fa-cloud-upload-alt"></i> رفع إلى Firebase
-                            </button>
-                            <button id="fbPullBtn" class="w-full bg-emerald-500 active:bg-emerald-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
-                                <i class="fas fa-cloud-download-alt"></i> تحميل من Firebase
-                            </button>
-                            <button id="fbDeleteBtn" class="w-full bg-red-500 active:bg-red-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
-                                <i class="fas fa-trash"></i> حذف من Firebase
-                            </button>
-                        </div>
-                        <div id="fbStatus" class="mt-4 p-3 bg-gray-50 rounded-xl border-2 border-gray-200 text-sm text-gray-600">
-                            <i class="fas fa-info-circle mr-1"></i> جاهز
+                        <div class="p-4 bg-green-50 rounded-xl border-l-4 border-green-400">
+                            <p class="text-xs text-green-800">
+                                <i class="fas fa-check-circle"></i>
+                                لا يوجد أزرار يدوية — كل حاجة تلقائية 100%
+                            </p>
                         </div>
                     </div>
 
                 </main>
             </div>
         </div>
-    </div>
-
-    <!-- =====================================================
+                        </div>
+                            <!-- =====================================================
          MAIN SITE
     ====================================================== -->
     <div id="siteContainer">
@@ -873,13 +962,119 @@
                 </div>
                 <div class="z-10 mt-6">
                     <h3 class="font-cursive text-2xl sm:text-3xl text-brand-dark font-bold">Envelope Of Love</h3>
-                    <p class="font-fredoka text-xs sm:text-sm text-amber-800">Dear Maryam</p>
+                    <p class="font-fredoka text-xs sm:text-sm text-amber-800" id="envelopeNameLabel">Dear Maryam</p>
                     <button id="btnOpenEnvelope" class="mt-4 bg-brand-rose active:bg-rose-700 text-white font-fredoka px-6 py-2 rounded-full shadow-lg flex items-center gap-2 mx-auto text-sm">
                         <span>Open</span><i class="fas fa-envelope-open"></i>
                     </button>
                 </div>
             </div>
             <div id="lettersContainer" class="hidden w-full space-y-4 sm:space-y-6 mt-6 transition-all duration-700"></div>
+            
+            <!-- NEW: Button to WhatsApp Chat (appears after letters) -->
+            <button id="btnGoToChat" class="hidden mt-8 bg-green-500 active:bg-green-700 text-white font-fredoka font-bold px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 text-base sm:text-lg transition-all duration-500 hover:scale-105">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span>Chat with Maryam</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         WHATSAPP CHAT SCREEN
+    ====================================================== -->
+    <div id="whatsappScreen" class="hidden fixed inset-0 z-[140] flex flex-col" style="background: #ECE5DD;">
+        <!-- WhatsApp Header -->
+        <div class="bg-[#075E54] text-white shadow-lg z-20">
+            <div class="flex items-center gap-2 p-3">
+                <button id="waBackBtn" class="p-2 active:bg-white/10 rounded-full">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <img id="waHeaderImg" src="" class="w-10 h-10 rounded-full object-cover border-2 border-white/40" onerror="this.src='https://placehold.co/100x100/25D366/ffffff?text=M'">
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-sm sm:text-base truncate" id="waHeaderName">Maryam</h3>
+                    <p class="text-[10px] sm:text-xs text-green-100" id="waHeaderStatus">متصل الآن</p>
+                </div>
+                <button class="p-2 active:bg-white/10 rounded-full" title="Call">
+                    <i class="fas fa-phone text-lg"></i>
+                </button>
+                <button class="p-2 active:bg-white/10 rounded-full" title="Video Call">
+                    <i class="fas fa-video text-lg"></i>
+                </button>
+                <button class="p-2 active:bg-white/10 rounded-full" title="Menu">
+                    <i class="fas fa-ellipsis-v text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div id="waChatArea" class="flex-1 overflow-y-auto p-3 sm:p-4" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22><g fill=%22none%22 fill-rule=%22evenodd%22><g fill=%22%23d4cdc4%22 fill-opacity=%220.25%22><path d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/></g></g></svg>');">
+            <!-- Typing Indicator (shows before each voice message) -->
+            <div id="waTypingIndicator" class="hidden mb-2">
+                <div class="inline-flex items-center gap-2 bg-white rounded-2xl px-4 py-3 shadow-md">
+                    <div class="flex gap-1">
+                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
+                    </div>
+                    <span class="text-xs text-gray-500 mr-1">جاري التسجيل</span>
+                </div>
+            </div>
+            <div id="waMessagesArea" class="space-y-1"></div>
+        </div>
+
+        <!-- Input Bar (hidden until voice messages finish) -->
+        <div id="waInputBar" class="hidden bg-[#f0f0f0] border-t border-gray-300 p-2 sm:p-3 z-20">
+            <div class="flex items-center gap-2">
+                <input type="text" id="waInputField" class="flex-1 bg-white rounded-full px-4 py-3 text-sm outline-none border-2 border-transparent focus:border-green-400 transition-all" placeholder="اكتبي رسالتك...">
+                <button id="waSendBtn" class="bg-[#25D366] active:bg-[#128C7E] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Name Prompt (after voice messages) -->
+        <div id="waNamePrompt" class="hidden bg-[#f0f0f0] border-t border-gray-300 p-3 sm:p-4 z-20">
+            <div class="max-w-md mx-auto text-center">
+                <p class="text-sm sm:text-base text-gray-700 font-bold mb-3" id="waPromptText">اكتبي اسم دلعك بطتي 💕</p>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="waNameInput" class="flex-1 bg-white rounded-full px-4 py-3 text-sm outline-none border-2 border-transparent focus:border-green-400 transition-all text-center font-bold" placeholder="اسم الدلع...">
+                    <button id="waNameSendBtn" class="bg-[#25D366] active:bg-[#128C7E] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+                <p id="waNameError" class="hidden text-xs text-red-500 mt-2 font-bold"></p>
+            </div>
+        </div>
+
+        <!-- Success Overlay -->
+        <div id="waSuccessOverlay" class="hidden absolute inset-0 bg-black/70 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl p-6 max-w-sm text-center shadow-2xl bubble-appear">
+                <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
+                    <i class="fas fa-heart text-green-500 text-3xl"></i>
+                </div>
+                <p class="font-bold text-gray-800 text-lg mb-2" id="waSuccessText">يلا نشوف الفيديوهات 🎬</p>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-4 overflow-hidden">
+                    <div id="waSuccessBar" class="h-full bg-green-500 rounded-full" style="width: 0%; transition: width 1.5s linear;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         VIDEO SCREEN
+    ====================================================== -->
+    <div id="videoScreen" class="hidden fixed inset-0 z-[140] bg-gradient-to-br from-purple-900 via-rose-900 to-purple-900 overflow-y-auto">
+        <button id="videoBackBtn" class="fixed top-4 left-4 z-50 bg-white/20 active:bg-white/30 text-white px-4 py-2 rounded-full backdrop-blur-md text-sm font-fredoka flex items-center gap-2 border border-white/30">
+            <i class="fas fa-arrow-left"></i><span>Back</span>
+        </button>
+        <div class="container mx-auto px-4 py-16 sm:py-20 max-w-4xl">
+            <h1 class="text-center font-fredoka text-3xl sm:text-4xl md:text-5xl text-white font-bold mb-2 drop-shadow-lg" id="videoScreenTitle">فيديوهات خاصة لمريم 🎬</h1>
+            <p class="text-center text-white/70 text-sm sm:text-base mb-8" id="videoScreenSubtitle">اضغط على أي فيديو للمشاهدة</p>
+            <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"></div>
+            <div id="noVideosMsg" class="hidden text-center text-white/80 py-12">
+                <i class="fas fa-video-slash text-5xl mb-4 opacity-50"></i>
+                <p>لا توجد فيديوهات بعد</p>
+            </div>
         </div>
     </div>
 
@@ -914,13 +1109,17 @@
                 return snapshot.exists() ? snapshot.val() : null;
             },
             async delete() { await remove(ref(db, CONFIG_PATH)); },
+            subscribe(callback) {
+                onValue(ref(db, CONFIG_PATH), (snapshot) => {
+                    if (snapshot.exists()) callback(snapshot.val());
+                });
+            },
             isReady: true
         };
         window.dispatchEvent(new Event('firebaseReady'));
         console.log('✅ Firebase initialized');
     </script>
-
-    <!-- =====================================================
+        <!-- =====================================================
          MAIN APP SCRIPT
     ====================================================== -->
     <script>
@@ -930,6 +1129,8 @@
     const STORAGE_KEY = 'maryam_birthday_config_v1';
     let autoSaveTimeout = null;
     let lastSavedHash = '';
+    let firebaseReady = false;
+    let isSyncingFromRemote = false;
 
     const defaultConfig = {
         name: 'Maryam',
@@ -959,11 +1160,26 @@
         profileImg: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
         colors: { accent: '#f43f5e', rose: '#e11d48', dark: '#881337', bg: '#fdf2f8' },
         typography: { fontSizeTitle: 1.0, fontSizeWelcome: 1.0, lineHeight: 1.6, fontHeading: 'Fredoka' },
-        effects: { confetti: true, floatingHearts: true, shine: true, autoMusic: false, particles: false }
+        effects: { confetti: true, floatingHearts: true, autoMusic: false, particles: false },
+        
+        // NEW: WhatsApp Chat
+        whatsapp: {
+            name: 'Maryam',
+            status: 'متصل الآن',
+            profileImg: 'https://placehold.co/200x200/25D366/ffffff?text=M',
+            voiceMessages: [],  // [{ audio: base64, duration: seconds, timestamp: ms }]
+            promptText: 'اكتبي اسم دلعك بطتي 💕',
+            correctName: 'بطتي',
+            wrongNameMsg: 'الاسم ده مش صح 🥺',
+            successMsg: 'يلا نشوف الفيديوهات 🎬'
+        },
+        
+        // NEW: Videos
+        videos: [],  // [{ url: youtubeURL, title: 'عنوان', videoId: 'abc123' }]
+        videoScreenTitle: 'فيديوهات خاصة لمريم 🎬'
     };
 
     let currentConfig = loadConfig();
-    let firebaseReady = false;
 
     function loadConfig() {
         try {
@@ -1008,55 +1224,51 @@
         const txt = document.getElementById('syncText');
         badge.className = 'sync-badge fixed top-4 left-16 sm:left-20 z-[100] sync-' + status;
         txt.textContent = text;
+        const fbStatus = document.getElementById('fbConnStatus');
+        if (fbStatus) fbStatus.textContent = text;
     }
 
     // ============================================
-    // AUTO-SAVE (Debounced)
+    // AUTO-SAVE (Instant Sync)
     // ============================================
     function scheduleAutoSave() {
+        if (isSyncingFromRemote) return;
         clearTimeout(autoSaveTimeout);
         updateSyncBadge('saving', '💾 جاري الحفظ...');
         autoSaveTimeout = setTimeout(async () => {
             await performSave();
-        }, 800); // wait 800ms after last change
+        }, 400);
     }
 
     async function performSave() {
         const hash = JSON.stringify(currentConfig);
         if (hash === lastSavedHash) return;
         
-        // Save locally
         try {
             localStorage.setItem(STORAGE_KEY, hash);
             lastSavedHash = hash;
         } catch (e) {
-            showToast('❌ فشل الحفظ المحلي', 'error');
+            showToast('❌ فشل الحفظ المحلي (المساحة ممتلئة)', 'error');
             return;
         }
         
-        // Flash effect
-        document.getElementById('adminPanel').classList.add('flash-success');
-        setTimeout(() => document.getElementById('adminPanel').classList.remove('flash-success'), 800);
+        const panel = document.getElementById('adminPanel');
+        if (panel) {
+            panel.classList.add('flash-success');
+            setTimeout(() => panel.classList.remove('flash-success'), 800);
+        }
         
-        // Sync to Firebase in background
         if (firebaseReady && window.firebaseHelpers) {
             try {
                 await window.firebaseHelpers.push(currentConfig);
-                updateSyncBadge('online', '☁️ محفوظ');
-                showToast('✅ تم الحفظ في المتصفح و Firebase');
+                updateSyncBadge('online', '☁️ متزامن');
             } catch (e) {
+                console.warn('Firebase push failed:', e);
                 updateSyncBadge('offline', '💾 محلي فقط');
-                showToast('✅ تم الحفظ محلياً (Firebase فشل)', 'warning');
             }
         } else {
             updateSyncBadge('offline', '💾 محلي');
-            showToast('✅ تم الحفظ في المتصفح');
         }
-    }
-
-    function manualSave() {
-        clearTimeout(autoSaveTimeout);
-        performSave();
     }
 
     // ============================================
@@ -1086,6 +1298,7 @@
 
         document.getElementById('dearBadge').textContent = `Dear ${c.name}`;
         document.getElementById('footerText').textContent = c.footerText || `Made with ❤️ for ${c.name}'s Special Day`;
+        document.getElementById('envelopeNameLabel').textContent = `Dear ${c.name}`;
 
         document.getElementById('noteTitle').textContent = c.noteTitle;
         document.getElementById('noteContent').textContent = c.noteContent;
@@ -1099,6 +1312,7 @@
         document.getElementById('cardBackPara2').textContent = c.cardBackPara2;
         document.getElementById('cardBackSignature').textContent = c.cardBackSignature;
 
+        // Letters
         const lc = document.getElementById('lettersContainer');
         lc.innerHTML = '';
         const borders = ['border-brand-rose', 'border-pink-400', 'border-amber-400', 'border-rose-500'];
@@ -1108,14 +1322,25 @@
             div.className = `bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-xl border-l-4 ${borders[i % 4]} transform transition-all duration-500`;
             div.innerHTML = `
                 <div class="flex justify-between items-start mb-2">
-                    <span class="text-xs font-bold text-brand-rose uppercase tracking-wider">${letter.title}</span>
+                    <span class="text-xs font-bold text-brand-rose uppercase tracking-wider">${escapeHtml(letter.title)}</span>
                     <i class="fas ${icons[i % 4]}"></i>
                 </div>
-                <p class="text-gray-700 text-sm sm:text-base leading-relaxed italic break-words">${letter.content}</p>
-                <span class="block text-right font-cursive text-lg sm:text-xl text-brand-dark mt-2">${letter.signature}</span>
+                <p class="text-gray-700 text-sm sm:text-base leading-relaxed italic break-words">${escapeHtml(letter.content)}</p>
+                <span class="block text-right font-cursive text-lg sm:text-xl text-brand-dark mt-2">${escapeHtml(letter.signature)}</span>
             `;
             lc.appendChild(div);
         });
+
+        // WhatsApp header
+        document.getElementById('waHeaderName').textContent = c.whatsapp.name;
+        document.getElementById('waHeaderStatus').textContent = c.whatsapp.status;
+        document.getElementById('waHeaderImg').src = c.whatsapp.profileImg;
+        document.getElementById('waPromptText').textContent = c.whatsapp.promptText;
+        document.getElementById('waSuccessText').textContent = c.whatsapp.successMsg;
+
+        // Video screen
+        document.getElementById('videoScreenTitle').textContent = c.videoScreenTitle;
+        renderVideoScreen();
 
         applyColors(c.colors);
         applyTypography(c.typography);
@@ -1199,7 +1424,7 @@
     }
 
     // ============================================
-    // IMAGE UPLOAD
+    // HELPERS
     // ============================================
     function fileToBase64(file) {
         return new Promise((resolve, reject) => {
@@ -1210,65 +1435,347 @@
         });
     }
 
-    async function handleProfileUpload(file) {
-        if (file.size > 5 * 1024 * 1024) {
-            showToast('❌ حجم الصورة يتجاوز 5 MB', 'error');
-            return;
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function formatDuration(sec) {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function extractYouTubeId(url) {
+        if (!url) return null;
+        const patterns = [
+            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+            /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+        ];
+        for (const p of patterns) {
+            const m = url.match(p);
+            if (m) return m[1];
         }
-        showToast('⏳ جاري رفع الصورة...', 'info');
+        return null;
+    }
+
+    // ============================================
+    // IMAGE UPLOAD (Profile + WA Profile)
+    // ============================================
+    async function handleProfileUpload(file) {
+        if (file.size > 3 * 1024 * 1024) { showToast('❌ حجم الصورة كبير جداً (max 3MB)', 'error'); return; }
+        showToast('⏳ جاري الرفع...', 'info');
         try {
             const base64 = await fileToBase64(file);
             currentConfig.profileImg = base64;
             document.getElementById('prev-profileImg').src = base64;
-            document.getElementById('cfg-profileImg').value = '(صورة مرفوعة من الجهاز)';
+            document.getElementById('cfg-profileImg').value = '';
             applyConfigToSite();
             scheduleAutoSave();
-        } catch (e) {
-            showToast('❌ فشل رفع الصورة', 'error');
-        }
+            showToast('✅ تم رفع الصورة');
+        } catch (e) { showToast('❌ فشل الرفع', 'error'); }
     }
 
-    async function handleGalleryUpload(files) {
-        showToast(`⏳ رفع ${files.length} صورة...`, 'info');
-        const newGallery = [...(currentConfig.gallery || [])];
-        for (const file of files) {
-            if (file.size > 5 * 1024 * 1024) {
-                showToast(`⚠️ تم تجاهل ${file.name}`, 'warning');
-                continue;
+    async function handleWAImageUpload(file) {
+        if (file.size > 2 * 1024 * 1024) { showToast('❌ حجم الصورة كبير جداً (max 2MB)', 'error'); return; }
+        try {
+            const base64 = await fileToBase64(file);
+            currentConfig.whatsapp.profileImg = base64;
+            document.getElementById('prev-waImg').src = base64;
+            applyConfigToSite();
+            scheduleAutoSave();
+            showToast('✅ تم رفع صورة الشات');
+        } catch (e) { showToast('❌ فشل الرفع', 'error'); }
+    }
+
+    // ============================================
+    // AUDIO RECORDING (with compression)
+    // ============================================
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingStartTime = 0;
+    let recordingTimerInterval = null;
+    let currentStream = null;
+
+    async function startRecording() {
+        try {
+            currentStream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    channelCount: 1,
+                    sampleRate: 16000,
+                    echoCancellation: true,
+                    noiseSuppression: true
+                } 
+            });
+            
+            // Use low bitrate for compression
+            let mimeType = 'audio/webm;codecs=opus';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = 'audio/webm';
+                if (!MediaRecorder.isTypeSupported(mimeType)) {
+                    mimeType = 'audio/mp4';
+                }
             }
-            try {
-                const base64 = await fileToBase64(file);
-                newGallery.push(base64);
-            } catch (e) {}
+            
+            const options = { mimeType, audioBitsPerSecond: 24000 };
+            mediaRecorder = new MediaRecorder(currentStream, options);
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunks.push(e.data);
+            };
+            
+            mediaRecorder.onstop = async () => {
+                const blob = new Blob(audioChunks, { type: mimeType });
+                await saveRecordedAudio(blob);
+                if (currentStream) {
+                    currentStream.getTracks().forEach(t => t.stop());
+                    currentStream = null;
+                }
+            };
+            
+            mediaRecorder.start();
+            recordingStartTime = Date.now();
+            
+            // Show recording UI
+            document.getElementById('recordingStatus').classList.remove('hidden');
+            document.getElementById('startRecordBtn').classList.add('hidden');
+            document.getElementById('stopRecordBtn').classList.remove('hidden');
+            document.getElementById('cancelRecordBtn').classList.remove('hidden');
+            
+            // Timer
+            recordingTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                document.getElementById('recordingTime').textContent = formatDuration(elapsed);
+                if (elapsed >= 60) {
+                    stopRecording();
+                }
+            }, 200);
+            
+            showToast('🎙️ جاري التسجيل...', 'info');
+        } catch (e) {
+            console.error(e);
+            showToast('❌ لا يمكن الوصول للميكروفون', 'error');
         }
-        currentConfig.gallery = newGallery;
-        renderGalleryPreview();
-        scheduleAutoSave();
     }
 
-    function renderGalleryPreview() {
-        const container = document.getElementById('galleryPreview');
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+        }
+        clearInterval(recordingTimerInterval);
+        document.getElementById('recordingStatus').classList.add('hidden');
+        document.getElementById('startRecordBtn').classList.remove('hidden');
+        document.getElementById('stopRecordBtn').classList.add('hidden');
+        document.getElementById('cancelRecordBtn').classList.add('hidden');
+    }
+
+    function cancelRecording() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.onstop = () => {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(t => t.stop());
+                    currentStream = null;
+                }
+            };
+            mediaRecorder.stop();
+        }
+        clearInterval(recordingTimerInterval);
+        document.getElementById('recordingStatus').classList.add('hidden');
+        document.getElementById('startRecordBtn').classList.remove('hidden');
+        document.getElementById('stopRecordBtn').classList.add('hidden');
+        document.getElementById('cancelRecordBtn').classList.add('hidden');
+        showToast('🚫 تم الإلغاء', 'warning');
+    }
+
+    async function saveRecordedAudio(blob) {
+        showToast('⏳ جاري الحفظ...', 'info');
+        try {
+            const duration = (Date.now() - recordingStartTime) / 1000;
+            const base64 = await fileToBase64(blob);
+            
+            // Check size
+            const sizeKB = Math.round(base64.length / 1024);
+            if (sizeKB > 500) {
+                showToast(`⚠️ الملف كبير (${sizeKB}KB)، جرب تسجيل أقصر`, 'warning');
+            }
+            
+            currentConfig.whatsapp.voiceMessages.push({
+                audio: base64,
+                duration: Math.round(duration),
+                timestamp: Date.now()
+            });
+            
+            renderVoiceMessagesList();
+            scheduleAutoSave();
+            showToast('✅ تم حفظ الرسالة الصوتية');
+        } catch (e) {
+            console.error(e);
+            showToast('❌ فشل الحفظ', 'error');
+        }
+    }
+
+    async function handleAudioFileUpload(file) {
+        if (file.size > 500 * 1024) {
+            showToast('⚠️ الملف كبير (max 500KB)، جرب ملف أقصر أو أقل جودة', 'warning');
+        }
+        try {
+            const base64 = await fileToBase64(file);
+            const audio = new Audio(base64);
+            audio.addEventListener('loadedmetadata', () => {
+                currentConfig.whatsapp.voiceMessages.push({
+                    audio: base64,
+                    duration: Math.round(audio.duration) || 0,
+                    timestamp: Date.now()
+                });
+                renderVoiceMessagesList();
+                scheduleAutoSave();
+                showToast('✅ تم رفع الملف الصوتي');
+            });
+        } catch (e) {
+            showToast('❌ فشل الرفع', 'error');
+        }
+    }
+
+    // ============================================
+    // VOICE MESSAGES LIST (Admin)
+    // ============================================
+    function renderVoiceMessagesList() {
+        const container = document.getElementById('voiceMessagesList');
+        const count = document.getElementById('voiceCount');
         container.innerHTML = '';
-        (currentConfig.gallery || []).forEach((src, i) => {
+        const msgs = currentConfig.whatsapp.voiceMessages || [];
+        count.textContent = msgs.length;
+        
+        if (msgs.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-400 text-sm py-6">لا توجد رسائل صوتية بعد</p>';
+            return;
+        }
+        
+        msgs.forEach((msg, i) => {
             const div = document.createElement('div');
-            div.className = 'relative';
+            div.className = 'flex items-center gap-3 p-3 bg-green-50 rounded-xl border-2 border-green-200';
+            const sizeKB = Math.round(msg.audio.length / 1024);
             div.innerHTML = `
-                <img src="${src}" class="preview-thumb">
-                <button class="absolute top-1 right-1 bg-red-500 active:bg-red-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center shadow" data-index="${i}">
-                    <i class="fas fa-times"></i>
+                <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-microphone text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-bold text-sm text-gray-800">رسالة #${i + 1}</p>
+                    <p class="text-xs text-gray-500">${formatDuration(msg.duration)} • ${sizeKB} KB</p>
+                </div>
+                <button class="play-voice-btn bg-green-500 active:bg-green-700 text-white w-9 h-9 rounded-full flex items-center justify-center shadow" data-index="${i}" title="استماع">
+                    <i class="fas fa-play text-xs"></i>
+                </button>
+                <button class="delete-voice-btn bg-red-500 active:bg-red-700 text-white w-9 h-9 rounded-full flex items-center justify-center shadow" data-index="${i}" title="حذف">
+                    <i class="fas fa-trash text-xs"></i>
                 </button>
             `;
-            div.querySelector('button').addEventListener('click', () => {
-                currentConfig.gallery.splice(i, 1);
-                renderGalleryPreview();
-                scheduleAutoSave();
-            });
             container.appendChild(div);
+        });
+        
+        container.querySelectorAll('.play-voice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.index);
+                const msg = currentConfig.whatsapp.voiceMessages[idx];
+                const audio = new Audio(msg.audio);
+                audio.play();
+                const icon = e.currentTarget.querySelector('i');
+                icon.className = 'fas fa-pause text-xs';
+                audio.onended = () => { icon.className = 'fas fa-play text-xs'; };
+            });
+        });
+        
+        container.querySelectorAll('.delete-voice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.index);
+                if (confirm(`حذف الرسالة #${idx + 1}؟`)) {
+                    currentConfig.whatsapp.voiceMessages.splice(idx, 1);
+                    renderVoiceMessagesList();
+                    scheduleAutoSave();
+                    showToast('🗑️ تم الحذف');
+                }
+            });
         });
     }
 
     // ============================================
-    // ADMIN FORM
+    // VIDEOS ADMIN
+    // ============================================
+    function renderVideosList() {
+        const container = document.getElementById('videosList');
+        const count = document.getElementById('videoCount');
+        container.innerHTML = '';
+        const vids = currentConfig.videos || [];
+        count.textContent = vids.length;
+        
+        if (vids.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-400 text-sm py-6">لا توجد فيديوهات بعد</p>';
+            return;
+        }
+        
+        vids.forEach((v, i) => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-3 p-3 bg-blue-50 rounded-xl border-2 border-blue-200';
+            div.innerHTML = `
+                <img src="https://img.youtube.com/vi/${v.videoId}/default.jpg" class="w-16 h-12 object-cover rounded-lg flex-shrink-0">
+                <div class="flex-1 min-w-0">
+                    <p class="font-bold text-sm text-gray-800 truncate">${escapeHtml(v.title)}</p>
+                    <p class="text-xs text-gray-500 truncate">${v.videoId}</p>
+                </div>
+                <button class="delete-video-btn bg-red-500 active:bg-red-700 text-white w-9 h-9 rounded-full flex items-center justify-center shadow" data-index="${i}" title="حذف">
+                    <i class="fas fa-trash text-xs"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        });
+        
+        container.querySelectorAll('.delete-video-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.index);
+                if (confirm('حذف هذا الفيديو؟')) {
+                    currentConfig.videos.splice(idx, 1);
+                    renderVideosList();
+                    renderVideoScreen();
+                    scheduleAutoSave();
+                    showToast('🗑️ تم الحذف');
+                }
+            });
+        });
+    }
+
+    function renderVideoScreen() {
+        const grid = document.getElementById('videosGrid');
+        const noMsg = document.getElementById('noVideosMsg');
+        grid.innerHTML = '';
+        const vids = currentConfig.videos || [];
+        
+        if (vids.length === 0) {
+            noMsg.classList.remove('hidden');
+            return;
+        }
+        noMsg.classList.add('hidden');
+        
+        vids.forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'video-card bg-black';
+            div.innerHTML = `
+                <iframe 
+                    src="https://www.youtube.com/embed/${v.videoId}" 
+                    title="${escapeHtml(v.title)}"
+                    class="w-full h-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                ${v.title ? `<div class="bg-white/95 p-3 text-center"><p class="font-bold text-sm text-gray-800">${escapeHtml(v.title)}</p></div>` : ''}
+            `;
+            grid.appendChild(div);
+        });
+    }
+
+    // ============================================
+    // ADMIN FORM POPULATE
     // ============================================
     function populateAdminForm() {
         const c = currentConfig;
@@ -1282,7 +1789,22 @@
         set('cfg-cardBackSignature', c.cardBackSignature);
         set('cfg-profileImg', c.profileImg && !c.profileImg.startsWith('data:') ? c.profileImg : '');
         document.getElementById('prev-profileImg').src = c.profileImg;
-        set('cfg-colorAccent', c.colors.accent); set('cfg-colorRose', c.colors.rose); set('cfg-colorDark', c.colors.dark); set('cfg-colorBg', c.colors.bg);
+        
+        // WhatsApp
+        set('cfg-waName', c.whatsapp.name);
+        set('cfg-waStatus', c.whatsapp.status);
+        set('cfg-waPrompt', c.whatsapp.promptText);
+        set('cfg-waCorrectName', c.whatsapp.correctName);
+        set('cfg-waWrongNameMsg', c.whatsapp.wrongNameMsg);
+        set('cfg-waSuccessMsg', c.whatsapp.successMsg);
+        document.getElementById('prev-waImg').src = c.whatsapp.profileImg;
+        
+        // Videos
+        set('cfg-videoScreenTitle', c.videoScreenTitle);
+        
+        // Colors, Typography, Effects
+        set('cfg-colorAccent', c.colors.accent); set('cfg-colorRose', c.colors.rose);
+        set('cfg-colorDark', c.colors.dark); set('cfg-colorBg', c.colors.bg);
         set('cfg-fontSizeTitle', c.typography.fontSizeTitle); set('cfg-fontSizeWelcome', c.typography.fontSizeWelcome);
         set('cfg-lineHeight', c.typography.lineHeight); set('cfg-fontHeading', c.typography.fontHeading);
         document.getElementById('fontSizeTitleVal').textContent = Math.round(c.typography.fontSizeTitle * 100) + '%';
@@ -1290,13 +1812,17 @@
         document.getElementById('lineHeightVal').textContent = c.typography.lineHeight;
         document.getElementById('cfg-confetti').checked = c.effects.confetti;
         document.getElementById('cfg-floatingHearts').checked = c.effects.floatingHearts;
-        document.getElementById('cfg-shine').checked = c.effects.shine;
         document.getElementById('cfg-autoMusic').checked = c.effects.autoMusic;
         document.getElementById('cfg-particles').checked = c.effects.particles;
+        
         renderLettersEditor();
-        renderGalleryPreview();
+        renderVoiceMessagesList();
+        renderVideosList();
     }
 
+    // ============================================
+    // LETTERS EDITOR
+    // ============================================
     function renderLettersEditor() {
         const container = document.getElementById('lettersEditor');
         container.innerHTML = '';
@@ -1337,13 +1863,10 @@
         }));
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
+    // ============================================
+    // BIND ADMIN EVENTS
+    // ============================================
     function bindAdminEvents() {
-        // Text inputs with data-auto
         document.querySelectorAll('[data-auto="true"]').forEach(el => {
             const id = el.id;
             const map = {
@@ -1353,16 +1876,24 @@
                 'cfg-cardFrontGreeting': 'cardFrontGreeting', 'cfg-cardFrontTitle': 'cardFrontTitle',
                 'cfg-cardFrontSubtitle': 'cardFrontSubtitle', 'cfg-cardBackTitle': 'cardBackTitle',
                 'cfg-cardBackPara1': 'cardBackPara1', 'cfg-cardBackPara2': 'cardBackPara2',
-                'cfg-cardBackSignature': 'cardBackSignature', 'cfg-profileImg': 'profileImg'
+                'cfg-cardBackSignature': 'cardBackSignature', 'cfg-profileImg': 'profileImg',
+                'cfg-videoScreenTitle': 'videoScreenTitle'
+            };
+            const waMap = {
+                'cfg-waName': 'name', 'cfg-waStatus': 'status',
+                'cfg-waPrompt': 'promptText', 'cfg-waCorrectName': 'correctName',
+                'cfg-waWrongNameMsg': 'wrongNameMsg', 'cfg-waSuccessMsg': 'successMsg'
             };
             const colorMap = { 'cfg-colorAccent': 'accent', 'cfg-colorRose': 'rose', 'cfg-colorDark': 'dark', 'cfg-colorBg': 'bg' };
             const typoMap = { 'cfg-fontSizeTitle': 'fontSizeTitle', 'cfg-fontSizeWelcome': 'fontSizeWelcome', 'cfg-lineHeight': 'lineHeight', 'cfg-fontHeading': 'fontHeading' };
-            const effectMap = { 'cfg-confetti': 'confetti', 'cfg-floatingHearts': 'floatingHearts', 'cfg-shine': 'shine', 'cfg-autoMusic': 'autoMusic', 'cfg-particles': 'particles' };
+            const effectMap = { 'cfg-confetti': 'confetti', 'cfg-floatingHearts': 'floatingHearts', 'cfg-autoMusic': 'autoMusic', 'cfg-particles': 'particles' };
             
             el.addEventListener('input', e => {
                 if (map[id]) {
                     currentConfig[map[id]] = (id === 'cfg-age') ? (parseInt(e.target.value) || 0) : e.target.value;
                     if (id === 'cfg-profileImg' && e.target.value) document.getElementById('prev-profileImg').src = e.target.value;
+                } else if (waMap[id]) {
+                    currentConfig.whatsapp[waMap[id]] = e.target.value;
                 } else if (colorMap[id]) {
                     currentConfig.colors[colorMap[id]] = e.target.value;
                     applyColors(currentConfig.colors);
@@ -1386,184 +1917,257 @@
                 });
             }
         });
+
+        // Tabs
+        document.querySelectorAll('.admin-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.toggle('hidden', c.dataset.content !== tab));
+            });
+        });
+
+        // Presets
+        const colorPresets = {
+            rose:   { accent: '#f43f5e', rose: '#e11d48', dark: '#881337', bg: '#fdf2f8' },
+            purple: { accent: '#a855f7', rose: '#9333ea', dark: '#581c87', bg: '#faf5ff' },
+            gold:   { accent: '#f59e0b', rose: '#d97706', dark: '#78350f', bg: '#fffbeb' },
+            ocean:  { accent: '#3b82f6', rose: '#2563eb', dark: '#1e3a8a', bg: '#eff6ff' }
+        };
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = colorPresets[btn.dataset.preset];
+                if (!preset) return;
+                currentConfig.colors = { ...preset };
+                document.getElementById('cfg-colorAccent').value = preset.accent;
+                document.getElementById('cfg-colorRose').value = preset.rose;
+                document.getElementById('cfg-colorDark').value = preset.dark;
+                document.getElementById('cfg-colorBg').value = preset.bg;
+                applyColors(preset);
+                scheduleAutoSave();
+            });
+        });
+
+        // Open/Close
+        document.getElementById('adminToggle').addEventListener('click', () => {
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('adminToggle').classList.add('gear-pulse');
+            setTimeout(() => document.getElementById('adminToggle').classList.remove('gear-pulse'), 600);
+            populateAdminForm();
+        });
+        document.getElementById('adminClose').addEventListener('click', () => {
+            clearTimeout(autoSaveTimeout);
+            performSave();
+            document.getElementById('adminPanel').classList.add('hidden');
+        });
+
+        // Profile upload
+        const uploadZone = document.getElementById('uploadZone');
+        const imageFileInput = document.getElementById('imageFileInput');
+        uploadZone.addEventListener('click', () => imageFileInput.click());
+        imageFileInput.addEventListener('change', e => {
+            if (e.target.files[0]) handleProfileUpload(e.target.files[0]);
+            e.target.value = '';
+        });
+
+        // WA image upload
+        const waUploadZone = document.getElementById('waUploadZone');
+        const waImageInput = document.getElementById('waImageInput');
+        waUploadZone.addEventListener('click', () => waImageInput.click());
+        waImageInput.addEventListener('change', e => {
+            if (e.target.files[0]) handleWAImageUpload(e.target.files[0]);
+            e.target.value = '';
+        });
+
+        // Voice recording
+        document.getElementById('startRecordBtn').addEventListener('click', startRecording);
+        document.getElementById('stopRecordBtn').addEventListener('click', stopRecording);
+        document.getElementById('cancelRecordBtn').addEventListener('click', cancelRecording);
+        
+        // Audio file upload
+        document.getElementById('audioFileInput').addEventListener('change', e => {
+            if (e.target.files[0]) handleAudioFileUpload(e.target.files[0]);
+            e.target.value = '';
+        });
+
+        // Add letter
+        document.getElementById('addLetterBtn').addEventListener('click', () => {
+            currentConfig.letters.push({ title: 'Memory ' + String(currentConfig.letters.length + 1).padStart(2, '0'), content: 'اكتب الرسالة هنا...', signature: '- Maryam' });
+            renderLettersEditor();
+            scheduleAutoSave();
+        });
+
+        // Add video
+        document.getElementById('addVideoBtn').addEventListener('click', () => {
+            const url = document.getElementById('newVideoUrl').value.trim();
+            const title = document.getElementById('newVideoTitle').value.trim();
+            if (!url) { showToast('❌ أدخل رابط الفيديو', 'error'); return; }
+            const videoId = extractYouTubeId(url);
+            if (!videoId) { showToast('❌ رابط يوتيوب غير صالح', 'error'); return; }
+            
+            currentConfig.videos.push({ url, videoId, title: title || 'فيديو' });
+            document.getElementById('newVideoUrl').value = '';
+            document.getElementById('newVideoTitle').value = '';
+            renderVideosList();
+            renderVideoScreen();
+            scheduleAutoSave();
+            showToast('✅ تم إضافة الفيديو');
+        });
     }
 
-    // Tabs
-    document.querySelectorAll('.admin-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tab = btn.dataset.tab;
-            document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.toggle('hidden', c.dataset.content !== tab));
-        });
-    });
+    // ============================================
+    // WHATSAPP CHAT SCREEN LOGIC
+    // ============================================
+    let waChatInitialized = false;
+    let currentAudioPlayer = null;
 
-    // Presets
-    const colorPresets = {
-        rose:   { accent: '#f43f5e', rose: '#e11d48', dark: '#881337', bg: '#fdf2f8' },
-        purple: { accent: '#a855f7', rose: '#9333ea', dark: '#581c87', bg: '#faf5ff' },
-        gold:   { accent: '#f59e0b', rose: '#d97706', dark: '#78350f', bg: '#fffbeb' },
-        ocean:  { accent: '#3b82f6', rose: '#2563eb', dark: '#1e3a8a', bg: '#eff6ff' }
-    };
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const preset = colorPresets[btn.dataset.preset];
-            if (!preset) return;
-            currentConfig.colors = { ...preset };
-            document.getElementById('cfg-colorAccent').value = preset.accent;
-            document.getElementById('cfg-colorRose').value = preset.rose;
-            document.getElementById('cfg-colorDark').value = preset.dark;
-            document.getElementById('cfg-colorBg').value = preset.bg;
-            applyColors(preset);
-            scheduleAutoSave();
-        });
-    });
-
-    // Open/Close
-    document.getElementById('adminToggle').addEventListener('click', () => {
-        const panel = document.getElementById('adminPanel');
-        panel.classList.remove('hidden');
-        document.getElementById('adminToggle').classList.add('gear-pulse');
-        setTimeout(() => document.getElementById('adminToggle').classList.remove('gear-pulse'), 600);
-        populateAdminForm();
-    });
-    document.getElementById('adminClose').addEventListener('click', () => {
-        clearTimeout(autoSaveTimeout);
-        performSave();
-        document.getElementById('adminPanel').classList.add('hidden');
-    });
-
-    // Sync
-    document.getElementById('adminSync').addEventListener('click', async () => {
-        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
-        updateSyncBadge('saving', '⏳ جاري الرفع...');
-        try {
-            await window.firebaseHelpers.push(currentConfig);
-            updateSyncBadge('online', '☁️ متزامن');
-            showToast('☁️ تم الرفع إلى Firebase');
-        } catch (e) {
-            updateSyncBadge('offline', '❌ فشل');
-            showToast('❌ فشل المزامنة', 'error');
+    async function initWhatsAppChat() {
+        const c = currentConfig.whatsapp;
+        document.getElementById('waHeaderName').textContent = c.name;
+        document.getElementById('waHeaderStatus').textContent = c.status;
+        document.getElementById('waHeaderImg').src = c.profileImg;
+        
+        const messagesArea = document.getElementById('waMessagesArea');
+        const typingIndicator = document.getElementById('waTypingIndicator');
+        const inputBar = document.getElementById('waInputBar');
+        const namePrompt = document.getElementById('waNamePrompt');
+        
+        messagesArea.innerHTML = '';
+        inputBar.classList.add('hidden');
+        namePrompt.classList.add('hidden');
+        typingIndicator.classList.add('hidden');
+        waChatInitialized = false;
+        
+        const msgs = c.voiceMessages || [];
+        
+        // If no voice messages, show name prompt directly
+        if (msgs.length === 0) {
+            setTimeout(() => {
+                namePrompt.classList.remove('hidden');
+                document.getElementById('waNameInput').focus();
+                waChatInitialized = true;
+            }, 800);
+            return;
         }
-    });
-
-    document.getElementById('fbPushBtn').addEventListener('click', async () => {
-        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
-        try {
-            await window.firebaseHelpers.push(currentConfig);
-            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم الرفع بنجاح!';
-            updateSyncBadge('online', '☁️ متزامن');
-            showToast('☁️ تم الرفع!');
-        } catch (e) {
-            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-times-circle text-red-600 mr-1"></i> فشل';
-            showToast('❌ فشل', 'error');
+        
+        // Play voice messages one by one with typing indicator
+        for (let i = 0; i < msgs.length; i++) {
+            if (!document.getElementById('whatsappScreen').classList.contains('hidden') === false) break;
+            
+            // Show typing indicator (like "recording audio...")
+            typingIndicator.classList.remove('hidden');
+            messagesArea.appendChild(typingIndicator);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
+            
+            // Hide typing indicator
+            typingIndicator.classList.add('hidden');
+            
+            // Add voice message bubble
+            const bubble = createVoiceBubble(msgs[i], i);
+            bubble.classList.add('bubble-appear');
+            messagesArea.appendChild(bubble);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            await new Promise(r => setTimeout(r, 500));
         }
-    });
+        
+        // Show name prompt after all voice messages
+        await new Promise(r => setTimeout(r, 800));
+        namePrompt.classList.remove('hidden');
+        document.getElementById('waNameInput').focus();
+        waChatInitialized = true;
+    }
 
-    document.getElementById('fbPullBtn').addEventListener('click', async () => {
-        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
-        try {
-            const data = await window.firebaseHelpers.pull();
-            if (data) {
-                currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), data);
-                populateAdminForm();
-                applyConfigToSite();
-                document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم التحميل!';
-                showToast('📥 تم التحميل من Firebase!');
-            } else {
-                showToast('ℹ️ لا توجد بيانات', 'info');
+    function createVoiceBubble(msg, index) {
+        const div = document.createElement('div');
+        div.className = 'flex justify-start';
+        
+        // Random wave heights for visual
+        const bars = Array.from({ length: 24 }, () => Math.floor(Math.random() * 16) + 4);
+        const barsHtml = bars.map(h => `<span style="height:${h}px"></span>`).join('');
+        
+        div.innerHTML = `
+            <div class="chat-bubble-voice out bubble-appear">
+                <button class="voice-play-btn" data-index="${index}">
+                    <i class="fas fa-play text-xs"></i>
+                </button>
+                <div class="voice-wave">${barsHtml}</div>
+                <span class="voice-duration">${formatDuration(msg.duration)}</span>
+                <i class="fas fa-check-double text-blue-500 text-xs"></i>
+            </div>
+        `;
+        
+        const playBtn = div.querySelector('.voice-play-btn');
+        playBtn.addEventListener('click', () => {
+            const icon = playBtn.querySelector('i');
+            
+            if (currentAudioPlayer) {
+                currentAudioPlayer.pause();
+                currentAudioPlayer = null;
+                document.querySelectorAll('.voice-play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.querySelector('i').className = 'fas fa-play text-xs';
+                });
             }
-        } catch (e) {
-            showToast('❌ فشل التحميل', 'error');
+            
+            if (icon.classList.contains('fa-play')) {
+                const audio = new Audio(msg.audio);
+                currentAudioPlayer = audio;
+                playBtn.classList.add('playing');
+                icon.className = 'fas fa-pause text-xs';
+                audio.play();
+                audio.onended = () => {
+                    playBtn.classList.remove('playing');
+                    icon.className = 'fas fa-play text-xs';
+                    currentAudioPlayer = null;
+                };
+            }
+        });
+        
+        return div;
+    }
+
+    function handleNameSubmit() {
+        const input = document.getElementById('waNameInput');
+        const errEl = document.getElementById('waNameError');
+        const val = input.value.trim();
+        const correct = currentConfig.whatsapp.correctName.trim();
+        
+        if (!val) {
+            errEl.textContent = 'اكتبي الاسم الأول 💕';
+            errEl.classList.remove('hidden');
+            return;
         }
-    });
-
-    document.getElementById('fbDeleteBtn').addEventListener('click', async () => {
-        if (!confirm('حذف البيانات من Firebase؟')) return;
-        if (!firebaseReady) return;
-        try {
-            await window.firebaseHelpers.delete();
-            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم الحذف';
-            showToast('🗑️ تم الحذف');
-        } catch (e) { showToast('❌ فشل', 'error'); }
-    });
-
-    // Export/Import/Reset
-    document.getElementById('adminExport').addEventListener('click', () => {
-        const blob = new Blob([JSON.stringify(currentConfig, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `maryam-config-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-        showToast('📥 تم التصدير');
-    });
-
-    document.getElementById('adminImport').addEventListener('click', () => document.getElementById('fileInput').click());
-    document.getElementById('fileInput').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = evt => {
-            try {
-                currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), JSON.parse(evt.target.result));
-                populateAdminForm();
-                applyConfigToSite();
-                scheduleAutoSave();
-                showToast('📤 تم الاستيراد');
-            } catch { showToast('❌ ملف غير صالح', 'error'); }
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-    });
-
-    document.getElementById('adminReset').addEventListener('click', () => {
-        if (confirm('استعادة الإعدادات الافتراضية؟')) {
-            currentConfig = JSON.parse(JSON.stringify(defaultConfig));
-            populateAdminForm();
-            applyConfigToSite();
-            scheduleAutoSave();
-            showToast('🔄 تم الاستعادة');
+        
+        // Case-insensitive + trim compare
+        if (val.toLowerCase() === correct.toLowerCase() || val === correct) {
+            errEl.classList.add('hidden');
+            showSuccessAndGoToVideos();
+        } else {
+            errEl.textContent = currentConfig.whatsapp.wrongNameMsg;
+            errEl.classList.remove('hidden');
+            input.value = '';
         }
-    });
+    }
 
-    document.getElementById('addLetterBtn').addEventListener('click', () => {
-        currentConfig.letters.push({ title: 'Memory ' + String(currentConfig.letters.length + 1).padStart(2, '0'), content: 'اكتب الرسالة هنا...', signature: '- Maryam' });
-        renderLettersEditor();
-        scheduleAutoSave();
-    });
-
-    // File upload
-    const uploadZone = document.getElementById('uploadZone');
-    const imageFileInput = document.getElementById('imageFileInput');
-    uploadZone.addEventListener('click', () => imageFileInput.click());
-    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-    uploadZone.addEventListener('drop', e => {
-        e.preventDefault(); uploadZone.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) handleProfileUpload(file);
-    });
-    imageFileInput.addEventListener('change', e => {
-        if (e.target.files[0]) handleProfileUpload(e.target.files[0]);
-        e.target.value = '';
-    });
-
-    const galleryZone = document.getElementById('galleryUploadZone');
-    const galleryFileInput = document.getElementById('galleryFileInput');
-    galleryZone.addEventListener('click', () => galleryFileInput.click());
-    galleryZone.addEventListener('dragover', e => { e.preventDefault(); galleryZone.classList.add('dragover'); });
-    galleryZone.addEventListener('dragleave', () => galleryZone.classList.remove('dragover'));
-    galleryZone.addEventListener('drop', e => {
-        e.preventDefault(); galleryZone.classList.remove('dragover');
-        const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-        if (files.length) handleGalleryUpload(files);
-    });
-    galleryFileInput.addEventListener('change', e => {
-        const files = Array.from(e.target.files);
-        if (files.length) handleGalleryUpload(files);
-        e.target.value = '';
-    });
+    function showSuccessAndGoToVideos() {
+        const overlay = document.getElementById('waSuccessOverlay');
+        const bar = document.getElementById('waSuccessBar');
+        overlay.classList.remove('hidden');
+        bar.style.width = '0%';
+        requestAnimationFrame(() => {
+            bar.style.width = '100%';
+        });
+        
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            document.getElementById('whatsappScreen').classList.add('hidden');
+            document.getElementById('videoScreen').classList.remove('hidden');
+        }, 1700);
+    }
 
     // ============================================
     // MUSIC
@@ -1610,11 +2214,124 @@
     }
 
     // ============================================
+    // SITE INTERACTIONS
+    // ============================================
+    function bindSiteInteractions() {
+        document.getElementById('btnNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.toggle('hidden'));
+        document.getElementById('closeStickyNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.add('hidden'));
+
+        document.getElementById('btn3DCard').addEventListener('click', () => {
+            document.getElementById('card3DModal').classList.remove('hidden');
+            triggerConfetti();
+        });
+        document.getElementById('close3DModal').addEventListener('click', () => {
+            document.getElementById('card3DModal').classList.add('hidden');
+            document.getElementById('flipperCard').classList.remove('rotate-y-180');
+        });
+        document.getElementById('flipperCard').addEventListener('click', () => document.getElementById('flipperCard').classList.toggle('rotate-y-180'));
+
+        document.getElementById('btnLoveLetter').addEventListener('click', () => {
+            document.getElementById('loveLetterSection').classList.remove('hidden');
+            document.getElementById('svgHeartContainer').classList.remove('hidden');
+            document.getElementById('envelopeMainContainer').classList.add('hidden');
+            document.getElementById('btnGoToChat').classList.add('hidden');
+            if (currentConfig.effects.floatingHearts) createFloatingHearts();
+            setTimeout(() => {
+                document.getElementById('svgHeartContainer').classList.add('hidden');
+                document.getElementById('envelopeMainContainer').classList.remove('hidden');
+            }, 3200);
+        });
+        document.getElementById('btnBackToDashboard').addEventListener('click', () => document.getElementById('loveLetterSection').classList.add('hidden'));
+
+        document.getElementById('btnOpenEnvelope').addEventListener('click', () => {
+            document.getElementById('envelopeFlap').classList.add('open');
+            document.getElementById('btnOpenEnvelope').classList.add('scale-0');
+            setTimeout(() => {
+                document.getElementById('lettersContainer').classList.remove('hidden');
+                triggerConfetti();
+                // Show chat button after letters
+                setTimeout(() => {
+                    document.getElementById('btnGoToChat').classList.remove('hidden');
+                }, 1500);
+            }, 600);
+        });
+
+        // Go to WhatsApp Chat
+        document.getElementById('btnGoToChat').addEventListener('click', () => {
+            document.getElementById('loveLetterSection').classList.add('hidden');
+            document.getElementById('whatsappScreen').classList.remove('hidden');
+            initWhatsAppChat();
+        });
+
+        // WA Back
+        document.getElementById('waBackBtn').addEventListener('click', () => {
+            document.getElementById('whatsappScreen').classList.add('hidden');
+            document.getElementById('loveLetterSection').classList.remove('hidden');
+        });
+
+        // Name Submit
+        document.getElementById('waNameSendBtn').addEventListener('click', handleNameSubmit);
+        document.getElementById('waNameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleNameSubmit();
+        });
+
+        // Video Back
+        document.getElementById('videoBackBtn').addEventListener('click', () => {
+            document.getElementById('videoScreen').classList.add('hidden');
+            document.getElementById('whatsappScreen').classList.remove('hidden');
+            // Reset chat
+            waChatInitialized = false;
+        });
+    }
+
+    function createFloatingHearts() {
+        const c = document.getElementById('floatingHeartsContainer');
+        c.innerHTML = '';
+        for (let i = 0; i < 20; i++) {
+            const h = document.createElement('div');
+            h.classList.add('floating-heart', 'fas', 'fa-heart');
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            h.style.fontSize = (Math.random() * 20 + 12) + 'px';
+            h.style.animationDelay = (Math.random() * 2) + 's';
+            c.appendChild(h);
+        }
+    }
+
+    // ============================================
+    // REAL-TIME SYNC FROM FIREBASE
+    // ============================================
+    function setupRealtimeSync() {
+        if (!window.firebaseHelpers || !window.firebaseHelpers.subscribe) return;
+        
+        window.firebaseHelpers.subscribe((remoteConfig) => {
+            // Skip if same as current
+            const remoteHash = JSON.stringify(remoteConfig);
+            const localHash = JSON.stringify(currentConfig);
+            if (remoteHash === localHash) return;
+            
+            // If admin panel is open, don't override (user is editing)
+            const isAdminOpen = !document.getElementById('adminPanel').classList.contains('hidden');
+            if (isAdminOpen) return;
+            
+            console.log('📥 Real-time update received');
+            isSyncingFromRemote = true;
+            currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), remoteConfig);
+            lastSavedHash = JSON.stringify(currentConfig);
+            try { localStorage.setItem(STORAGE_KEY, lastSavedHash); } catch(e) {}
+            applyConfigToSite();
+            isSyncingFromRemote = false;
+            showToast('🔄 تم تحديث الموقع', 'info');
+        });
+    }
+
+    // ============================================
     // INIT
     // ============================================
     window.addEventListener('DOMContentLoaded', () => {
         applyConfigToSite();
         lastSavedHash = JSON.stringify(currentConfig);
+        bindSiteInteractions();
 
         const pb = document.getElementById('progressBar'), ls = document.getElementById('loadingStatusText');
         let p = 0;
@@ -1639,68 +2356,23 @@
         }, 250);
     });
 
-    // Interactions
-    document.getElementById('btnNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.toggle('hidden'));
-    document.getElementById('closeStickyNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.add('hidden'));
-
-    document.getElementById('btn3DCard').addEventListener('click', () => {
-        document.getElementById('card3DModal').classList.remove('hidden');
-        triggerConfetti();
-    });
-    document.getElementById('close3DModal').addEventListener('click', () => {
-        document.getElementById('card3DModal').classList.add('hidden');
-        document.getElementById('flipperCard').classList.remove('rotate-y-180');
-    });
-    document.getElementById('flipperCard').addEventListener('click', () => document.getElementById('flipperCard').classList.toggle('rotate-y-180'));
-
-    document.getElementById('btnLoveLetter').addEventListener('click', () => {
-        document.getElementById('loveLetterSection').classList.remove('hidden');
-        document.getElementById('svgHeartContainer').classList.remove('hidden');
-        document.getElementById('envelopeMainContainer').classList.add('hidden');
-        if (currentConfig.effects.floatingHearts) createFloatingHearts();
-        setTimeout(() => {
-            document.getElementById('svgHeartContainer').classList.add('hidden');
-            document.getElementById('envelopeMainContainer').classList.remove('hidden');
-        }, 3200);
-    });
-    document.getElementById('btnBackToDashboard').addEventListener('click', () => document.getElementById('loveLetterSection').classList.add('hidden'));
-
-    document.getElementById('btnOpenEnvelope').addEventListener('click', () => {
-        document.getElementById('envelopeFlap').classList.add('open');
-        document.getElementById('btnOpenEnvelope').classList.add('scale-0');
-        setTimeout(() => {
-            document.getElementById('lettersContainer').classList.remove('hidden');
-            triggerConfetti();
-        }, 600);
-    });
-
-    function createFloatingHearts() {
-        const c = document.getElementById('floatingHeartsContainer');
-        c.innerHTML = '';
-        for (let i = 0; i < 20; i++) {
-            const h = document.createElement('div');
-            h.classList.add('floating-heart', 'fas', 'fa-heart');
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            h.style.fontSize = (Math.random() * 20 + 12) + 'px';
-            h.style.animationDelay = (Math.random() * 2) + 's';
-            c.appendChild(h);
-        }
-    }
-
     // Firebase ready
     window.addEventListener('firebaseReady', () => {
         firebaseReady = true;
         updateSyncBadge('online', '☁️ متصل');
+        setupRealtimeSync();
+        
         window.firebaseHelpers.pull().then(data => {
             if (data) {
                 currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), data);
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(currentConfig));
+                lastSavedHash = JSON.stringify(currentConfig);
                 applyConfigToSite();
                 updateSyncBadge('online', '☁️ متزامن');
                 console.log('📥 Remote config loaded');
             } else {
-                updateSyncBadge('offline', 'غير متزامن');
+                // First time: push defaults to Firebase
+                performSave();
             }
         }).catch(err => {
             console.warn('Firebase pull failed:', err);
@@ -1718,14 +2390,6 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(currentConfig));
         } catch (e) {}
     });
-
-    // Global shortcut
-    document.addEventListener('keydown', e => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            manualSave();
-        }
-    });
     </script>
 </body>
-            </html>
+    </html>

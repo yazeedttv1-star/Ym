@@ -1,1124 +1,1731 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صانع بوستر جدول الحصص والسناتر التعليمية</title>
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy 16th Birthday, Maryam! 🎉</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;600;800&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Arabic Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@500;700;900&family=Changa:wght@600;800&display=swap" rel="stylesheet">
-    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#0056b3',
-                            dark: '#0a192f',
-                            yellow: '#ffcc00',
-                            magenta: '#d81b60',
-                            purple: '#6a1b9a',
-                            green: '#2e7d32',
-                            orange: '#e65100',
-                            cyan: '#00838f'
+                            pink: '#fce7f3',
+                            accent: '#f43f5e',
+                            rose: '#e11d48',
+                            dark: '#881337',
+                            softPink: '#fbcfe8',
+                            bg: '#fdf2f8'
                         }
                     },
                     fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        cursive: ['Great Vibes', 'cursive'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                         cairo: ['Cairo', 'sans-serif'],
-                        tajawal: ['Tajawal', 'sans-serif'],
-                        changa: ['Changa', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-    
+
     <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        
         body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fdf2f8;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-text-size-adjust: 100%;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #fce7f3; }
+        ::-webkit-scrollbar-thumb { background: #f43f5e; border-radius: 9999px; }
+
+        .bg-grid-pattern {
+            background-size: 20px 20px;
+            background-image: 
+                linear-gradient(to right, rgba(244, 63, 94, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(244, 63, 94, 0.08) 1px, transparent 1px);
+        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        .heart-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawHeart 3s ease-in-out forwards; }
+        @keyframes drawHeart { to { stroke-dashoffset: 0; } }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(-5deg); }
+        }
+        .animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+
+        @keyframes riseUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+        .floating-heart { position: absolute; bottom: -50px; color: rgba(255, 255, 255, 0.6); pointer-events: none; animation: riseUp linear infinite; }
+
+        @keyframes flameGlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px #fbbf24); }
+        }
+        .animate-flame { animation: flameGlow 1.2s ease-in-out infinite; }
+
+        .envelope-flap { transform-origin: top; transition: transform 0.6s ease-in-out; z-index: 20; }
+        .envelope-flap.open { transform: rotateX(180deg); z-index: 5; }
+
+        @keyframes bounceShort {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-bounce-short { animation: bounceShort 1.5s ease-in-out infinite; }
+
+        /* ====== ADMIN PANEL (Mobile-first) ====== */
+        .admin-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #fbcfe8;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #fff;
             font-family: 'Cairo', sans-serif;
-            background-color: #0d1527;
-            color: #f1f5f9;
+            -webkit-appearance: none;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .admin-input:focus { outline: none; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15); }
+        
+        .admin-tab {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            flex-shrink: 0;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
+        .admin-tab.active { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); }
+        .admin-tab:not(.active) { background: white; color: #881337; border: 2px solid #fbcfe8; }
+        .admin-tab:not(.active):active { background: #fce7f3; }
+
+        /* ====== TOAST (Mobile-friendly) ====== */
+        .toast {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150px);
+            min-width: 260px;
+            max-width: calc(100vw - 32px);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-weight: 700;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.5);
+            z-index: 99999;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 40px rgba(239, 68, 68, 0.5); }
+        .toast.info { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5); }
+        .toast.warning { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 10px 40px rgba(245, 158, 11, 0.5); }
+        .toast-icon { font-size: 20px; flex-shrink: 0; }
+        .toast-text { flex: 1; }
+
+        /* Upload zone */
+        .upload-zone {
+            border: 3px dashed #fbcfe8;
+            border-radius: 16px;
+            padding: 20px 14px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: #fff9fc;
+            font-family: 'Cairo', sans-serif;
         }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .upload-zone:active, .upload-zone.dragover {
+            border-color: #f43f5e;
+            background: #fce7f3;
         }
-        .canvas-shadow {
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+
+        /* Toggle switch */
+        .toggle-switch { position: relative; display: inline-block; width: 48px; height: 26px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 26px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-switch input:checked + .toggle-slider { background-color: #f43f5e; }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(22px); }
+
+        /* Range slider */
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 8px; border-radius: 5px;
+            background: #fbcfe8; outline: none;
         }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: #f43f5e; cursor: pointer;
+            box-shadow: 0 2px 6px rgba(244, 63, 94, 0.4);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: #f43f5e; cursor: pointer; border: none;
+        }
+
+        .sync-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 10px; border-radius: 999px;
+            font-size: 10px; font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            white-space: nowrap;
+        }
+        .sync-online { background: #d1fae5; color: #065f46; }
+        .sync-offline { background: #fee2e2; color: #991b1b; }
+        .sync-saving { background: #fef3c7; color: #92400e; }
+
+        .preview-thumb {
+            width: 100%; height: 100px;
+            object-fit: cover; border-radius: 10px;
+            border: 2px solid #fbcfe8;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 640px) {
+            .admin-tab { padding: 8px 12px; font-size: 11px; }
+            .admin-input { padding: 10px 12px; font-size: 14px; }
+            .toast { padding: 12px 16px; font-size: 13px; min-width: 220px; }
+        }
+
+        /* Gear button pulse */
+        @keyframes pulseGear {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        .gear-pulse { animation: pulseGear 0.6s ease-in-out; }
+
+        /* Save flash */
+        @keyframes flashBorder {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+            100% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+        }
+        .flash-success { animation: flashBorder 0.8s ease-out; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="bg-brand-bg text-gray-800 min-h-screen relative">
 
-    <!-- Navigation Header -->
-    <header class="glass-panel sticky top-0 z-50 border-b border-slate-800 px-4 lg:px-8 py-3">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-500 to-amber-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <h1 class="font-black text-lg lg:text-xl text-white flex items-center gap-2">
-                        صانع بوستر "حصص غداً"
-                        <span class="text-[10px] bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 px-2 py-0.5 rounded-full font-bold">احترافي</span>
-                    </h1>
-                    <p class="text-xs text-slate-400">صمم جداول الحصص والسناتر بالهوية التعليمية الجذابة مع العلامة المائية <span class="text-yellow-400 font-mono dir-ltr">a.m_4.4</span></p>
-                </div>
-            </div>
-
-            <!-- Header Quick Controls -->
-            <div class="flex items-center gap-2">
-                <button onclick="clearAllData()" class="text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold transition border border-slate-700 flex items-center gap-1.5">
-                    <i class="fa-solid fa-eraser text-rose-400"></i>
-                    <span>تفريض البيانات</span>
-                </button>
-                <button onclick="loadSampleData()" class="text-amber-300 bg-amber-950/60 hover:bg-amber-900/80 px-3 py-1.5 rounded-xl text-xs font-semibold transition border border-amber-700/50 flex items-center gap-1.5">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>تعبئة نموذج تجريبي</span>
-                </button>
-                <button onclick="exportPosterHD()" class="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 font-black px-4 py-1.5 rounded-xl text-xs sm:text-sm shadow-lg shadow-amber-500/20 transition flex items-center gap-2">
-                    <i class="fa-solid fa-download"></i>
-                    <span>تحميل البوستر HD</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Workspace Studio -->
-    <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1">
-        
-        <!-- Left Column: Controls & Form Inputs (Cols 5) -->
-        <div class="lg:col-span-5 space-y-5">
-            
-            <!-- Main Controls Container -->
-            <div class="glass-panel rounded-2xl p-4 lg:p-5 border border-slate-800 space-y-5">
-                
-                <!-- Tab Selector -->
-                <div class="flex border-b border-slate-700/80 pb-3 gap-2 overflow-x-auto">
-                    <button onclick="switchTab('center')" id="tab-btn-center" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-amber-500 text-slate-950">
-                        <i class="fa-solid fa-school"></i> بيانات السنتر
-                    </button>
-                    <button onclick="switchTab('classes')" id="tab-btn-classes" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:bg-slate-800">
-                        <i class="fa-solid fa-book-open"></i> الحصص والمواد
-                    </button>
-                    <button onclick="switchTab('footer')" id="tab-btn-footer" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:bg-slate-800">
-                        <i class="fa-solid fa-bullhorn"></i> التنبيهات والتواصل
-                    </button>
-                </div>
-
-                <!-- TAB 1: CENTER & HEADER INFO -->
-                <div id="tab-content-center" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">اسم السنتر / المؤسسة التعليمية</label>
-                        <input id="input-center-name" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="مثال: سنتر سيجما التعليمي">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">الشعار / الشعار اللفظي (Slogan)</label>
-                        <input id="input-center-slogan" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="مثال: هدفنا الثقة والتميز">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">العنوان الرئيسي للجدول</label>
-                        <input id="input-main-title" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="مثال: حصص غداً بإذن الله">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">عبارة الملاحظة الشريطية (أعلى اليسار)</label>
-                        <input id="input-top-sticker" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="مثال: معاً نحو مستقبل أفضل ♡">
-                    </div>
-                </div>
-
-                <!-- TAB 2: CLASSES & CARDS BUILDER -->
-                <div id="tab-content-classes" class="space-y-4 hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-300">قائمة المواد الحالية (<span id="cards-count">0</span>)</span>
-                        <button onclick="addNewCard()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
-                            <i class="fa-solid fa-plus"></i> إضافة مادة جديدة
-                        </button>
-                    </div>
-
-                    <!-- Cards Dynamic Accordion Container -->
-                    <div id="cards-editor-container" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
-                        <!-- Dynamic Card Forms Rendered Here -->
-                    </div>
-                </div>
-
-                <!-- TAB 3: FOOTER, ANNOUNCEMENTS & WATERMARK -->
-                <div id="tab-content-footer" class="space-y-4 hidden">
-                    <!-- Notice / Announcement Box Content -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">صندوق الإعلانات والتنبيهات الخاصة (أسفل الجدول)</label>
-                        <textarea id="input-announcement" rows="3" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition resize-none" placeholder="اكتب أي إعلان أو فتح مجموعات جديدة هنا..."></textarea>
-                    </div>
-
-                    <!-- Additional Bottom Note Box -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">ملاحظة أسفل البوستر (الشريط الأخير)</label>
-                        <input id="input-bottom-note" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="مثال: ملاحظة هامة: الحضور قبل الموعد بـ 15 دقيقة">
-                    </div>
-
-                    <!-- Contact & Phone Number -->
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">رقم التواصل / الواتساب</label>
-                            <input id="input-phone" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="01147758295">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">شارة أسفل اليمين</label>
-                            <input id="input-footer-badge" type="text" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="معاً.. نحقق النجاح ♡">
-                        </div>
-                    </div>
-
-                    <!-- Watermark Options -->
-                    <div class="border-t border-slate-800 pt-3 space-y-3">
-                        <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
-                            <div>
-                                <span class="block text-xs font-bold text-white">العلامة المائية الحصرية</span>
-                                <span class="text-[11px] text-slate-400">طباعة التوقيع الإخباري المائي</span>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="toggle-watermark" checked onchange="renderPoster()" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                            </label>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">نص العلامة</label>
-                                <input id="input-wm-text" type="text" value="a.m_4.4" oninput="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white font-mono focus:outline-none focus:border-amber-500 transition">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">موقع العلامة</label>
-                                <select id="select-wm-pos" onchange="renderPoster()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-amber-500">
-                                    <option value="bottom-left" selected>أسفل اليسار</option>
-                                    <option value="bottom-right">أسفل اليمين</option>
-                                    <option value="top-right">أعلى اليمين</option>
-                                    <option value="top-left">أعلى اليسار</option>
-                                    <option value="pattern">نمط مكرر</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Right Column: Live Poster Preview Stage (Cols 7) -->
-        <div class="lg:col-span-7 space-y-4 sticky top-20">
-            <div class="glass-panel rounded-2xl p-4 lg:p-6 border border-slate-800 flex flex-col items-center justify-center min-h-[550px]">
-                
-                <!-- Preview Toolbar -->
-                <div class="w-full flex justify-between items-center mb-4 px-2 text-xs text-slate-400">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="font-bold text-white">المعاينة المباشرة للبوستر</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded text-slate-300">A4 HD (1200x1700 px)</span>
-                        <button onclick="copyPosterImage()" class="hover:text-white transition flex items-center gap-1">
-                            <i class="fa-regular fa-copy"></i> نسخ
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Canvas Preview Wrapper -->
-                <div class="relative w-full flex items-center justify-center overflow-hidden p-2 bg-slate-950/80 rounded-xl border border-slate-800/80">
-                    <!-- HTML5 Canvas Element -->
-                    <canvas id="posterCanvas" class="max-w-full max-h-[700px] rounded-lg canvas-shadow transition-all duration-300"></canvas>
-                </div>
-
-                <!-- Download Bar -->
-                <div class="w-full mt-5 flex flex-col sm:flex-row gap-3 items-center justify-between">
-                    <div class="text-xs text-slate-400 flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                        <span>علامتك المائية: <strong class="text-white font-mono dir-ltr">a.m_4.4</strong></span>
-                    </div>
-
-                    <button onclick="exportPosterHD()" class="w-full sm:w-auto bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 hover:opacity-95 text-slate-950 font-black px-6 py-3 rounded-xl shadow-xl shadow-amber-500/20 transition flex items-center justify-center gap-2 text-sm">
-                        <i class="fa-solid fa-file-arrow-down text-base"></i>
-                        <span>تحميل البوستر عالي الدقة (HD PNG)</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="glass-panel border-t border-slate-800 mt-10 py-4 px-6 text-center text-xs text-slate-400">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-            <div>
-                صانع البوسترات التعليمية والسناتر &copy; 2026 - جميع الحقوق محفوظة
-            </div>
-            <div class="font-mono text-slate-300 flex items-center gap-1 dir-ltr">
-                <span>Watermark Tag:</span>
-                <span class="bg-amber-950/80 border border-amber-800/50 text-amber-400 px-2 py-0.5 rounded font-bold">a.m_4.4</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 text-sm font-bold">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toast-msg">تمت العملية بنجاح</span>
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+        <span class="toast-text" id="toastText">تم الحفظ!</span>
     </div>
 
-    <script>
-        // Global Canvas Context & Application State
-        const canvas = document.getElementById('posterCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- ===== GEAR BUTTON (Only) ===== -->
+    <button id="adminToggle" title="الإعدادات"
+            class="fixed top-3 left-3 sm:top-4 sm:left-4 z-[100] w-12 h-12 bg-white/95 active:bg-white backdrop-blur-md text-brand-rose rounded-full shadow-lg border-2 border-brand-softPink flex items-center justify-center transition-all duration-300 hover:rotate-90 active:scale-95">
+        <i class="fas fa-cog text-xl"></i>
+    </button>
 
-        // Color Presets for Subject Cards matching the image reference
-        const CARD_COLORS = [
-            { id: 'magenta', name: 'وردي / عربي', main: '#d81b60', gradient: ['#e91e63', '#880e4f'], text: '#ffffff' },
-            { id: 'blue', name: 'أزرق / عربي', main: '#1976d2', gradient: ['#2196f3', '#0d47a1'], text: '#ffffff' },
-            { id: 'green', name: 'أخضر / رياضيات', main: '#2e7d32', gradient: ['#4caf50', '#1b5e20'], text: '#ffffff' },
-            { id: 'purple', name: 'أرجواني / رياضيات', main: '#7b1fa2', gradient: ['#9c27b0', '#4a148c'], text: '#ffffff' },
-            { id: 'orange', name: 'برتقالي / حساب', main: '#e65100', gradient: ['#ff9800', '#b71c1c'], text: '#ffffff' },
-            { id: 'cyan', name: 'سماوي / خاص', main: '#00838f', gradient: ['#00acc1', '#004d40'], text: '#ffffff' }
-        ];
+    <!-- ===== Firebase Sync Badge ===== -->
+    <div id="syncBadge" class="sync-badge sync-offline fixed top-4 left-16 sm:left-20 z-[100]">
+        <i class="fas fa-circle" style="font-size:5px;"></i>
+        <span id="syncText">غير متصل</span>
+    </div>
 
-        // State Store
-        let state = {
-            centerName: 'سنتر سيجما التعليمي',
-            slogan: 'هدفنا الثقة والتميز',
-            mainTitle: 'حصص غداً بإذن الله',
-            topSticker: 'معاً نحو مستقبل أفضل ♡',
-            announcement: '',
-            bottomNote: '',
-            phone: '01147758295',
-            footerBadge: 'معاً.. نحقق النجاح ♡',
-            watermarkEnabled: true,
-            watermarkText: 'a.m_4.4',
-            watermarkPos: 'bottom-left',
-            cards: [] // Starts empty as requested ("بدون بيانات تجريبية")
-        };
+    <!-- ===== Music Toggle ===== -->
+    <div class="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
+        <button id="musicToggle" class="bg-white/95 active:bg-white backdrop-blur-md text-brand-rose p-3 rounded-full shadow-lg border-2 border-brand-softPink flex items-center gap-2 font-fredoka text-xs sm:text-sm">
+            <i id="musicIcon" class="fas fa-music"></i>
+            <span id="musicText" class="hidden sm:inline">Play Music</span>
+        </button>
+    </div>
 
-        // Window Load Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            // Load state from local memory or keep clean empty cards
-            syncFormFromState();
-            renderCardsEditor();
-            renderPoster();
-        });
+    <!-- =====================================================
+         ADMIN PANEL
+    ====================================================== -->
+    <div id="adminPanel" class="hidden fixed inset-0 z-[200] bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 overflow-y-auto" style="font-family:'Cairo',sans-serif;" dir="rtl">
+        <div class="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-7xl pb-24">
+            
+            <!-- Admin Header -->
+            <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-lg border-2 border-pink-200 mb-4 sticky top-2 z-30">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center text-white text-lg sm:text-xl shadow-lg">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-base sm:text-xl text-brand-dark">الإعدادات</h1>
+                            <p class="text-[10px] sm:text-xs text-gray-500">حفظ تلقائي مفعّل ✨</p>
+                        </div>
+                    </div>
+                    <button id="adminClose" class="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+                
+                <!-- Action buttons (scrollable on mobile) -->
+                <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width: none;">
+                    <button id="adminSync" class="flex-shrink-0 bg-blue-500 active:bg-blue-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
+                        <i class="fas fa-cloud-upload-alt"></i> مزامنة
+                    </button>
+                    <button id="adminExport" class="flex-shrink-0 bg-amber-500 active:bg-amber-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
+                        <i class="fas fa-download"></i> تصدير
+                    </button>
+                    <button id="adminImport" class="flex-shrink-0 bg-purple-500 active:bg-purple-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
+                        <i class="fas fa-upload"></i> استيراد
+                    </button>
+                    <button id="adminReset" class="flex-shrink-0 bg-gray-500 active:bg-gray-700 text-white px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
+                        <i class="fas fa-undo"></i> استعادة
+                    </button>
+                </div>
+            </div>
 
-        function switchTab(tab) {
-            ['center', 'classes', 'footer'].forEach(t => {
-                const btn = document.getElementById(`tab-btn-${t}`);
-                const content = document.getElementById(`tab-content-${t}`);
-                if (t === tab) {
-                    content.classList.remove('hidden');
-                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-amber-500 text-slate-950";
-                } else {
-                    content.classList.add('hidden');
-                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:bg-slate-800";
-                }
-            });
-        }
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <!-- Sidebar Tabs (horizontal scroll on mobile) -->
+                <aside class="lg:col-span-3">
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-lg border-2 border-pink-100 lg:sticky lg:top-32">
+                        <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-1 lg:pb-0 lg:overflow-visible" style="scrollbar-width: none;">
+                            <button class="admin-tab active" data-tab="general"><i class="fas fa-info-circle"></i><span>عام</span></button>
+                            <button class="admin-tab" data-tab="messages"><i class="fas fa-comment-dots"></i><span>الرسائل</span></button>
+                            <button class="admin-tab" data-tab="letters"><i class="fas fa-heart"></i><span>رسائل الحب</span></button>
+                            <button class="admin-tab" data-tab="images"><i class="fas fa-image"></i><span>الصور</span></button>
+                            <button class="admin-tab" data-tab="colors"><i class="fas fa-palette"></i><span>الألوان</span></button>
+                            <button class="admin-tab" data-tab="typography"><i class="fas fa-font"></i><span>الخطوط</span></button>
+                            <button class="admin-tab" data-tab="effects"><i class="fas fa-magic"></i><span>التأثيرات</span></button>
+                            <button class="admin-tab" data-tab="firebase"><i class="fas fa-cloud"></i><span>Firebase</span></button>
+                        </nav>
+                        <div class="hidden lg:block mt-4 p-3 bg-pink-50 rounded-xl border-2 border-dashed border-pink-300">
+                            <p class="text-xs text-brand-dark leading-relaxed">
+                                <i class="fas fa-lightbulb text-amber-500 ml-1"></i>
+                                كل تعديل <strong>يُحفظ تلقائياً</strong> في المتصفح و Firebase.
+                            </p>
+                        </div>
+                    </div>
+                </aside>
 
-        function syncFormFromState() {
-            document.getElementById('input-center-name').value = state.centerName;
-            document.getElementById('input-center-slogan').value = state.slogan;
-            document.getElementById('input-main-title').value = state.mainTitle;
-            document.getElementById('input-top-sticker').value = state.topSticker;
-            document.getElementById('input-announcement').value = state.announcement;
-            document.getElementById('input-bottom-note').value = state.bottomNote;
-            document.getElementById('input-phone').value = state.phone;
-            document.getElementById('input-footer-badge').value = state.footerBadge;
-            document.getElementById('input-wm-text').value = state.watermarkText;
-            document.getElementById('select-wm-pos').value = state.watermarkPos;
-            document.getElementById('toggle-watermark').checked = state.watermarkEnabled;
-        }
+                <!-- Content -->
+                <main class="lg:col-span-9 space-y-4">
+                    
+                    <!-- TAB: GENERAL -->
+                    <div class="admin-tab-content bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="general">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-info-circle text-brand-rose"></i> المعلومات العامة
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">الاسم بالإنجليزية</label>
+                                <input type="text" id="cfg-name" class="admin-input" data-auto="true">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">الاسم بالعربية</label>
+                                <input type="text" id="cfg-nameArabic" class="admin-input" data-auto="true">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">العمر</label>
+                                <input type="number" id="cfg-age" class="admin-input" data-auto="true">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">التاريخ المعروض</label>
+                                <input type="text" id="cfg-dateDisplay" class="admin-input" data-auto="true">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">نص الترحيب</label>
+                                <textarea id="cfg-welcomeText" rows="2" class="admin-input" data-auto="true"></textarea>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-bold text-gray-700 mb-1.5">نص التذييل</label>
+                                <input type="text" id="cfg-footerText" class="admin-input" data-auto="true">
+                            </div>
+                        </div>
+                    </div>
 
-        function syncStateFromForm() {
-            state.centerName = document.getElementById('input-center-name').value;
-            state.slogan = document.getElementById('input-center-slogan').value;
-            state.mainTitle = document.getElementById('input-main-title').value;
-            state.topSticker = document.getElementById('input-top-sticker').value;
-            state.announcement = document.getElementById('input-announcement').value;
-            state.bottomNote = document.getElementById('input-bottom-note').value;
-            state.phone = document.getElementById('input-phone').value;
-            state.footerBadge = document.getElementById('input-footer-badge').value;
-            state.watermarkText = document.getElementById('input-wm-text').value || 'a.m_4.4';
-            state.watermarkPos = document.getElementById('select-wm-pos').value;
-            state.watermarkEnabled = document.getElementById('toggle-watermark').checked;
-        }
+                    <!-- TAB: MESSAGES -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="messages">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-comment-dots text-brand-rose"></i> الرسائل
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-yellow-50 rounded-xl border-l-4 border-yellow-400">
+                                <h4 class="font-bold text-gray-800 mb-3 text-sm">📝 Sticky Note</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">العنوان</label>
+                                        <input type="text" id="cfg-noteTitle" class="admin-input" data-auto="true">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">التوقيع</label>
+                                        <input type="text" id="cfg-noteSignature" class="admin-input" data-auto="true">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">المحتوى</label>
+                                    <textarea id="cfg-noteContent" rows="3" class="admin-input" data-auto="true"></textarea>
+                                </div>
+                            </div>
 
-        function addNewCard() {
-            const defaultColors = ['magenta', 'blue', 'green', 'purple', 'orange', 'cyan'];
-            const nextColor = defaultColors[state.cards.length % defaultColors.length];
+                            <div class="p-4 bg-rose-50 rounded-xl border-l-4 border-rose-400">
+                                <h4 class="font-bold text-gray-800 mb-3 text-sm">🎴 البطاقة - الأمام</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">التحية</label>
+                                        <input type="text" id="cfg-cardFrontGreeting" class="admin-input" data-auto="true">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">العنوان</label>
+                                        <input type="text" id="cfg-cardFrontTitle" class="admin-input" data-auto="true">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">العبارة الفرعية</label>
+                                    <input type="text" id="cfg-cardFrontSubtitle" class="admin-input" data-auto="true">
+                                </div>
+                            </div>
 
-            state.cards.push({
-                id: Date.now(),
-                subject: 'اسم المادة',
-                teacher: 'اسم المدرس',
-                colorId: nextColor,
-                schedules: [
-                    { time: '1:00', classText: 'اسم الصف / المرحلة' }
-                ]
-            });
+                            <div class="p-4 bg-purple-50 rounded-xl border-l-4 border-purple-400">
+                                <h4 class="font-bold text-gray-800 mb-3 text-sm">💌 البطاقة - الخلف</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">العنوان الرئيسي</label>
+                                        <input type="text" id="cfg-cardBackTitle" class="admin-input" data-auto="true">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">الفقرة الأولى</label>
+                                        <textarea id="cfg-cardBackPara1" rows="2" class="admin-input" data-auto="true"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">الفقرة الثانية</label>
+                                        <textarea id="cfg-cardBackPara2" rows="2" class="admin-input" data-auto="true"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-600 mb-1">التوقيع</label>
+                                        <input type="text" id="cfg-cardBackSignature" class="admin-input" data-auto="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            renderCardsEditor();
-            renderPoster();
-            showToast('تمت إضافة مادة جديدة');
-        }
-
-        function removeCard(cardId) {
-            state.cards = state.cards.filter(c => c.id !== cardId);
-            renderCardsEditor();
-            renderPoster();
-            showToast('تم حذف المادة');
-        }
-
-        function addScheduleRow(cardIndex) {
-            state.cards[cardIndex].schedules.push({ time: '2:00', classText: 'اسم الصف' });
-            renderCardsEditor();
-            renderPoster();
-        }
-
-        function removeScheduleRow(cardIndex, schedIndex) {
-            state.cards[cardIndex].schedules.splice(schedIndex, 1);
-            renderCardsEditor();
-            renderPoster();
-        }
-
-        function renderCardsEditor() {
-            const container = document.getElementById('cards-editor-container');
-            document.getElementById('cards-count').innerText = state.cards.length;
-
-            if (state.cards.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 border border-dashed border-slate-700 rounded-xl p-4">
-                        <i class="fa-solid fa-folder-open text-slate-500 text-3xl mb-2 block"></i>
-                        <p class="text-xs text-slate-400 mb-3">لا توجد حصص مضافة حالياً (القالب فارغ)</p>
-                        <button onclick="addNewCard()" class="bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs hover:bg-amber-400 transition">
-                            <i class="fa-solid fa-plus"></i> إضافة أول مادة
+                    <!-- TAB: LETTERS -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="letters">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-heart text-brand-rose"></i> رسائل الحب
+                        </h2>
+                        <div id="lettersEditor" class="space-y-4"></div>
+                        <button id="addLetterBtn" class="mt-4 w-full bg-emerald-500 active:bg-emerald-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all">
+                            <i class="fas fa-plus"></i> إضافة رسالة
                         </button>
                     </div>
-                `;
-                return;
-            }
 
-            let html = '';
-            state.cards.forEach((card, idx) => {
-                html += `
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-3">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> مادة ${idx + 1}
-                            </span>
-                            <div class="flex items-center gap-2">
-                                <select onchange="updateCardColor(${idx}, this.value)" class="bg-slate-800 border border-slate-700 rounded text-[11px] text-white px-2 py-0.5">
-                                    ${CARD_COLORS.map(c => `<option value="${c.id}" ${c.id === card.colorId ? 'selected' : ''}>${c.name}</option>`).join('')}
-                                </select>
-                                <button onclick="removeCard(${card.id})" class="text-rose-400 hover:text-rose-300 text-xs px-1">
-                                    <i class="fa-solid fa-trash-can"></i>
+                    <!-- TAB: IMAGES -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="images">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-image text-brand-rose"></i> الصور
+                        </h2>
+                        
+                        <!-- Profile Image -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-user-circle text-brand-rose ml-1"></i>
+                                صورة البروفايل
+                            </label>
+                            
+                            <div id="uploadZone" class="upload-zone">
+                                <input type="file" id="imageFileInput" accept="image/*" class="hidden">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-brand-rose mb-2"></i>
+                                <p class="font-bold text-gray-700 text-sm">اضغط لاختيار صورة</p>
+                                <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF — الحد الأقصى 5 MB</p>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1.5">أو الصق رابطاً</label>
+                                    <input type="url" id="cfg-profileImg" class="admin-input" placeholder="https://..." data-auto="true">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1.5">معاينة</label>
+                                    <img id="prev-profileImg" src="" class="preview-thumb" onerror="this.src='https://placehold.co/200x200/f43f5e/ffffff?text=Maryam'">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gallery -->
+                        <div class="border-t-2 border-pink-100 pt-6">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-images text-brand-rose ml-1"></i>
+                                معرض الصور (اختياري)
+                            </label>
+                            <div id="galleryUploadZone" class="upload-zone">
+                                <input type="file" id="galleryFileInput" accept="image/*" multiple class="hidden">
+                                <i class="fas fa-plus-circle text-3xl text-brand-rose mb-2"></i>
+                                <p class="font-bold text-gray-700 text-sm">أضف صوراً متعددة</p>
+                            </div>
+                            <div id="galleryPreview" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 mt-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: COLORS -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="colors">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-palette text-brand-rose"></i> الألوان
+                        </h2>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-gray-700 mb-3 text-sm">أنماط جاهزة</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                                <button class="preset-btn p-2 sm:p-3 rounded-xl border-2 border-pink-200 active:border-rose-400 transition-all" data-preset="rose">
+                                    <div class="flex gap-1 justify-center mb-1.5">
+                                        <div class="w-5 h-5 rounded-full" style="background:#f43f5e"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#fbcfe8"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#881337"></div>
+                                    </div>
+                                    <span class="text-xs font-bold">Rose</span>
+                                </button>
+                                <button class="preset-btn p-2 sm:p-3 rounded-xl border-2 border-purple-200 active:border-purple-400 transition-all" data-preset="purple">
+                                    <div class="flex gap-1 justify-center mb-1.5">
+                                        <div class="w-5 h-5 rounded-full" style="background:#a855f7"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#e9d5ff"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#581c87"></div>
+                                    </div>
+                                    <span class="text-xs font-bold">Purple</span>
+                                </button>
+                                <button class="preset-btn p-2 sm:p-3 rounded-xl border-2 border-amber-200 active:border-amber-400 transition-all" data-preset="gold">
+                                    <div class="flex gap-1 justify-center mb-1.5">
+                                        <div class="w-5 h-5 rounded-full" style="background:#f59e0b"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#fef3c7"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#78350f"></div>
+                                    </div>
+                                    <span class="text-xs font-bold">Gold</span>
+                                </button>
+                                <button class="preset-btn p-2 sm:p-3 rounded-xl border-2 border-blue-200 active:border-blue-400 transition-all" data-preset="ocean">
+                                    <div class="flex gap-1 justify-center mb-1.5">
+                                        <div class="w-5 h-5 rounded-full" style="background:#3b82f6"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#bfdbfe"></div>
+                                        <div class="w-5 h-5 rounded-full" style="background:#1e3a8a"></div>
+                                    </div>
+                                    <span class="text-xs font-bold">Ocean</span>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="text-[10px] text-slate-400">اسم المادة</label>
-                                <input type="text" value="${card.subject}" oninput="updateCardSubject(${idx}, this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-slate-400">اسم الأستاذ / المعلم</label>
-                                <input type="text" value="${card.teacher}" oninput="updateCardTeacher(${idx}, this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
-                            </div>
-                        </div>
-
-                        <!-- Schedules List -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-bold text-slate-400">المواعيد والصفوف</span>
-                                <button onclick="addScheduleRow(${idx})" class="text-[10px] text-amber-400 hover:underline">+ إضافة موعد</button>
-                            </div>
-                            ${card.schedules.map((s, sIdx) => `
-                                <div class="flex items-center gap-1.5">
-                                    <input type="text" value="${s.time}" oninput="updateCardScheduleTime(${idx}, ${sIdx}, this.value)" placeholder="1:00" class="w-16 bg-slate-800 border border-slate-700 rounded p-1 text-xs text-center text-amber-300 dir-ltr font-mono">
-                                    <input type="text" value="${s.classText}" oninput="updateCardScheduleText(${idx}, ${sIdx}, this.value)" placeholder="اسم الصف" class="flex-1 bg-slate-800 border border-slate-700 rounded p-1 text-xs text-white">
-                                    <button onclick="removeScheduleRow(${idx}, ${sIdx})" class="text-slate-500 hover:text-rose-400 px-1 text-xs">×</button>
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-gray-700 mb-3 text-sm">تخصيص</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-pink-100">
+                                    <input type="color" id="cfg-colorAccent" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-200 flex-shrink-0" data-auto="true">
+                                    <div><p class="text-xs font-bold">اللون الأساسي</p><p class="text-[10px] text-gray-400">Accent</p></div>
                                 </div>
-                            `).join('')}
+                                <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-pink-100">
+                                    <input type="color" id="cfg-colorRose" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-200 flex-shrink-0" data-auto="true">
+                                    <div><p class="text-xs font-bold">اللون الوردي</p><p class="text-[10px] text-gray-400">Rose</p></div>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-pink-100">
+                                    <input type="color" id="cfg-colorDark" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-200 flex-shrink-0" data-auto="true">
+                                    <div><p class="text-xs font-bold">اللون الداكن</p><p class="text-[10px] text-gray-400">Dark</p></div>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-pink-100">
+                                    <input type="color" id="cfg-colorBg" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-gray-200 flex-shrink-0" data-auto="true">
+                                    <div><p class="text-xs font-bold">لون الخلفية</p><p class="text-[10px] text-gray-400">Background</p></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                `;
-            });
 
-            container.innerHTML = html;
+                    <!-- TAB: TYPOGRAPHY -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="typography">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-font text-brand-rose"></i> الخطوط والأحجام
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-pink-50 rounded-xl">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">
+                                    حجم العنوان: <span id="fontSizeTitleVal" class="text-brand-rose">100%</span>
+                                </label>
+                                <input type="range" id="cfg-fontSizeTitle" min="0.7" max="1.5" step="0.05" value="1" data-auto="true">
+                            </div>
+                            <div class="p-4 bg-pink-50 rounded-xl">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">
+                                    حجم النص: <span id="fontSizeWelcomeVal" class="text-brand-rose">100%</span>
+                                </label>
+                                <input type="range" id="cfg-fontSizeWelcome" min="0.8" max="1.3" step="0.05" value="1" data-auto="true">
+                            </div>
+                            <div class="p-4 bg-pink-50 rounded-xl">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">
+                                    تباعد الأسطر: <span id="lineHeightVal" class="text-brand-rose">1.6</span>
+                                </label>
+                                <input type="range" id="cfg-lineHeight" min="1.2" max="2.2" step="0.1" value="1.6" data-auto="true">
+                            </div>
+                            <div class="p-4 bg-pink-50 rounded-xl">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">خط العناوين</label>
+                                <select id="cfg-fontHeading" class="admin-input" data-auto="true">
+                                    <option value="Fredoka">Fredoka</option>
+                                    <option value="Cairo">Cairo</option>
+                                    <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                                    <option value="Great Vibes">Great Vibes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: EFFECTS -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="effects">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-magic text-brand-rose"></i> التأثيرات
+                        </h2>
+                        <div class="space-y-3">
+                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-birthday-cake text-brand-rose text-lg"></i>
+                                    <div><p class="font-bold text-sm">القصاصات</p><p class="text-xs text-gray-500">Confetti</p></div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="cfg-confetti" data-auto="true" checked><span class="toggle-slider"></span></label>
+                            </label>
+                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-heart text-brand-rose text-lg"></i>
+                                    <div><p class="font-bold text-sm">القلوب الطائرة</p></div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="cfg-floatingHearts" data-auto="true" checked><span class="toggle-slider"></span></label>
+                            </label>
+                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-sparkles text-brand-rose text-lg"></i>
+                                    <div><p class="font-bold text-sm">اللمعان</p></div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="cfg-shine" data-auto="true" checked><span class="toggle-slider"></span></label>
+                            </label>
+                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-music text-brand-rose text-lg"></i>
+                                    <div><p class="font-bold text-sm">الموسيقى التلقائية</p></div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="cfg-autoMusic" data-auto="true"><span class="toggle-slider"></span></label>
+                            </label>
+                            <label class="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer active:bg-pink-50">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-snowflake text-brand-rose text-lg"></i>
+                                    <div><p class="font-bold text-sm">الجزيئات</p></div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="cfg-particles" data-auto="true"><span class="toggle-slider"></span></label>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- TAB: FIREBASE -->
+                    <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="firebase">
+                        <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2">
+                            <i class="fas fa-cloud text-brand-rose"></i> Firebase
+                        </h2>
+                        <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400 mb-4">
+                            <p class="text-sm text-blue-800">
+                                <i class="fas fa-info-circle ml-1"></i>
+                                المزامنة التلقائية مفعّلة. كل تعديل يُرفع تلقائياً.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                            <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
+                                <p class="text-xs font-bold text-gray-500 mb-1">المشروع</p>
+                                <p class="font-bold text-brand-dark text-sm">ym-pro-max</p>
+                            </div>
+                            <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
+                                <p class="text-xs font-bold text-gray-500 mb-1">قاعدة البيانات</p>
+                                <p class="font-bold text-brand-dark text-sm">Realtime DB</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <button id="fbPushBtn" class="w-full bg-blue-500 active:bg-blue-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                <i class="fas fa-cloud-upload-alt"></i> رفع إلى Firebase
+                            </button>
+                            <button id="fbPullBtn" class="w-full bg-emerald-500 active:bg-emerald-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                <i class="fas fa-cloud-download-alt"></i> تحميل من Firebase
+                            </button>
+                            <button id="fbDeleteBtn" class="w-full bg-red-500 active:bg-red-700 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                                <i class="fas fa-trash"></i> حذف من Firebase
+                            </button>
+                        </div>
+                        <div id="fbStatus" class="mt-4 p-3 bg-gray-50 rounded-xl border-2 border-gray-200 text-sm text-gray-600">
+                            <i class="fas fa-info-circle mr-1"></i> جاهز
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MAIN SITE
+    ====================================================== -->
+    <div id="siteContainer">
+        <div id="loadingScreen" class="fixed inset-0 z-50 bg-gradient-to-br from-pink-300 via-rose-200 to-pink-400 flex flex-col items-center justify-center p-4 transition-opacity duration-1000">
+            <div class="relative flex flex-col items-center">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 relative mb-4 sm:mb-6">
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl">
+                        <ellipse cx="100" cy="170" rx="85" ry="15" fill="#f472b6" />
+                        <path d="M 30,120 Q 30,165 100,165 Q 170,165 170,120 L 170,140 Q 170,165 100,165 Q 30,165 30,140 Z" fill="#fb7185" />
+                        <rect x="30" y="120" width="140" height="25" rx="5" fill="#fda4af" />
+                        <path d="M 30,120 Q 45,130 60,120 Q 75,130 90,120 Q 105,130 120,120 Q 135,130 150,120 Q 165,130 170,120 L 170,110 L 30,110 Z" fill="#ffffff" />
+                        <rect x="45" y="75" width="110" height="35" rx="4" fill="#f43f5e" />
+                        <path d="M 45,85 Q 58,95 72,85 Q 86,95 100,85 Q 114,95 128,85 Q 142,95 155,85 L 155,75 L 45,75 Z" fill="#ffffff" />
+                        <rect x="94" y="40" width="12" height="35" rx="2" fill="#38bdf8" />
+                        <path class="animate-flame" d="M 100,20 Q 108,32 100,40 Q 92,32 100,20 Z" fill="#fbbf24" />
+                        <path class="animate-flame" d="M 100,25 Q 104,33 100,38 Q 96,33 100,25 Z" fill="#f97316" />
+                    </svg>
+                </div>
+                <h1 class="font-fredoka text-2xl sm:text-3xl md:text-4xl text-white font-bold text-center drop-shadow-md mb-2 px-4" id="loadingTitle">Happy 16th Birthday!</h1>
+                <h2 class="font-cursive text-3xl sm:text-4xl md:text-5xl text-brand-dark font-bold text-center mb-4 sm:mb-6 px-4" id="loadingName">Maryam 🎉</h2>
+                <div class="w-56 sm:w-64 h-3 bg-white/50 rounded-full overflow-hidden shadow-inner p-0.5">
+                    <div id="progressBar" class="h-full bg-brand-rose rounded-full w-0 transition-all duration-300 ease-out"></div>
+                </div>
+                <p id="loadingStatusText" class="text-white font-semibold text-xs mt-2 tracking-wider px-4 text-center">Preparing something special...</p>
+            </div>
+        </div>
+
+        <div id="mainContent" class="hidden min-h-screen flex flex-col bg-grid-pattern relative">
+            <div class="w-full flex justify-between overflow-hidden pointer-events-none absolute top-0 left-0 right-0 z-10 opacity-90">
+                <svg class="w-full h-10 sm:h-12 md:h-16 text-brand-rose fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <polygon points="0,0 40,0 20,50" fill="#f43f5e"/>
+                    <polygon points="40,0 80,0 60,65" fill="#fb7185"/>
+                    <polygon points="80,0 120,0 100,45" fill="#f43f5e"/>
+                    <polygon points="120,0 160,0 140,70" fill="#fbcfe8"/>
+                    <polygon points="160,0 200,0 180,55" fill="#f43f5e"/>
+                    <polygon points="200,0 240,0 220,60" fill="#fb7185"/>
+                    <polygon points="240,0 280,0 260,45" fill="#f43f5e"/>
+                    <polygon points="280,0 320,0 300,65" fill="#fbcfe8"/>
+                    <polygon points="320,0 360,0 340,50" fill="#f43f5e"/>
+                    <polygon points="360,0 400,0 380,70" fill="#fb7185"/>
+                    <polygon points="400,0 440,0 420,55" fill="#f43f5e"/>
+                    <polygon points="440,0 480,0 460,65" fill="#fbcfe8"/>
+                    <polygon points="480,0 520,0 500,45" fill="#f43f5e"/>
+                    <polygon points="520,0 560,0 540,70" fill="#fb7185"/>
+                    <polygon points="560,0 600,0 580,50" fill="#f43f5e"/>
+                    <polygon points="600,0 640,0 620,65" fill="#fbcfe8"/>
+                    <polygon points="640,0 680,0 660,45" fill="#f43f5e"/>
+                    <polygon points="680,0 720,0 700,70" fill="#fb7185"/>
+                    <polygon points="720,0 760,0 740,55" fill="#f43f5e"/>
+                    <polygon points="760,0 800,0 780,65" fill="#fbcfe8"/>
+                    <polygon points="800,0 840,0 820,45" fill="#f43f5e"/>
+                    <polygon points="840,0 880,0 860,70" fill="#fb7185"/>
+                    <polygon points="880,0 920,0 900,50" fill="#f43f5e"/>
+                    <polygon points="920,0 960,0 940,65" fill="#fbcfe8"/>
+                    <polygon points="960,0 1000,0 980,55" fill="#f43f5e"/>
+                    <polygon points="1000,0 1040,0 1020,70" fill="#fb7185"/>
+                    <polygon points="1040,0 1080,0 1060,45" fill="#f43f5e"/>
+                    <polygon points="1080,0 1120,0 1100,65" fill="#fbcfe8"/>
+                    <polygon points="1120,0 1160,0 1140,50" fill="#f43f5e"/>
+                    <polygon points="1160,0 1200,0 1180,70" fill="#fb7185"/>
+                </svg>
+            </div>
+
+            <main class="container mx-auto px-3 sm:px-4 pt-16 sm:pt-20 pb-8 sm:pb-12 flex-1 flex flex-col justify-center items-center max-w-5xl relative z-20">
+                <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
+                    <div class="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left space-y-4 sm:space-y-6">
+                        <div class="relative inline-block w-full">
+                            <div class="flex items-center justify-center md:justify-start gap-2 sm:gap-3 mb-2 flex-wrap">
+                                <span class="bg-brand-rose text-white font-fredoka px-3 py-1 rounded-full text-xs sm:text-sm font-semibold tracking-wider shadow-md" id="dateBadge">
+                                    <i class="fas fa-calendar-alt mr-1"></i> 21 Sep
+                                </span>
+                                <span class="bg-pink-200 text-brand-dark font-fredoka px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-sm" id="ageBadge">
+                                    <i class="fas fa-cake-candles mr-1"></i> 16 Years
+                                </span>
+                            </div>
+                            <h1 id="mainTitle" class="font-fredoka text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-brand-dark leading-tight tracking-tight drop-shadow-sm">
+                                Happy <br class="hidden sm:inline"/>
+                                <span class="text-brand-rose relative inline-block">
+                                    Birthday
+                                    <i class="fas fa-hat-wizard text-2xl sm:text-3xl md:text-4xl text-amber-400 absolute -top-4 sm:-top-5 -right-5 sm:-right-6 transform rotate-12"></i>
+                                </span>
+                            </h1>
+                        </div>
+
+                        <p class="text-gray-600 text-sm sm:text-base md:text-lg max-w-md font-medium px-2 sm:px-0" id="welcomeText"></p>
+
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start w-full pt-2 px-2 sm:px-0">
+                            <button id="btnNote" class="w-full sm:w-auto bg-white active:bg-rose-50 text-brand-rose font-fredoka font-semibold px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl border-2 border-brand-rose shadow-md active:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base">
+                                <i class="fas fa-sticky-note text-lg"></i>
+                                <span id="btnNoteText">Click Here Maryam</span>
+                            </button>
+                            <button id="btn3DCard" class="w-full sm:w-auto bg-gradient-to-r from-brand-rose to-pink-500 active:from-rose-600 active:to-pink-600 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base">
+                                <i class="fas fa-gift text-lg"></i>
+                                <span id="btn3DCardText">From Maryam</span>
+                            </button>
+                            <button id="btnLoveLetter" class="w-full sm:w-auto bg-amber-500 active:bg-amber-600 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl shadow-md transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base">
+                                <i class="fas fa-envelope-open-text text-lg"></i>
+                                <span>Love Letter</span>
+                                <i class="fas fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div id="stickyNotePopup" class="hidden w-full max-w-md bg-yellow-100 border-l-8 border-yellow-400 p-3 sm:p-4 rounded-xl shadow-xl relative animate-bounce-short mx-2 sm:mx-0">
+                            <button id="closeStickyNote" class="absolute top-2 right-2 text-gray-500 active:text-gray-800 p-1">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="flex items-start gap-3">
+                                <div class="text-2xl text-yellow-600 mt-1"><i class="fas fa-smile-wink"></i></div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-fredoka font-bold text-gray-800 text-base sm:text-lg" id="noteTitle"></h4>
+                                    <p class="text-gray-700 text-xs sm:text-sm mt-1 leading-relaxed break-words" id="noteContent"></p>
+                                    <span class="block text-right text-xs font-bold text-brand-rose mt-2" id="noteSignature"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-5 flex justify-center relative px-4 sm:px-0">
+                        <div class="absolute -top-8 -left-4 text-brand-rose text-2xl sm:text-3xl animate-float"><i class="fas fa-heart"></i></div>
+                        <div class="absolute bottom-2 -right-2 text-pink-400 text-3xl sm:text-4xl animate-float-slow"><i class="fas fa-sparkles"></i></div>
+                        <div class="relative group">
+                            <div class="absolute -top-10 right-2 z-20 animate-float">
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-10 h-12 sm:w-12 sm:h-14 bg-gradient-to-tr from-brand-rose to-pink-300 rounded-full shadow-md flex items-center justify-center text-white text-xs font-bold">🎈</div>
+                                    <div class="w-0.5 h-10 sm:h-12 bg-pink-300/80"></div>
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 z-20 bg-brand-rose text-white font-cursive text-xl sm:text-2xl px-5 sm:px-6 py-1 rounded-full shadow-lg border-2 border-white whitespace-nowrap" id="dearBadge">Dear Maryam</div>
+                            <div class="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full p-3 bg-white shadow-2xl border-4 border-pink-200 relative overflow-hidden flex items-center justify-center">
+                                <img id="profileImg" src="" alt="Portrait" class="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-105">
+                            </div>
+                            <div class="absolute top-1/2 -left-4 sm:-left-6 transform -translate-y-1/2 bg-white text-yellow-500 p-2 sm:p-3 rounded-full shadow-md text-xl sm:text-2xl border border-pink-100 animate-pulse">
+                                <i class="far fa-smile-beam"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="text-center py-3 sm:py-4 text-gray-400 text-[10px] sm:text-xs font-medium z-20 px-4" id="footerText"></footer>
+        </div>
+    </div>
+
+    <!-- 3D CARD MODAL -->
+    <div id="card3DModal" class="fixed inset-0 z-[150] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 transition-all duration-300">
+        <div class="relative w-full max-w-lg perspective-1000">
+            <button id="close3DModal" class="absolute -top-12 right-0 text-white active:text-pink-200 text-2xl z-50">
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <div id="flipperCard" class="w-full bg-transparent transform-style-3d transition-transform duration-700 relative min-h-[400px] sm:min-h-[420px] cursor-pointer">
+                <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-pink-400 to-brand-rose rounded-2xl p-6 sm:p-8 shadow-2xl border-4 border-white flex flex-col items-center justify-center text-white text-center backface-hidden">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 flex items-center justify-center mb-3 sm:mb-4 text-3xl sm:text-4xl">🎂</div>
+                    <span class="text-xs uppercase tracking-widest font-semibold bg-white/20 px-3 py-1 rounded-full mb-2" id="cardFrontGreeting"></span>
+                    <h3 class="font-fredoka text-3xl sm:text-4xl font-bold mb-2" id="cardFrontTitle"></h3>
+                    <p class="font-cursive text-xl sm:text-2xl text-pink-100 mb-4 sm:mb-6" id="cardFrontSubtitle"></p>
+                    <span class="text-xs font-semibold bg-white text-brand-rose px-4 py-2 rounded-full shadow-md animate-pulse">اضغط لفتح البطاقة ✨</span>
+                </div>
+                <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-rose-600 to-brand-dark text-white rounded-2xl p-5 sm:p-8 shadow-2xl border-4 border-white flex flex-col justify-between rotate-y-180 backface-hidden">
+                    <div class="text-right"><span class="font-cursive text-2xl sm:text-3xl text-pink-200">To You!</span></div>
+                    <div class="space-y-2 sm:space-y-3 font-sans text-xs sm:text-sm md:text-base leading-relaxed text-pink-50">
+                        <p class="font-semibold text-base sm:text-lg text-pink-200 font-fredoka" id="cardBackTitle"></p>
+                        <p id="cardBackPara1"></p>
+                        <p id="cardBackPara2"></p>
+                    </div>
+                    <div class="text-right pt-2 border-t border-pink-400/40">
+                        <p class="font-cursive text-xl sm:text-2xl text-pink-200" id="cardBackSignature"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOVE LETTER SECTION -->
+    <div id="loveLetterSection" class="hidden fixed inset-0 z-[140] bg-rose-700 min-h-screen overflow-y-auto flex flex-col items-center justify-center p-3 sm:p-4">
+        <div id="floatingHeartsContainer" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+        <button id="btnBackToDashboard" class="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 bg-white/20 active:bg-white/30 text-white px-3 sm:px-4 py-2 rounded-full backdrop-blur-md text-xs sm:text-sm font-fredoka flex items-center gap-2 border border-white/30">
+            <i class="fas fa-arrow-left"></i><span>Back</span>
+        </button>
+
+        <div id="svgHeartContainer" class="flex flex-col items-center justify-center text-center">
+            <svg class="w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80" viewBox="0 0 200 200">
+                <circle cx="70" cy="80" r="45" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+                <circle cx="130" cy="80" r="45" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+                <polygon points="100,170 30,90 170,90" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+                <path class="heart-path" d="M 100,160 C 100,160 35,110 35,70 C 35,45 55,30 75,30 C 90,30 100,42 100,42 C 100,42 110,30 125,30 C 145,30 165,45 165,70 C 165,110 100,160 100,160 Z" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+            </svg>
+            <p class="text-white/80 font-fredoka text-base sm:text-lg mt-4 animate-pulse">Drawing love...</p>
+        </div>
+
+        <div id="envelopeMainContainer" class="hidden w-full max-w-2xl flex flex-col items-center my-auto py-8 sm:py-12">
+            <div class="relative w-full max-w-xs sm:max-w-sm h-48 sm:h-56 bg-amber-100 rounded-b-xl shadow-2xl border-2 border-amber-200 flex flex-col items-center justify-center p-4 text-center my-6">
+                <div id="envelopeFlap" class="envelope-flap absolute top-0 left-0 right-0 h-24 sm:h-28 bg-amber-200 rounded-t-xl origin-top flex items-center justify-center border-b-2 border-amber-300 shadow-md">
+                    <div class="w-10 h-10 rounded-full bg-brand-rose text-white flex items-center justify-center text-lg shadow-inner"><i class="fas fa-heart"></i></div>
+                </div>
+                <div class="z-10 mt-6">
+                    <h3 class="font-cursive text-2xl sm:text-3xl text-brand-dark font-bold">Envelope Of Love</h3>
+                    <p class="font-fredoka text-xs sm:text-sm text-amber-800">Dear Maryam</p>
+                    <button id="btnOpenEnvelope" class="mt-4 bg-brand-rose active:bg-rose-700 text-white font-fredoka px-6 py-2 rounded-full shadow-lg flex items-center gap-2 mx-auto text-sm">
+                        <span>Open</span><i class="fas fa-envelope-open"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="lettersContainer" class="hidden w-full space-y-4 sm:space-y-6 mt-6 transition-all duration-700"></div>
+        </div>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="fileInput" accept=".json" class="hidden">
+
+    <!-- =====================================================
+         FIREBASE MODULAR SDK
+    ====================================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+            authDomain: "ym-pro-max.firebaseapp.com",
+            databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com",
+            projectId: "ym-pro-max",
+            storageBucket: "ym-pro-max.firebasestorage.app",
+            messagingSenderId: "174657071953",
+            appId: "1:174657071953:web:5e831fc337df46dbd18170"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const CONFIG_PATH = 'maryam_birthday/config';
+
+        window.firebaseHelpers = {
+            async push(config) { await set(ref(db, CONFIG_PATH), config); },
+            async pull() {
+                const snapshot = await get(ref(db, CONFIG_PATH));
+                return snapshot.exists() ? snapshot.val() : null;
+            },
+            async delete() { await remove(ref(db, CONFIG_PATH)); },
+            isReady: true
+        };
+        window.dispatchEvent(new Event('firebaseReady'));
+        console.log('✅ Firebase initialized');
+    </script>
+
+    <!-- =====================================================
+         MAIN APP SCRIPT
+    ====================================================== -->
+    <script>
+    // ============================================
+    // CONFIG & STORAGE
+    // ============================================
+    const STORAGE_KEY = 'maryam_birthday_config_v1';
+    let autoSaveTimeout = null;
+    let lastSavedHash = '';
+
+    const defaultConfig = {
+        name: 'Maryam',
+        nameArabic: 'مريم',
+        age: 16,
+        dateDisplay: '21 Sep',
+        dateFull: '2010-09-21',
+        welcomeText: 'Today is all about celebrating you, Maryam! Wishing you a year filled with endless laughter, joy, and magical moments. ✨',
+        footerText: "Made with ❤️ for Maryam's Special Day",
+        noteTitle: 'Hey Maryam,',
+        noteContent: 'كل سنة وانتي طيبة يا مريم! 🎂✨ يا رب السنة الجديدة تكون مليانة نجاح وسعادة وتحقيق أحلام. 16 سنة من الجمال والروعة، وعقبال 100 سنة! 💕',
+        noteSignature: '- مع كل الحب',
+        cardFrontGreeting: 'Dear Maryam',
+        cardFrontTitle: 'Happy Birthday!',
+        cardFrontSubtitle: 'A special message just for you... 💕',
+        cardBackTitle: 'Happy 16th Birthday, Maryam! 🌸',
+        cardBackPara1: 'كل سنة وانتي طيبة يا مريم! 16 سنة من الحلاوة والجمال. يا رب تكون سنة مليانة بالحب والنجاح والضحك.',
+        cardBackPara2: 'From the moment we met, something in my life shifted—you brought warmth into the parts of me I didn\'t even know were cold.',
+        cardBackSignature: 'With all my love',
+        letters: [
+            { title: 'Memory 01', content: 'من أول يوم اتكلمنا فيه، كنتي البهجة اللي غيرت حياتي، وحولتي الأيام العادية للحظات جميلة تستحق إنها تتعاش.', signature: '- Maryam' },
+            { title: 'Memory 02', content: 'من ساعة ما اتقابلنا، قلبي عرف مكانه الصح — معاكي، في كل لحظة حلوة، كل ضحكة، وكل جزء هادي من الأبدية.', signature: '- Maryam' },
+            { title: 'Memory 03', content: 'حتى من ورا الشاشات، ضحكتك بتوصلني زي نور الشمس من الشباك — دافية، حقيقية، ومستحيل تتنسي.', signature: '- Maryam' },
+            { title: 'Memory 04', content: 'رسايلنا ممكن تكون بتمشي في الأسلاك، بس كل كلمة بتبعتيها بتوصل لقلبي على طول. ❤️', signature: '- Maryam' }
+        ],
+        gallery: [],
+        profileImg: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+        colors: { accent: '#f43f5e', rose: '#e11d48', dark: '#881337', bg: '#fdf2f8' },
+        typography: { fontSizeTitle: 1.0, fontSizeWelcome: 1.0, lineHeight: 1.6, fontHeading: 'Fredoka' },
+        effects: { confetti: true, floatingHearts: true, shine: true, autoMusic: false, particles: false }
+    };
+
+    let currentConfig = loadConfig();
+    let firebaseReady = false;
+
+    function loadConfig() {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) return deepMerge(JSON.parse(JSON.stringify(defaultConfig)), JSON.parse(stored));
+        } catch (e) { console.error('Load error:', e); }
+        return JSON.parse(JSON.stringify(defaultConfig));
+    }
+
+    function deepMerge(target, source) {
+        const result = { ...target };
+        for (const key in source) {
+            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                result[key] = deepMerge(target[key] || {}, source[key]);
+            } else { result[key] = source[key]; }
         }
+        return result;
+    }
 
-        function updateCardColor(idx, val) { state.cards[idx].colorId = val; renderPoster(); }
-        function updateCardSubject(idx, val) { state.cards[idx].subject = val; renderPoster(); }
-        function updateCardTeacher(idx, val) { state.cards[idx].teacher = val; renderPoster(); }
-        function updateCardScheduleTime(cardIdx, schedIdx, val) { state.cards[cardIdx].schedules[schedIdx].time = val; renderPoster(); }
-        function updateCardScheduleText(cardIdx, schedIdx, val) { state.cards[cardIdx].schedules[schedIdx].classText = val; renderPoster(); }
+    // ============================================
+    // TOAST
+    // ============================================
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        const icon = document.getElementById('toastIcon');
+        const txt = document.getElementById('toastText');
+        
+        t.classList.remove('error', 'info', 'warning');
+        if (type === 'error') { t.classList.add('error'); icon.className = 'fas fa-exclamation-circle toast-icon'; }
+        else if (type === 'info') { t.classList.add('info'); icon.className = 'fas fa-info-circle toast-icon'; }
+        else if (type === 'warning') { t.classList.add('warning'); icon.className = 'fas fa-exclamation-triangle toast-icon'; }
+        else { icon.className = 'fas fa-check-circle toast-icon'; }
+        
+        txt.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._hideTimer);
+        t._hideTimer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
 
-        function clearAllData() {
-            state.cards = [];
-            state.announcement = '';
-            state.bottomNote = '';
-            syncFormFromState();
-            renderCardsEditor();
-            renderPoster();
-            showToast('تم تفريغ كافة البيانات والبطاقات');
+    function updateSyncBadge(status, text) {
+        const badge = document.getElementById('syncBadge');
+        const txt = document.getElementById('syncText');
+        badge.className = 'sync-badge fixed top-4 left-16 sm:left-20 z-[100] sync-' + status;
+        txt.textContent = text;
+    }
+
+    // ============================================
+    // AUTO-SAVE (Debounced)
+    // ============================================
+    function scheduleAutoSave() {
+        clearTimeout(autoSaveTimeout);
+        updateSyncBadge('saving', '💾 جاري الحفظ...');
+        autoSaveTimeout = setTimeout(async () => {
+            await performSave();
+        }, 800); // wait 800ms after last change
+    }
+
+    async function performSave() {
+        const hash = JSON.stringify(currentConfig);
+        if (hash === lastSavedHash) return;
+        
+        // Save locally
+        try {
+            localStorage.setItem(STORAGE_KEY, hash);
+            lastSavedHash = hash;
+        } catch (e) {
+            showToast('❌ فشل الحفظ المحلي', 'error');
+            return;
         }
-
-        function loadSampleData() {
-            state.centerName = 'سنتر سيجما التعليمي';
-            state.slogan = 'هدفنا الثقة والتميز';
-            state.mainTitle = 'حصص غداً بإذن الله';
-            state.topSticker = 'معاً نحو مستقبل أفضل ♡';
-            state.phone = '01147758295';
-            state.footerBadge = 'معاً.. نحقق النجاح ♡';
-            state.announcement = 'تم فتح مجموعة جديدة مع مستر علاء حمدي للصف الأول الإعدادي الأحد والأربعاء الساعة 5 خصيصاً للفترة المسائية';
-            
-            state.cards = [
-                {
-                    id: 1, subject: 'اللغة العربية', teacher: 'مس صفية منصور', colorId: 'magenta',
-                    schedules: [
-                        { time: '1:00', classText: 'حصص التأسيس' },
-                        { time: '2:00', classText: 'الصف الرابع الابتدائي' },
-                        { time: '3:00', classText: 'الصف الخامس الابتدائي' },
-                        { time: '4:00', classText: 'الصف السادس الابتدائي' }
-                    ]
-                },
-                {
-                    id: 2, subject: 'اللغة العربية', teacher: 'مستر علاء حمدي', colorId: 'blue',
-                    schedules: [
-                        { time: '2:00', classText: 'الصف الثالث الإعدادي' },
-                        { time: '3:00', classText: 'الصف الأول الإعدادي' },
-                        { time: '4:00', classText: 'الصف الثاني الإعدادي' }
-                    ]
-                },
-                {
-                    id: 3, subject: 'الرياضيات', teacher: 'مستر أحمد إيهاب', colorId: 'green',
-                    schedules: [
-                        { time: '2:00', classText: 'الصف الأول الثانوي (بنات)' },
-                        { time: '4:00', classText: 'الصف الثاني الثانوي (بكالوريا)' },
-                        { time: '6:00', classText: 'الصف الأول الثانوي (ولاد)' }
-                    ]
-                },
-                {
-                    id: 4, subject: 'الرياضيات', teacher: 'مستر أحمد عبدالحليم', colorId: 'purple',
-                    schedules: [
-                        { time: '4:00', classText: 'الصف الأول الإعدادي' },
-                        { time: '5:00', classText: 'الصف الثالث الإعدادي' },
-                        { time: '6:00', classText: 'الصف الثاني الإعدادي' }
-                    ]
-                },
-                {
-                    id: 5, subject: 'الحساب', teacher: 'مستر أحمد عبدالحليم', colorId: 'orange',
-                    schedules: [
-                        { time: '1:00', classText: 'الصف الرابع الابتدائي' },
-                        { time: '2:00', classText: 'الصف الخامس الابتدائي' },
-                        { time: '3:00', classText: 'الصف السادس الابتدائي' }
-                    ]
-                }
-            ];
-
-            syncFormFromState();
-            renderCardsEditor();
-            renderPoster();
-            showToast('تم تحميل نموذج البيانات بنجاح!');
-        }
-
-        function renderPoster() {
-            syncStateFromForm();
-
-            // High Resolution A4 Poster Dimensions
-            const W = 1200;
-            const H = 1700;
-            canvas.width = W;
-            canvas.height = H;
-
-            ctx.clearRect(0, 0, W, H);
-
-            // 1. Draw Background Gradient & Patterns
-            drawBackground(W, H);
-
-            // 2. Draw Top Header Area (Logo, Main Curved Title, Top Sticker)
-            const headerBottomY = drawHeader(W, H);
-
-            // 3. Draw Footer Area
-            const footerTopY = drawFooter(W, H);
-
-            // 4. Draw Cards Grid in Main Content Area
-            drawCardsGrid(W, headerBottomY + 20, footerTopY - 20);
-
-            // 5. Draw Watermark if Enabled
-            if (state.watermarkEnabled) {
-                drawWatermark(W, H);
-            }
-        }
-
-        function drawBackground(W, H) {
-            // Main Top Yellow/Cyan Dynamic Gradient Backdrop
-            const grad = ctx.createLinearGradient(0, 0, 0, H);
-            grad.addColorStop(0, '#e0f7fa');
-            grad.addColorStop(0.2, '#fffde7');
-            grad.addColorStop(0.5, '#ffffff');
-            grad.addColorStop(1, '#f8fafc');
-
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, W, H);
-
-            // Top Header Colorful Splashes / Decorative Top Wave
-            ctx.save();
-            ctx.fillStyle = '#00bcd4';
-            ctx.beginPath();
-            ctx.arc(W / 2, -150, 650, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#ffeb3b';
-            ctx.beginPath();
-            ctx.arc(W / 2, -180, 580, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-        }
-
-        function drawHeader(W, H) {
-            ctx.save();
-
-            // A) Center Logo Placeholder (Top Right / Center-Right Frame)
-            const logoX = 140;
-            const logoY = 130;
-            const logoR = 85;
-
-            // Outer Seal Circle
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(logoX, logoY, logoR + 8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#0d1b2a';
-            ctx.lineWidth = 6;
-            ctx.stroke();
-
-            // Logo Badge Background
-            const logoGrad = ctx.createLinearGradient(logoX - logoR, logoY - logoR, logoX + logoR, logoY + logoR);
-            logoGrad.addColorStop(0, '#e0f2fe');
-            logoGrad.addColorStop(1, '#ffffff');
-            ctx.fillStyle = logoGrad;
-            ctx.beginPath();
-            ctx.arc(logoX, logoY, logoR, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Σ Sigma / Graduation Cap Icon Symbol
-            ctx.fillStyle = '#0d2847';
-            ctx.font = '900 65px "Cairo", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Σ', logoX, logoY - 10);
-
-            // Center Name Banner Ribbon Under Logo
-            if (state.centerName) {
-                ctx.fillStyle = '#0d1b2a';
-                drawRoundedRect(ctx, logoX - 110, logoY + 50, 220, 42, 10);
-                ctx.fill();
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 20px "Cairo", sans-serif';
-                ctx.fillText(state.centerName, logoX, logoY + 71);
-            }
-
-            if (state.slogan) {
-                ctx.fillStyle = '#f59e0b';
-                drawRoundedRect(ctx, logoX - 90, logoY + 96, 180, 26, 6);
-                ctx.fill();
-                ctx.fillStyle = '#0d1b2a';
-                ctx.font = 'bold 13px "Cairo", sans-serif';
-                ctx.fillText(state.slogan, logoX, logoY + 109);
-            }
-
-            // B) Center Main Header Title ("حصص غداً بإذن الله")
-            const titleX = W / 2 + 30;
-            const titleY = 120;
-
-            // Cyan Brush Banner Backdrop
-            ctx.fillStyle = '#00acc1';
-            drawRoundedRect(ctx, titleX - 250, titleY - 60, 500, 110, 25);
-            ctx.fill();
-
-            ctx.fillStyle = '#ffeb3b';
-            drawRoundedRect(ctx, titleX - 240, titleY - 50, 480, 90, 20);
-            ctx.fill();
-
-            // Stylized 3D Arabic Text
-            const mainText = state.mainTitle || 'حصص غداً بإذن الله';
-            ctx.font = '900 72px "Changa", "Cairo", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            // Text Shadow / Stroke
-            ctx.strokeStyle = '#0d1b2a';
-            ctx.lineWidth = 12;
-            ctx.lineJoin = 'round';
-            ctx.strokeText(mainText, titleX, titleY - 5);
-
-            ctx.fillStyle = '#d97706';
-            ctx.fillText(mainText, titleX + 4, titleY + 2);
-
-            ctx.fillStyle = '#00838f';
-            ctx.fillText(mainText, titleX, titleY - 5);
-
-            // C) Top Right Sticker Note ("معاً نحو مستقبل أفضل ♡")
-            if (state.topSticker) {
-                const stickerX = W - 180;
-                const stickerY = 100;
-
-                ctx.save();
-                ctx.translate(stickerX, stickerY);
-                ctx.rotate(0.08); // Slight fun tilt
-
-                ctx.fillStyle = '#fff59d';
-                ctx.shadowColor = 'rgba(0,0,0,0.15)';
-                ctx.shadowBlur = 12;
-                ctx.shadowOffsetY = 6;
-                drawRoundedRect(ctx, -120, -50, 240, 90, 15);
-                ctx.fill();
-                ctx.shadowColor = 'transparent';
-
-                ctx.strokeStyle = '#fbc02d';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                ctx.fillStyle = '#0d1b2a';
-                ctx.font = 'bold 22px "Cairo", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                
-                const lines = wrapText(ctx, state.topSticker, 210);
-                lines.forEach((line, lIdx) => {
-                    ctx.fillText(line, 0, -15 + (lIdx * 28));
-                });
-
-                ctx.restore();
-            }
-
-            ctx.restore();
-            return 240; // Bottom Y of header area
-        }
-
-        function drawCardsGrid(W, startY, endY) {
-            ctx.save();
-
-            const availableHeight = endY - startY;
-            const marginX = 40;
-            const gap = 20;
-            const colWidth = (W - (marginX * 2) - gap) / 2;
-
-            // Check if there is an announcement box or cards
-            const totalCards = state.cards.length;
-            const hasAnnouncement = Boolean(state.announcement && state.announcement.trim());
-
-            // If no cards present, draw empty state placeholder
-            if (totalCards === 0 && !hasAnnouncement) {
-                ctx.fillStyle = '#64748b';
-                ctx.font = 'bold 28px "Cairo", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('لا توجد حصص مضافة - استخدم القائمة الجانبية لإضافة المواد والجدول', W / 2, startY + 200);
-                ctx.restore();
-                return;
-            }
-
-            // Calculate grid rows
-            const rows = Math.ceil(totalCards / 2);
-            let cardHeight = 260;
-            if (rows > 0) {
-                const calculatedH = (availableHeight - (hasAnnouncement ? 160 : 0) - (rows * gap)) / rows;
-                cardHeight = Math.min(340, Math.max(220, calculatedH));
-            }
-
-            // Draw Cards in 2 Columns
-            state.cards.forEach((card, idx) => {
-                const col = idx % 2; // 0: Left, 1: Right
-                const row = Math.floor(idx / 2);
-
-                const x = (col === 0) ? marginX + colWidth + gap : marginX; // Right to Left in Arabic
-                const y = startY + (row * (cardHeight + gap));
-
-                drawSingleCard(ctx, card, x, y, colWidth, cardHeight);
-            });
-
-            // Draw Announcement Box at the Bottom of Grid if specified
-            if (hasAnnouncement) {
-                const annY = startY + (rows * (cardHeight + gap));
-                const annHeight = Math.min(180, endY - annY);
-                if (annHeight > 60) {
-                    drawAnnouncementCard(ctx, state.announcement, marginX, annY, W - (marginX * 2), annHeight);
-                }
-            }
-
-            ctx.restore();
-        }
-
-        function drawSingleCard(ctx, card, x, y, w, h) {
-            ctx.save();
-
-            const colorObj = CARD_COLORS.find(c => c.id === card.colorId) || CARD_COLORS[0];
-
-            // Outer Card Container Box
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.08)';
-            ctx.shadowBlur = 10;
-            ctx.shadowOffsetY = 4;
-            drawRoundedRect(ctx, x, y, w, h, 20);
-            ctx.fill();
-
-            ctx.strokeStyle = colorObj.main;
-            ctx.lineWidth = 4;
-            ctx.stroke();
-
-            // Card Header Banner
-            const headerH = 62;
-            const headerGrad = ctx.createLinearGradient(x, y, x + w, y);
-            headerGrad.addColorStop(0, colorObj.gradient[0]);
-            headerGrad.addColorStop(1, colorObj.gradient[1]);
-
-            ctx.fillStyle = headerGrad;
-            drawTopRoundedRect(ctx, x, y, w, headerH, 16);
-            ctx.fill();
-
-            // Subject Title (Right side in Header)
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '900 28px "Cairo", sans-serif';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(card.subject || 'اسم المادة', x + w - 20, y + (headerH / 2));
-
-            // Teacher Name Pill (Center/Left Badge in Header)
-            if (card.teacher) {
-                const teacherText = `${card.teacher} 👤`;
-                ctx.font = 'bold 18px "Cairo", sans-serif';
-                const textW = ctx.measureText(teacherText).width;
-                const pillW = textW + 30;
-                const pillX = x + 15;
-                const pillY = y + (headerH / 2) - 17;
-
-                ctx.fillStyle = '#ffeb3b';
-                drawRoundedRect(ctx, pillX, pillY, pillW, 34, 17);
-                ctx.fill();
-
-                ctx.fillStyle = '#0d1b2a';
-                ctx.textAlign = 'center';
-                ctx.fillText(teacherText, pillX + (pillW / 2), y + (headerH / 2) + 1);
-            }
-
-            // Schedules Rows Area
-            const contentY = y + headerH + 10;
-            const contentH = h - headerH - 15;
-            const schedules = card.schedules || [];
-            const rowH = Math.min(42, (contentH / Math.max(1, schedules.length)));
-
-            schedules.forEach((sched, sIdx) => {
-                const rowY = contentY + (sIdx * rowH);
-
-                // Alternating row background
-                if (sIdx % 2 === 1) {
-                    ctx.fillStyle = '#f8fafc';
-                    drawRoundedRect(ctx, x + 8, rowY, w - 16, rowH - 4, 8);
-                    ctx.fill();
-                }
-
-                // Time Badge Pill (Left Side)
-                const timeText = sched.time || '--:--';
-                const timePillW = 85;
-                const timePillX = x + 15;
-
-                const timeGrad = ctx.createLinearGradient(timePillX, rowY, timePillX + timePillW, rowY);
-                timeGrad.addColorStop(0, colorObj.gradient[0]);
-                timeGrad.addColorStop(1, colorObj.gradient[1]);
-                ctx.fillStyle = timeGrad;
-                drawRoundedRect(ctx, timePillX, rowY + 3, timePillW, rowH - 10, 12);
-                ctx.fill();
-
-                // Clock Icon & Time Text
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 15px "Changa", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(`🕒 ${timeText}`, timePillX + (timePillW / 2), rowY + (rowH / 2));
-
-                // Class Name Text (Right Side)
-                ctx.fillStyle = '#0f172a';
-                ctx.font = 'bold 20px "Cairo", sans-serif';
-                ctx.textAlign = 'right';
-                ctx.fillText(sched.classText || '', x + w - 15, rowY + (rowH / 2));
-            });
-
-            ctx.restore();
-        }
-
-        function drawAnnouncementCard(ctx, text, x, y, w, h) {
-            ctx.save();
-
-            ctx.fillStyle = '#ffffff';
-            drawRoundedRect(ctx, x, y, w, h, 20);
-            ctx.fill();
-
-            ctx.strokeStyle = '#00acc1';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-
-            // Announcement Text Wrap
-            ctx.fillStyle = '#0f172a';
-            ctx.font = 'bold 24px "Cairo", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            const lines = wrapText(ctx, text, w - 40);
-            const lineHeight = 34;
-            const startY = y + (h / 2) - ((lines.length - 1) * lineHeight / 2);
-
-            lines.forEach((line, idx) => {
-                ctx.fillText(line, x + (w / 2), startY + (idx * lineHeight));
-            });
-
-            ctx.restore();
-        }
-
-        function drawFooter(W, H) {
-            ctx.save();
-
-            const footerH = 120;
-            const footerY = H - footerH;
-
-            // Footer Dark Blue Background Bar
-            ctx.fillStyle = '#0a192f';
-            ctx.fillRect(0, footerY, W, footerH);
-
-            // Top Border Line
-            ctx.fillStyle = '#ffcc00';
-            ctx.fillRect(0, footerY, W, 6);
-
-            // A) Right Badge Sticker ("معاً.. نحقق النجاح ♡")
-            if (state.footerBadge) {
-                const badgeX = W - 50;
-                const badgeY = footerY + (footerH / 2);
-
-                ctx.save();
-                ctx.translate(badgeX, badgeY);
-                ctx.rotate(-0.05);
-
-                ctx.fillStyle = '#fff59d';
-                drawRoundedRect(ctx, -180, -32, 180, 64, 12);
-                ctx.fill();
-
-                ctx.fillStyle = '#0d1b2a';
-                ctx.font = 'bold 20px "Cairo", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(state.footerBadge, -90, 2);
-                ctx.restore();
-            }
-
-            // B) Center Logo / Center Name Text
-            if (state.centerName) {
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 26px "Cairo", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(state.centerName, W / 2 + 100, footerY + (footerH / 2) - 10);
-
-                if (state.slogan) {
-                    ctx.fillStyle = '#94a3b8';
-                    ctx.font = '16px "Cairo", sans-serif';
-                    ctx.fillText(state.slogan, W / 2 + 100, footerY + (footerH / 2) + 20);
-                }
-            }
-
-            // C) Phone / WhatsApp Pill (Left Side)
-            if (state.phone) {
-                const phoneX = 60;
-                const phoneY = footerY + (footerH / 2) - 28;
-
-                ctx.fillStyle = '#00e676';
-                drawRoundedRect(ctx, phoneX, phoneY, 360, 56, 28);
-                ctx.fill();
-
-                // Phone Icon Circle
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(phoneX + 30, phoneY + 28, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = '#0d1b2a';
-                ctx.font = '20px "Font Awesome 6 Free"';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('📞', phoneX + 30, phoneY + 28);
-
-                // Phone Number Text
-                ctx.fillStyle = '#0d1b2a';
-                ctx.font = '900 30px "Changa", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(state.phone, phoneX + 200, phoneY + 30);
-            }
-
-            ctx.restore();
-            return footerY;
-        }
-
-        function drawWatermark(W, H) {
-            ctx.save();
-            ctx.globalAlpha = 0.75;
-
-            const text = state.watermarkText || 'a.m_4.4';
-            const pos = state.watermarkPos || 'bottom-left';
-
-            ctx.font = 'bold 24px "Changa", sans-serif';
-
-            if (pos === 'pattern') {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-                ctx.textAlign = 'center';
-                for (let x = 100; x < W; x += 300) {
-                    for (let y = 150; y < H; y += 220) {
-                        ctx.save();
-                        ctx.translate(x, y);
-                        ctx.rotate(-Math.PI / 6);
-                        ctx.fillText(text, 0, 0);
-                        ctx.restore();
-                    }
-                }
-            } else {
-                let x = 60, y = H - 150;
-                if (pos === 'bottom-right') { x = W - 220; y = H - 150; }
-                if (pos === 'top-right') { x = W - 220; y = 160; }
-                if (pos === 'top-left') { x = 60; y = 160; }
-
-                const textWidth = ctx.measureText(text).width;
-                ctx.fillStyle = 'rgba(13, 27, 42, 0.85)';
-                ctx.strokeStyle = '#ffeb3b';
-                ctx.lineWidth = 2;
-
-                drawRoundedRect(ctx, x, y, textWidth + 30, 44, 10);
-                ctx.fill();
-                ctx.stroke();
-
-                ctx.fillStyle = '#ffeb3b';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(text, x + (textWidth + 30) / 2, y + 23);
-            }
-
-            ctx.restore();
-        }
-
-        // Helper Drawing Functions
-        function drawRoundedRect(ctx, x, y, w, h, r) {
-            ctx.beginPath();
-            ctx.moveTo(x + r, y);
-            ctx.lineTo(x + w - r, y);
-            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-            ctx.lineTo(x + w, y + h - r);
-            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-            ctx.lineTo(x + r, y + h);
-            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-            ctx.lineTo(x, y + r);
-            ctx.quadraticCurveTo(x, y, x + r, y);
-            ctx.closePath();
-        }
-
-        function drawTopRoundedRect(ctx, x, y, w, h, r) {
-            ctx.beginPath();
-            ctx.moveTo(x + r, y);
-            ctx.lineTo(x + w - r, y);
-            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-            ctx.lineTo(x + w, y + h);
-            ctx.lineTo(x, y + h);
-            ctx.lineTo(x, y + r);
-            ctx.quadraticCurveTo(x, y, x + r, y);
-            ctx.closePath();
-        }
-
-        function wrapText(context, text, maxWidth) {
-            if (!text) return [];
-            const words = text.split(' ');
-            const lines = [];
-            let currentLine = words[0];
-
-            for (let i = 1; i < words.length; i++) {
-                const word = words[i];
-                const width = context.measureText(currentLine + " " + word).width;
-                if (width < maxWidth) {
-                    currentLine += " " + word;
-                } else {
-                    lines.push(currentLine);
-                    currentLine = word;
-                }
-            }
-            lines.push(currentLine);
-            return lines;
-        }
-
-        function exportPosterHD() {
-            renderPoster();
-            const imageURI = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = `جدول-الحصص-${Date.now()}.png`;
-            link.href = imageURI;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast('تم تحميل البوستر عالي الدقة PNG!');
-        }
-
-        function copyPosterImage() {
+        
+        // Flash effect
+        document.getElementById('adminPanel').classList.add('flash-success');
+        setTimeout(() => document.getElementById('adminPanel').classList.remove('flash-success'), 800);
+        
+        // Sync to Firebase in background
+        if (firebaseReady && window.firebaseHelpers) {
             try {
-                canvas.toBlob((blob) => {
-                    if (navigator.clipboard && window.ClipboardItem) {
-                        const item = new ClipboardItem({ 'image/png': blob });
-                        navigator.clipboard.write([item]).then(() => {
-                            showToast('تم نسخ البوستر كصورة للحافظة!');
-                        }).catch(() => fallbackCopy());
-                    } else {
-                        fallbackCopy();
-                    }
-                });
+                await window.firebaseHelpers.push(currentConfig);
+                updateSyncBadge('online', '☁️ محفوظ');
+                showToast('✅ تم الحفظ في المتصفح و Firebase');
             } catch (e) {
-                fallbackCopy();
+                updateSyncBadge('offline', '💾 محلي فقط');
+                showToast('✅ تم الحفظ محلياً (Firebase فشل)', 'warning');
             }
+        } else {
+            updateSyncBadge('offline', '💾 محلي');
+            showToast('✅ تم الحفظ في المتصفح');
         }
+    }
 
-        function fallbackCopy() {
-            showToast('اضغط بالزر الأيمن على الصورة واختر نسخ الصورة');
-        }
+    function manualSave() {
+        clearTimeout(autoSaveTimeout);
+        performSave();
+    }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+    // ============================================
+    // APPLY CONFIG
+    // ============================================
+    function applyConfigToSite() {
+        const c = currentConfig;
+        document.getElementById('loadingTitle').textContent = `Happy ${c.age}th Birthday!`;
+        document.getElementById('loadingName').textContent = `${c.name} 🎉`;
+        document.title = `Happy ${c.age}th Birthday, ${c.name}! 🎉`;
+
+        document.getElementById('dateBadge').innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${c.dateDisplay}`;
+        document.getElementById('ageBadge').innerHTML = `<i class="fas fa-cake-candles mr-1"></i> ${c.age} Years`;
+
+        const welcome = document.getElementById('welcomeText');
+        const wt = c.welcomeText || '';
+        if (wt.includes(c.name)) welcome.innerHTML = wt.replace(new RegExp(c.name, 'g'), `<strong class="text-brand-rose">${c.name}</strong>`);
+        else welcome.textContent = wt;
+
+        document.getElementById('btnNoteText').textContent = `Click Here ${c.name}`;
+        document.getElementById('btn3DCardText').textContent = `From ${c.name}`;
+
+        const img = document.getElementById('profileImg');
+        img.src = c.profileImg || defaultConfig.profileImg;
+        img.alt = `${c.name} Portrait`;
+        img.onerror = function() { this.src = `https://placehold.co/400x400/f43f5e/ffffff?text=${c.name}`; };
+
+        document.getElementById('dearBadge').textContent = `Dear ${c.name}`;
+        document.getElementById('footerText').textContent = c.footerText || `Made with ❤️ for ${c.name}'s Special Day`;
+
+        document.getElementById('noteTitle').textContent = c.noteTitle;
+        document.getElementById('noteContent').textContent = c.noteContent;
+        document.getElementById('noteSignature').textContent = c.noteSignature;
+
+        document.getElementById('cardFrontGreeting').textContent = c.cardFrontGreeting;
+        document.getElementById('cardFrontTitle').textContent = c.cardFrontTitle;
+        document.getElementById('cardFrontSubtitle').textContent = c.cardFrontSubtitle;
+        document.getElementById('cardBackTitle').textContent = c.cardBackTitle;
+        document.getElementById('cardBackPara1').textContent = c.cardBackPara1;
+        document.getElementById('cardBackPara2').textContent = c.cardBackPara2;
+        document.getElementById('cardBackSignature').textContent = c.cardBackSignature;
+
+        const lc = document.getElementById('lettersContainer');
+        lc.innerHTML = '';
+        const borders = ['border-brand-rose', 'border-pink-400', 'border-amber-400', 'border-rose-500'];
+        const icons = ['fa-heart text-pink-400', 'fa-sparkles text-amber-400', 'fa-sun text-yellow-500', 'fa-paper-plane text-brand-rose'];
+        (c.letters || []).forEach((letter, i) => {
+            const div = document.createElement('div');
+            div.className = `bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-xl border-l-4 ${borders[i % 4]} transform transition-all duration-500`;
+            div.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-brand-rose uppercase tracking-wider">${letter.title}</span>
+                    <i class="fas ${icons[i % 4]}"></i>
+                </div>
+                <p class="text-gray-700 text-sm sm:text-base leading-relaxed italic break-words">${letter.content}</p>
+                <span class="block text-right font-cursive text-lg sm:text-xl text-brand-dark mt-2">${letter.signature}</span>
+            `;
+            lc.appendChild(div);
+        });
+
+        applyColors(c.colors);
+        applyTypography(c.typography);
+        applyEffects(c.effects);
+    }
+
+    function applyColors(colors) {
+        const style = document.getElementById('dynamicColors') || document.createElement('style');
+        style.id = 'dynamicColors';
+        style.textContent = `
+            .bg-brand-rose, .bg-brand-accent { background-color: ${colors.accent} !important; }
+            .text-brand-rose, .text-brand-accent { color: ${colors.accent} !important; }
+            .bg-brand-dark { background-color: ${colors.dark} !important; }
+            .text-brand-dark { color: ${colors.dark} !important; }
+            body { background-color: ${colors.bg} !important; }
+            .border-brand-rose { border-color: ${colors.accent} !important; }
+            .from-brand-rose { --tw-gradient-from: ${colors.accent} !important; }
+            .to-brand-dark { --tw-gradient-to: ${colors.dark} !important; }
+        `;
+        if (!style.parentNode) document.head.appendChild(style);
+    }
+
+    function applyTypography(t) {
+        if (!t) return;
+        const mainTitle = document.getElementById('mainTitle');
+        if (mainTitle) mainTitle.style.fontSize = `calc(clamp(2.25rem, 8vw, 5rem) * ${t.fontSizeTitle || 1})`;
+        const welcome = document.getElementById('welcomeText');
+        if (welcome) {
+            welcome.style.fontSize = `calc(1rem * ${t.fontSizeWelcome || 1})`;
+            welcome.style.lineHeight = t.lineHeight || 1.6;
         }
+        if (t.fontHeading && t.fontHeading !== 'Fredoka') {
+            document.querySelectorAll('.font-fredoka').forEach(el => el.style.fontFamily = `'${t.fontHeading}', sans-serif`);
+        }
+    }
+
+    function applyEffects(e) {
+        if (!e) return;
+        if (e.particles) {
+            if (!document.getElementById('particlesBg')) {
+                const canvas = document.createElement('canvas');
+                canvas.id = 'particlesBg';
+                canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
+                document.body.appendChild(canvas);
+                startParticles(canvas);
+            }
+        } else {
+            const p = document.getElementById('particlesBg');
+            if (p) p.remove();
+        }
+    }
+
+    function startParticles(canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = Array.from({ length: 40 }, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            r: Math.random() * 2 + 1,
+            vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+            alpha: Math.random() * 0.5 + 0.2
+        }));
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(244, 63, 94, ${p.alpha})`;
+                ctx.fill();
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+
+    // ============================================
+    // IMAGE UPLOAD
+    // ============================================
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function handleProfileUpload(file) {
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('❌ حجم الصورة يتجاوز 5 MB', 'error');
+            return;
+        }
+        showToast('⏳ جاري رفع الصورة...', 'info');
+        try {
+            const base64 = await fileToBase64(file);
+            currentConfig.profileImg = base64;
+            document.getElementById('prev-profileImg').src = base64;
+            document.getElementById('cfg-profileImg').value = '(صورة مرفوعة من الجهاز)';
+            applyConfigToSite();
+            scheduleAutoSave();
+        } catch (e) {
+            showToast('❌ فشل رفع الصورة', 'error');
+        }
+    }
+
+    async function handleGalleryUpload(files) {
+        showToast(`⏳ رفع ${files.length} صورة...`, 'info');
+        const newGallery = [...(currentConfig.gallery || [])];
+        for (const file of files) {
+            if (file.size > 5 * 1024 * 1024) {
+                showToast(`⚠️ تم تجاهل ${file.name}`, 'warning');
+                continue;
+            }
+            try {
+                const base64 = await fileToBase64(file);
+                newGallery.push(base64);
+            } catch (e) {}
+        }
+        currentConfig.gallery = newGallery;
+        renderGalleryPreview();
+        scheduleAutoSave();
+    }
+
+    function renderGalleryPreview() {
+        const container = document.getElementById('galleryPreview');
+        container.innerHTML = '';
+        (currentConfig.gallery || []).forEach((src, i) => {
+            const div = document.createElement('div');
+            div.className = 'relative';
+            div.innerHTML = `
+                <img src="${src}" class="preview-thumb">
+                <button class="absolute top-1 right-1 bg-red-500 active:bg-red-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center shadow" data-index="${i}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            div.querySelector('button').addEventListener('click', () => {
+                currentConfig.gallery.splice(i, 1);
+                renderGalleryPreview();
+                scheduleAutoSave();
+            });
+            container.appendChild(div);
+        });
+    }
+
+    // ============================================
+    // ADMIN FORM
+    // ============================================
+    function populateAdminForm() {
+        const c = currentConfig;
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+        set('cfg-name', c.name); set('cfg-nameArabic', c.nameArabic); set('cfg-age', c.age);
+        set('cfg-dateDisplay', c.dateDisplay); set('cfg-welcomeText', c.welcomeText);
+        set('cfg-footerText', c.footerText);
+        set('cfg-noteTitle', c.noteTitle); set('cfg-noteContent', c.noteContent); set('cfg-noteSignature', c.noteSignature);
+        set('cfg-cardFrontGreeting', c.cardFrontGreeting); set('cfg-cardFrontTitle', c.cardFrontTitle); set('cfg-cardFrontSubtitle', c.cardFrontSubtitle);
+        set('cfg-cardBackTitle', c.cardBackTitle); set('cfg-cardBackPara1', c.cardBackPara1); set('cfg-cardBackPara2', c.cardBackPara2);
+        set('cfg-cardBackSignature', c.cardBackSignature);
+        set('cfg-profileImg', c.profileImg && !c.profileImg.startsWith('data:') ? c.profileImg : '');
+        document.getElementById('prev-profileImg').src = c.profileImg;
+        set('cfg-colorAccent', c.colors.accent); set('cfg-colorRose', c.colors.rose); set('cfg-colorDark', c.colors.dark); set('cfg-colorBg', c.colors.bg);
+        set('cfg-fontSizeTitle', c.typography.fontSizeTitle); set('cfg-fontSizeWelcome', c.typography.fontSizeWelcome);
+        set('cfg-lineHeight', c.typography.lineHeight); set('cfg-fontHeading', c.typography.fontHeading);
+        document.getElementById('fontSizeTitleVal').textContent = Math.round(c.typography.fontSizeTitle * 100) + '%';
+        document.getElementById('fontSizeWelcomeVal').textContent = Math.round(c.typography.fontSizeWelcome * 100) + '%';
+        document.getElementById('lineHeightVal').textContent = c.typography.lineHeight;
+        document.getElementById('cfg-confetti').checked = c.effects.confetti;
+        document.getElementById('cfg-floatingHearts').checked = c.effects.floatingHearts;
+        document.getElementById('cfg-shine').checked = c.effects.shine;
+        document.getElementById('cfg-autoMusic').checked = c.effects.autoMusic;
+        document.getElementById('cfg-particles').checked = c.effects.particles;
+        renderLettersEditor();
+        renderGalleryPreview();
+    }
+
+    function renderLettersEditor() {
+        const container = document.getElementById('lettersEditor');
+        container.innerHTML = '';
+        currentConfig.letters.forEach((letter, index) => {
+            const div = document.createElement('div');
+            div.className = 'p-3 sm:p-4 bg-pink-50 rounded-xl border-l-4 border-brand-rose relative';
+            div.innerHTML = `
+                <button class="absolute top-2 left-2 bg-red-500 active:bg-red-600 text-white w-7 h-7 rounded-full text-xs flex items-center justify-center shadow remove-letter" data-index="${index}" title="حذف">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <div class="font-bold text-brand-rose text-sm mb-2">رسالة ${index + 1}</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">العنوان</label>
+                        <input type="text" class="admin-input letter-title" data-index="${index}" value="${escapeHtml(letter.title)}">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">التوقيع</label>
+                        <input type="text" class="admin-input letter-signature" data-index="${index}" value="${escapeHtml(letter.signature)}">
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <label class="block text-xs font-bold text-gray-600 mb-1">المحتوى</label>
+                    <textarea rows="2" class="admin-input letter-content" data-index="${index}">${escapeHtml(letter.content)}</textarea>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        container.querySelectorAll('.letter-title').forEach(el => el.addEventListener('input', e => { currentConfig.letters[e.target.dataset.index].title = e.target.value; scheduleAutoSave(); }));
+        container.querySelectorAll('.letter-content').forEach(el => el.addEventListener('input', e => { currentConfig.letters[e.target.dataset.index].content = e.target.value; scheduleAutoSave(); }));
+        container.querySelectorAll('.letter-signature').forEach(el => el.addEventListener('input', e => { currentConfig.letters[e.target.dataset.index].signature = e.target.value; scheduleAutoSave(); }));
+        container.querySelectorAll('.remove-letter').forEach(el => el.addEventListener('click', e => {
+            if (confirm('حذف هذه الرسالة؟')) {
+                currentConfig.letters.splice(parseInt(e.currentTarget.dataset.index), 1);
+                renderLettersEditor();
+                scheduleAutoSave();
+            }
+        }));
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function bindAdminEvents() {
+        // Text inputs with data-auto
+        document.querySelectorAll('[data-auto="true"]').forEach(el => {
+            const id = el.id;
+            const map = {
+                'cfg-name': 'name', 'cfg-nameArabic': 'nameArabic', 'cfg-age': 'age',
+                'cfg-dateDisplay': 'dateDisplay', 'cfg-welcomeText': 'welcomeText', 'cfg-footerText': 'footerText',
+                'cfg-noteTitle': 'noteTitle', 'cfg-noteContent': 'noteContent', 'cfg-noteSignature': 'noteSignature',
+                'cfg-cardFrontGreeting': 'cardFrontGreeting', 'cfg-cardFrontTitle': 'cardFrontTitle',
+                'cfg-cardFrontSubtitle': 'cardFrontSubtitle', 'cfg-cardBackTitle': 'cardBackTitle',
+                'cfg-cardBackPara1': 'cardBackPara1', 'cfg-cardBackPara2': 'cardBackPara2',
+                'cfg-cardBackSignature': 'cardBackSignature', 'cfg-profileImg': 'profileImg'
+            };
+            const colorMap = { 'cfg-colorAccent': 'accent', 'cfg-colorRose': 'rose', 'cfg-colorDark': 'dark', 'cfg-colorBg': 'bg' };
+            const typoMap = { 'cfg-fontSizeTitle': 'fontSizeTitle', 'cfg-fontSizeWelcome': 'fontSizeWelcome', 'cfg-lineHeight': 'lineHeight', 'cfg-fontHeading': 'fontHeading' };
+            const effectMap = { 'cfg-confetti': 'confetti', 'cfg-floatingHearts': 'floatingHearts', 'cfg-shine': 'shine', 'cfg-autoMusic': 'autoMusic', 'cfg-particles': 'particles' };
+            
+            el.addEventListener('input', e => {
+                if (map[id]) {
+                    currentConfig[map[id]] = (id === 'cfg-age') ? (parseInt(e.target.value) || 0) : e.target.value;
+                    if (id === 'cfg-profileImg' && e.target.value) document.getElementById('prev-profileImg').src = e.target.value;
+                } else if (colorMap[id]) {
+                    currentConfig.colors[colorMap[id]] = e.target.value;
+                    applyColors(currentConfig.colors);
+                } else if (typoMap[id]) {
+                    const val = (id === 'cfg-fontHeading') ? e.target.value : parseFloat(e.target.value);
+                    currentConfig.typography[typoMap[id]] = val;
+                    if (id === 'cfg-fontSizeTitle') document.getElementById('fontSizeTitleVal').textContent = Math.round(val * 100) + '%';
+                    if (id === 'cfg-fontSizeWelcome') document.getElementById('fontSizeWelcomeVal').textContent = Math.round(val * 100) + '%';
+                    if (id === 'cfg-lineHeight') document.getElementById('lineHeightVal').textContent = val;
+                    applyTypography(currentConfig.typography);
+                }
+                applyConfigToSite();
+                scheduleAutoSave();
+            });
+            
+            if (effectMap[id]) {
+                el.addEventListener('change', e => {
+                    currentConfig.effects[effectMap[id]] = e.target.checked;
+                    applyEffects(currentConfig.effects);
+                    scheduleAutoSave();
+                });
+            }
+        });
+    }
+
+    // Tabs
+    document.querySelectorAll('.admin-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.toggle('hidden', c.dataset.content !== tab));
+        });
+    });
+
+    // Presets
+    const colorPresets = {
+        rose:   { accent: '#f43f5e', rose: '#e11d48', dark: '#881337', bg: '#fdf2f8' },
+        purple: { accent: '#a855f7', rose: '#9333ea', dark: '#581c87', bg: '#faf5ff' },
+        gold:   { accent: '#f59e0b', rose: '#d97706', dark: '#78350f', bg: '#fffbeb' },
+        ocean:  { accent: '#3b82f6', rose: '#2563eb', dark: '#1e3a8a', bg: '#eff6ff' }
+    };
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const preset = colorPresets[btn.dataset.preset];
+            if (!preset) return;
+            currentConfig.colors = { ...preset };
+            document.getElementById('cfg-colorAccent').value = preset.accent;
+            document.getElementById('cfg-colorRose').value = preset.rose;
+            document.getElementById('cfg-colorDark').value = preset.dark;
+            document.getElementById('cfg-colorBg').value = preset.bg;
+            applyColors(preset);
+            scheduleAutoSave();
+        });
+    });
+
+    // Open/Close
+    document.getElementById('adminToggle').addEventListener('click', () => {
+        const panel = document.getElementById('adminPanel');
+        panel.classList.remove('hidden');
+        document.getElementById('adminToggle').classList.add('gear-pulse');
+        setTimeout(() => document.getElementById('adminToggle').classList.remove('gear-pulse'), 600);
+        populateAdminForm();
+    });
+    document.getElementById('adminClose').addEventListener('click', () => {
+        clearTimeout(autoSaveTimeout);
+        performSave();
+        document.getElementById('adminPanel').classList.add('hidden');
+    });
+
+    // Sync
+    document.getElementById('adminSync').addEventListener('click', async () => {
+        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
+        updateSyncBadge('saving', '⏳ جاري الرفع...');
+        try {
+            await window.firebaseHelpers.push(currentConfig);
+            updateSyncBadge('online', '☁️ متزامن');
+            showToast('☁️ تم الرفع إلى Firebase');
+        } catch (e) {
+            updateSyncBadge('offline', '❌ فشل');
+            showToast('❌ فشل المزامنة', 'error');
+        }
+    });
+
+    document.getElementById('fbPushBtn').addEventListener('click', async () => {
+        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
+        try {
+            await window.firebaseHelpers.push(currentConfig);
+            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم الرفع بنجاح!';
+            updateSyncBadge('online', '☁️ متزامن');
+            showToast('☁️ تم الرفع!');
+        } catch (e) {
+            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-times-circle text-red-600 mr-1"></i> فشل';
+            showToast('❌ فشل', 'error');
+        }
+    });
+
+    document.getElementById('fbPullBtn').addEventListener('click', async () => {
+        if (!firebaseReady) { showToast('⏳ Firebase لم يجهز', 'warning'); return; }
+        try {
+            const data = await window.firebaseHelpers.pull();
+            if (data) {
+                currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), data);
+                populateAdminForm();
+                applyConfigToSite();
+                document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم التحميل!';
+                showToast('📥 تم التحميل من Firebase!');
+            } else {
+                showToast('ℹ️ لا توجد بيانات', 'info');
+            }
+        } catch (e) {
+            showToast('❌ فشل التحميل', 'error');
+        }
+    });
+
+    document.getElementById('fbDeleteBtn').addEventListener('click', async () => {
+        if (!confirm('حذف البيانات من Firebase؟')) return;
+        if (!firebaseReady) return;
+        try {
+            await window.firebaseHelpers.delete();
+            document.getElementById('fbStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-600 mr-1"></i> تم الحذف';
+            showToast('🗑️ تم الحذف');
+        } catch (e) { showToast('❌ فشل', 'error'); }
+    });
+
+    // Export/Import/Reset
+    document.getElementById('adminExport').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(currentConfig, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `maryam-config-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast('📥 تم التصدير');
+    });
+
+    document.getElementById('adminImport').addEventListener('click', () => document.getElementById('fileInput').click());
+    document.getElementById('fileInput').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = evt => {
+            try {
+                currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), JSON.parse(evt.target.result));
+                populateAdminForm();
+                applyConfigToSite();
+                scheduleAutoSave();
+                showToast('📤 تم الاستيراد');
+            } catch { showToast('❌ ملف غير صالح', 'error'); }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    });
+
+    document.getElementById('adminReset').addEventListener('click', () => {
+        if (confirm('استعادة الإعدادات الافتراضية؟')) {
+            currentConfig = JSON.parse(JSON.stringify(defaultConfig));
+            populateAdminForm();
+            applyConfigToSite();
+            scheduleAutoSave();
+            showToast('🔄 تم الاستعادة');
+        }
+    });
+
+    document.getElementById('addLetterBtn').addEventListener('click', () => {
+        currentConfig.letters.push({ title: 'Memory ' + String(currentConfig.letters.length + 1).padStart(2, '0'), content: 'اكتب الرسالة هنا...', signature: '- Maryam' });
+        renderLettersEditor();
+        scheduleAutoSave();
+    });
+
+    // File upload
+    const uploadZone = document.getElementById('uploadZone');
+    const imageFileInput = document.getElementById('imageFileInput');
+    uploadZone.addEventListener('click', () => imageFileInput.click());
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', e => {
+        e.preventDefault(); uploadZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleProfileUpload(file);
+    });
+    imageFileInput.addEventListener('change', e => {
+        if (e.target.files[0]) handleProfileUpload(e.target.files[0]);
+        e.target.value = '';
+    });
+
+    const galleryZone = document.getElementById('galleryUploadZone');
+    const galleryFileInput = document.getElementById('galleryFileInput');
+    galleryZone.addEventListener('click', () => galleryFileInput.click());
+    galleryZone.addEventListener('dragover', e => { e.preventDefault(); galleryZone.classList.add('dragover'); });
+    galleryZone.addEventListener('dragleave', () => galleryZone.classList.remove('dragover'));
+    galleryZone.addEventListener('drop', e => {
+        e.preventDefault(); galleryZone.classList.remove('dragover');
+        const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+        if (files.length) handleGalleryUpload(files);
+    });
+    galleryFileInput.addEventListener('change', e => {
+        const files = Array.from(e.target.files);
+        if (files.length) handleGalleryUpload(files);
+        e.target.value = '';
+    });
+
+    // ============================================
+    // MUSIC
+    // ============================================
+    let audioCtx = null, isPlaying = false, audioInterval = null;
+    const notes = [
+        { n: 261.63, d: 0.4 }, { n: 261.63, d: 0.4 }, { n: 293.66, d: 0.8 },
+        { n: 261.63, d: 0.8 }, { n: 349.23, d: 0.8 }, { n: 329.63, d: 1.2 },
+        { n: 261.63, d: 0.4 }, { n: 261.63, d: 0.4 }, { n: 293.66, d: 0.8 },
+        { n: 261.63, d: 0.8 }, { n: 392.00, d: 0.8 }, { n: 349.23, d: 1.2 }
+    ];
+    function playTone(f, d) {
+        if (!audioCtx) return;
+        try {
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + d);
+        } catch (e) {}
+    }
+    function startMelody() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        let i = 0; isPlaying = true;
+        document.getElementById('musicText').innerText = "Pause";
+        document.getElementById('musicIcon').classList.add('fa-spin');
+        audioInterval = setInterval(() => { playTone(notes[i].n, notes[i].d); i = (i + 1) % notes.length; }, 600);
+    }
+    function stopMelody() {
+        isPlaying = false;
+        clearInterval(audioInterval);
+        document.getElementById('musicText').innerText = "Play Music";
+        document.getElementById('musicIcon').classList.remove('fa-spin');
+    }
+    document.getElementById('musicToggle').addEventListener('click', () => isPlaying ? stopMelody() : startMelody());
+
+    function triggerConfetti() {
+        if (currentConfig.effects && !currentConfig.effects.confetti) return;
+        if (typeof confetti === 'function') {
+            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#f43f5e', '#fbcfe8', '#fbbf24', '#ffffff'] });
+        }
+    }
+
+    // ============================================
+    // INIT
+    // ============================================
+    window.addEventListener('DOMContentLoaded', () => {
+        applyConfigToSite();
+        lastSavedHash = JSON.stringify(currentConfig);
+
+        const pb = document.getElementById('progressBar'), ls = document.getElementById('loadingStatusText');
+        let p = 0;
+        const interval = setInterval(() => {
+            p += 15;
+            if (p <= 100) pb.style.width = p + '%';
+            if (p === 45) ls.innerText = "Baking the cake...";
+            else if (p === 75) ls.innerText = "Decorating with love...";
+            else if (p >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    const l = document.getElementById('loadingScreen');
+                    l.classList.add('opacity-0');
+                    setTimeout(() => {
+                        l.classList.add('hidden');
+                        document.getElementById('mainContent').classList.remove('hidden');
+                        triggerConfetti();
+                        if (currentConfig.effects.autoMusic) startMelody();
+                    }, 1000);
+                }, 500);
+            }
+        }, 250);
+    });
+
+    // Interactions
+    document.getElementById('btnNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.toggle('hidden'));
+    document.getElementById('closeStickyNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.add('hidden'));
+
+    document.getElementById('btn3DCard').addEventListener('click', () => {
+        document.getElementById('card3DModal').classList.remove('hidden');
+        triggerConfetti();
+    });
+    document.getElementById('close3DModal').addEventListener('click', () => {
+        document.getElementById('card3DModal').classList.add('hidden');
+        document.getElementById('flipperCard').classList.remove('rotate-y-180');
+    });
+    document.getElementById('flipperCard').addEventListener('click', () => document.getElementById('flipperCard').classList.toggle('rotate-y-180'));
+
+    document.getElementById('btnLoveLetter').addEventListener('click', () => {
+        document.getElementById('loveLetterSection').classList.remove('hidden');
+        document.getElementById('svgHeartContainer').classList.remove('hidden');
+        document.getElementById('envelopeMainContainer').classList.add('hidden');
+        if (currentConfig.effects.floatingHearts) createFloatingHearts();
+        setTimeout(() => {
+            document.getElementById('svgHeartContainer').classList.add('hidden');
+            document.getElementById('envelopeMainContainer').classList.remove('hidden');
+        }, 3200);
+    });
+    document.getElementById('btnBackToDashboard').addEventListener('click', () => document.getElementById('loveLetterSection').classList.add('hidden'));
+
+    document.getElementById('btnOpenEnvelope').addEventListener('click', () => {
+        document.getElementById('envelopeFlap').classList.add('open');
+        document.getElementById('btnOpenEnvelope').classList.add('scale-0');
+        setTimeout(() => {
+            document.getElementById('lettersContainer').classList.remove('hidden');
+            triggerConfetti();
+        }, 600);
+    });
+
+    function createFloatingHearts() {
+        const c = document.getElementById('floatingHeartsContainer');
+        c.innerHTML = '';
+        for (let i = 0; i < 20; i++) {
+            const h = document.createElement('div');
+            h.classList.add('floating-heart', 'fas', 'fa-heart');
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            h.style.fontSize = (Math.random() * 20 + 12) + 'px';
+            h.style.animationDelay = (Math.random() * 2) + 's';
+            c.appendChild(h);
+        }
+    }
+
+    // Firebase ready
+    window.addEventListener('firebaseReady', () => {
+        firebaseReady = true;
+        updateSyncBadge('online', '☁️ متصل');
+        window.firebaseHelpers.pull().then(data => {
+            if (data) {
+                currentConfig = deepMerge(JSON.parse(JSON.stringify(defaultConfig)), data);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(currentConfig));
+                applyConfigToSite();
+                updateSyncBadge('online', '☁️ متزامن');
+                console.log('📥 Remote config loaded');
+            } else {
+                updateSyncBadge('offline', 'غير متزامن');
+            }
+        }).catch(err => {
+            console.warn('Firebase pull failed:', err);
+            updateSyncBadge('offline', 'غير متصل');
+        });
+    });
+
+    populateAdminForm();
+    bindAdminEvents();
+
+    // Save on unload
+    window.addEventListener('beforeunload', () => {
+        clearTimeout(autoSaveTimeout);
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentConfig));
+        } catch (e) {}
+    });
+
+    // Global shortcut
+    document.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            manualSave();
+        }
+    });
     </script>
 </body>
-</html>
+            </html>

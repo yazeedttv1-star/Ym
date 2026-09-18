@@ -94,9 +94,8 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
 @keyframes flashBorder { 0%{box-shadow:0 0 0 0 rgba(16,185,129,.6);} 100%{box-shadow:0 0 0 15px rgba(16,185,129,0);} }
 .flash-success { animation: flashBorder .8s ease-out; }
 
-/* WhatsApp */
 .chat-bubble-voice { background:#dcf8c6; border-radius:12px; padding:8px 12px; display:inline-flex; align-items:center; gap:10px; max-width:85%; box-shadow:0 1px 2px rgba(0,0,0,.1); margin-bottom:6px; }
-.voice-play-btn { width:36px; height:36px; border-radius:50%; background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all .2s; }
+.voice-play-btn { width:36px; height:36px; border-radius:50%; background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
 .voice-play-btn.playing { background:#128C7E; }
 .voice-wave { display:flex; align-items:center; gap:2px; height:24px; flex:1; }
 .voice-wave span { display:inline-block; width:2px; background:#6b7280; border-radius:2px; }
@@ -114,11 +113,15 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
 @keyframes finalCardIn { from{opacity:0;transform:scale(.85) translateY(20px);} to{opacity:1;transform:scale(1) translateY(0);} }
 .final-card-appear { animation: finalCardIn .7s cubic-bezier(.34,1.56,.64,1) forwards; }
 
-/* Locked buttons */
-.btn-locked { opacity: 0.4 !important; filter: grayscale(0.7) !important; cursor: not-allowed !important; pointer-events: auto !important; position: relative; }
+.btn-locked { opacity: 0.45 !important; filter: grayscale(0.6) !important; cursor: not-allowed !important; position: relative; }
 .btn-locked::after { content: '🔒'; position: absolute; top: -8px; right: -8px; font-size: 16px; background: white; border-radius: 50%; padding: 2px 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 .btn-unlocked-flash { animation: unlockFlash .8s ease-out; }
 @keyframes unlockFlash { 0%{box-shadow:0 0 0 0 rgba(16,185,129,.8);} 100%{box-shadow:0 0 0 20px rgba(16,185,129,0);} }
+
+.video-card-live { aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.25); background: #000; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
+.video-card-live:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(0,0,0,0.35); }
+.video-card-live iframe { width: 100%; height: 100%; border: 0; }
+.video-title-bar { background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 0 0 14px 14px; margin-top: -2px; }
 </style>
 </head>
 <body class="bg-brand-bg text-gray-800 min-h-screen relative">
@@ -166,8 +169,9 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
                     <button class="admin-tab" data-tab="messages"><i class="fas fa-comment-dots"></i><span>الرسائل</span></button>
                     <button class="admin-tab" data-tab="letters"><i class="fas fa-heart"></i><span>رسائل الحب</span></button>
                     <button class="admin-tab" data-tab="images"><i class="fas fa-image"></i><span>الصور</span></button>
-                    <button class="admin-tab" data-tab="music"><i class="fas fa-music"></i><span>الأغنية</span></button>
+                    <button class="admin-tab" data-tab="music"><i class="fas fa-music"></i><span>الموسيقى</span></button>
                     <button class="admin-tab" data-tab="whatsapp"><i class="fab fa-whatsapp"></i><span>شات واتساب</span></button>
+                    <button class="admin-tab" data-tab="videos"><i class="fas fa-video"></i><span>الفيديوهات</span></button>
                     <button class="admin-tab" data-tab="finalmsg"><i class="fas fa-envelope-open-text"></i><span>الرسالة الأخيرة</span></button>
                     <button class="admin-tab" data-tab="colors"><i class="fas fa-palette"></i><span>الألوان</span></button>
                     <button class="admin-tab" data-tab="effects"><i class="fas fa-magic"></i><span>التأثيرات</span></button>
@@ -247,20 +251,20 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
 
             <!-- MUSIC -->
             <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="music">
-                <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2"><i class="fas fa-music text-brand-rose"></i> الأغنية</h2>
+                <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2"><i class="fas fa-music text-brand-rose"></i> الموسيقى</h2>
                 <div class="p-4 bg-pink-50 rounded-xl border-l-4 border-pink-400 mb-4">
-                    <h4 class="font-bold text-gray-800 mb-3 text-sm">🎵 رفع ملف MP3</h4>
+                    <h4 class="font-bold text-gray-800 mb-3 text-sm">🎵 رفع ملف صوتي</h4>
                     <div id="musicUploadZone" class="upload-zone">
                         <input type="file" id="musicFileInput" accept="audio/*" class="hidden">
                         <i class="fas fa-music text-3xl text-brand-rose mb-2"></i>
                         <p class="font-bold text-gray-700 text-sm">اختر ملف صوتي</p>
-                        <p class="text-xs text-gray-500 mt-1">max 2MB</p>
+                        <p class="text-xs text-gray-500 mt-1">max 3MB</p>
                     </div>
                 </div>
                 <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400 mb-4">
-                    <h4 class="font-bold text-gray-800 mb-3 text-sm">🔗 أو رابط من أي منصة</h4>
-                    <input type="url" id="cfg-musicUrl" class="admin-input" placeholder="YouTube, Facebook, TikTok, MP3..." data-auto="true">
-                    <p class="text-[10px] text-gray-500 mt-2">يقبل: يوتيوب / فيسبوك / تيك توك / انستجرام / MP3 مباشر</p>
+                    <h4 class="font-bold text-gray-800 mb-3 text-sm">🔗 أو رابط مباشر</h4>
+                    <input type="url" id="cfg-musicUrl" class="admin-input" placeholder="https://example.com/song.mp3" data-auto="true">
+                    <p class="text-[10px] text-gray-500 mt-2">MP3 / WAV / M4A / رابط صوتي مباشر</p>
                 </div>
                 <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
                     <div class="flex items-center justify-between mb-3">
@@ -268,6 +272,15 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
                         <button id="deleteMusicBtn" class="text-xs bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold"><i class="fas fa-trash"></i> حذف</button>
                     </div>
                     <div id="musicPlayerWrap"></div>
+                </div>
+                <div class="p-4 bg-yellow-50 rounded-xl border-l-4 border-yellow-400 mt-4">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <div>
+                            <p class="font-bold text-sm text-gray-800">تشغيل تلقائي عند فتح الموقع</p>
+                            <p class="text-xs text-gray-500">مقفول افتراضياً</p>
+                        </div>
+                        <label class="toggle-switch"><input type="checkbox" id="cfg-autoMusic" data-auto="true"><span class="toggle-slider"></span></label>
+                    </label>
                 </div>
             </div>
 
@@ -330,6 +343,33 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
                 </div>
             </div>
 
+            <!-- VIDEOS -->
+            <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-blue-100" data-content="videos">
+                <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2"><i class="fas fa-video text-blue-500"></i> الفيديوهات</h2>
+                
+                <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400 mb-4">
+                    <h4 class="font-bold text-gray-800 mb-3 text-sm">➕ إضافة فيديو</h4>
+                    <div class="space-y-3">
+                        <div><label class="block text-xs font-bold text-gray-600 mb-1">الرابط (يوتيوب / فيسبوك / تيك توك / انستجرام / MP4)</label><input type="url" id="newVideoUrl" class="admin-input" placeholder="https://youtube.com/watch?v=..."></div>
+                        <div><label class="block text-xs font-bold text-gray-600 mb-1">العنوان (اختياري)</label><input type="text" id="newVideoTitle" class="admin-input" placeholder="عنوان الفيديو"></div>
+                        <div id="videoLivePreview" class="hidden p-3 bg-white rounded-xl border-2 border-blue-200">
+                            <p class="text-xs font-bold text-gray-600 mb-2">معاينة حية:</p>
+                            <div id="videoPreviewContainer"></div>
+                        </div>
+                        <button id="addVideoBtn" class="w-full bg-blue-500 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md">
+                            <i class="fas fa-plus"></i> إضافة الفيديو
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl border-2 border-pink-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-gray-800 text-sm">🎬 الفيديوهات المضافة (<span id="videoCount">0</span>)</h4>
+                    </div>
+                    <div id="videosList" class="space-y-3"></div>
+                </div>
+            </div>
+
             <!-- FINAL MESSAGE -->
             <div class="admin-tab-content hidden bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-pink-100" data-content="finalmsg">
                 <h2 class="text-lg sm:text-xl font-bold text-brand-dark mb-4 flex items-center gap-2"><i class="fas fa-envelope-open-text text-brand-rose"></i> الرسالة الأخيرة</h2>
@@ -384,7 +424,6 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
                 <div class="space-y-3">
                     <label class="flex items-center justify-between p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer"><div class="flex items-center gap-3"><i class="fas fa-birthday-cake text-brand-rose text-lg"></i><div><p class="font-bold text-sm">القصاصات</p></div></div><label class="toggle-switch"><input type="checkbox" id="cfg-confetti" data-auto="true" checked><span class="toggle-slider"></span></label></label>
                     <label class="flex items-center justify-between p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer"><div class="flex items-center gap-3"><i class="fas fa-heart text-brand-rose text-lg"></i><div><p class="font-bold text-sm">القلوب الطائرة</p></div></div><label class="toggle-switch"><input type="checkbox" id="cfg-floatingHearts" data-auto="true" checked><span class="toggle-slider"></span></label></label>
-                    <label class="flex items-center justify-between p-4 bg-white rounded-xl border-2 border-pink-100 cursor-pointer"><div class="flex items-center gap-3"><i class="fas fa-music text-brand-rose text-lg"></i><div><p class="font-bold text-sm">الموسيقى التلقائية</p></div></div><label class="toggle-switch"><input type="checkbox" id="cfg-autoMusic" data-auto="true"><span class="toggle-slider"></span></label></label>
                 </div>
             </div>
 
@@ -401,9 +440,8 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
         </main>
     </div>
 </div>
-</div>
-
-<!-- MAIN SITE -->
+    </div>
+    <!-- MAIN SITE -->
 <div id="siteContainer">
     <div id="loadingScreen" class="fixed inset-0 z-50 bg-gradient-to-br from-pink-300 via-rose-200 to-pink-400 flex flex-col items-center justify-center p-4 transition-opacity duration-700">
         <div class="relative flex flex-col items-center">
@@ -442,16 +480,16 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
                     </h1>
                     <p class="text-gray-600 text-sm sm:text-base md:text-lg max-w-md font-medium" id="welcomeText"></p>
 
-                    <!-- Buttons: Sequential unlock -->
+                    <!-- Buttons: Order 1 → 2 → 3 -->
                     <div class="flex flex-col sm:flex-row flex-wrap gap-3 justify-center md:justify-start w-full pt-2">
-                        <button id="btn3DCard" class="btn-seq w-full sm:w-auto bg-gradient-to-r from-brand-rose to-pink-500 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base transition-all" data-order="1">
+                        <button id="btn3DCard" class="btn-seq w-full sm:w-auto bg-gradient-to-r from-brand-rose to-pink-500 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base transition-all">
                             <i class="fas fa-gift text-lg"></i><span id="btn3DCardText">From Maryam</span>
                         </button>
-                        <button id="btnLoveLetter" class="btn-seq btn-locked w-full sm:w-auto bg-amber-500 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl shadow-md flex items-center justify-center gap-2 text-sm sm:text-base transition-all" data-order="2">
-                            <i class="fas fa-envelope-open-text text-lg"></i><span>Love Letter</span><i class="fas fa-arrow-right text-xs"></i>
-                        </button>
-                        <button id="btnNote" class="btn-seq btn-locked w-full sm:w-auto bg-white text-brand-rose font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl border-2 border-brand-rose shadow-md flex items-center justify-center gap-2 text-sm sm:text-base transition-all" data-order="3">
+                        <button id="btnNote" class="btn-seq btn-locked w-full sm:w-auto bg-white text-brand-rose font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl border-2 border-brand-rose shadow-md flex items-center justify-center gap-2 text-sm sm:text-base transition-all">
                             <i class="fas fa-sticky-note text-lg"></i><span id="btnNoteText">Click Here Maryam</span>
+                        </button>
+                        <button id="btnLoveLetter" class="btn-seq btn-locked w-full sm:w-auto bg-amber-500 text-white font-fredoka font-semibold px-5 sm:px-6 py-3 rounded-2xl shadow-md flex items-center justify-center gap-2 text-sm sm:text-base transition-all">
+                            <i class="fas fa-envelope-open-text text-lg"></i><span>Love Letter</span><i class="fas fa-arrow-right text-xs"></i>
                         </button>
                     </div>
 
@@ -579,14 +617,42 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
         <div class="bg-white rounded-2xl p-6 max-w-sm text-center shadow-2xl bubble-appear">
             <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3"><i class="fas fa-heart text-green-500 text-3xl"></i></div>
             <p class="font-bold text-gray-800 text-lg mb-2">💕 صح!</p>
-            <p class="text-sm text-gray-600 mb-4">جاري فتح رسالتك...</p>
+            <p class="text-sm text-gray-600 mb-4">جاري فتح الفيديوهات...</p>
             <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden"><div id="waSuccessBar" class="h-full bg-green-500 rounded-full" style="width:0%;transition:width 1.2s linear;"></div></div>
         </div>
     </div>
 </div>
 
+<!-- VIDEO SCREEN -->
+<div id="videoScreen" class="hidden fixed inset-0 z-[145] bg-gradient-to-br from-purple-900 via-rose-900 to-purple-900 overflow-y-auto">
+    <div id="videoFloatingHearts" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+    <button id="videoBackBtn" class="fixed top-4 left-4 z-50 bg-white/20 text-white px-4 py-2 rounded-full backdrop-blur-md text-sm font-fredoka flex items-center gap-2 border border-white/30">
+        <i class="fas fa-arrow-left"></i><span>الرسالة الأخيرة</span>
+    </button>
+    <div class="container mx-auto px-4 py-16 sm:py-20 max-w-5xl relative z-10">
+        <h1 class="text-center font-fredoka text-3xl sm:text-4xl md:text-5xl text-white font-bold mb-2 drop-shadow-lg">
+            <i class="fas fa-video text-amber-300 mr-2"></i>
+            فيديوهات خاصة لمريم 🎬
+        </h1>
+        <p class="text-center text-white/70 text-sm sm:text-base mb-10">اضغط على أي فيديو للمشاهدة</p>
+        <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+        <div id="noVideosMsg" class="hidden text-center text-white/80 py-16">
+            <i class="fas fa-video-slash text-6xl mb-4 opacity-50"></i>
+            <p class="text-lg">لا توجد فيديوهات بعد</p>
+            <p class="text-sm mt-2 opacity-70">أضفها من لوحة التحكم</p>
+        </div>
+        <div class="text-center mt-12">
+            <button id="videoToFinalBtn" class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full font-fredoka flex items-center gap-3 mx-auto border border-white/30 hover:bg-white/30 transition-all text-base">
+                <i class="fas fa-envelope-open-text text-xl"></i>
+                <span>الانتقال إلى الرسالة الأخيرة</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- FINAL MESSAGE -->
-<div id="finalMessageScreen" class="hidden fixed inset-0 z-[145] bg-gradient-to-br from-rose-600 via-pink-500 to-rose-700 overflow-y-auto flex flex-col items-center justify-center p-4">
+<div id="finalMessageScreen" class="hidden fixed inset-0 z-[146] bg-gradient-to-br from-rose-600 via-pink-500 to-rose-700 overflow-y-auto flex flex-col items-center justify-center p-4">
     <div id="finalFloatingHearts" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
     <button id="finalBackBtn" class="fixed top-4 left-4 z-50 bg-white/20 text-white px-4 py-2 rounded-full backdrop-blur-md text-sm font-fredoka flex items-center gap-2 border border-white/30">
         <i class="fas fa-arrow-left"></i><span>رجوع</span>
@@ -604,9 +670,14 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:
             <div id="finalMsgEmoji" class="text-5xl mb-4">💖</div>
             <p id="finalMsgSignature" class="font-cursive text-2xl sm:text-3xl text-brand-rose"></p>
         </div>
-        <button id="finalReplayBtn" class="mt-8 bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full font-fredoka flex items-center gap-2 mx-auto border border-white/30">
-            <i class="fas fa-redo"></i><span>من البداية</span>
-        </button>
+        <div class="flex flex-wrap gap-3 justify-center mt-8">
+            <button id="finalVideosBtn" class="bg-blue-500 text-white px-6 py-3 rounded-full font-fredoka flex items-center gap-2 shadow-xl hover:scale-105 transition-all">
+                <i class="fas fa-video"></i><span>الفيديوهات</span>
+            </button>
+            <button id="finalReplayBtn" class="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full font-fredoka flex items-center gap-2 border border-white/30 hover:bg-white/30 transition-all">
+                <i class="fas fa-redo"></i><span>من البداية</span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -644,7 +715,7 @@ console.log('✅ Firebase ready');
 
 <script>
 // ========== CONFIG ==========
-const SK = 'maryam_v4';
+const SK = 'maryam_v5';
 const ADMIN_PASS = '1234';
 let fbReady = false;
 
@@ -677,7 +748,7 @@ const defaultConfig = {
         emoji: '💖',
         bgFrom: '#e11d48', bgTo: '#be185d'
     },
-    btnProgress: { card: false, letter: false, note: false }
+    btnProgress: { card: false, note: false, letter: false }
 };
 
 const defaultLetters = [
@@ -691,6 +762,7 @@ let cfg = JSON.parse(JSON.stringify(defaultConfig));
 let letters = JSON.parse(JSON.stringify(defaultLetters));
 let voices = [];
 let music = null;
+let videos = [];
 let adminUnlocked = false;
 
 // ========== HELPERS ==========
@@ -712,6 +784,7 @@ function loadLocal() {
         const l = localStorage.getItem(SK+'_l'); if (l) letters = JSON.parse(l);
         const v = localStorage.getItem(SK+'_v'); if (v) voices = JSON.parse(v);
         const m = localStorage.getItem(SK+'_m'); if (m) music = JSON.parse(m);
+        const vd = localStorage.getItem(SK+'_vd'); if (vd) videos = JSON.parse(vd);
     } catch(e) {}
 }
 function saveLocal() {
@@ -721,6 +794,7 @@ function saveLocal() {
         localStorage.setItem(SK+'_v', JSON.stringify(voices));
         if (music) localStorage.setItem(SK+'_m', JSON.stringify(music));
         else localStorage.removeItem(SK+'_m');
+        localStorage.setItem(SK+'_vd', JSON.stringify(videos));
     } catch(e) {}
 }
 
@@ -743,7 +817,7 @@ function setSync(st, tx) {
     document.getElementById('syncText').textContent = tx;
 }
 
-// ========== FAST SAVE (per-section, debounced 200ms) ==========
+// ========== FAST SAVE ==========
 const saveTimers = {};
 function saveFast(section) {
     saveLocal();
@@ -755,6 +829,7 @@ function saveFast(section) {
             else if (section === 'letters') await window.firebaseHelpers.push('letters', letters);
             else if (section === 'voices') await window.firebaseHelpers.push('voiceMessages', voices);
             else if (section === 'music') await window.firebaseHelpers.push('music', music);
+            else if (section === 'videos') await window.firebaseHelpers.push('videos', videos);
             setSync('online', '☁️ محفوظ');
         } catch(e) { setSync('offline', '💾 محلي'); console.warn(section, e); }
     }, 200);
@@ -794,42 +869,51 @@ function applySite() {
     document.getElementById('waHeaderImg').src = c.whatsapp.profileImg;
     document.getElementById('waPromptText').textContent = c.whatsapp.promptText;
     applyColors(c.colors);
-    applyEffects(c.effects);
     renderLettersSite();
     renderMusicPlayer();
+    renderVideosScreen();
     updateButtonLocks();
 }
 
 function updateButtonLocks() {
-    const p = cfg.btnProgress || { card: false, letter: false, note: false };
+    const p = cfg.btnProgress || { card: false, note: false, letter: false };
     const btnCard = document.getElementById('btn3DCard');
-    const btnLetter = document.getElementById('btnLoveLetter');
     const btnNote = document.getElementById('btnNote');
+    const btnLetter = document.getElementById('btnLoveLetter');
     
-    // Order 1: From Maryam (always unlocked)
+    // 1) From Maryam — مفتوح دايماً
     btnCard.classList.remove('btn-locked');
     
-    // Order 2: Love Letter (unlocked after card)
-    if (p.card) btnLetter.classList.remove('btn-locked');
-    else btnLetter.classList.add('btn-locked');
+    // 2) Click Here Maryam — يُفتح بعد From Maryam
+    if (p.card) {
+        btnNote.classList.remove('btn-locked');
+    } else {
+        btnNote.classList.add('btn-locked');
+    }
     
-    // Order 3: Click Here Maryam (unlocked after letter)
-    if (p.card && p.letter) btnNote.classList.remove('btn-locked');
-    else btnNote.classList.add('btn-locked');
+    // 3) Love Letter — يُفتح بعد Click Here Maryam
+    if (p.note) {
+        btnLetter.classList.remove('btn-locked');
+    } else {
+        btnLetter.classList.add('btn-locked');
+    }
 }
 
 function unlockNext(step) {
-    if (!cfg.btnProgress) cfg.btnProgress = { card: false, letter: false, note: false };
+    if (!cfg.btnProgress) cfg.btnProgress = { card: false, note: false, letter: false };
     if (cfg.btnProgress[step]) return;
     cfg.btnProgress[step] = true;
     updateButtonLocks();
     saveFast('config');
-    const btnMap = { card: 'btnLoveLetter', letter: 'btnNote', note: null };
+    // card → note → letter
+    const btnMap = { card: 'btnNote', note: 'btnLoveLetter', letter: null };
     const next = btnMap[step];
     if (next) {
         const el = document.getElementById(next);
-        el.classList.add('btn-unlocked-flash');
-        setTimeout(() => el.classList.remove('btn-unlocked-flash'), 800);
+        if (el) {
+            el.classList.add('btn-unlocked-flash');
+            setTimeout(() => el.classList.remove('btn-unlocked-flash'), 800);
+        }
     }
 }
 
@@ -852,65 +936,83 @@ function applyColors(c) {
     s.textContent = `.bg-brand-rose,.bg-brand-accent{background-color:${c.accent}!important}.text-brand-rose,.text-brand-accent{color:${c.accent}!important}.bg-brand-dark{background-color:${c.dark}!important}.text-brand-dark{color:${c.dark}!important}body{background-color:${c.bg}!important}.border-brand-rose{border-color:${c.accent}!important}.from-brand-rose{--tw-gradient-from:${c.accent}!important}.to-brand-dark{--tw-gradient-to:${c.dark}!important}`;
 }
 
-function applyEffects(e) {
-    if (!e) return;
-}
-
-// ========== MUSIC (Multi-platform) ==========
-function getEmbedInfo(url) {
+// ========== VIDEO EMBED HELPER ==========
+function getEmbed(url) {
     if (!url) return null;
     url = url.trim();
     // YouTube
     const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
-    if (yt) return { type: 'youtube', id: yt[1], embed: `https://www.youtube.com/embed/${yt[1]}?autoplay=1&loop=1&playlist=${yt[1]}` };
+    if (yt) return { type:'youtube', embed:`https://www.youtube.com/embed/${yt[1]}` };
     // Facebook
     if (url.includes('facebook.com') || url.includes('fb.watch')) {
-        return { type: 'facebook', embed: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&autoplay=1&loop=1` };
+        return { type:'facebook', embed:`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false` };
     }
     // TikTok
     const tt = url.match(/tiktok\.com\/.*\/video\/(\d+)/);
-    if (tt) return { type: 'tiktok', id: tt[1], embed: `https://www.tiktok.com/embed/v2/${tt[1]}?autoplay=1&loop=1` };
+    if (tt) return { type:'tiktok', embed:`https://www.tiktok.com/embed/v2/${tt[1]}` };
     // Instagram
     const ig = url.match(/instagram\.com\/(?:p|reel)\/([a-zA-Z0-9_-]+)/);
-    if (ig) return { type: 'instagram', id: ig[1], embed: `https://www.instagram.com/p/${ig[1]}/embed/?autoplay=1` };
+    if (ig) return { type:'instagram', embed:`https://www.instagram.com/p/${ig[1]}/embed/` };
     // Google Drive
     const gd = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (gd) return { type: 'gdrive', embed: `https://drive.google.com/file/d/${gd[1]}/preview` };
-    // Direct audio/video
-    if (/\.(mp3|wav|m4a|ogg|aac|mp4|webm|mov)(\?.*)?$/i.test(url)) {
-        return { type: 'direct', url: url };
+    if (gd) return { type:'gdrive', embed:`https://drive.google.com/file/d/${gd[1]}/preview` };
+    // Direct video
+    if (/\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url)) {
+        return { type:'direct', embed:url };
     }
-    // Generic iframe fallback
-    return { type: 'iframe', embed: url };
+    // Fallback
+    return { type:'iframe', embed:url };
 }
 
+// ========== VIDEO SCREEN ==========
+function renderVideosScreen() {
+    const grid = document.getElementById('videosGrid');
+    const noMsg = document.getElementById('noVideosMsg');
+    grid.innerHTML = '';
+    if (videos.length === 0) {
+        noMsg.classList.remove('hidden');
+        return;
+    }
+    noMsg.classList.add('hidden');
+    videos.forEach(v => {
+        const info = getEmbed(v.url);
+        if (!info) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'video-card-live bg-black';
+        let inner = '';
+        if (info.type === 'direct') {
+            inner = `<video src="${esc(info.embed)}" controls class="w-full h-full object-cover"></video>`;
+        } else {
+            inner = `<iframe src="${esc(info.embed)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+        }
+        wrap.innerHTML = `
+            ${inner}
+            ${v.title ? `<div class="video-title-bar absolute bottom-0 left-0 right-0"><p class="font-bold text-sm text-gray-800 truncate">${esc(v.title)}</p></div>` : ''}
+        `;
+        grid.appendChild(wrap);
+    });
+}
+
+// ========== MUSIC ==========
 function renderMusicPlayer() {
     const wrap = document.getElementById('musicPlayerWrap');
     if (!wrap) return;
     wrap.innerHTML = '';
     if (!music || !music.src) {
-        wrap.innerHTML = '<p class="text-xs text-gray-500 text-center py-3">لا توجد أغنية</p>';
+        wrap.innerHTML = '<p class="text-xs text-gray-500 text-center py-3">لا توجد موسيقى</p>';
         return;
     }
-    const info = getEmbedInfo(music.src);
-    if (!info) {
-        wrap.innerHTML = '<p class="text-xs text-red-500 text-center py-3">رابط غير صالح</p>';
-        return;
-    }
-    if (info.type === 'direct') {
-        wrap.innerHTML = `<audio controls class="w-full" src="${esc(info.url)}"></audio><p class="text-xs text-gray-500 mt-2 text-center">${esc(music.name || 'Direct audio')}</p>`;
-    } else if (info.type === 'youtube') {
-        wrap.innerHTML = `<div class="aspect-video rounded-xl overflow-hidden"><iframe src="${info.embed}" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-    } else if (info.type === 'tiktok') {
-        wrap.innerHTML = `<div class="rounded-xl overflow-hidden" style="max-width:340px;margin:0 auto;"><iframe src="${info.embed}" class="w-full" style="height:500px;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-    } else if (info.type === 'instagram') {
-        wrap.innerHTML = `<div class="rounded-xl overflow-hidden"><iframe src="${info.embed}" class="w-full" style="height:480px;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-    } else if (info.type === 'facebook') {
-        wrap.innerHTML = `<div class="rounded-xl overflow-hidden aspect-video"><iframe src="${info.embed}" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-    } else if (info.type === 'gdrive') {
-        wrap.innerHTML = `<div class="rounded-xl overflow-hidden aspect-video"><iframe src="${info.embed}" class="w-full h-full" frameborder="0" allow="autoplay"></iframe></div>`;
+    if (music.src.startsWith('data:')) {
+        wrap.innerHTML = `<audio controls class="w-full" src="${esc(music.src)}"></audio><p class="text-xs text-gray-500 mt-2 text-center">${esc(music.name || 'ملف مرفوع')}</p>`;
+    } else if (/\.(mp3|wav|m4a|ogg|aac)(\?.*)?$/i.test(music.src)) {
+        wrap.innerHTML = `<audio controls class="w-full" src="${esc(music.src)}"></audio><p class="text-xs text-gray-500 mt-2 text-center">${esc(music.name || 'رابط مباشر')}</p>`;
     } else {
-        wrap.innerHTML = `<div class="rounded-xl overflow-hidden aspect-video"><iframe src="${esc(info.embed)}" class="w-full h-full" frameborder="0" allow="autoplay"></iframe></div>`;
+        const info = getEmbed(music.src);
+        if (info && info.type !== 'direct') {
+            wrap.innerHTML = `<div class="rounded-xl overflow-hidden" style="aspect-ratio:16/9;"><iframe src="${esc(info.embed)}" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+        } else {
+            wrap.innerHTML = '<p class="text-xs text-red-500 text-center py-3">رابط غير صالح</p>';
+        }
     }
 }
 
@@ -1059,7 +1161,52 @@ function renderVoiceList() {
     }));
 }
 
-// ========== ADMIN ==========
+// ========== VIDEOS ADMIN ==========
+function renderVideosList() {
+    const c = document.getElementById('videosList');
+    document.getElementById('videoCount').textContent = videos.length;
+    c.innerHTML = '';
+    if (videos.length === 0) { c.innerHTML = '<p class="text-center text-gray-400 text-sm py-6">لا توجد فيديوهات</p>'; return; }
+    videos.forEach((v, i) => {
+        const d = document.createElement('div');
+        d.className = 'flex items-center gap-3 p-3 bg-blue-50 rounded-xl border-2 border-blue-200';
+        d.innerHTML = `<div class="w-12 h-12 rounded-lg bg-blue-500 text-white flex items-center justify-center flex-shrink-0"><i class="fas fa-video"></i></div><div class="flex-1 min-w-0"><p class="font-bold text-sm text-gray-800 truncate">${esc(v.title || 'فيديو ' + (i+1))}</p><p class="text-xs text-gray-500 truncate">${esc(v.url.substring(0, 50))}...</p></div><button class="del-vd bg-red-500 text-white w-9 h-9 rounded-full flex items-center justify-center" data-i="${i}"><i class="fas fa-trash text-xs"></i></button>`;
+        c.appendChild(d);
+    });
+    c.querySelectorAll('.del-vd').forEach(b => b.addEventListener('click', e => {
+        const i = +e.currentTarget.dataset.i;
+        if (confirm('حذف الفيديو؟')) {
+            videos.splice(i, 1);
+            renderVideosList();
+            renderVideosScreen();
+            saveFast('videos');
+            showToast('🗑️ تم');
+        }
+    }));
+}
+
+function liveVideoPreview(url) {
+    const wrap = document.getElementById('videoLivePreview');
+    const container = document.getElementById('videoPreviewContainer');
+    if (!url || url.length < 10) {
+        wrap.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+    }
+    const info = getEmbed(url);
+    if (!info) {
+        wrap.classList.add('hidden');
+        return;
+    }
+    wrap.classList.remove('hidden');
+    if (info.type === 'direct') {
+        container.innerHTML = `<div style="aspect-ratio:16/9;border-radius:10px;overflow:hidden;"><video src="${esc(info.embed)}" controls class="w-full h-full"></video></div>`;
+    } else {
+        container.innerHTML = `<div style="aspect-ratio:16/9;border-radius:10px;overflow:hidden;"><iframe src="${esc(info.embed)}" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+    }
+}
+
+// ========== ADMIN FORM ==========
 function populateAdmin() {
     const c = cfg;
     const s = (id, v) => { const e = document.getElementById(id); if (e) e.value = v; };
@@ -1086,6 +1233,7 @@ function populateAdmin() {
     document.getElementById('cfg-autoMusic').checked = c.effects.autoMusic;
     renderLettersEditor();
     renderVoiceList();
+    renderVideosList();
     renderMusicPlayer();
 }
 
@@ -1209,6 +1357,29 @@ function bindAdmin() {
         renderLettersSite();
         saveFast('letters');
     });
+
+    // Video live preview
+    document.getElementById('newVideoUrl').addEventListener('input', e => {
+        liveVideoPreview(e.target.value.trim());
+    });
+
+    // Add video
+    document.getElementById('addVideoBtn').addEventListener('click', () => {
+        const url = document.getElementById('newVideoUrl').value.trim();
+        const title = document.getElementById('newVideoTitle').value.trim();
+        if (!url) { showToast('❌ أدخل الرابط', 'error'); return; }
+        const info = getEmbed(url);
+        if (!info) { showToast('❌ رابط غير صالح', 'error'); return; }
+        videos.push({ url, title: title || '', timestamp: Date.now() });
+        document.getElementById('newVideoUrl').value = '';
+        document.getElementById('newVideoTitle').value = '';
+        document.getElementById('videoLivePreview').classList.add('hidden');
+        renderVideosList();
+        renderVideosScreen();
+        saveFast('videos');
+        showToast('✅ تم إضافة الفيديو');
+    });
+
     document.getElementById('finalPreviewBtn').addEventListener('click', () => {
         document.getElementById('adminPanel').classList.add('hidden');
         showFinal();
@@ -1217,10 +1388,10 @@ function bindAdmin() {
         if (!confirm('استعادة الافتراضي؟')) return;
         cfg = JSON.parse(JSON.stringify(defaultConfig));
         letters = JSON.parse(JSON.stringify(defaultLetters));
-        voices = []; music = null;
+        voices = []; music = null; videos = [];
         localStorage.clear();
         populateAdmin(); applySite();
-        saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music');
+        saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music'); saveFast('videos');
         showToast('🔄 تم');
     });
     document.getElementById('resetRemoteBtn').addEventListener('click', async () => {
@@ -1230,10 +1401,10 @@ function bindAdmin() {
             await window.firebaseHelpers.deleteAll();
             cfg = JSON.parse(JSON.stringify(defaultConfig));
             letters = JSON.parse(JSON.stringify(defaultLetters));
-            voices = []; music = null;
+            voices = []; music = null; videos = [];
             localStorage.clear();
             populateAdmin(); applySite();
-            saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music');
+            saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music'); saveFast('videos');
             showToast('🗑️ تم');
         } catch(e) { showToast('❌ فشل', 'error'); }
     });
@@ -1330,9 +1501,29 @@ function showSuccess() {
         showToast('💕 صح!', 'success');
         setTimeout(() => {
             document.getElementById('whatsappScreen').classList.add('hidden');
-            showFinal();
+            showVideos();
         }, 600);
     }, 1400);
+}
+
+// ========== VIDEO SCREEN ==========
+function showVideos() {
+    renderVideosScreen();
+    document.getElementById('videoScreen').classList.remove('hidden');
+    // floating hearts
+    const fc = document.getElementById('videoFloatingHearts');
+    fc.innerHTML = '';
+    if (cfg.effects.floatingHearts) {
+        for (let i = 0; i < 15; i++) {
+            const h = document.createElement('div');
+            h.classList.add('floating-heart', 'fas', 'fa-heart');
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            h.style.fontSize = (Math.random() * 16 + 10) + 'px';
+            h.style.animationDelay = (Math.random() * 3) + 's';
+            fc.appendChild(h);
+        }
+    }
 }
 
 // ========== FINAL ==========
@@ -1365,43 +1556,24 @@ function showFinal() {
 }
 
 // ========== MUSIC TOGGLE ==========
-let audioCtx = null, isPlaying = false, melInterval = null, musicAudio = null;
-const notes = [{n:261.63,d:.4},{n:261.63,d:.4},{n:293.66,d:.8},{n:261.63,d:.8},{n:349.23,d:.8},{n:329.63,d:1.2}];
-function playTone(f, d) {
-    if (!audioCtx) return;
-    try {
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
-        o.connect(g); g.connect(audioCtx.destination);
-        o.start(); o.stop(audioCtx.currentTime + d);
-    } catch(e) {}
-}
+let musicAudio = null, isPlaying = false;
+
 function startMusic() {
-    if (music && music.src) {
-        const info = getEmbedInfo(music.src);
-        if (info && info.type === 'direct') {
-            musicAudio = new Audio(info.url);
-            musicAudio.loop = true;
-            musicAudio.play().catch(e => console.warn(e));
-            isPlaying = true;
-            document.getElementById('musicText').innerText = "Pause";
-            document.getElementById('musicIcon').className = 'fas fa-pause';
-            return;
-        }
+    if (!music || !music.src) { showToast('❌ لا توجد موسيقى', 'warning'); return; }
+    if (music.src.startsWith('data:') || /\.(mp3|wav|m4a|ogg|aac)(\?.*)?$/i.test(music.src)) {
+        musicAudio = new Audio(music.src);
+        musicAudio.loop = true;
+        musicAudio.play().catch(e => { showToast('❌ فشل التشغيل', 'error'); console.warn(e); });
+        isPlaying = true;
+        document.getElementById('musicText').innerText = "Pause";
+        document.getElementById('musicIcon').className = 'fas fa-pause';
+    } else {
+        showToast('ℹ️ الرابط مش صوتي مباشر', 'info');
     }
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    let i = 0; isPlaying = true;
-    document.getElementById('musicText').innerText = "Pause";
-    document.getElementById('musicIcon').className = 'fas fa-spin fa-music';
-    melInterval = setInterval(() => { playTone(notes[i].n, notes[i].d); i = (i + 1) % notes.length; }, 600);
 }
 function stopMusic() {
     isPlaying = false;
     if (musicAudio) { musicAudio.pause(); musicAudio = null; }
-    clearInterval(melInterval);
     document.getElementById('musicText').innerText = "Play Music";
     document.getElementById('musicIcon').className = 'fas fa-music';
 }
@@ -1412,7 +1584,7 @@ function triggerConfetti() {
     if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
 }
 
-// ========== INTERACTIONS ==========
+// ========== SITE INTERACTIONS ==========
 function bindSite() {
     document.getElementById('btn3DCard').addEventListener('click', (e) => {
         if (e.currentTarget.classList.contains('btn-locked')) { showToast('🔒 افتح الزر اللي قبله أول', 'warning'); return; }
@@ -1426,8 +1598,15 @@ function bindSite() {
     });
     document.getElementById('flipperCard').addEventListener('click', () => document.getElementById('flipperCard').classList.toggle('rotate-y-180'));
 
-    document.getElementById('btnLoveLetter').addEventListener('click', (e) => {
+    document.getElementById('btnNote').addEventListener('click', (e) => {
         if (e.currentTarget.classList.contains('btn-locked')) { showToast('🔒 افتح From Maryam أول', 'warning'); return; }
+        unlockNext('note');
+        document.getElementById('stickyNotePopup').classList.toggle('hidden');
+    });
+    document.getElementById('closeStickyNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.add('hidden'));
+
+    document.getElementById('btnLoveLetter').addEventListener('click', (e) => {
+        if (e.currentTarget.classList.contains('btn-locked')) { showToast('🔒 افتح Click Here Maryam أول', 'warning'); return; }
         unlockNext('letter');
         document.getElementById('loveLetterSection').classList.remove('hidden');
         document.getElementById('svgHeartContainer').classList.remove('hidden');
@@ -1461,19 +1640,26 @@ function bindSite() {
     document.getElementById('waNameSendBtn').addEventListener('click', submitName);
     document.getElementById('waNameInput').addEventListener('keypress', e => { if (e.key === 'Enter') submitName(); });
 
-    document.getElementById('btnNote').addEventListener('click', (e) => {
-        if (e.currentTarget.classList.contains('btn-locked')) { showToast('🔒 افتح الأزرار اللي قبلها أول', 'warning'); return; }
-        unlockNext('note');
-        document.getElementById('stickyNotePopup').classList.toggle('hidden');
+    document.getElementById('videoBackBtn').addEventListener('click', () => {
+        document.getElementById('videoScreen').classList.add('hidden');
+        document.getElementById('whatsappScreen').classList.remove('hidden');
     });
-    document.getElementById('closeStickyNote').addEventListener('click', () => document.getElementById('stickyNotePopup').classList.add('hidden'));
+    document.getElementById('videoToFinalBtn').addEventListener('click', () => {
+        document.getElementById('videoScreen').classList.add('hidden');
+        showFinal();
+    });
 
     document.getElementById('finalBackBtn').addEventListener('click', () => {
         document.getElementById('finalMessageScreen').classList.add('hidden');
-        document.getElementById('whatsappScreen').classList.remove('hidden');
+        document.getElementById('videoScreen').classList.remove('hidden');
+    });
+    document.getElementById('finalVideosBtn').addEventListener('click', () => {
+        document.getElementById('finalMessageScreen').classList.add('hidden');
+        showVideos();
     });
     document.getElementById('finalReplayBtn').addEventListener('click', () => {
         document.getElementById('finalMessageScreen').classList.add('hidden');
+        document.getElementById('videoScreen').classList.add('hidden');
         document.getElementById('whatsappScreen').classList.add('hidden');
         document.getElementById('loveLetterSection').classList.add('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1532,6 +1718,15 @@ function setupRealtime() {
         saveLocal();
         renderMusicPlayer();
     });
+    window.firebaseHelpers.sub('videos', (r) => {
+        if (isAdminOpen()) return;
+        const arr = r ? (Array.isArray(r) ? r.filter(Boolean) : Object.values(r)) : [];
+        if (JSON.stringify(arr) === JSON.stringify(videos)) return;
+        videos = arr;
+        saveLocal();
+        renderVideosScreen();
+        renderVideosList();
+    });
 }
 
 // ========== INIT ==========
@@ -1557,6 +1752,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('loadingScreen').classList.add('hidden');
                     document.getElementById('mainContent').classList.remove('hidden');
                     triggerConfetti();
+                    // فتح الموسيقى فقط لو autoMusic مفعّلة
                     if (cfg.effects.autoMusic) startMusic();
                 }, 700);
             }, 300);
@@ -1574,12 +1770,13 @@ window.addEventListener('firebaseReady', () => {
             if (data.letters) letters = Array.isArray(data.letters) ? data.letters.filter(Boolean) : Object.values(data.letters);
             if (data.voiceMessages) voices = Array.isArray(data.voiceMessages) ? data.voiceMessages.filter(Boolean) : Object.values(data.voiceMessages);
             if (data.music) music = data.music;
+            if (data.videos) videos = Array.isArray(data.videos) ? data.videos.filter(Boolean) : Object.values(data.videos);
             saveLocal();
             applySite();
             setSync('online', '☁️ متزامن');
             console.log('📥 loaded');
         } else {
-            saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music');
+            saveFast('config'); saveFast('letters'); saveFast('voices'); saveFast('music'); saveFast('videos');
         }
     }).catch(e => {
         console.warn('pull failed:', e);

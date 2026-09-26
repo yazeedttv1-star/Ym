@@ -3,191 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جاري تحديث الموقع</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6a11cb 100%);
-            background-size: 200% 200%;
-            animation: gradientMove 8s ease infinite;
-            padding: 20px;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 25px;
-            padding: 50px 40px;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: spin 3s linear infinite;
-            display: inline-block;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        h1 {
-            color: #ffffff;
-            font-size: 32px;
-            margin-bottom: 15px;
-            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-            line-height: 1.5;
-        }
-
-        p {
-            color: #e8e8e8;
-            font-size: 19px;
-            margin-bottom: 30px;
-            line-height: 1.7;
-        }
-
-        .thanks {
-            color: #ffd700;
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 35px;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-        }
-
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 20px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
-            margin-bottom: 25px;
-        }
-
-        .whatsapp-btn:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.7);
-        }
-
-        .whatsapp-btn svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-        .enjoy {
-            color: #ffffff;
-            font-size: 17px;
-            margin-top: 15px;
-            opacity: 0.9;
-            font-style: italic;
-        }
-
-        .loader {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 25px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            background: #ffffff;
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 35px 22px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            p {
-                font-size: 16px;
-            }
-            .thanks {
-                font-size: 19px;
-            }
-            .whatsapp-btn {
-                font-size: 17px;
-                padding: 14px 30px;
-            }
-            .icon {
-                font-size: 60px;
-            }
-        }
-    </style>
+    <title>MY Chat App</title>
+    <!-- CSS & FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <div class="icon">⚙️</div>
-        
-        <h1>جاري تحديث الموقع وتطويره</h1>
-        <p>نعمل حالياً على تحسين الموقع لتقديم تجربة أفضل لك</p>
-        
-        <div class="loader">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </div>
+<body class="dark-theme">
 
-        <div class="thanks">شكراً لك 🌟</div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Sidebar Header -->
+            <header class="sidebar-header">
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/40" id="user-avatar" alt="Profile">
+                    <span id="user-name">اسم المستخدم</span>
+                </div>
+                <div class="header-actions">
+                    <button id="theme-toggle-btn" title="تبديل المظهر (داكن/فاتح)">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button id="status-btn" title="الحالات"><i class="fa-solid fa-circle-notch"></i></button>
+                    <button id="channels-btn" title="القنوات والمجموعات"><i class="fa-solid fa-users"></i></button>
+                    <button id="settings-btn" title="الإعدادات"><i class="fa-solid fa-gear"></i></button>
+                </div>
+            </header>
 
-        <a href="https://wa.me/201147975962" class="whatsapp-btn" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            تواصل معنا واتساب
-        </a>
+            <!-- Search Bar & Filters -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="بحث أو بدء محادثة جديدة...">
+                </div>
+                <div class="filter-chips">
+                    <button class="chip active" data-filter="all">الكل</button>
+                    <button class="chip" data-filter="unread">غير مقروءة</button>
+                    <button class="chip" data-filter="groups">المجموعات</button>
+                    <button class="chip" data-filter="channels">القنوات</button>
+                </div>
+            </div>
 
-        <p class="enjoy">استمتع بعد التحديث ✨</p>
+            <!-- Chat List -->
+            <div class="chat-list" id="chat-list">
+                <!-- قائمة المحادثات سيتم إنشاؤها عبر JavaScript -->
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <!-- Chat Header -->
+            <header class="chat-header" id="chat-header">
+                <div class="active-chat-info">
+                    <img src="https://via.placeholder.com/40" id="active-chat-avatar" alt="Avatar">
+                    <div class="chat-details">
+                        <h3 id="active-chat-name">اختر محادثة لبدء الدردشة</h3>
+                        <p id="active-chat-status">متصل الان | جاري الكتابة...</p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="voice-call-btn" title="مكالمة صوتية"><i class="fa-solid fa-phone"></i></button>
+                    <button id="video-call-btn" title="مكالمة فيديو"><i class="fa-solid fa-video"></i></button>
+                    <button id="search-chat-btn" title="بحث في المحادثة"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button id="chat-menu-btn" title="خيارات إضافية"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+            </header>
+
+            <!-- Message Area -->
+            <div class="messages-container" id="messages-container">
+                <div class="welcome-screen">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <h2>MY Chat Web</h2>
+                    <p>أرسل واستقبل الرسائل والمستندات بخصوصية وأمان تام.</p>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <footer class="input-area" id="input-area">
+                <div class="attachment-wrapper">
+                    <button id="emoji-btn" title="إيموجي"><i class="fa-regular fa-face-smile"></i></button>
+                    <button id="attach-btn" title="إرفاق ملف"><i class="fa-solid fa-paperclip"></i></button>
+                    <input type="file" id="file-input" hidden multiple>
+                </div>
+
+                <div class="text-input-wrapper">
+                    <textarea id="message-input" placeholder="اكتب رسالة..." rows="1"></textarea>
+                </div>
+
+                <div class="action-btn-wrapper">
+                    <button id="voice-note-btn" title="تسجيل صوتي"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="send-btn" title="إرسال" class="hidden"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </footer>
+        </main>
     </div>
+
+    <!-- Modals & Overlays -->
+    <!-- Status / Stories Modal -->
+    <div class="modal hidden" id="status-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>الحالات والاستوري</h2>
+            <div class="status-list" id="status-list"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>

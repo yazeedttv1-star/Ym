@@ -1,0 +1,227 @@
+:root {
+    /* Light Mode Variables */
+    --bg-main: #eae6df;
+    --sidebar-bg: #ffffff;
+    --chat-bg: #efeae2;
+    --header-bg: #f0f2f5;
+    --text-primary: #111b21;
+    --text-secondary: #667781;
+    --msg-sent: #d9fdd3;
+    --msg-received: #ffffff;
+    --accent: #00a884;
+    --border-color: #e9edef;
+    --input-bg: #ffffff;
+}
+
+body.dark-theme {
+    /* Dark Mode Variables */
+    --bg-main: #0c1317;
+    --sidebar-bg: #111b21;
+    --chat-bg: #0b141a;
+    --header-bg: #202c33;
+    --text-primary: #e9edef;
+    --text-secondary: #8696a0;
+    --msg-sent: #005c4b;
+    --msg-received: #202c33;
+    --accent: #00a884;
+    --border-color: #222d34;
+    --input-bg: #2a3942;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background-color: var(--sidebar-bg);
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 30%;
+    min-width: 320px;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    height: 60px;
+    background-color: var(--header-bg);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.header-actions button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+/* Search Box */
+.search-container {
+    padding: 8px 12px;
+    background-color: var(--sidebar-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-box {
+    background-color: var(--header-bg);
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    width: 100%;
+}
+
+.filter-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.chip {
+    padding: 4px 12px;
+    border-radius: 16px;
+    border: none;
+    background-color: var(--header-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.chip.active {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* Chat List */
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Chat Main Area */
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--chat-bg);
+}
+
+.chat-header {
+    height: 60px;
+    background-color: var(--header-bg);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.active-chat-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.active-chat-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.messages-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome-screen {
+    margin: auto;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.welcome-screen i {
+    font-size: 80px;
+    margin-bottom: 16px;
+    color: var(--accent);
+}
+
+/* Input Area */
+.input-area {
+    min-height: 62px;
+    background-color: var(--header-bg);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.attachment-wrapper button, .action-btn-wrapper button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.text-input-wrapper {
+    flex: 1;
+}
+
+.text-input-wrapper textarea {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    resize: none;
+    outline: none;
+}
+
+.hidden {
+    display: none !important;
+}

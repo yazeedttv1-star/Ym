@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY Chat App</title>
-    <!-- CSS & FontAwesome Icons -->
+    <title>MY Chat Web</title>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-theme">
@@ -16,15 +17,15 @@
             <!-- Sidebar Header -->
             <header class="sidebar-header">
                 <div class="user-profile">
-                    <img src="https://via.placeholder.com/40" id="user-avatar" alt="Profile">
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" id="user-avatar" alt="Profile">
                     <span id="user-name">اسم المستخدم</span>
                 </div>
                 <div class="header-actions">
-                    <button id="theme-toggle-btn" title="تبديل المظهر (داكن/فاتح)">
+                    <button id="theme-toggle-btn" title="تبديل المظهر">
                         <i class="fa-solid fa-moon"></i>
                     </button>
                     <button id="status-btn" title="الحالات"><i class="fa-solid fa-circle-notch"></i></button>
-                    <button id="channels-btn" title="القنوات والمجموعات"><i class="fa-solid fa-users"></i></button>
+                    <button id="channels-btn" title="المجموعات"><i class="fa-solid fa-users"></i></button>
                     <button id="settings-btn" title="الإعدادات"><i class="fa-solid fa-gear"></i></button>
                 </div>
             </header>
@@ -39,13 +40,12 @@
                     <button class="chip active" data-filter="all">الكل</button>
                     <button class="chip" data-filter="unread">غير مقروءة</button>
                     <button class="chip" data-filter="groups">المجموعات</button>
-                    <button class="chip" data-filter="channels">القنوات</button>
                 </div>
             </div>
 
             <!-- Chat List -->
             <div class="chat-list" id="chat-list">
-                <!-- قائمة المحادثات سيتم إنشاؤها عبر JavaScript -->
+                <!-- قائمة المحادثات -->
             </div>
         </aside>
 
@@ -54,21 +54,21 @@
             <!-- Chat Header -->
             <header class="chat-header" id="chat-header">
                 <div class="active-chat-info">
-                    <img src="https://via.placeholder.com/40" id="active-chat-avatar" alt="Avatar">
+                    <img src="https://ui-avatars.com/api/?name=Chat&background=00a884&color=fff" id="active-chat-avatar" alt="Avatar">
                     <div class="chat-details">
-                        <h3 id="active-chat-name">اختر محادثة لبدء الدردشة</h3>
-                        <p id="active-chat-status">متصل الان | جاري الكتابة...</p>
+                        <h3 id="active-chat-name">المحادثة العامة</h3>
+                        <p id="active-chat-status">متصل الآن</p>
                     </div>
                 </div>
                 <div class="chat-actions">
                     <button id="voice-call-btn" title="مكالمة صوتية"><i class="fa-solid fa-phone"></i></button>
                     <button id="video-call-btn" title="مكالمة فيديو"><i class="fa-solid fa-video"></i></button>
-                    <button id="search-chat-btn" title="بحث في المحادثة"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button id="chat-menu-btn" title="خيارات إضافية"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <button id="search-chat-btn" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button id="chat-menu-btn" title="خيارات"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 </div>
             </header>
 
-            <!-- Message Area -->
+            <!-- Message Container -->
             <div class="messages-container" id="messages-container">
                 <div class="welcome-screen">
                     <i class="fa-brands fa-whatsapp"></i>
@@ -95,16 +95,6 @@
                 </div>
             </footer>
         </main>
-    </div>
-
-    <!-- Modals & Overlays -->
-    <!-- Status / Stories Modal -->
-    <div class="modal hidden" id="status-modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>الحالات والاستوري</h2>
-            <div class="status-list" id="status-list"></div>
-        </div>
     </div>
 
     <!-- Firebase SDKs -->

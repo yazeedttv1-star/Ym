@@ -1,6 +1,9 @@
+/* ==========================================
+   المتغيرات الأساسية للثيمات (Themes Variables)
+   ========================================== */
 :root {
-    /* Light Mode Variables */
-    --bg-main: #eae6df;
+    /* الوضع الفاتح (Light Theme) */
+    --bg-main: #d1d7db;
     --sidebar-bg: #ffffff;
     --chat-bg: #efeae2;
     --header-bg: #f0f2f5;
@@ -11,10 +14,11 @@
     --accent: #00a884;
     --border-color: #e9edef;
     --input-bg: #ffffff;
+    --hover-bg: #f5f6f6;
 }
 
 body.dark-theme {
-    /* Dark Mode Variables */
+    /* الوضع الداكن (Dark Theme) */
     --bg-main: #0c1317;
     --sidebar-bg: #111b21;
     --chat-bg: #0b141a;
@@ -26,8 +30,12 @@ body.dark-theme {
     --accent: #00a884;
     --border-color: #222d34;
     --input-bg: #2a3942;
+    --hover-bg: #202c33;
 }
 
+/* ==========================================
+   إعادة الضبط العامة (Global Reset)
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -39,25 +47,33 @@ body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* الحاوية الرئيسية للتطبيق */
 .app-container {
     width: 100vw;
     height: 100vh;
     display: flex;
     background-color: var(--sidebar-bg);
+    overflow: hidden;
 }
 
-/* Sidebar Styling */
+/* ==========================================
+   الشريط الجانبي (Sidebar)
+   ========================================== */
 .sidebar {
-    width: 30%;
+    width: 35%;
     min-width: 320px;
+    max-width: 450px;
     border-left: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
+    background-color: var(--sidebar-bg);
 }
 
 .sidebar-header {
@@ -67,18 +83,31 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .user-profile {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .user-profile img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-profile span {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .header-actions button {
@@ -86,11 +115,21 @@ body {
     border: none;
     color: var(--text-secondary);
     font-size: 18px;
-    margin-right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
 }
 
-/* Search Box */
+.header-actions button:hover {
+    background-color: var(--hover-bg);
+}
+
+/* شريط البحث والفلاتر */
 .search-container {
     padding: 8px 12px;
     background-color: var(--sidebar-bg);
@@ -103,7 +142,8 @@ body {
     padding: 6px 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    color: var(--text-secondary);
 }
 
 .search-box input {
@@ -112,40 +152,46 @@ body {
     outline: none;
     color: var(--text-primary);
     width: 100%;
+    font-size: 14px;
 }
 
 .filter-chips {
     display: flex;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .chip {
-    padding: 4px 12px;
+    padding: 5px 12px;
     border-radius: 16px;
     border: none;
     background-color: var(--header-bg);
     color: var(--text-secondary);
+    font-size: 13px;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
-.chip.active {
+.chip.active, .chip:hover {
     background-color: var(--accent);
-    color: #fff;
+    color: #ffffff;
 }
 
-/* Chat List */
+/* قائمة المحادثات */
 .chat-list {
     flex: 1;
     overflow-y: auto;
 }
 
-/* Chat Main Area */
+/* ==========================================
+   منطقة المحادثة الرئيسية (Chat Area)
+   ========================================== */
 .chat-area {
     flex: 1;
     display: flex;
     flex-direction: column;
     background-color: var(--chat-bg);
+    position: relative;
 }
 
 .chat-header {
@@ -155,6 +201,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .active-chat-info {
@@ -167,14 +214,50 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
+.chat-details h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.chat-details p {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.chat-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-actions button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-actions button:hover {
+    background-color: var(--hover-bg);
+}
+
+/* حاوية الرسائل */
 .messages-container {
     flex: 1;
-    padding: 20px;
+    padding: 20px 5%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .welcome-screen {
@@ -189,14 +272,71 @@ body {
     color: var(--accent);
 }
 
-/* Input Area */
+.welcome-screen h2 {
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+/* تصميم فقاعات الرسائل (Messages Bubbles) */
+.message {
+    display: flex;
+    margin-bottom: 8px;
+    max-width: 65%;
+}
+
+.message.sent {
+    margin-right: auto; /* محاذاة للجهة المقابلة للرسائل المرسلة */
+}
+
+.message.received {
+    margin-left: auto;
+}
+
+.message-content {
+    padding: 8px 12px;
+    border-radius: 8px;
+    position: relative;
+    font-size: 14.2px;
+    line-height: 1.4;
+    word-break: break-word;
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+}
+
+.message.sent .message-content {
+    background-color: var(--msg-sent);
+    border-top-left-radius: 0;
+}
+
+.message.received .message-content {
+    background-color: var(--msg-received);
+    border-top-right-radius: 0;
+}
+
+.message-time {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: block;
+    text-align: left;
+}
+
+/* ==========================================
+   منطقة كتابة الرسالة (Input Area)
+   ========================================== */
 .input-area {
     min-height: 62px;
     background-color: var(--header-bg);
     padding: 10px 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.attachment-wrapper, .action-btn-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .attachment-wrapper button, .action-btn-wrapper button {
@@ -204,7 +344,17 @@ body {
     border: none;
     color: var(--text-secondary);
     font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attachment-wrapper button:hover, .action-btn-wrapper button:hover {
+    background-color: var(--hover-bg);
 }
 
 .text-input-wrapper {
@@ -220,8 +370,33 @@ body {
     color: var(--text-primary);
     resize: none;
     outline: none;
+    font-size: 15px;
+    max-height: 100px;
 }
 
+/* العناصر المخفية */
 .hidden {
     display: none !important;
+}
+
+/* ==========================================
+   التجاوب مع الشاشات الصغيرة (Responsive Design)
+   ========================================== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        max-width: 100%;
+    }
+    .chat-area {
+        display: none; /* إخفاء الشات المباشر على الهاتف حتى اختيار محادثة */
+    }
+    .chat-area.active {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+    }
 }

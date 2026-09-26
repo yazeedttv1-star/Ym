@@ -1,8 +1,9 @@
-import { db, auth, storage } from './firebase-config.js';
+import { messaging, db, auth, storage } from './firebase-config.js';
+import { getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 import { ref as dbRef, push, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// --- العناصر البرمجية (DOM Elements) ---
+// --- عناصر الواجهة (DOM Elements) ---
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const messageInput = document.getElementById('message-input');
 const voiceBtn = document.getElementById('voice-note-btn');
@@ -27,7 +28,7 @@ themeToggleBtn.addEventListener('click', () => {
     }
 });
 
-// --- 2. التبديل بين زر الإرسال وزر الميكروفون ---
+// --- 2. التبديل بين زر الإرسال والميكروفون ---
 messageInput.addEventListener('input', () => {
     if (messageInput.value.trim().length > 0) {
         voiceBtn.classList.add('hidden');
@@ -38,19 +39,44 @@ messageInput.addEventListener('input', () => {
     }
 });
 
-// --- 3. التسجيل الصوتي المباشر (Voice Recording) ---
+// --- 3. إعداد وتفعيل إشعارات Push (FCM) ---
+async function requestNotificationPermission() {
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            const currentToken = await getToken(messaging, { 
+                vapidKey: 'BF-CpPIlfbEG9KkCqX-yyy-EzHcIsKxuyP8rFyXFUsUYM26nhzSeHbyTAIf_ryLy94KmRJbTCXRuRGuaYnD5g3Q' 
+            });
+            if (currentToken) {
+                console.log('FCM Token:', currentToken);
+            }
+        }
+    } catch (error) {
+        console.error('خطأ في تفعيل الإشعارات:', error);
+    }
+}
+requestNotificationPermission();
+
+// استقبال الإشعارات والتطبيق مفتوح
+onMessage(messaging, (payload) => {
+    if (Notification.permission === 'granted') {
+        new Notification(payload.notification.title || 'رسالة جديدة', {
+            body: payload.notification.body || 'لديك إشعار جديد',
+            icon: '/favicon.ico'
+        });
+    }
+});
+
+// --- 4. التسجيل الصوتي المباشر ---
 voiceBtn.addEventListener('click', async () => {
     if (!isRecording) {
         try {
-            // طلب إذن الوصول للميكروفون
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
 
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunks.push(event.data);
-                }
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunks.push(e.data);
             };
 
             mediaRecorder.onstop = async () => {
@@ -61,25 +87,19 @@ voiceBtn.addEventListener('click', async () => {
             mediaRecorder.start();
             isRecording = true;
             voiceBtn.style.color = 'red';
-            voiceBtn.title = "انقر لإيقاف التسجيل وإرسال البصمة";
         } catch (err) {
-            alert('تعذر الوصول إلى الميكروفون: ' + err.message);
+            alert('تعذر الوصول للميكروفون: ' + err.message);
         }
     } else {
-        // إيقاف التسجيل
         mediaRecorder.stop();
-        // إيقاف جميع مسارات الصوت
         mediaRecorder.stream.getTracks().forEach(track => track.stop());
         isRecording = false;
         voiceBtn.style.color = '';
-        voiceBtn.title = "تسجيل صوتي";
     }
 });
 
-// --- 4. إرفاق الملفات والصور (File Attachments) ---
-attachBtn.addEventListener('click', () => {
-    fileInput.click();
-});
+// --- 5. إرفاق الملفات والصور ---
+attachBtn.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
@@ -87,49 +107,42 @@ fileInput.addEventListener('change', async (e) => {
         const type = file.type.startsWith('image/') ? 'image' : 'file';
         await uploadAndSendFile(file, type);
     }
-    fileInput.value = ''; // إعادة تعيين الحقل
+    fileInput.value = '';
 });
 
-// --- 5. رفع الملفات إلى Firebase Storage وإرسال الرسالة ---
+// --- 6. رفع الملفات إلى Firebase Storage ---
 async function uploadAndSendFile(fileOrBlob, type) {
     try {
-        const fileName = `${Date.now()}_${type === 'audio' ? 'voice_note.webm' : fileOrBlob.name}`;
+        const fileName = `${Date.now()}_${type === 'audio' ? 'voice.webm' : fileOrBlob.name}`;
         const fileStorageRef = storageRef(storage, `uploads/${type}s/${fileName}`);
         
-        // رفع الملف
         const snapshot = await uploadBytes(fileStorageRef, fileOrBlob);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
-        // إرسال بياناقت الرسالة إلى Realtime Database
         await sendMessageToDB({
             type: type,
             mediaUrl: downloadURL,
             fileName: fileOrBlob.name || 'بصمة صوتية'
         });
     } catch (error) {
-        console.error('حدث خطأ أثناء رفع الملف:', error);
+        console.error('خطأ في رفع الملف:', error);
     }
 }
 
-// --- 6. إرسال الرسائل النصية ---
+// --- 7. إرسال الرسائل النصية وقراءتها ---
 sendBtn.addEventListener('click', () => {
     const text = messageInput.value.trim();
     if (text.length > 0) {
-        sendMessageToDB({
-            type: 'text',
-            content: text
-        });
+        sendMessageToDB({ type: 'text', content: text });
         messageInput.value = '';
         voiceBtn.classList.remove('hidden');
         sendBtn.classList.add('hidden');
     }
 });
 
-// --- 7. حفظ الرسالة في Firebase ---
 async function sendMessageToDB(messageData) {
     const chatRef = dbRef(db, 'chats/global_chat/messages');
     const newMessageRef = push(chatRef);
-    
     await set(newMessageRef, {
         sender: auth.currentUser ? auth.currentUser.uid : 'Anonymous',
         senderName: 'المستخدم',
@@ -138,35 +151,26 @@ async function sendMessageToDB(messageData) {
     });
 }
 
-// --- 8. استماع وعرض الرسائل لحظياً ---
+// استماع الرسائل لحظياً
 const chatRef = dbRef(db, 'chats/global_chat/messages');
 onValue(chatRef, (snapshot) => {
     const data = snapshot.val();
-    messagesContainer.innerHTML = ''; // مسح المحتوى القديم
-
+    messagesContainer.innerHTML = '';
     if (data) {
-        Object.values(data).forEach(msg => {
-            renderMessage(msg);
-        });
+        Object.values(data).forEach(msg => renderMessage(msg));
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 });
 
-// --- 9. رسم الرسالة في الواجهة (Render Message) ---
 function renderMessage(msg) {
     const msgElement = document.createElement('div');
     msgElement.className = `message ${msg.sender === (auth.currentUser?.uid || 'Anonymous') ? 'sent' : 'received'}`;
 
     let contentHTML = '';
-    if (msg.type === 'text') {
-        contentHTML = `<p>${msg.content}</p>`;
-    } else if (msg.type === 'image') {
-        contentHTML = `<img src="${msg.mediaUrl}" alt="صورة مرفقة" style="max-width: 200px; border-radius: 8px;">`;
-    } else if (msg.type === 'audio') {
-        contentHTML = `<audio controls src="${msg.mediaUrl}"></audio>`;
-    } else if (msg.type === 'file') {
-        contentHTML = `<a href="${msg.mediaUrl}" target="_blank" download><i class="fa-solid fa-file"></i> ${msg.fileName}</a>`;
-    }
+    if (msg.type === 'text') contentHTML = `<p>${msg.content}</p>`;
+    else if (msg.type === 'image') contentHTML = `<img src="${msg.mediaUrl}" style="max-width: 200px; border-radius: 8px;">`;
+    else if (msg.type === 'audio') contentHTML = `<audio controls src="${msg.mediaUrl}"></audio>`;
+    else if (msg.type === 'file') contentHTML = `<a href="${msg.mediaUrl}" target="_blank" download><i class="fa-solid fa-file"></i> ${msg.fileName}</a>`;
 
     msgElement.innerHTML = `
         <div class="message-content">
@@ -174,50 +178,5 @@ function renderMessage(msg) {
             <span class="message-time">${msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
         </div>
     `;
-
     messagesContainer.appendChild(msgElement);
 }
-import { messaging } from './firebase-config.js';
-import { getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
-
-// طلب إذن الإشعارات وحفظ التوكن (Token)
-async function requestNotificationPermission() {
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            console.log('تم منح إذن الإشعارات.');
-            
-            // استبدل المفتاح أدناه بـ VAPID Key الذي جلبته من Firebase
-            const currentToken = await getToken(messaging, { 
-                vapidKey: 'ضع_هنا_مفتاح_VAPID_الذي_نسخته_من_الفايبربيس' 
-            });
-            
-            if (currentToken) {
-                console.log('Notification Token:', currentToken);
-                // يمكنك حفظ هذا التوكن في قاعدة البيانات لإرسال إشعارات لهذا المستخدم تحديداً
-            } else {
-                console.log('لم يتم الحصول على توكن الإشعارات.');
-            }
-        } else {
-            console.log('تم رفض إذن الإشعارات.');
-        }
-    } catch (error) {
-        console.error('حدث خطأ أثناء طلب إذن الإشعارات:', error);
-    }
-}
-
-// تشغيل طلب الإذن عند تحميل التطبيق
-requestNotificationPermission();
-
-// استقبال الإشعارات عندما يكون التطبيق مفتوحاً (داخلية)
-onMessage(messaging, (payload) => {
-    console.log('إشعار داخلي واصل:', payload);
-    
-    // إظهار تنبيه داخلي أو صوت
-    if (Notification.permission === 'granted') {
-        new Notification(payload.notification.title, {
-            body: payload.notification.body,
-            icon: '/favicon.ico'
-        });
-    }
-});

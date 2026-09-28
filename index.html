@@ -8,8 +8,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="متجر يزيد">
-<meta name="format-detection" content="telephone=no">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%236d28d9'/%3E%3Ctext x='50' y='65' font-size='50' text-anchor='middle' fill='white'%3E👑%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -30,12 +28,13 @@
   --shadow:0 4px 24px rgba(0,0,0,.4);
   --shadow-lg:0 20px 50px rgba(0,0,0,.6);
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;transition:background .3s,color .3s;overflow-x:hidden;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);overscroll-behavior-y:none}
-img{max-width:100%;display:block;-webkit-user-drag:none}
-button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appearance:none;border-radius:0}
+body{background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;transition:background .3s,color .3s;overflow-x:hidden;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
+img{max-width:100%;display:block}
+button,input,select,textarea{font-family:inherit;-webkit-appearance:none;border-radius:0}
 
+/* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s;padding-top:var(--safe-top)}
 [data-theme="dark"] header{background:rgba(21,26,45,.85)}
 .nav{max-width:1400px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -43,33 +42,34 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdr
 .logo img{width:42px;height:42px;border-radius:12px;object-fit:cover;border:2px solid var(--primary);box-shadow:0 4px 12px rgba(109,40,217,.25)}
 .logo i{background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-text-fill-color:#fff;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;box-shadow:0 8px 20px rgba(109,40,217,.35);flex-shrink:0}
 .search-box{flex:1;max-width:440px;position:relative;display:none}
-.search-box input{width:100%;padding:11px 44px 11px 16px;border-radius:12px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:14px;transition:all .25s;-webkit-appearance:none}
+.search-box input{width:100%;padding:11px 44px 11px 16px;border-radius:12px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:14px;transition:all .25s}
 .search-box input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(109,40,217,.15)}
 .search-box i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-2)}
 .nav-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .icon-btn{width:40px;height:40px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:all .25s;position:relative;touch-action:manipulation}
-.icon-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-2px)}
+.icon-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 .icon-btn:active{transform:scale(.95)}
 .badge{position:absolute;top:-6px;left:-6px;background:var(--danger);color:#fff;min-width:20px;height:20px;border-radius:10px;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px;box-shadow:0 2px 8px rgba(239,68,68,.5);animation:badgePulse 2s infinite}
 @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);cursor:pointer}
-.user-chip{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;background:var(--bg-2);border:1px solid var(--border);cursor:pointer;transition:all .25s;touch-action:manipulation}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;background:var(--bg-2);border:1px solid var(--border);cursor:pointer;transition:all .25s}
 .user-chip:hover{border-color:var(--primary)}
-.user-chip:active{transform:scale(.96)}
 .user-chip span{font-size:13px;font-weight:700;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(min-width:900px){ .search-box{display:block} }
 
-.btn{padding:11px 22px;border-radius:12px;border:none;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;transition:all .25s;white-space:nowrap;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+/* BUTTONS */
+.btn{padding:11px 22px;border-radius:12px;border:none;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;transition:all .25s;white-space:nowrap;touch-action:manipulation}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 20px rgba(109,40,217,.3)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(109,40,217,.45)}
 .btn-primary:active{transform:translateY(0) scale(.97)}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
 .btn-ghost:hover{background:var(--bg-2);border-color:var(--primary);color:var(--primary)}
 .btn-google{background:#fff;color:#444;border:1px solid #ddd;font-weight:700;width:100%}
-.btn-google:hover{background:#f5f5f5;border-color:#999}
+.btn-google:hover{background:#f5f5f5}
 .btn-google img{width:20px;height:20px}
 .btn-danger{background:var(--danger);color:#fff}
 
+/* HERO */
 .hero{max-width:1400px;margin:0 auto;padding:40px 16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
 .hero-text h1{font-size:clamp(26px,5vw,50px);font-weight:900;line-height:1.15;margin-bottom:16px}
 .hero-text h1 span{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -78,14 +78,16 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdr
 .hero-img i{font-size:150px;color:rgba(255,255,255,.22)}
 .hero-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 
+/* SECTIONS */
 section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
 .section-title{font-size:clamp(20px,3vw,28px);font-weight:900;display:flex;align-items:center;gap:10px}
 .section-title::before{content:'';width:5px;height:26px;border-radius:3px;background:linear-gradient(180deg,var(--primary),var(--accent))}
-.filters{display:flex;gap:6px;flex-wrap:wrap;-webkit-overflow-scrolling:touch}
-.filter-btn{padding:7px 16px;border-radius:999px;background:var(--bg-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;font-weight:600;font-size:12px;transition:all .25s;touch-action:manipulation}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{padding:7px 16px;border-radius:999px;background:var(--bg-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;font-weight:600;font-size:12px;transition:all .25s;font-family:inherit}
 .filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-color:transparent}
 
+/* PRODUCTS GRID */
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;align-items:stretch}
 @media(min-width:1200px){ .products{grid-template-columns:repeat(5,1fr)} }
 @media(min-width:900px) and (max-width:1199px){ .products{grid-template-columns:repeat(4,1fr)} }
@@ -93,19 +95,19 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 @media(max-width:599px){ .products{grid-template-columns:repeat(2,1fr);gap:10px} }
 @media(max-width:360px){ .products{grid-template-columns:1fr} }
 
-.product{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--border);transition:all .3s;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;animation:fadeUp .5s ease both;touch-action:manipulation}
+.product{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--border);transition:all .3s;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;animation:fadeUp .5s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .product:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
 .product:active{transform:scale(.98)}
 .product-img{aspect-ratio:1;background:var(--bg);position:relative;overflow:hidden}
-.product-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;pointer-events:none}
+.product-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .product:hover .product-img img{transform:scale(1.08)}
 .product-img .placeholder{width:100%;height:100%;display:grid;place-items:center;font-size:56px;color:var(--text-2);opacity:.3}
 .tag{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;color:#fff;background:var(--success);box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2}
 .tag.out{background:var(--danger)}
 .tag.sale{background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;font-weight:900;font-size:11px;padding:5px 10px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.wish-btn{position:absolute;top:8px;left:8px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.95);border:none;cursor:pointer;display:grid;place-items:center;color:#666;font-size:14px;transition:all .25s;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2;touch-action:manipulation}
+.wish-btn{position:absolute;top:8px;left:8px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.95);border:none;cursor:pointer;display:grid;place-items:center;color:#666;font-size:14px;transition:all .25s;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2}
 .wish-btn:hover{transform:scale(1.15)}
 .wish-btn:active{transform:scale(.9)}
 .wish-btn.active{color:#ef4444;background:#fff}
@@ -116,11 +118,12 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .price{font-size:17px;font-weight:900;color:var(--primary)}
 .price small{font-size:10px;color:var(--text-2);font-weight:500;margin-inline-start:2px}
 .old-price{font-size:12px;color:var(--text-2);text-decoration:line-through;font-weight:600}
-.add-btn{padding:10px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .25s;width:100%;margin-top:6px;touch-action:manipulation;min-height:40px}
+.add-btn{padding:10px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .25s;width:100%;margin-top:6px;min-height:40px}
 .add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(109,40,217,.3)}
 .add-btn:active{transform:scale(.97)}
 .add-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
+/* DRAWERS */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
 .overlay.show{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;left:0;bottom:0;width:min(420px,100vw);background:var(--bg-2);z-index:201;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:var(--shadow-lg);padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
@@ -137,20 +140,21 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .cart-item-info h4{font-size:13px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cart-item-info .p{color:var(--primary);font-weight:800;font-size:13px}
 .qty{display:flex;align-items:center;gap:6px;margin-top:5px}
-.qty button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;touch-action:manipulation}
+.qty button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);cursor:pointer;font-weight:700;font-size:14px}
 .qty button:active{background:var(--primary);color:#fff}
 .qty span{font-weight:700;min-width:20px;text-align:center;font-size:13px}
-.remove-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:15px;padding:6px;touch-action:manipulation}
+.remove-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:15px;padding:6px}
 .total{display:flex;justify-content:space-between;font-size:17px;font-weight:900;margin-bottom:12px;padding-top:8px;border-top:1px dashed var(--border)}
 .empty-cart{text-align:center;padding:50px 20px;color:var(--text-2)}
 .empty-cart i{font-size:56px;opacity:.3;margin-bottom:14px;display:block}
 
-.notif-item{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--bg);margin-bottom:8px;align-items:flex-start;transition:all .25s;border:1px solid transparent;cursor:pointer;position:relative;touch-action:manipulation}
-.notif-item:hover{border-color:var(--primary);background:var(--bg-2)}
-.notif-item:active{transform:scale(.98)}
+/* NOTIFICATIONS */
+.notif-item{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--bg);margin-bottom:8px;align-items:flex-start;transition:all .25s;border:1px solid transparent;cursor:pointer;position:relative}
+.notif-item:hover{border-color:var(--primary)}
 .notif-item.unread{background:linear-gradient(135deg,rgba(109,40,217,.06),rgba(245,158,11,.06));border-color:rgba(109,40,217,.15)}
 .notif-item.unread::before{content:'';position:absolute;top:14px;right:-4px;width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 3px rgba(109,40,217,.2)}
-.notif-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:18px;flex-shrink:0;box-shadow:0 6px 16px rgba(109,40,217,.3)}
+.notif-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:18px;flex-shrink:0;box-shadow:0 6px 16px rgba(109,40,217,.3);overflow:hidden}
+.notif-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .notif-icon.order{background:linear-gradient(135deg,#10b981,#059669)}
 .notif-icon.promo{background:linear-gradient(135deg,#f59e0b,#d97706)}
 .notif-icon.system{background:linear-gradient(135deg,#3b82f6,#2563eb)}
@@ -159,46 +163,48 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .notif-content p{font-size:12px;color:var(--text-2);line-height:1.5;margin-bottom:4px}
 .notif-content .time{font-size:11px;color:var(--text-2);display:flex;align-items:center;gap:4px}
 
+/* MODAL */
 .modal{position:fixed;inset:0;z-index:300;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;-webkit-overflow-scrolling:touch}
-.modal.show{display:grid;align-items:center}
-.modal-box{background:var(--bg-2);border-radius:24px;width:100%;max-width:440px;padding:26px;box-shadow:var(--shadow-lg);animation:popIn .3s ease;max-height:92vh;max-height:92dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:auto}
+.modal.show{display:grid}
+.modal-box{background:var(--bg-2);border-radius:24px;width:100%;max-width:440px;padding:26px;box-shadow:var(--shadow-lg);animation:popIn .3s ease;max-height:92vh;max-height:92dvh;overflow-y:auto;margin:auto}
 @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 .modal-box h2{font-size:22px;font-weight:900;margin-bottom:6px;text-align:center}
 .modal-box .sub{color:var(--text-2);text-align:center;margin-bottom:20px;font-size:13px}
 .field{margin-bottom:12px}
 .field label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
-.field input,.field select,.field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:16px;transition:all .25s;-webkit-appearance:none;font-family:inherit}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:16px;transition:all .25s;font-family:inherit}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(109,40,217,.15)}
 .form-msg{padding:10px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:12px;display:none}
 .form-msg.err{background:rgba(239,68,68,.1);color:var(--danger);display:block}
 .form-msg.ok{background:rgba(16,185,129,.1);color:var(--success);display:block}
 .tabs{display:flex;gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:18px}
-.tab{flex:1;padding:11px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:700;cursor:pointer;font-size:13px;transition:all .25s;touch-action:manipulation}
+.tab{flex:1;padding:11px;border-radius:9px;border:none;background:transparent;color:var(--text-2);font-weight:700;cursor:pointer;font-size:13px;transition:all .25s}
 .tab.active{background:var(--bg-2);color:var(--primary);box-shadow:var(--shadow)}
 .divider{display:flex;align-items:center;gap:12px;margin:14px 0;color:var(--text-2);font-size:12px;font-weight:600}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* ADMIN DASHBOARD */
 #adminApp{display:none;min-height:100vh;min-height:100dvh;grid-template-columns:250px 1fr;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 #adminApp.show{display:grid}
-.admin-sidebar{background:var(--bg-2);border-left:1px solid var(--border);padding:18px;position:sticky;top:0;height:100vh;height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.admin-sidebar{background:var(--bg-2);border-left:1px solid var(--border);padding:18px;position:sticky;top:0;height:100vh;height:100dvh;overflow-y:auto}
 .admin-sidebar .logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:900;margin-bottom:20px;background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.admin-sidebar .logo i{background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-text-fill-color:#fff;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.admin-sidebar .logo i{background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-text-fill-color:#fff;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px}
 .admin-badge{display:flex;align-items:center;gap:10px;padding:10px 12px;background:linear-gradient(135deg,rgba(109,40,217,.1),rgba(245,158,11,.1));border-radius:12px;margin-bottom:16px;font-size:12px;font-weight:700;color:var(--primary);border:1px solid rgba(109,40,217,.2)}
 .admin-badge i{font-size:20px}
 .menu{display:flex;flex-direction:column;gap:3px}
-.menu-item{display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:11px;cursor:pointer;color:var(--text-2);font-weight:600;font-size:13px;border:none;background:transparent;text-align:right;width:100%;transition:all .25s;touch-action:manipulation}
+.menu-item{display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:11px;cursor:pointer;color:var(--text-2);font-weight:600;font-size:13px;border:none;background:transparent;text-align:right;width:100%;transition:all .25s;font-family:inherit}
 .menu-item i{width:18px;text-align:center}
 .menu-item:hover{background:var(--bg);color:var(--text)}
-.menu-item:active{transform:scale(.98)}
 .menu-item.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 20px rgba(109,40,217,.3)}
 .menu-item .badge-mini{margin-inline-start:auto;background:var(--danger);color:#fff;min-width:18px;height:18px;border-radius:9px;font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 5px}
 .admin-main{padding:20px;overflow-x:hidden}
 .admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:10px;flex-wrap:wrap}
 .admin-topbar h1{font-size:22px;font-weight:900}
-.admin-topbar-actions{display:flex;gap:8px;align-items:center}
+.admin-topbar-actions{display:flex;gap:8px}
 .tab-content{display:none;animation:fadeUp .3s ease}
 .tab-content.active{display:block}
 
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
 .stat-card{background:var(--card);border-radius:16px;padding:18px;border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:var(--shadow);transition:all .3s}
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
@@ -224,7 +230,7 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .img-upload p{font-size:12px;color:var(--text-2);font-weight:600}
 .img-upload img{max-width:100%;max-height:140px;margin:10px auto 0;border-radius:10px;display:block}
 .img-upload-btns{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-.img-upload-btns button{padding:9px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;touch-action:manipulation;min-height:40px}
+.img-upload-btns button{padding:9px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;min-height:40px;font-family:inherit}
 .img-upload-btns button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 
 .chart-wrap{padding:8px;overflow-x:auto}
@@ -237,23 +243,18 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
 th,td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--border)}
-th{background:var(--bg);font-weight:800;font-size:12px;color:var(--text-2);position:sticky;top:0;z-index:1}
+th{background:var(--bg);font-weight:800;font-size:12px;color:var(--text-2)}
 tr:last-child td{border-bottom:none}
-tbody tr{transition:background .2s}
-tbody tr:hover{background:var(--bg)}
 .badge-status{padding:4px 11px;border-radius:999px;font-size:11px;font-weight:700;display:inline-block}
 .badge-pending{background:rgba(245,158,11,.15);color:#f59e0b}
 .badge-confirmed{background:rgba(16,185,129,.15);color:#10b981}
 .badge-shipped{background:rgba(59,130,246,.15);color:#3b82f6}
 .badge-delivered{background:rgba(16,185,129,.2);color:#059669}
 .badge-cancelled{background:rgba(239,68,68,.15);color:#ef4444}
-.mini-btn{padding:8px 10px;border-radius:8px;border:none;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;touch-action:manipulation;min-height:32px}
+.mini-btn{padding:8px 10px;border-radius:8px;border:none;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;min-height:32px;font-family:inherit}
 .mini-btn.edit{background:rgba(59,130,246,.15);color:#3b82f6}
-.mini-btn.edit:hover{background:#3b82f6;color:#fff}
 .mini-btn.del{background:rgba(239,68,68,.15);color:#ef4444}
-.mini-btn.del:hover{background:#ef4444;color:#fff}
 .mini-btn.view{background:rgba(109,40,217,.15);color:var(--primary)}
-.mini-btn.view:hover{background:var(--primary);color:#fff}
 .prod-thumb{width:44px;height:44px;border-radius:10px;object-fit:cover;background:var(--bg);border:1px solid var(--border)}
 .prod-thumb-ph{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--border);color:var(--text-2)}
 .color-input-wrap{display:flex;gap:6px;align-items:center}
@@ -267,9 +268,7 @@ tbody tr:hover{background:var(--bg)}
 
 .danger-zone{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(245,158,11,.08));border:2px solid rgba(239,68,68,.3);border-radius:16px;padding:20px;margin-bottom:16px}
 .danger-zone h3{color:var(--danger);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:16px}
-.danger-zone p{color:var(--text-2);font-size:13px;margin-bottom:14px;line-height:1.6}
-.btn-danger-full{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:14px 20px;border-radius:12px;border:none;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:14px;width:100%;justify-content:center;transition:all .25s;min-height:48px;touch-action:manipulation}
-.btn-danger-full:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(239,68,68,.4)}
+.btn-danger-full{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:14px 20px;border-radius:12px;border:none;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:14px;width:100%;justify-content:center;transition:all .25s;min-height:48px;font-family:inherit}
 .btn-danger-full:active{transform:scale(.98)}
 
 footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16px calc(20px + var(--safe-bottom));margin-top:50px}
@@ -279,36 +278,28 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
 .footer-col a:hover{color:var(--primary)}
 .footer-bottom{max-width:1400px;margin:0 auto;padding-top:16px;border-top:1px solid var(--border);text-align:center;color:var(--text-2);font-size:12px}
 
-.toast{position:fixed;bottom:20px;bottom:calc(20px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(200px);background:var(--text);color:var(--bg);padding:14px 22px;border-radius:14px;font-weight:700;font-size:13px;z-index:500;box-shadow:var(--shadow-lg);transition:transform .35s;display:flex;align-items:center;gap:8px;max-width:92vw}
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(200px);background:var(--text);color:var(--bg);padding:14px 22px;border-radius:14px;font-weight:700;font-size:13px;z-index:500;box-shadow:var(--shadow-lg);transition:transform .35s;display:flex;align-items:center;gap:8px;max-width:92vw}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.ok{background:var(--success);color:#fff}
 .toast.err{background:var(--danger);color:#fff}
 
-.push-notif{position:fixed;top:calc(80px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-300px);background:var(--bg-2);border:1px solid var(--border);border-radius:18px;padding:14px 18px;box-shadow:0 20px 50px rgba(0,0,0,.25);z-index:9999;display:flex;gap:12px;align-items:center;max-width:90vw;width:380px;transition:transform .4s cubic-bezier(.4,0,.2,1);cursor:pointer;touch-action:manipulation}
+.push-notif{position:fixed;top:calc(80px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-300px);background:var(--bg-2);border:1px solid var(--border);border-radius:18px;padding:14px 18px;box-shadow:0 20px 50px rgba(0,0,0,.25);z-index:9999;display:flex;gap:12px;align-items:center;max-width:90vw;width:380px;transition:transform .4s cubic-bezier(.4,0,.2,1);cursor:pointer}
 .push-notif.show{transform:translateX(-50%) translateY(0)}
-.push-notif:active{transform:translateX(-50%) scale(.98)}
-.push-notif .pi-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:22px;flex-shrink:0}
+.push-notif .pi-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:22px;flex-shrink:0;overflow:hidden}
+.push-notif .pi-icon img{width:100%;height:100%;object-fit:cover;border-radius:12px}
 .push-notif .pi-content{flex:1;min-width:0}
 .push-notif .pi-content h4{font-size:14px;font-weight:800;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .push-notif .pi-content p{font-size:12px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.push-notif .pi-close{background:transparent;border:none;color:var(--text-2);cursor:pointer;font-size:14px;padding:6px;touch-action:manipulation}
+.push-notif .pi-close{background:transparent;border:none;color:var(--text-2);cursor:pointer;font-size:14px;padding:6px}
 
 .loader{display:grid;place-items:center;padding:60px;grid-column:1/-1}
 .spinner{width:44px;height:44px;border-radius:50%;border:4px solid var(--border);border-top-color:var(--primary);animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.install-banner{position:fixed;bottom:16px;bottom:calc(16px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(200px);background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;padding:14px 18px;border-radius:16px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;z-index:450;transition:transform .35s;max-width:92vw}
+.install-banner{position:fixed;bottom:calc(16px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(200px);background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;padding:14px 18px;border-radius:16px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;z-index:450;transition:transform .35s;max-width:92vw}
 .install-banner.show{transform:translateX(-50%) translateY(0)}
-.install-banner button{background:#fff;color:var(--primary);border:none;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer;font-size:13px;min-height:40px;touch-action:manipulation}
+.install-banner button{background:#fff;color:var(--primary);border:none;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer;font-size:13px;min-height:40px;font-family:inherit}
 .install-banner .close-x{background:transparent;color:#fff;border:none;font-size:16px;cursor:pointer;padding:4px;min-height:40px;min-width:40px}
-
-.ios-install-hint{position:fixed;bottom:20px;bottom:calc(20px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(200px);background:linear-gradient(135deg,#1c1c1e,#2c2c2e);color:#fff;padding:16px 20px;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.4);z-index:460;transition:transform .35s;max-width:92vw;width:360px;display:flex;gap:14px;align-items:flex-start}
-.ios-install-hint.show{transform:translateX(-50%) translateY(0)}
-.ios-install-hint .ios-icon{font-size:28px;color:#fff;flex-shrink:0}
-.ios-install-hint .ios-txt{flex:1;font-size:13px;line-height:1.6}
-.ios-install-hint .ios-txt strong{display:block;margin-bottom:6px;font-size:14px}
-.ios-install-hint .ios-txt i{color:#f59e0b}
-.ios-install-hint button{background:rgba(255,255,255,.15);color:#fff;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;touch-action:manipulation}
 
 .menu-toggle{display:none}
 .sidebar-overlay{display:none}
@@ -345,27 +336,9 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
   .modal-box h2{font-size:19px}
   .form-grid{grid-template-columns:1fr}
   .push-notif{width:94vw;top:calc(70px + var(--safe-top))}
-  .ios-install-hint{width:94vw}
 }
-
-@supports (padding:max(0px)){
-  body{padding-left:max(0px,env(safe-area-inset-left));padding-right:max(0px,env(safe-area-inset-right))}
-}
-
 @media(display-mode:standalone){
-  header{padding-top:12px}
   .install-banner{display:none !important}
-  .ios-install-hint{display:none !important}
-}
-
-/* تحسين للمس */
-@media(hover:none){
-  .product:hover{transform:none}
-  .icon-btn:hover{transform:none;background:var(--bg-2);color:var(--text);border-color:var(--border)}
-  .btn-primary:hover{transform:none}
-  .notif-item:hover{border-color:transparent;background:var(--bg)}
-  .filter-btn:hover{background:var(--bg-2);color:var(--text-2);border-color:var(--border)}
-  .filter-btn.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-color:transparent}
 }
 </style>
 </head>
@@ -458,7 +431,7 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       <div class="field"><label>الهاتف</label><input type="tel" id="profPhone" inputmode="tel"></div>
       <div class="field"><label>العنوان الافتراضي</label><textarea id="profAddress" rows="2"></textarea></div>
       <button class="btn btn-primary" style="width:100%" onclick="saveProfile()"><i class="fas fa-save"></i> حفظ</button>
-      <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="requestNotifPermission()">
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="enableNotifications()">
         <i class="fas fa-bell"></i> تفعيل الإشعارات
       </button>
       <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="testNotification()">
@@ -770,7 +743,7 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
     <div class="tab-content" id="tab-reset">
       <div class="danger-zone">
         <h3><i class="fas fa-exclamation-triangle"></i> منطقة الخطر</h3>
-        <p>⚠️ هذه العمليات <strong>لا يمكن التراجع عنها</strong>.</p>
+        <p style="color:var(--text-2);font-size:13px">⚠️ هذه العمليات <strong>لا يمكن التراجع عنها</strong>.</p>
       </div>
       <div class="panel">
         <div class="panel-head"><h3><i class="fas fa-user-slash" style="color:var(--danger)"></i> حذف جميع العملاء</h3></div>
@@ -927,28 +900,275 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
   <button class="close-x" onclick="document.getElementById('installBanner').classList.remove('show');localStorage.setItem('ym_install_dismissed','1')"><i class="fas fa-times"></i></button>
 </div>
 
-<div class="ios-install-hint" id="iosHint">
-  <div class="ios-icon"><i class="fab fa-apple"></i></div>
-  <div class="ios-txt">
-    <strong>ثبّت التطبيق على iPhone</strong>
-    اضغط على <i class="fas fa-arrow-up-from-bracket"></i> في الأسفل ثم اختر <strong>"إضافة إلى الشاشة الرئيسية"</strong>
-  </div>
-  <button onclick="document.getElementById('iosHint').classList.remove('show');localStorage.setItem('ym_ios_hint','1')">
-    <i class="fas fa-times"></i>
-  </button>
-</div>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, push, set, get, update, remove }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, updateProfile,
-  getRedirectResult, signInWithRedirect, browserPopupRedirectResolver }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getMessaging, getToken, onMessage, isSupported }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+/* ========================================================
+   🚀 1. إنشاء الـ Service Workers تلقائياً
+   ======================================================== */
 
+// Service Worker الرئيسي
+const SW_CODE = `
+const CACHE_VERSION = 'ym-store-v1.0.0';
+const CACHE_ASSETS = ['/', '/index.html'];
+
+self.addEventListener('install', e => {
+  console.log('[SW] Installing...');
+  e.waitUntil(
+    caches.open(CACHE_VERSION).then(c => c.addAll(CACHE_ASSETS).catch(()=>{}))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', e => {
+  console.log('[SW] Activating...');
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k))
+    )).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.hostname.includes('firebase') || 
+      url.hostname.includes('googleapis') ||
+      url.hostname.includes('gstatic') ||
+      url.hostname.includes('firebaseio') ||
+      url.protocol === 'chrome-extension:') return;
+
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      const fetched = fetch(e.request).then(resp => {
+        if (resp.status === 200 && resp.type === 'basic') {
+          const clone = resp.clone();
+          caches.open(CACHE_VERSION).then(c => c.put(e.request, clone));
+        }
+        return resp;
+      }).catch(() => cached);
+      return cached || fetched;
+    })
+  );
+});
+
+self.addEventListener('push', e => {
+  console.log('[SW] Push received');
+  let data = {};
+  try { data = e.data ? e.data.json() : {}; } catch(err) { data = {}; }
+  
+  const n = data.notification || {};
+  const d = data.data || {};
+  
+  const title = n.title || data.title || d.title || 'متجر يزيد';
+  const body = n.body || data.body || d.body || 'لديك إشعار جديد';
+  const icon = n.icon || data.icon || d.storeLogo || '/favicon.ico';
+  const image = n.image || data.image || d.storeImage || '';
+  const type = d.type || data.type || 'system';
+  const priority = d.priority || data.priority || 'normal';
+  
+  const vibrate = priority === 'high' 
+    ? [500, 200, 500, 200, 500, 200, 500] 
+    : [300, 150, 300, 150, 300];
+  
+  const options = {
+    body, icon, badge: icon,
+    ...(image ? { image } : {}),
+    dir: 'rtl', lang: 'ar',
+    vibrate,
+    tag: 'ym-' + Date.now(),
+    renotify: true,
+    requireInteraction: priority === 'high',
+    silent: false,
+    timestamp: Date.now(),
+    actions: [
+      { action: 'open', title: '🎁 فتح المتجر' },
+      { action: 'close', title: '✖ إغلاق' }
+    ],
+    data: { url: '/', type, priority }
+  };
+  
+  e.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  if (e.action === 'close') return;
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (c.url.includes(self.location.origin) && 'focus' in c) return c.focus();
+      }
+      if (clients.openWindow) return clients.openWindow('/');
+    })
+  );
+});
+
+self.addEventListener('message', e => {
+  const data = e.data || {};
+  if (data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (data.type === 'SHOW_NOTIFICATION') {
+    const p = data.payload || {};
+    const vibrate = p.priority === 'high' ? [500,200,500,200,500] : [300,150,300];
+    self.registration.showNotification(p.title || 'متجر يزيد', {
+      body: p.body || '',
+      icon: p.icon || '/favicon.ico',
+      badge: p.icon || '/favicon.ico',
+      ...(p.image ? { image: p.image } : {}),
+      dir: 'rtl', lang: 'ar', vibrate,
+      tag: 'ym-' + Date.now(),
+      renotify: true,
+      requireInteraction: p.priority === 'high',
+      silent: false,
+      data: { url: '/' }
+    });
+  }
+});
+
+console.log('[SW] Loaded ✓');
+`;
+
+// Firebase Messaging Service Worker
+const FCM_SW_CODE = `
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
+
+firebase.initializeApp({
+  apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
+  authDomain: "ym-pro-max.firebaseapp.com",
+  databaseURL: "https://ym-pro-max-default-rtdb.firebaseio.com",
+  projectId: "ym-pro-max",
+  storageBucket: "ym-pro-max.firebasestorage.app",
+  messagingSenderId: "174657071953",
+  appId: "1:174657071953:web:5e831fc337df46dbd18170"
+});
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(payload => {
+  console.log('[FCM-SW] Background message:', payload);
+  const n = payload.notification || {};
+  const d = payload.data || {};
+  
+  const title = n.title || d.title || 'متجر يزيد';
+  const body = n.body || d.body || 'لديك إشعار جديد';
+  const icon = n.icon || d.storeLogo || '/favicon.ico';
+  const image = n.image || d.storeImage || '';
+  const priority = d.priority || 'normal';
+  
+  const vibrate = priority === 'high' ? [500,200,500,200,500] : [300,150,300];
+  
+  return self.registration.showNotification(title, {
+    body, icon, badge: icon,
+    ...(image ? { image } : {}),
+    dir: 'rtl', lang: 'ar',
+    vibrate,
+    tag: 'fcm-' + Date.now(),
+    renotify: true,
+    requireInteraction: priority === 'high',
+    silent: false,
+    data: { url: '/' }
+  });
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (c.url.includes(self.location.origin)) return c.focus();
+      }
+      return clients.openWindow('/');
+    })
+  );
+});
+`;
+
+// إنشاء Service Workers عبر Blob URLs
+async function setupServiceWorkers(){
+  if (!('serviceWorker' in navigator)) {
+    console.log('SW not supported');
+    return;
+  }
+  
+  try {
+    // سجّل SW الرئيسي من Blob
+    const swBlob = new Blob([SW_CODE], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(swBlob);
+    
+    const reg = await navigator.serviceWorker.register(swUrl, { scope: './' });
+    console.log('✅ Main SW registered:', reg.scope);
+    
+    window.__swRegistration = reg;
+    
+    // محاولة تسجيل FCM SW
+    try {
+      const fcmBlob = new Blob([FCM_SW_CODE], { type: 'application/javascript' });
+      const fcmUrl = URL.createObjectURL(fcmBlob);
+      await navigator.serviceWorker.register(fcmUrl, { scope: './' });
+      console.log('✅ FCM SW registered');
+    } catch(e) {
+      console.log('FCM SW error (OK):', e.message);
+    }
+  } catch(e) {
+    console.log('⚠️ SW registration failed:', e);
+  }
+}
+
+// Manifest ديناميكي
+function createManifest(){
+  const manifest = {
+    name: "متجر يزيد",
+    short_name: "YM Store",
+    description: "متجرك الإلكتروني الأول",
+    start_url: "./",
+    scope: "./",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#6d28d9",
+    theme_color: "#6d28d9",
+    lang: "ar",
+    dir: "rtl",
+    icons: [{
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%236d28d9'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='white'%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E",
+      sizes: "192x192",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }, {
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%236d28d9'/%3E%3Ctext x='256' y='340' font-size='260' text-anchor='middle' fill='white'%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E",
+      sizes: "512x512",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }]
+  };
+  
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  let link = document.querySelector('link[rel="manifest"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'manifest';
+    document.head.appendChild(link);
+  }
+  link.href = url;
+}
+
+createManifest();
+setupServiceWorkers();
+
+/* ========================================================
+   🚀 2. Firebase Imports
+   ======================================================== */
+const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+const { getDatabase, ref, onValue, push, set, get, update, remove } 
+  = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, updateProfile,
+  getRedirectResult, signInWithRedirect } 
+  = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+
+/* ========================================================
+   🚀 3. Firebase Config
+   ======================================================== */
 const firebaseConfig = {
   apiKey:"AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
   authDomain:"ym-pro-max.firebaseapp.com",
@@ -958,29 +1178,28 @@ const firebaseConfig = {
   messagingSenderId:"174657071953",
   appId:"1:174657071953:web:5e831fc337df46dbd18170"
 };
-// 🔑 المفتاح الجديد
+
 const VAPID_KEY = "BIFXFtrywmlGk4yMwx0eMLLHD2EVz-lR0fQvIKl7j4AcjKxLqmYz5Qp4qa88cP-EliJPtgPSbl11nvXMtxslnJ4";
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({prompt: 'select_account'});
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 const ADMIN_USERNAME = "01147975962";
 const ADMIN_EMAIL = "01147975962@ym-store.com";
 const ADMIN_PASSWORD = "Aa01147975962y";
 const ADMIN_DISPLAY_NAME = "المدير العام 👑";
 
-/* ========== DEVICE DETECTION ========== */
+/* ========== Device Detection ========== */
 const ua = navigator.userAgent;
 const IS_IOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const IS_ANDROID = /Android/i.test(ua);
-const IS_MOBILE = IS_IOS || IS_ANDROID || /Mobi|Tablet/i.test(ua);
 const IS_STANDALONE = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(ua);
 
-/* ========== STATE ========== */
+/* ========== State ========== */
 let PRODUCTS = [], ORDERS = [], USERS = [], SETTINGS = {}, COUPONS = {};
 let ALL_NOTIFS = [];
 let MY_NOTIFS = [];
@@ -999,126 +1218,138 @@ let READ_NOTIFS = JSON.parse(localStorage.getItem('ym_read_notifs') || '[]');
 let audioEnabled = false;
 let lastKnownNotifId = null;
 let notifListenerActive = false;
-let pollingTimer = null;
+let swRegistration = null;
 let fcmToken = null;
-let messagingInstance = null;
 
-/* ========== THEME ========== */
+/* ========== Theme ========== */
 function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-theme', t);
   const ti = document.getElementById('themeIcon');
   const ta = document.getElementById('themeIconAdmin');
-  if(ti) ti.className = t==='dark'?'fas fa-sun':'fas fa-moon';
-  if(ta) ta.className = t==='dark'?'fas fa-sun':'fas fa-moon';
-  localStorage.setItem('ym_theme',t);
+  if (ti) ti.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  if (ta) ta.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  localStorage.setItem('ym_theme', t);
 }
-window.toggleTheme = ()=>{
+window.toggleTheme = () => {
   const cur = document.documentElement.getAttribute('data-theme');
-  applyTheme(cur==='dark'?'light':'dark');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
 };
-applyTheme(localStorage.getItem('ym_theme')||'light');
+applyTheme(localStorage.getItem('ym_theme') || 'light');
 
-/* ========== SOUND (Multi-Fallback) ========== */
+/* ========================================================
+   🎵 4. نظام الصوت المميز
+   ======================================================== */
 let audioCtx = null;
 
 function initAudio(){
-  try{
-    if(!audioCtx){
+  try {
+    if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    if(audioCtx.state === 'suspended') audioCtx.resume();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
-  }catch(e){ return null; }
+  } catch(e) { return null; }
 }
 
-function playNotifSound(priority){
+function playStoreSound(priority = 'normal'){
   const ctx = initAudio();
-  if(!ctx) return fallbackBeep();
-  try{
-    const now = ctx.currentTime;
-    const notes = priority === 'high' 
-      ? [{f:523, s:0, d:.15},{f:659, s:.16, d:.15},{f:784, s:.32, d:.15},{f:1046, s:.48, d:.28}]
-      : [{f:800, s:0, d:.12},{f:1000, s:.13, d:.12},{f:1300, s:.26, d:.18}];
-    notes.forEach(n=>{
+  if (!ctx) return;
+  
+  const now = ctx.currentTime;
+  
+  // نغمة "متجر يزيد" - 5 نغمات صاعدة للأولوية العالية، 3 نغمات للعادية
+  const notes = priority === 'high' 
+    ? [
+        {f:659.25, s:0.00, d:0.18, v:0.4},
+        {f:783.99, s:0.20, d:0.18, v:0.4},
+        {f:987.77, s:0.40, d:0.18, v:0.4},
+        {f:1318.51, s:0.60, d:0.25, v:0.5},
+        {f:1567.98, s:0.90, d:0.35, v:0.45}
+      ]
+    : [
+        {f:880, s:0.00, d:0.15, v:0.35},
+        {f:1100, s:0.16, d:0.15, v:0.35},
+        {f:1320, s:0.32, d:0.25, v:0.4}
+      ];
+  
+  notes.forEach(n => {
+    try {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(n.f, now + n.s);
       gain.gain.setValueAtTime(0, now + n.s);
-      gain.gain.linearRampToValueAtTime(.35, now + n.s + .02);
-      gain.gain.exponentialRampToValueAtTime(.001, now + n.s + n.d);
+      gain.gain.linearRampToValueAtTime(n.v, now + n.s + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + n.s + n.d);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now + n.s);
       osc.stop(now + n.s + n.d);
-    });
-  }catch(e){ fallbackBeep(); }
+    } catch(e) {}
+  });
 }
 
-function fallbackBeep(){
-  try{
-    const a = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQBvT18AAAAAAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA');
-    a.volume = 0.5;
-    a.play().catch(()=>{});
-  }catch(e){}
-}
-
-// فك قفل الصوت عند أول تفاعل
-['click','touchstart','keydown','scroll'].forEach(evt=>{
-  document.addEventListener(evt, ()=>{ audioEnabled = true; initAudio(); }, {once:true, passive:true});
+// فك قفل الصوت
+['click', 'touchstart', 'keydown', 'scroll'].forEach(evt => {
+  document.addEventListener(evt, () => { audioEnabled = true; initAudio(); }, { once: true, passive: true });
 });
 
-/* ========== SETTINGS ========== */
-onValue(ref(db,'settings'), snap=>{
-  if(snap.exists()) SETTINGS = {...SETTINGS, ...snap.val()};
+/* ========================================================
+   📊 5. Settings & Realtime Data
+   ======================================================== */
+onValue(ref(db, 'settings'), snap => {
+  if (snap.exists()) SETTINGS = { ...SETTINGS, ...snap.val() };
   applySettings();
 });
+
 function applySettings(){
   const n = SETTINGS.storeName || 'متجر يزيد';
-  const sn = document.getElementById('storeName'); if(sn) sn.textContent = n;
-  const fn = document.getElementById('footerName'); if(fn) fn.textContent = n;
-  const fy = document.getElementById('footerYear'); if(fy) fy.textContent = n;
-  const sbn = document.getElementById('sbStoreName'); if(sbn) sbn.textContent = n;
+  const sn = document.getElementById('storeName'); if (sn) sn.textContent = n;
+  const fn = document.getElementById('footerName'); if (fn) fn.textContent = n;
+  const fy = document.getElementById('footerYear'); if (fy) fy.textContent = n;
+  const sbn = document.getElementById('sbStoreName'); if (sbn) sbn.textContent = n;
   document.title = n + ' | YM Store';
+  
   const logoBox = document.getElementById('logoBox');
-  if(logoBox && SETTINGS.logo){
+  if (logoBox && SETTINGS.logo) {
     logoBox.innerHTML = `<img src="${SETTINGS.logo}" alt="logo"><span id="storeName">${n}</span>`;
   }
   const heroImg = document.getElementById('heroImg');
-  if(heroImg && SETTINGS.storeImage){
+  if (heroImg && SETTINGS.storeImage) {
     heroImg.innerHTML = `<img src="${SETTINGS.storeImage}" alt="store">`;
   }
   const ht = document.getElementById('heroTitle');
-  if(ht && SETTINGS.heroTitle) ht.textContent = SETTINGS.heroTitle;
-
+  if (ht && SETTINGS.heroTitle) ht.textContent = SETTINGS.heroTitle;
+  
   const r = document.documentElement.style;
-  if(SETTINGS.primary) r.setProperty('--primary',SETTINGS.primary);
-  if(SETTINGS.primary2) r.setProperty('--primary-2',SETTINGS.primary2);
-  if(SETTINGS.accent) r.setProperty('--accent',SETTINGS.accent);
-  if(SETTINGS.maxUsers !== undefined) MAX_USERS = Number(SETTINGS.maxUsers) || 0;
+  if (SETTINGS.primary) r.setProperty('--primary', SETTINGS.primary);
+  if (SETTINGS.primary2) r.setProperty('--primary-2', SETTINGS.primary2);
+  if (SETTINGS.accent) r.setProperty('--accent', SETTINGS.accent);
+  if (SETTINGS.maxUsers !== undefined) MAX_USERS = Number(SETTINGS.maxUsers) || 0;
+  
   const tc = document.querySelector('meta[name=theme-color]');
-  if(tc) tc.content = SETTINGS.primary || '#6d28d9';
-
+  if (tc) tc.content = SETTINGS.primary || '#6d28d9';
+  
   const snf = document.getElementById('sName');
-  if(snf){
+  if (snf) {
     snf.value = SETTINGS.storeName || 'متجر يزيد';
     document.getElementById('sHero').value = SETTINGS.heroTitle || '';
     document.getElementById('sMaxUsers').value = SETTINGS.maxUsers || 0;
-    ['Primary','Primary2','Accent'].forEach(k=>{
+    ['Primary','Primary2','Accent'].forEach(k => {
       const key = k.toLowerCase();
       const v = SETTINGS[key] || ({Primary:'#6d28d9',Primary2:'#8b5cf6',Accent:'#f59e0b'})[k];
       document.getElementById('s'+k).value = v;
       document.getElementById('s'+k+'Txt').value = v;
     });
     const lp = document.getElementById('sLogoPreview');
-    if(lp){
-      if(SETTINGS.logo) lp.innerHTML = `<img src="${SETTINGS.logo}">`;
+    if (lp) {
+      if (SETTINGS.logo) lp.innerHTML = `<img src="${SETTINGS.logo}">`;
       else lp.innerHTML = `<i class="fas fa-image"></i><p>اضغط لاختيار شعار</p>`;
       document.getElementById('sLogo').value = SETTINGS.logo || '';
     }
     const sp = document.getElementById('sStorePreview');
-    if(sp){
-      if(SETTINGS.storeImage) sp.innerHTML = `<img src="${SETTINGS.storeImage}">`;
+    if (sp) {
+      if (SETTINGS.storeImage) sp.innerHTML = `<img src="${SETTINGS.storeImage}">`;
       else sp.innerHTML = `<i class="fas fa-store"></i><p>اضغط لاختيار صورة المتجر</p>`;
       document.getElementById('sStoreImage').value = SETTINGS.storeImage || '';
     }
@@ -1126,74 +1357,84 @@ function applySettings(){
 }
 applySettings();
 
-/* ========== COUPONS ========== */
-onValue(ref(db,'coupons'), snap=>{
+/* ========== Coupons ========== */
+onValue(ref(db, 'coupons'), snap => {
   DYNAMIC_COUPONS = snap.exists() ? snap.val() : {};
   COUPONS = DYNAMIC_COUPONS;
-  if(IS_ADMIN) renderCoupons();
+  if (IS_ADMIN) renderCoupons();
 });
 
-/* ========== PRODUCTS ========== */
-onValue(ref(db,'products'), snap=>{
+/* ========== Products ========== */
+onValue(ref(db, 'products'), snap => {
   PRODUCTS = [];
-  if(snap.exists()){ snap.forEach(c=> PRODUCTS.push({id:c.key, ...c.val()})); PRODUCTS.reverse(); }
-  renderFilters(); renderProducts();
-  if(IS_ADMIN){ renderProductsAdmin(); renderStats(); renderAnalytics(); }
+  if (snap.exists()) {
+    snap.forEach(c => PRODUCTS.push({ id: c.key, ...c.val() }));
+    PRODUCTS.reverse();
+  }
+  renderFilters();
+  renderProducts();
+  if (IS_ADMIN) { renderProductsAdmin(); renderStats(); renderAnalytics(); }
 });
 
-/* ========== ORDERS ========== */
-onValue(ref(db,'orders'), snap=>{
+/* ========== Orders ========== */
+onValue(ref(db, 'orders'), snap => {
   ORDERS = [];
-  if(snap.exists()){ snap.forEach(c=> ORDERS.push({id:c.key, ...c.val()})); ORDERS.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); }
-  if(IS_ADMIN){ renderOrders(); renderStats(); renderAnalytics(); }
-  if(document.getElementById('page-myorders').style.display !== 'none') renderMyOrders();
+  if (snap.exists()) {
+    snap.forEach(c => ORDERS.push({ id: c.key, ...c.val() }));
+    ORDERS.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  }
+  if (IS_ADMIN) { renderOrders(); renderStats(); renderAnalytics(); }
+  const myEl = document.getElementById('page-myorders');
+  if (myEl && myEl.style.display !== 'none') renderMyOrders();
 });
 
-/* ========== USERS ========== */
-onValue(ref(db,'users'), snap=>{
+/* ========== Users ========== */
+onValue(ref(db, 'users'), snap => {
   USERS = [];
-  if(snap.exists()){
-    snap.forEach(c=>{
+  if (snap.exists()) {
+    snap.forEach(c => {
       const v = c.val();
-      if(v.role !== 'admin' && v.email !== ADMIN_EMAIL) USERS.push({id:c.key, ...v});
+      if (v.role !== 'admin' && v.email !== ADMIN_EMAIL) USERS.push({ id: c.key, ...v });
     });
   }
-  if(IS_ADMIN){ renderUsers(); renderStats(); renderUserSelect(); }
+  if (IS_ADMIN) { renderUsers(); renderStats(); renderUserSelect(); }
 });
 
-/* ========== NOTIFICATIONS ========== */
-onValue(ref(db,'notifications'), snap=>{
+/* ========================================================
+   🔔 6. Notifications System
+   ======================================================== */
+onValue(ref(db, 'notifications'), snap => {
   ALL_NOTIFS = [];
-  if(snap.exists()){ 
-    snap.forEach(c=> ALL_NOTIFS.push({id:c.key, ...c.val()})); 
-    ALL_NOTIFS.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
+  if (snap.exists()) {
+    snap.forEach(c => ALL_NOTIFS.push({ id: c.key, ...c.val() }));
+    ALL_NOTIFS.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
   }
-  if(IS_ADMIN) renderNotifs();
+  if (IS_ADMIN) renderNotifs();
   filterMyNotifs();
 });
 
 function filterMyNotifs(){
-  if(!CURRENT_USER){ MY_NOTIFS = []; renderUserNotifs(); return; }
+  if (!CURRENT_USER) { MY_NOTIFS = []; renderUserNotifs(); return; }
   const uid = CURRENT_USER.uid;
-  MY_NOTIFS = ALL_NOTIFS.filter(n=>{
-    if(n.target === 'all') return true;
-    if(n.target === 'specific' && n.targetUid === uid) return true;
-    if(!n.target) return true;
+  MY_NOTIFS = ALL_NOTIFS.filter(n => {
+    if (n.target === 'all') return true;
+    if (n.target === 'specific' && n.targetUid === uid) return true;
+    if (!n.target) return true;
     return false;
   });
   renderUserNotifs();
-
-  if(notifListenerActive && MY_NOTIFS.length > 0){
+  
+  if (notifListenerActive && MY_NOTIFS.length > 0) {
     const latest = MY_NOTIFS[0];
-    if(latest.id !== lastKnownNotifId && !READ_NOTIFS.includes(latest.id)){
+    if (latest.id !== lastKnownNotifId && !READ_NOTIFS.includes(latest.id)) {
       const age = Date.now() - (latest.createdAt || 0);
-      if(age < 60000){
+      if (age < 60000) {
         showPushNotif(latest);
-        playNotifSound(latest.priority);
+        if (audioEnabled) playStoreSound(latest.priority);
       }
       lastKnownNotifId = latest.id;
     }
-  } else if(MY_NOTIFS.length > 0){
+  } else if (MY_NOTIFS.length > 0) {
     lastKnownNotifId = MY_NOTIFS[0].id;
   }
   notifListenerActive = true;
@@ -1201,20 +1442,24 @@ function filterMyNotifs(){
 
 function renderUserNotifs(){
   const el = document.getElementById('notifBodyUser');
-  if(!el) return;
-  if(!MY_NOTIFS.length){
+  if (!el) return;
+  if (!MY_NOTIFS.length) {
     el.innerHTML = `<div class="empty-cart"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div>`;
     return;
   }
-  el.innerHTML = MY_NOTIFS.map(n=>{
+  const storeLogo = SETTINGS.logo || '';
+  el.innerHTML = MY_NOTIFS.map(n => {
     const isRead = READ_NOTIFS.includes(n.id);
     const typeIcon = n.type === 'order' ? 'fa-shopping-bag' : (n.type === 'promo' ? 'fa-gift' : 'fa-info-circle');
+    const iconHTML = storeLogo 
+      ? `<img src="${storeLogo}" alt="">` 
+      : `<i class="fas ${typeIcon}"></i>`;
     return `
-      <div class="notif-item ${isRead?'':'unread'}" onclick="markNotifRead('${n.id}')">
-        <div class="notif-icon ${n.type||'system'}"><i class="fas ${typeIcon}"></i></div>
+      <div class="notif-item ${isRead ? '' : 'unread'}" onclick="markNotifRead('${n.id}')">
+        <div class="notif-icon ${n.type || 'system'}">${iconHTML}</div>
         <div class="notif-content">
-          <h4>${escapeHtml(n.title||'إشعار')}</h4>
-          <p>${escapeHtml(n.body||'')}</p>
+          <h4>${escapeHtml(n.title || 'إشعار')}</h4>
+          <p>${escapeHtml(n.body || '')}</p>
           <div class="time"><i class="far fa-clock"></i> ${formatTimeAgo(n.createdAt)}</div>
         </div>
       </div>`;
@@ -1225,94 +1470,102 @@ function renderUserNotifs(){
 function updateNotifBadge(){
   const unread = MY_NOTIFS.filter(n => !READ_NOTIFS.includes(n.id)).length;
   const b = document.getElementById('notifBadge');
-  if(!b) return;
-  if(unread > 0){ b.style.display = 'grid'; b.textContent = unread > 99 ? '99+' : unread; }
-  else b.style.display = 'none';
-  document.title = unread > 0 ? `(${unread}) ${SETTINGS.storeName || 'متجر يزيد'}` : (SETTINGS.storeName || 'متجر يزيد') + ' | YM Store';
+  if (!b) return;
+  if (unread > 0) {
+    b.style.display = 'grid';
+    b.textContent = unread > 99 ? '99+' : unread;
+  } else b.style.display = 'none';
 }
 
-window.markNotifRead = id=>{
-  if(!READ_NOTIFS.includes(id)){
+window.markNotifRead = id => {
+  if (!READ_NOTIFS.includes(id)) {
     READ_NOTIFS.push(id);
     localStorage.setItem('ym_read_notifs', JSON.stringify(READ_NOTIFS));
     renderUserNotifs();
   }
 };
-window.markAllRead = ()=>{
-  READ_NOTIFS = [...new Set([...READ_NOTIFS, ...MY_NOTIFS.map(n=>n.id)])];
+window.markAllRead = () => {
+  READ_NOTIFS = [...new Set([...READ_NOTIFS, ...MY_NOTIFS.map(n => n.id)])];
   localStorage.setItem('ym_read_notifs', JSON.stringify(READ_NOTIFS));
   renderUserNotifs();
-  toast('تم تحديد الكل كمقروء ✓','ok');
+  toast('تم تحديد الكل كمقروء ✓', 'ok');
 };
-window.openNotifDrawer = ()=>{
+window.openNotifDrawer = () => {
   renderUserNotifs();
   document.getElementById('notifOverlay').classList.add('show');
   document.getElementById('notifDrawer').classList.add('show');
 };
-window.closeNotifDrawer = ()=>{
+window.closeNotifDrawer = () => {
   document.getElementById('notifOverlay').classList.remove('show');
   document.getElementById('notifDrawer').classList.remove('show');
 };
 
-/* ========== PUSH POPUP ========== */
+/* ========== Push Popup ========== */
 let pushTimer;
-window.showPushNotif = (n)=>{
-  if(audioEnabled) playNotifSound(n.priority);
-  if(navigator.vibrate) navigator.vibrate(n.priority === 'high' ? [400,200,400,200,400] : [200,100,200]);
+window.showPushNotif = n => {
+  if (audioEnabled) playStoreSound(n.priority);
+  if (navigator.vibrate) navigator.vibrate(n.priority === 'high' ? [400,200,400,200,400] : [200,100,200]);
   
   const pn = document.getElementById('pushNotif');
+  const storeLogo = SETTINGS.logo || '';
   const typeIcon = n.type === 'order' ? 'fa-shopping-bag' : (n.type === 'promo' ? 'fa-gift' : 'fa-bell');
-  document.getElementById('pushIcon').innerHTML = `<i class="fas ${typeIcon}"></i>`;
+  document.getElementById('pushIcon').innerHTML = storeLogo 
+    ? `<img src="${storeLogo}" alt="">` 
+    : `<i class="fas ${typeIcon}"></i>`;
   document.getElementById('pushTitle').textContent = n.title || 'إشعار جديد';
   document.getElementById('pushBody').textContent = n.body || '';
   pn.classList.add('show');
   clearTimeout(pushTimer);
   pushTimer = setTimeout(hidePushNotif, 7000);
 };
-window.hidePushNotif = ()=>{
+window.hidePushNotif = () => {
   document.getElementById('pushNotif').classList.remove('show');
 };
 
 function formatTimeAgo(ts){
-  if(!ts) return 'الآن';
+  if (!ts) return 'الآن';
   const diff = Date.now() - ts;
-  const m = Math.floor(diff/60000);
-  const h = Math.floor(diff/3600000);
-  const d = Math.floor(diff/86400000);
-  if(m < 1) return 'الآن';
-  if(m < 60) return `منذ ${m} دقيقة`;
-  if(h < 24) return `منذ ${h} ساعة`;
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+  if (m < 1) return 'الآن';
+  if (m < 60) return `منذ ${m} دقيقة`;
+  if (h < 24) return `منذ ${h} ساعة`;
   return `منذ ${d} يوم`;
 }
 
-/* ==================== STOREFRONT ==================== */
+/* ========================================================
+   🛒 7. Storefront Logic
+   ======================================================== */
 function renderFilters(){
-  const cats = ['all', ...new Set(PRODUCTS.map(p=>p.category).filter(Boolean))];
+  const cats = ['all', ...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
   const el = document.getElementById('filters');
-  if(!el) return;
-  if(cats.length <= 1){ el.innerHTML=''; return; }
+  if (!el) return;
+  if (cats.length <= 1) { el.innerHTML = ''; return; }
   el.innerHTML = cats.map(c =>
-    `<button class="filter-btn ${ACTIVE_CAT===c?'active':''}" onclick="setCat('${c}')">${c==='all'?'الكل':escapeHtml(c)}</button>`).join('');
+    `<button class="filter-btn ${ACTIVE_CAT === c ? 'active' : ''}" onclick="setCat('${c}')">${c === 'all' ? 'الكل' : escapeHtml(c)}</button>`
+  ).join('');
 }
-window.setCat = c=>{ ACTIVE_CAT=c; renderFilters(); renderProducts(); };
-window.doSearch = v=>{ SEARCH_TERM = v.toLowerCase().trim(); renderProducts(); };
+window.setCat = c => { ACTIVE_CAT = c; renderFilters(); renderProducts(); };
+window.doSearch = v => { SEARCH_TERM = v.toLowerCase().trim(); renderProducts(); };
 
 function renderProducts(){
   const grid = document.getElementById('productsGrid');
-  if(!grid) return;
-  let list = PRODUCTS.filter(p=>p.visible !== false);
-  if(ACTIVE_CAT!=='all') list = list.filter(p=>p.category===ACTIVE_CAT);
-  if(SEARCH_TERM) list = list.filter(p =>
-    (p.name||'').toLowerCase().includes(SEARCH_TERM) ||
-    (p.description||'').toLowerCase().includes(SEARCH_TERM));
-  if(!list.length){
+  if (!grid) return;
+  let list = PRODUCTS.filter(p => p.visible !== false);
+  if (ACTIVE_CAT !== 'all') list = list.filter(p => p.category === ACTIVE_CAT);
+  if (SEARCH_TERM) list = list.filter(p =>
+    (p.name || '').toLowerCase().includes(SEARCH_TERM) ||
+    (p.description || '').toLowerCase().includes(SEARCH_TERM)
+  );
+  if (!list.length) {
     grid.innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><i class="fas fa-box-open"></i><p>لا توجد منتجات</p></div>`;
     return;
   }
-  grid.innerHTML = list.map((p,i)=> productCard(p,i)).join('');
+  grid.innerHTML = list.map((p, i) => productCard(p, i)).join('');
 }
 
-function productCard(p,i){
+function productCard(p, i){
   const inStock = p.stock !== false;
   const img = p.image
     ? `<img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'placeholder\\'><i class=\\'fas fa-image\\'></i></div>'">`
@@ -1320,151 +1573,165 @@ function productCard(p,i){
   const isWished = WISHLIST.includes(p.id);
   const discount = Number(p.discount) || 0;
   const originalPrice = Number(p.price) || 0;
-  const finalPrice = discount > 0 ? Math.round(originalPrice * (1 - discount/100)) : originalPrice;
+  const finalPrice = discount > 0 ? Math.round(originalPrice * (1 - discount / 100)) : originalPrice;
   return `
-  <div class="product" style="animation-delay:${i*.03}s">
+  <div class="product" style="animation-delay:${i * .03}s">
     <div class="product-img">
       ${img}
-      ${discount>0?`<span class="tag sale">خصم ${discount}%</span>`:(!inStock?`<span class="tag out">نفذ</span>`:`<span class="tag">متوفر</span>`)}
-      <button class="wish-btn ${isWished?'active':''}" onclick="toggleWish('${p.id}',event)" aria-label="المفضلة">
-        <i class="fa${isWished?'s':'r'} fa-heart"></i>
+      ${discount > 0 ? `<span class="tag sale">خصم ${discount}%</span>` : (!inStock ? `<span class="tag out">نفذ</span>` : `<span class="tag">متوفر</span>`)}
+      <button class="wish-btn ${isWished ? 'active' : ''}" onclick="toggleWish('${p.id}', event)">
+        <i class="fa${isWished ? 's' : 'r'} fa-heart"></i>
       </button>
     </div>
     <div class="product-body">
-      <h3>${escapeHtml(p.name||'')}</h3>
-      ${p.description?`<p class="desc">${escapeHtml(p.description)}</p>`:''}
+      <h3>${escapeHtml(p.name || '')}</h3>
+      ${p.description ? `<p class="desc">${escapeHtml(p.description)}</p>` : ''}
       <div class="price-wrap">
         <div class="price">${formatPrice(finalPrice)}<small>ج.م</small></div>
-        ${discount>0?`<span class="old-price">${formatPrice(originalPrice)}</span>`:''}
+        ${discount > 0 ? `<span class="old-price">${formatPrice(originalPrice)}</span>` : ''}
       </div>
-      <button class="add-btn" ${!inStock?'disabled':''} onclick="addToCart('${p.id}')">
-        <i class="fas fa-cart-plus"></i> ${inStock?'أضف للسلة':'نفذ'}
+      <button class="add-btn" ${!inStock ? 'disabled' : ''} onclick="addToCart('${p.id}')">
+        <i class="fas fa-cart-plus"></i> ${inStock ? 'أضف للسلة' : 'نفذ'}
       </button>
     </div>
   </div>`;
 }
 
-/* ========== WISHLIST ========== */
-window.toggleWish = (id, e)=>{
-  if(e){ e.stopPropagation(); e.preventDefault(); }
+/* ========== Wishlist ========== */
+window.toggleWish = (id, e) => {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
   const idx = WISHLIST.indexOf(id);
-  if(idx >= 0){ WISHLIST.splice(idx,1); toast('تم الحذف من المفضلة','ok'); }
-  else { WISHLIST.push(id); toast('تم الإضافة ❤️','ok'); }
+  if (idx >= 0) { WISHLIST.splice(idx, 1); toast('تم الحذف من المفضلة', 'ok'); }
+  else { WISHLIST.push(id); toast('تم الإضافة ❤️', 'ok'); }
   localStorage.setItem('ym_wishlist', JSON.stringify(WISHLIST));
-  updateWishBadge(); renderProducts(); renderWishlistPage();
+  updateWishBadge();
+  renderProducts();
+  renderWishlistPage();
 };
 function updateWishBadge(){
-  const b = document.getElementById('wishBadge'); if(!b) return;
-  if(WISHLIST.length){ b.style.display='grid'; b.textContent = WISHLIST.length; }
-  else b.style.display='none';
+  const b = document.getElementById('wishBadge');
+  if (!b) return;
+  if (WISHLIST.length) { b.style.display = 'grid'; b.textContent = WISHLIST.length; }
+  else b.style.display = 'none';
 }
 function renderWishlistPage(){
-  const grid = document.getElementById('wishlistGrid'); if(!grid) return;
+  const grid = document.getElementById('wishlistGrid');
+  if (!grid) return;
   const list = PRODUCTS.filter(p => WISHLIST.includes(p.id));
-  if(!list.length){
+  if (!list.length) {
     grid.innerHTML = `<div class="empty-cart" style="grid-column:1/-1"><i class="fas fa-heart-broken"></i><p>لا توجد منتجات</p></div>`;
     return;
   }
-  grid.innerHTML = list.map((p,i)=> productCard(p,i)).join('');
+  grid.innerHTML = list.map((p, i) => productCard(p, i)).join('');
 }
 
-/* ========== CART ========== */
+/* ========== Cart ========== */
 function saveCart(){ localStorage.setItem('ym_cart', JSON.stringify(CART)); updateCartBadge(); }
 function updateCartBadge(){
-  const b = document.getElementById('cartBadge'); if(!b) return;
-  const count = Object.values(CART).reduce((s,i)=>s+i.qty,0);
-  if(count>0){ b.style.display='grid'; b.textContent = count; }
-  else b.style.display='none';
+  const b = document.getElementById('cartBadge');
+  if (!b) return;
+  const count = Object.values(CART).reduce((s, i) => s + i.qty, 0);
+  if (count > 0) { b.style.display = 'grid'; b.textContent = count; }
+  else b.style.display = 'none';
 }
-window.addToCart = id=>{
-  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+window.addToCart = id => {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
   const discount = Number(p.discount) || 0;
-  const finalPrice = discount > 0 ? Math.round(Number(p.price) * (1 - discount/100)) : Number(p.price);
-  if(!CART[id]) CART[id] = {id, name:p.name, price:finalPrice, originalPrice:Number(p.price), image:p.image||'', qty:0};
+  const finalPrice = discount > 0 ? Math.round(Number(p.price) * (1 - discount / 100)) : Number(p.price);
+  if (!CART[id]) CART[id] = { id, name: p.name, price: finalPrice, originalPrice: Number(p.price), image: p.image || '', qty: 0 };
   CART[id].qty++;
-  saveCart(); toast(`تمت الإضافة للسلة`,'ok');
-  if(navigator.vibrate) navigator.vibrate(50);
+  saveCart();
+  toast(`تمت الإضافة للسلة`, 'ok');
+  if (navigator.vibrate) navigator.vibrate(50);
 };
-window.changeQty = (id,d)=>{
-  if(!CART[id]) return;
+window.changeQty = (id, d) => {
+  if (!CART[id]) return;
   CART[id].qty += d;
-  if(CART[id].qty<=0) delete CART[id];
-  saveCart(); renderCart();
+  if (CART[id].qty <= 0) delete CART[id];
+  saveCart();
+  renderCart();
 };
-window.removeFromCart = id=>{ delete CART[id]; saveCart(); renderCart(); };
+window.removeFromCart = id => { delete CART[id]; saveCart(); renderCart(); };
 
 function renderCart(){
-  const body = document.getElementById('cartBody'); if(!body) return;
+  const body = document.getElementById('cartBody');
+  if (!body) return;
   const foot = document.getElementById('cartFoot');
   const items = Object.values(CART);
-  if(!items.length){
+  if (!items.length) {
     body.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>سلتك فارغة</p></div>`;
-    if(foot) foot.style.display='none'; return;
+    if (foot) foot.style.display = 'none';
+    return;
   }
-  body.innerHTML = items.map(i=>`
+  body.innerHTML = items.map(i => `
     <div class="cart-item">
-      ${i.image?`<img src="${i.image}" alt="">`:`<div class="ph"><i class="fas fa-image"></i></div>`}
+      ${i.image ? `<img src="${i.image}" alt="">` : `<div class="ph"><i class="fas fa-image"></i></div>`}
       <div class="cart-item-info">
         <h4>${escapeHtml(i.name)}</h4>
         <div class="p">${formatPrice(i.price)} ج.م</div>
         <div class="qty">
-          <button onclick="changeQty('${i.id}',-1)">-</button>
+          <button onclick="changeQty('${i.id}', -1)">-</button>
           <span>${i.qty}</span>
-          <button onclick="changeQty('${i.id}',1)">+</button>
+          <button onclick="changeQty('${i.id}', 1)">+</button>
         </div>
       </div>
       <button class="remove-btn" onclick="removeFromCart('${i.id}')"><i class="fas fa-trash"></i></button>
     </div>`).join('');
-  const subtotal = items.reduce((s,i)=>s+i.price*i.qty,0);
+  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   let discount = 0;
-  if(APPLIED_COUPON && subtotal >= (APPLIED_COUPON.min||0)){
-    discount = APPLIED_COUPON.type==='percent' ? Math.round(subtotal * APPLIED_COUPON.value / 100) : APPLIED_COUPON.value;
+  if (APPLIED_COUPON && subtotal >= (APPLIED_COUPON.min || 0)) {
+    discount = APPLIED_COUPON.type === 'percent'
+      ? Math.round(subtotal * APPLIED_COUPON.value / 100)
+      : APPLIED_COUPON.value;
   }
   const total = Math.max(0, subtotal - discount);
   document.getElementById('cartSubtotal').textContent = formatPrice(subtotal) + ' ج.م';
   const dr = document.getElementById('discountRow');
-  if(discount > 0){
+  if (discount > 0) {
     dr.style.display = 'flex';
     document.getElementById('cartDiscount').textContent = '- ' + formatPrice(discount) + ' ج.م';
   } else dr.style.display = 'none';
   document.getElementById('cartTotal').textContent = formatPrice(total) + ' ج.م';
-  if(foot) foot.style.display='block';
+  if (foot) foot.style.display = 'block';
 }
 
-window.applyCoupon = ()=>{
+window.applyCoupon = () => {
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
-  if(!code) return toast('أدخل الكود','err');
+  if (!code) return toast('أدخل الكود', 'err');
   const c = DYNAMIC_COUPONS[code];
-  if(!c) return toast('كود غير صحيح','err');
-  if(c.active === false) return toast('الكود غير مفعل','err');
-  const subtotal = Object.values(CART).reduce((s,i)=>s+i.price*i.qty,0);
-  if(subtotal < (c.min||0)) return toast(`الحد الأدنى ${c.min||0} ج.م`,'err');
+  if (!c) return toast('كود غير صحيح', 'err');
+  if (c.active === false) return toast('الكود غير مفعل', 'err');
+  const subtotal = Object.values(CART).reduce((s, i) => s + i.price * i.qty, 0);
+  if (subtotal < (c.min || 0)) return toast(`الحد الأدنى ${c.min || 0} ج.م`, 'err');
   APPLIED_COUPON = c;
-  toast(`تم تطبيق "${code}" ✓`,'ok');
+  toast(`تم تطبيق "${code}" ✓`, 'ok');
   renderCart();
 };
-window.openCart = ()=>{ renderCart(); document.getElementById('overlay').classList.add('show'); document.getElementById('cartDrawer').classList.add('show'); };
-window.closeCart = ()=>{ document.getElementById('overlay').classList.remove('show'); document.getElementById('cartDrawer').classList.remove('show'); };
+window.openCart = () => { renderCart(); document.getElementById('overlay').classList.add('show'); document.getElementById('cartDrawer').classList.add('show'); };
+window.closeCart = () => { document.getElementById('overlay').classList.remove('show'); document.getElementById('cartDrawer').classList.remove('show'); };
 
-/* ========== PAGES ========== */
-window.showPage = (name)=>{
-  ['home','wishlist','myorders','profile'].forEach(p=>{
-    document.getElementById('page-'+p).style.display = (p===name)?'block':'none';
+/* ========== Pages ========== */
+window.showPage = name => {
+  ['home', 'wishlist', 'myorders', 'profile'].forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = (p === name) ? 'block' : 'none';
   });
-  if(name==='wishlist') renderWishlistPage();
-  if(name==='myorders') renderMyOrders();
-  if(name==='profile') renderProfile();
-  window.scrollTo({top:0,behavior:'smooth'});
+  if (name === 'wishlist') renderWishlistPage();
+  if (name === 'myorders') renderMyOrders();
+  if (name === 'profile') renderProfile();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-/* ========== USER AREA ========== */
+/* ========== User Area ========== */
 function renderUserArea(){
-  const el = document.getElementById('userArea'); if(!el) return;
-  if(!CURRENT_USER){
+  const el = document.getElementById('userArea');
+  if (!el) return;
+  if (!CURRENT_USER) {
     el.innerHTML = `<button class="icon-btn" onclick="openAuth()" title="دخول"><i class="fas fa-user"></i></button>`;
     return;
   }
-  if(IS_ADMIN){
+  if (IS_ADMIN) {
     const photo = `https://ui-avatars.com/api/?name=Admin&background=f59e0b&color=fff`;
     el.innerHTML = `
       <div class="user-chip" style="border-color:var(--accent)" onclick="toggleUserMenu()">
@@ -1478,11 +1745,11 @@ function renderUserArea(){
         <button class="menu-item-u" onclick="logout()" style="color:var(--danger)"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>`;
   } else {
-    const photo = CURRENT_USER.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(CURRENT_USER.displayName||'U')}&background=6d28d9&color=fff`;
+    const photo = CURRENT_USER.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(CURRENT_USER.displayName || 'U')}&background=6d28d9&color=fff`;
     el.innerHTML = `
       <div class="user-chip" onclick="toggleUserMenu()">
         <img class="avatar" src="${photo}" alt="">
-        <span>${escapeHtml(CURRENT_USER.displayName||'حسابي')}</span>
+        <span>${escapeHtml(CURRENT_USER.displayName || 'حسابي')}</span>
       </div>
       <div id="userMenu" style="position:absolute;top:64px;left:12px;background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:6px;box-shadow:var(--shadow-lg);display:none;min-width:190px;z-index:150">
         <button class="menu-item-u" onclick="showPage('myorders')"><i class="fas fa-shopping-bag"></i> طلباتي</button>
@@ -1493,94 +1760,92 @@ function renderUserArea(){
         <button class="menu-item-u" onclick="logout()" style="color:var(--danger)"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>`;
   }
-  if(!document.getElementById('userMenuStyle')){
+  if (!document.getElementById('userMenuStyle')) {
     const s = document.createElement('style');
     s.id = 'userMenuStyle';
     s.textContent = `.menu-item-u{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:none;background:transparent;color:var(--text);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%;text-align:right;transition:all .2s}.menu-item-u:hover{background:var(--bg);color:var(--primary)}`;
     document.head.appendChild(s);
   }
 }
-window.toggleUserMenu = ()=>{
+window.toggleUserMenu = () => {
   const m = document.getElementById('userMenu');
-  if(m) m.style.display = m.style.display==='block'?'none':'block';
+  if (m) m.style.display = m.style.display === 'block' ? 'none' : 'block';
 };
-document.addEventListener('click', e=>{
+document.addEventListener('click', e => {
   const m = document.getElementById('userMenu');
-  if(m && !e.target.closest('.user-chip') && !e.target.closest('#userMenu')) m.style.display='none';
+  if (m && !e.target.closest('.user-chip') && !e.target.closest('#userMenu')) m.style.display = 'none';
 });
 
-/* ========== AUTH ========== */
-window.openAuth = ()=>{
-  if(CURRENT_USER){
-    if(confirm('تسجيل الخروج؟')) logout();
+/* ========================================================
+   🔐 8. Authentication
+   ======================================================== */
+window.openAuth = () => {
+  if (CURRENT_USER) {
+    if (confirm('تسجيل الخروج؟')) logout();
     return;
   }
   switchTab('login');
   document.getElementById('authMsg').className = 'form-msg';
   document.getElementById('authModal').classList.add('show');
 };
-window.closeModal = id=> document.getElementById(id).classList.remove('show');
+window.closeModal = id => document.getElementById(id).classList.remove('show');
 
-window.switchTab = t=>{
-  document.getElementById('tabLogin').classList.toggle('active', t==='login');
-  document.getElementById('tabAdmin').classList.toggle('active', t==='admin');
-  document.getElementById('userForm').style.display = t==='login'?'block':'none';
-  document.getElementById('adminForm').style.display = t==='admin'?'block':'none';
-  document.getElementById('googleSection').style.display = t==='login'?'block':'none';
+window.switchTab = t => {
+  document.getElementById('tabLogin').classList.toggle('active', t === 'login');
+  document.getElementById('tabAdmin').classList.toggle('active', t === 'admin');
+  document.getElementById('userForm').style.display = t === 'login' ? 'block' : 'none';
+  document.getElementById('adminForm').style.display = t === 'admin' ? 'block' : 'none';
+  document.getElementById('googleSection').style.display = t === 'login' ? 'block' : 'none';
   document.getElementById('authMsg').className = 'form-msg';
 };
 
 function showMsg(el, text, type){ el.textContent = text; el.className = 'form-msg ' + type; }
 function authError(code){
   const m = {
-    'auth/invalid-email':'البريد الإلكتروني غير صالح',
-    'auth/user-not-found':'الحساب غير موجود',
-    'auth/wrong-password':'كلمة المرور خاطئة',
-    'auth/invalid-credential':'بيانات الدخول خاطئة',
-    'auth/email-already-in-use':'البريد الإلكتروني مستخدم بالفعل',
-    'auth/weak-password':'كلمة المرور ضعيفة جداً',
-    'auth/popup-closed-by-user':'تم إغلاق النافذة',
-    'auth/cancelled-popup-request':'تم إلغاء الطلب',
-    'auth/network-request-failed':'تعذر الاتصال - تأكد من الشبكة',
-    'auth/too-many-requests':'محاولات كثيرة، حاول لاحقاً',
-    'auth/operation-not-allowed':'الطريقة غير مفعلة في Firebase',
-    'auth/unauthorized-domain':'النطاق غير مصرح به',
-    'auth/popup-blocked':'المتصفح منع النافذة - حاول مرة أخرى'
+    'auth/invalid-email': 'البريد الإلكتروني غير صالح',
+    'auth/user-not-found': 'الحساب غير موجود',
+    'auth/wrong-password': 'كلمة المرور خاطئة',
+    'auth/invalid-credential': 'بيانات الدخول خاطئة',
+    'auth/email-already-in-use': 'البريد الإلكتروني مستخدم بالفعل',
+    'auth/weak-password': 'كلمة المرور ضعيفة جداً',
+    'auth/popup-closed-by-user': 'تم إغلاق النافذة',
+    'auth/cancelled-popup-request': 'تم إلغاء الطلب',
+    'auth/network-request-failed': 'تعذر الاتصال - تأكد من الشبكة',
+    'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
+    'auth/operation-not-allowed': 'الطريقة غير مفعلة في Firebase',
+    'auth/unauthorized-domain': 'النطاق غير مصرح به',
+    'auth/popup-blocked': 'المتصفح منع النافذة'
   };
-  return m[code] || `خطأ: ${code||'غير معروف'}`;
+  return m[code] || `خطأ: ${code || 'غير معروف'}`;
 }
 async function checkUserLimit(){
-  if(!MAX_USERS) return true;
-  try{
-    const snap = await get(ref(db,'users'));
+  if (!MAX_USERS) return true;
+  try {
+    const snap = await get(ref(db, 'users'));
     const count = snap.exists() ? Object.keys(snap.val()).length : 0;
     return count < MAX_USERS;
-  }catch{ return true; }
+  } catch { return true; }
 }
 
-/* ========== Google Login - يدعم كل الأجهزة ========== */
-window.googleLogin = async ()=>{
+window.googleLogin = async () => {
   const msg = document.getElementById('authMsg');
-  try{
-    showMsg(msg,'جاري الاتصال...','ok');
-    // iOS + Safari: استخدم redirect بدل popup
-    if(IS_IOS || IS_SAFARI){
+  try {
+    showMsg(msg, 'جاري الاتصال...', 'ok');
+    if (IS_IOS || IS_SAFARI) {
       await signInWithRedirect(auth, googleProvider);
       return;
     }
-    // Android + Desktop: popup
-    try{
+    try {
       const res = await signInWithPopup(auth, googleProvider);
       await handleGoogleUser(res.user);
-    }catch(e){
-      // لو popup فشل، جرب redirect
-      if(e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment' || e.code === 'auth/cancelled-popup-request'){
+    } catch (e) {
+      if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request') {
         await signInWithRedirect(auth, googleProvider);
         return;
       }
       throw e;
     }
-  }catch(e){
+  } catch (e) {
     console.error('Google error:', e);
     showMsg(msg, authError(e.code), 'err');
   }
@@ -1588,12 +1853,12 @@ window.googleLogin = async ()=>{
 
 async function handleGoogleUser(u){
   const msg = document.getElementById('authMsg');
-  if(u.email === ADMIN_EMAIL){ await signOut(auth); showMsg(msg,'هذا البريد خاص بالأدمن','err'); return; }
+  if (u.email === ADMIN_EMAIL) { await signOut(auth); showMsg(msg, 'هذا البريد خاص بالأدمن', 'err'); return; }
   const ok = await checkUserLimit();
-  if(!ok){ await signOut(auth); showMsg(msg,`الحد الأقصى (${MAX_USERS})`,'err'); return; }
+  if (!ok) { await signOut(auth); showMsg(msg, `الحد الأقصى (${MAX_USERS})`, 'err'); return; }
   const userRef = ref(db, 'users/' + u.uid);
   const snap = await get(userRef);
-  if(!snap.exists()){
+  if (!snap.exists()) {
     await set(userRef, {
       name: u.displayName || u.email.split('@')[0],
       email: u.email, photo: u.photoURL || '',
@@ -1601,223 +1866,213 @@ async function handleGoogleUser(u){
     });
   }
   closeModal('authModal');
-  toast('تم الدخول ✓','ok');
+  toast('تم الدخول ✓', 'ok');
   audioEnabled = true;
   initAudio();
-  setTimeout(()=> requestNotifPermission(), 1000);
+  setTimeout(() => enableNotifications(), 1000);
 }
 
-// معالجة نتيجة الـ Redirect عند العودة
-try{
+try {
   const rr = await getRedirectResult(auth);
-  if(rr && rr.user){
-    await handleGoogleUser(rr.user);
-  }
-}catch(e){ console.log('redirect result err:', e); }
+  if (rr && rr.user) await handleGoogleUser(rr.user);
+} catch(e){ console.log('redirect result err:', e); }
 
-window.userLogin = async ()=>{
+window.userLogin = async () => {
   const msg = document.getElementById('authMsg');
   const email = document.getElementById('userEmail').value.trim();
   const pass = document.getElementById('userPass').value;
-  if(!email || !pass) return showMsg(msg,'املأ الحقول','err');
-  if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return showMsg(msg,'استخدم تبويب "أدمن"','err');
-  try{
-    showMsg(msg,'جاري التحقق...','ok');
+  if (!email || !pass) return showMsg(msg, 'املأ الحقول', 'err');
+  if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return showMsg(msg, 'استخدم تبويب "أدمن"', 'err');
+  try {
+    showMsg(msg, 'جاري التحقق...', 'ok');
     await signInWithEmailAndPassword(auth, email, pass);
     closeModal('authModal');
-    toast('تم الدخول ✓','ok');
+    toast('تم الدخول ✓', 'ok');
     audioEnabled = true;
     initAudio();
-    setTimeout(()=> requestNotifPermission(), 1000);
-  }catch(e){
-    if(e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password'){
-      showMsg(msg,'البريد أو كلمة المرور غير صحيحة','err');
+    setTimeout(() => enableNotifications(), 1000);
+  } catch (e) {
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
+      showMsg(msg, 'البريد أو كلمة المرور غير صحيحة', 'err');
     } else showMsg(msg, authError(e.code), 'err');
   }
 };
 
-window.adminLogin = async ()=>{
+window.adminLogin = async () => {
   const msg = document.getElementById('authMsg');
   const user = document.getElementById('adminUser').value.trim();
   const pass = document.getElementById('adminPass').value;
-  if(!user || !pass) return showMsg(msg,'املأ الحقول','err');
-  if(user !== ADMIN_USERNAME) return showMsg(msg,'❌ رقم الهاتف غير صحيح','err');
-  if(pass !== ADMIN_PASSWORD) return showMsg(msg,'❌ كلمة المرور غير صحيحة','err');
-  try{
-    showMsg(msg,'جاري الدخول...','ok');
-    try{ await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD); }
-    catch(e){
-      if(e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password'){
-        try{
+  if (!user || !pass) return showMsg(msg, 'املأ الحقول', 'err');
+  if (user !== ADMIN_USERNAME) return showMsg(msg, '❌ رقم الهاتف غير صحيح', 'err');
+  if (pass !== ADMIN_PASSWORD) return showMsg(msg, '❌ كلمة المرور غير صحيحة', 'err');
+  try {
+    showMsg(msg, 'جاري الدخول...', 'ok');
+    try { await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD); }
+    catch (e) {
+      if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password') {
+        try {
           const cred = await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
-          await updateProfile(cred.user, {displayName: ADMIN_DISPLAY_NAME});
-          await set(ref(db,'users/'+cred.user.uid), {
+          await updateProfile(cred.user, { displayName: ADMIN_DISPLAY_NAME });
+          await set(ref(db, 'users/' + cred.user.uid), {
             name: ADMIN_DISPLAY_NAME, email: ADMIN_EMAIL, username: ADMIN_USERNAME,
             role: 'admin', provider: 'email', createdAt: Date.now()
           });
-        }catch(e2){
-          if(e2.code === 'auth/email-already-in-use') showMsg(msg,'⚠️ الحساب موجود بكلمة مرور مختلفة','err');
+        } catch (e2) {
+          if (e2.code === 'auth/email-already-in-use') showMsg(msg, '⚠️ الحساب موجود بكلمة مرور مختلفة', 'err');
           else showMsg(msg, authError(e2.code), 'err');
           return;
         }
       } else throw e;
     }
     closeModal('authModal');
-    toast('مرحباً بك يا مدير 👑','ok');
+    toast('مرحباً بك يا مدير 👑', 'ok');
     audioEnabled = true;
     initAudio();
-  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
+  } catch (e) { showMsg(msg, authError(e.code), 'err'); }
 };
 
-window.userRegister = (e)=>{
+window.userRegister = e => {
   e.preventDefault();
   closeModal('authModal');
   document.getElementById('regMsg').className = 'form-msg';
   document.getElementById('registerModal').classList.add('show');
 };
 
-window.doRegister = async ()=>{
+window.doRegister = async () => {
   const msg = document.getElementById('regMsg');
   const name = document.getElementById('regName').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pass = document.getElementById('regPass').value;
-  if(!name||!phone||!email||!pass) return showMsg(msg,'املأ جميع الحقول','err');
-  if(pass.length<6) return showMsg(msg,'كلمة المرور 6 أحرف على الأقل','err');
-  if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return showMsg(msg,'هذا البريد محجوز','err');
-  try{
-    showMsg(msg,'جاري الإنشاء...','ok');
+  if (!name || !phone || !email || !pass) return showMsg(msg, 'املأ جميع الحقول', 'err');
+  if (pass.length < 6) return showMsg(msg, 'كلمة المرور 6 أحرف على الأقل', 'err');
+  if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return showMsg(msg, 'هذا البريد محجوز', 'err');
+  try {
+    showMsg(msg, 'جاري الإنشاء...', 'ok');
     const ok = await checkUserLimit();
-    if(!ok){ showMsg(msg,`الحد الأقصى (${MAX_USERS})`,'err'); return; }
+    if (!ok) { showMsg(msg, `الحد الأقصى (${MAX_USERS})`, 'err'); return; }
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    await updateProfile(cred.user, {displayName: name});
-    await set(ref(db,'users/'+cred.user.uid), {
+    await updateProfile(cred.user, { displayName: name });
+    await set(ref(db, 'users/' + cred.user.uid), {
       name, phone, email, provider: 'email', role: 'customer', createdAt: Date.now()
     });
     closeModal('registerModal');
-    toast('تم إنشاء الحساب 🎉','ok');
+    toast('تم إنشاء الحساب 🎉', 'ok');
     audioEnabled = true;
     initAudio();
-    setTimeout(()=> requestNotifPermission(), 1000);
-  }catch(e){ 
-    if(e.code === 'auth/email-already-in-use') showMsg(msg,'البريد مستخدم','err');
+    setTimeout(() => enableNotifications(), 1000);
+  } catch (e) {
+    if (e.code === 'auth/email-already-in-use') showMsg(msg, 'البريد مستخدم', 'err');
     else showMsg(msg, authError(e.code), 'err');
   }
 };
 
-window.logout = async ()=>{
+window.logout = async () => {
   await signOut(auth);
-  toast('تم الخروج','ok');
+  toast('تم الخروج', 'ok');
   backToStore();
 };
 
-/* ========== إشعارات: طلب إذن + حفظ التوكن ========== */
-window.requestNotifPermission = async ()=>{
-  if(!('Notification' in window)) return toast('المتصفح لا يدعم الإشعارات','err');
-  if(IS_IOS && !IS_STANDALONE) return showIosHint();
-  try{
+/* ========================================================
+   🔔 9. Notifications Permission + FCM
+   ======================================================== */
+window.enableNotifications = async () => {
+  if (!('Notification' in window)) return toast('المتصفح لا يدعم الإشعارات', 'err');
+  if (IS_IOS && !IS_STANDALONE) {
+    toast('على iPhone: أضف التطبيق للشاشة الرئيسية أولاً', 'err');
+    return;
+  }
+  try {
     const perm = await Notification.requestPermission();
-    if(perm === 'granted'){
+    if (perm === 'granted') {
       await saveFCMToken();
-      toast('تم تفعيل الإشعارات ✓','ok');
-      if(navigator.vibrate) navigator.vibrate(100);
-    } else if(perm === 'denied'){
-      toast('الإشعارات مرفوضة من إعدادات المتصفح','err');
+      toast('تم تفعيل الإشعارات ✓', 'ok');
+      if (navigator.vibrate) navigator.vibrate(100);
+    } else if (perm === 'denied') {
+      toast('الإشعارات مرفوضة من إعدادات المتصفح', 'err');
     }
-  }catch(e){ console.log(e); }
+  } catch (e) { console.log(e); }
 };
 
 async function saveFCMToken(){
-  if(!CURRENT_USER) return;
-  try{
-    const supported = await isSupported().catch(()=>false);
-    if(!supported){ console.log('FCM not supported on this device'); return; }
-    if(!('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.ready;
-    if(!messagingInstance) messagingInstance = getMessaging(app);
-    const token = await getToken(messagingInstance, {
+  if (!CURRENT_USER) return;
+  try {
+    if (!('serviceWorker' in navigator)) return;
+    
+    // استخدم SW الرئيسي
+    const reg = swRegistration || await navigator.serviceWorker.ready;
+    
+    // جرّب Firebase Messaging
+    const { getMessaging, getToken } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js");
+    const messaging = getMessaging(app);
+    const token = await getToken(messaging, {
       vapidKey: VAPID_KEY,
       serviceWorkerRegistration: reg
     });
-    if(token){
+    
+    if (token) {
       fcmToken = token;
-      await update(ref(db,'users/'+CURRENT_USER.uid), {fcmToken: token, notifyEnabled: true});
-      console.log('FCM token saved:', token.substring(0,30)+'...');
+      await update(ref(db, 'users/' + CURRENT_USER.uid), {
+        fcmToken: token,
+        notifyEnabled: true,
+        lastSeen: Date.now()
+      });
+      console.log('✅ FCM token saved');
     }
-  }catch(e){ 
-    console.log('FCM save error:', e);
+  } catch (e) {
+    console.log('FCM save error (OK):', e.message);
   }
 }
 
-// استقبال إشعارات في المقدمة
-(async ()=>{
-  try{
-    const supported = await isSupported().catch(()=>false);
-    if(!supported) return;
-    if('Notification' in window){
-      messagingInstance = getMessaging(app);
-      onMessage(messagingInstance, payload=>{
-        console.log('FCM foreground:', payload);
-        const title = payload.notification?.title || payload.data?.title || 'إشعار';
-        const body = payload.notification?.body || payload.data?.body || '';
-        const type = payload.data?.type || 'system';
-        showPushNotif({title, body, type});
-      });
-    }
-  }catch(e){ console.log('FCM setup err:', e); }
-})();
-
-// إعادة حفظ التوكن عند العودة للصفحة
-document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden && CURRENT_USER && Notification.permission === 'granted'){
-    saveFCMToken();
-  }
-});
-
-window.testNotification = async ()=>{
-  if(Notification.permission !== 'granted') return requestNotifPermission();
-  playNotifSound('high');
-  if(navigator.vibrate) navigator.vibrate([400,200,400,200,400]);
+window.testNotification = async () => {
+  if (Notification.permission !== 'granted') return enableNotifications();
+  playStoreSound('high');
+  if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 400]);
   showPushNotif({
     title: '🎉 اختبار الإشعار',
     body: 'إذا شاهدت هذا الإشعار، فكل شيء يعمل!',
     type: 'promo',
     priority: 'high'
   });
-  // إشعار في النظام كمان
-  try{
-    const reg = await navigator.serviceWorker.ready;
-    reg.showNotification('🎉 اختبار الإشعارات', {
-      body: 'إذا شاهدت هذا الإشعار، فالنظام يعمل بشكل صحيح',
-      icon: '/favicon.ico',
-      badge: '/favicon.ico',
-      dir: 'rtl', lang: 'ar',
-      vibrate: [400,200,400],
-      tag: 'test-' + Date.now()
-    });
-  }catch(e){}
+  // إشعار النظام
+  try {
+    if (swRegistration) {
+      const storeLogo = SETTINGS.logo || '/favicon.ico';
+      const storeName = SETTINGS.storeName || 'متجر يزيد';
+      swRegistration.active.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        payload: {
+          title: `🎉 من ${storeName}`,
+          body: 'هذا اختبار للإشعارات - يعمل بشكل ممتاز!',
+          icon: storeLogo,
+          image: SETTINGS.storeImage || '',
+          priority: 'high'
+        }
+      });
+    }
+  } catch (e) { console.log('sys notif error:', e); }
 };
 
-/* ==================== AUTH STATE ==================== */
+/* ========================================================
+   🔐 10. Auth State
+   ======================================================== */
 let adminTabsInit = false;
 
-onAuthStateChanged(auth, async u=>{
+onAuthStateChanged(auth, async u => {
   CURRENT_USER = u;
-  if(u){
+  if (u) {
     IS_ADMIN = (u.email === ADMIN_EMAIL);
-    try{
-      const s = await get(ref(db,'users/'+u.uid));
-      USER_PROFILE = s.exists() ? s.val() : {name: u.displayName || u.email.split('@')[0], email: u.email};
-    }catch{ USER_PROFILE = {name: u.displayName || '', email: u.email}; }
-
-    if('Notification' in window && Notification.permission === 'granted'){
-      setTimeout(()=> saveFCMToken(), 500);
-    }
-
-    if(IS_ADMIN){
+    try {
+      const s = await get(ref(db, 'users/' + u.uid));
+      USER_PROFILE = s.exists() ? s.val() : { name: u.displayName || u.email.split('@')[0], email: u.email };
+    } catch { USER_PROFILE = { name: u.displayName || '', email: u.email }; }
+    
+    if (Notification.permission === 'granted') setTimeout(() => saveFCMToken(), 500);
+    
+    if (IS_ADMIN) {
       initAdminTabs();
       const an = document.getElementById('adminName');
-      if(an) an.textContent = u.displayName || 'المدير';
+      if (an) an.textContent = u.displayName || 'المدير';
       document.getElementById('storefront').style.display = 'none';
       document.getElementById('adminApp').classList.add('show');
     }
@@ -1831,71 +2086,74 @@ onAuthStateChanged(auth, async u=>{
     backToStore();
   }
   renderUserArea();
-  if(IS_ADMIN){
+  if (IS_ADMIN) {
     renderProductsAdmin(); renderOrders(); renderUsers(); renderCoupons(); renderNotifs();
     renderStats(); renderAnalytics(); renderUserSelect();
   }
 });
 
-/* ==================== ADMIN PANEL ==================== */
-window.openAdminPanel = ()=>{
-  if(!IS_ADMIN) return toast('للمشرف فقط','err');
+/* ========================================================
+   👑 11. Admin Panel
+   ======================================================== */
+window.openAdminPanel = () => {
+  if (!IS_ADMIN) return toast('للمشرف فقط', 'err');
   document.getElementById('storefront').style.display = 'none';
   document.getElementById('adminApp').classList.add('show');
-  window.scrollTo({top:0,behavior:'instant'});
-  if(document.getElementById('userMenu')) document.getElementById('userMenu').style.display='none';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (document.getElementById('userMenu')) document.getElementById('userMenu').style.display = 'none';
 };
-window.backToStore = ()=>{
+window.backToStore = () => {
   document.getElementById('storefront').style.display = 'block';
   document.getElementById('adminApp').classList.remove('show');
   const sb = document.getElementById('adminSidebar');
   const ov = document.getElementById('sidebarOverlay');
-  if(sb) sb.classList.remove('show');
-  if(ov) ov.classList.remove('show');
-  window.scrollTo({top:0,behavior:'instant'});
+  if (sb) sb.classList.remove('show');
+  if (ov) ov.classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'instant' });
 };
-window.toggleAdminSidebar = ()=>{
+window.toggleAdminSidebar = () => {
   document.getElementById('adminSidebar').classList.toggle('show');
   document.getElementById('sidebarOverlay').classList.toggle('show');
 };
 
 function initAdminTabs(){
-  if(adminTabsInit) return; adminTabsInit = true;
-  document.querySelectorAll('.menu-item[data-tab]').forEach(btn=>{
-    btn.onclick = ()=>{
-      document.querySelectorAll('.menu-item').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  if (adminTabsInit) return;
+  adminTabsInit = true;
+  document.querySelectorAll('.menu-item[data-tab]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
       const id = btn.dataset.tab;
-      document.getElementById('tab-'+id).classList.add('active');
-      const labels = {dashboard:'الإحصائيات',analytics:'التقارير',products:'المنتجات',orders:'الطلبات',users:'العملاء',coupons:'الكوبونات',notifications:'إرسال إشعارات',settings:'الإعدادات',reset:'إعادة ضبط'};
-      document.getElementById('pageTitle').textContent = labels[id]||'';
+      document.getElementById('tab-' + id).classList.add('active');
+      const labels = { dashboard:'الإحصائيات', analytics:'التقارير', products:'المنتجات', orders:'الطلبات', users:'العملاء', coupons:'الكوبونات', notifications:'إرسال إشعارات', settings:'الإعدادات', reset:'إعادة ضبط' };
+      document.getElementById('pageTitle').textContent = labels[id] || '';
       document.getElementById('adminSidebar').classList.remove('show');
       document.getElementById('sidebarOverlay').classList.remove('show');
-      if(id === 'notifications') renderUserSelect();
+      if (id === 'notifications') renderUserSelect();
     };
   });
 }
 
-window.handleTargetChange = ()=>{
+window.handleTargetChange = () => {
   const t = document.getElementById('nTarget').value;
-  document.getElementById('userSelectWrap').style.display = t==='specific'?'block':'none';
-  if(t === 'specific') renderUserSelect();
+  document.getElementById('userSelectWrap').style.display = t === 'specific' ? 'block' : 'none';
+  if (t === 'specific') renderUserSelect();
 };
 
 function renderUserSelect(){
   const sel = document.getElementById('nTargetUser');
-  if(!sel) return;
-  if(!USERS.length){
+  if (!sel) return;
+  if (!USERS.length) {
     sel.innerHTML = '<option value="">لا يوجد مستخدمون</option>';
     return;
   }
-  sel.innerHTML = '<option value="">— اختر مستخدم —</option>' + USERS.map(u=>
-    `<option value="${u.id}">${escapeHtml(u.name||u.email)} (${escapeHtml(u.email||'')})</option>`
+  sel.innerHTML = '<option value="">— اختر مستخدم —</option>' + USERS.map(u =>
+    `<option value="${u.id}">${escapeHtml(u.name || u.email)} (${escapeHtml(u.email || '')})</option>`
   ).join('');
 }
 
-window.sendNotification = async ()=>{
+window.sendNotification = async () => {
   const target = document.getElementById('nTarget').value;
   const targetUid = document.getElementById('nTargetUser').value;
   const title = document.getElementById('nTitle').value.trim();
@@ -1903,142 +2161,159 @@ window.sendNotification = async ()=>{
   const type = document.getElementById('nType').value;
   const priority = document.getElementById('nPriority').value;
   
-  if(!title || !body) return toast('املأ العنوان والرسالة','err');
-  if(target === 'specific' && !targetUid) return toast('اختر المستخدم','err');
+  if (!title || !body) return toast('املأ العنوان والرسالة', 'err');
+  if (target === 'specific' && !targetUid) return toast('اختر المستخدم', 'err');
   
-  try{
+  try {
     const notifData = {
       title, body, type, priority,
       target,
       targetUid: target === 'specific' ? targetUid : 'all',
       createdAt: Date.now(),
-      from: 'admin'
+      from: 'admin',
+      storeLogo: SETTINGS.logo || '',
+      storeImage: SETTINGS.storeImage || '',
+      storeName: SETTINGS.storeName || 'متجر يزيد'
     };
-    await push(ref(db,'notifications'), notifData);
+    await push(ref(db, 'notifications'), notifData);
     
-    // إرسال FCM Push لكل المستخدمين (لو الـ Cloud Function مفعّل)
-    // ملاحظة: بدون Cloud Function، الـ FCM يشتغل فقط لو المستخدم عنده توكن محفوظ
-    // ولو تريد Push فعلي، لازم تنشئ Cloud Function (كود تحت)
+    // إرسال إشعار فوري للمستخدمين المتصلين
+    try {
+      if (swRegistration && swRegistration.active) {
+        swRegistration.active.postMessage({
+          type: 'SHOW_NOTIFICATION',
+          payload: {
+            title: `${title} - ${SETTINGS.storeName || 'متجر يزيد'}`,
+            body: body,
+            icon: SETTINGS.logo || '/favicon.ico',
+            image: SETTINGS.storeImage || '',
+            priority: priority
+          }
+        });
+      }
+    } catch (e) { console.log('sys notif error:', e); }
     
     document.getElementById('nTitle').value = '';
     document.getElementById('nBody').value = '';
-    
-    toast('تم إرسال الإشعار ✓','ok');
-  }catch(e){
+    toast('تم إرسال الإشعار ✓', 'ok');
+    if (navigator.vibrate) navigator.vibrate(100);
+  } catch (e) {
     console.error(e);
-    toast('فشل الإرسال','err');
+    toast('فشل الإرسال', 'err');
   }
 };
 
-window.previewNotif = ()=>{
+window.previewNotif = () => {
   const title = document.getElementById('nTitle').value.trim() || 'عرض خاص 🎉';
   const body = document.getElementById('nBody').value.trim() || 'خصم 20% على جميع المنتجات';
   const type = document.getElementById('nType').value;
   const priority = document.getElementById('nPriority').value;
-  showPushNotif({title, body, type, priority});
+  showPushNotif({ title, body, type, priority });
 };
 
-window.deleteNotif = async id=>{
-  try{ await remove(ref(db,'notifications/'+id)); toast('تم','ok'); }catch{ toast('فشل','err'); }
+window.deleteNotif = async id => {
+  try { await remove(ref(db, 'notifications/' + id)); toast('تم', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
 
-window.clearAllNotifs = async ()=>{
-  if(!confirm('حذف جميع الإشعارات؟')) return;
-  try{ await remove(ref(db,'notifications')); toast('تم الحذف','ok'); }
-  catch{ toast('فشل','err'); }
+window.clearAllNotifs = async () => {
+  if (!confirm('حذف جميع الإشعارات؟')) return;
+  try { await remove(ref(db, 'notifications')); toast('تم الحذف', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
 
 function renderNotifs(){
-  const el = document.getElementById('notifBody'); if(!el) return;
+  const el = document.getElementById('notifBody');
+  if (!el) return;
   document.getElementById('notifCount').textContent = ALL_NOTIFS.length;
-  if(!ALL_NOTIFS.length){
+  if (!ALL_NOTIFS.length) {
     el.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div></td></tr>`;
     return;
   }
-  el.innerHTML = ALL_NOTIFS.map(n=>{
+  el.innerHTML = ALL_NOTIFS.map(n => {
     let targetLabel = 'الجميع';
-    if(n.target === 'specific' && n.targetUid){
-      const u = USERS.find(x=>x.id===n.targetUid);
-      targetLabel = u ? escapeHtml(u.name||u.email) : 'مستخدم';
+    if (n.target === 'specific' && n.targetUid) {
+      const u = USERS.find(x => x.id === n.targetUid);
+      targetLabel = u ? escapeHtml(u.name || u.email) : 'مستخدم';
     }
     return `
     <tr>
       <td><span class="badge-status badge-shipped">${targetLabel}</span></td>
-      <td><span class="badge-status badge-${n.type==='order'?'confirmed':(n.type==='promo'?'pending':'shipped')}">${n.type==='order'?'🛒':(n.type==='promo'?'🎁':'ℹ️')}</span></td>
-      <td><strong>${escapeHtml(n.title||'')}</strong></td>
-      <td>${escapeHtml(n.body||'')}</td>
+      <td><span class="badge-status badge-${n.type === 'order' ? 'confirmed' : (n.type === 'promo' ? 'pending' : 'shipped')}">${n.type === 'order' ? '🛒' : (n.type === 'promo' ? '🎁' : 'ℹ️')}</span></td>
+      <td><strong>${escapeHtml(n.title || '')}</strong></td>
+      <td>${escapeHtml(n.body || '')}</td>
       <td><small>${formatDate(n.createdAt)}</small></td>
       <td><button class="mini-btn del" onclick="deleteNotif('${n.id}')"><i class="fas fa-trash"></i></button></td>
     </tr>`;
   }).join('');
 }
 
-/* ========== ADMIN: RESET ========== */
-window.resetUsers = async ()=>{
-  if(!confirm('⚠️ حذف جميع العملاء؟')) return;
-  if(!confirm('تأكيد نهائي؟')) return;
-  try{
-    const snap = await get(ref(db,'users'));
-    if(snap.exists()){
+/* ========== Admin: Reset ========== */
+window.resetUsers = async () => {
+  if (!confirm('⚠️ حذف جميع العملاء؟')) return;
+  if (!confirm('تأكيد نهائي؟')) return;
+  try {
+    const snap = await get(ref(db, 'users'));
+    if (snap.exists()) {
       const updates = {};
-      snap.forEach(c=>{
+      snap.forEach(c => {
         const v = c.val();
-        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/'+c.key] = null;
+        if (v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/' + c.key] = null;
       });
       await update(ref(db), updates);
     }
-    toast('تم ✓','ok');
-  }catch{ toast('فشل','err'); }
+    toast('تم ✓', 'ok');
+  } catch { toast('فشل', 'err'); }
 };
 
-window.resetProducts = async ()=>{
-  if(!confirm('⚠️ حذف جميع المنتجات؟')) return;
-  try{ await remove(ref(db,'products')); toast('تم ✓','ok'); }
-  catch{ toast('فشل','err'); }
+window.resetProducts = async () => {
+  if (!confirm('⚠️ حذف جميع المنتجات؟')) return;
+  try { await remove(ref(db, 'products')); toast('تم ✓', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
 
-window.resetOrders = async ()=>{
-  if(!confirm('⚠️ حذف جميع الطلبات؟')) return;
-  try{ await remove(ref(db,'orders')); toast('تم ✓','ok'); }
-  catch{ toast('فشل','err'); }
+window.resetOrders = async () => {
+  if (!confirm('⚠️ حذف جميع الطلبات؟')) return;
+  try { await remove(ref(db, 'orders')); toast('تم ✓', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
 
-window.resetNotifications = async ()=>{
-  if(!confirm('⚠️ حذف جميع الإشعارات؟')) return;
-  try{
-    await remove(ref(db,'notifications'));
+window.resetNotifications = async () => {
+  if (!confirm('⚠️ حذف جميع الإشعارات؟')) return;
+  try {
+    await remove(ref(db, 'notifications'));
     READ_NOTIFS = [];
     localStorage.setItem('ym_read_notifs', JSON.stringify([]));
-    toast('تم ✓','ok');
-  }catch{ toast('فشل','err'); }
+    toast('تم ✓', 'ok');
+  } catch { toast('فشل', 'err'); }
 };
 
-window.resetAll = async ()=>{
-  if(!confirm('⚠️⚠️ حذف كل شيء؟')) return;
+window.resetAll = async () => {
+  if (!confirm('⚠️⚠️ حذف كل شيء؟')) return;
   const c = prompt('اكتب "تأكيد":');
-  if(c !== 'تأكيد') return;
-  try{
-    await remove(ref(db,'products'));
-    await remove(ref(db,'orders'));
-    await remove(ref(db,'coupons'));
-    await remove(ref(db,'notifications'));
-    const snap = await get(ref(db,'users'));
-    if(snap.exists()){
+  if (c !== 'تأكيد') return;
+  try {
+    await remove(ref(db, 'products'));
+    await remove(ref(db, 'orders'));
+    await remove(ref(db, 'coupons'));
+    await remove(ref(db, 'notifications'));
+    const snap = await get(ref(db, 'users'));
+    if (snap.exists()) {
       const updates = {};
-      snap.forEach(ch=>{
+      snap.forEach(ch => {
         const v = ch.val();
-        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/'+ch.key] = null;
+        if (v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/' + ch.key] = null;
       });
-      if(Object.keys(updates).length) await update(ref(db), updates);
+      if (Object.keys(updates).length) await update(ref(db), updates);
     }
     READ_NOTIFS = [];
     localStorage.setItem('ym_read_notifs', JSON.stringify([]));
-    toast('تم إعادة ضبط المتجر ✓','ok');
-  }catch{ toast('فشل','err'); }
+    toast('تم إعادة ضبط المتجر ✓', 'ok');
+  } catch { toast('فشل', 'err'); }
 };
 
-/* ========== ADMIN: SETTINGS ========== */
-window.saveSettings = async ()=>{
+/* ========== Admin: Settings ========== */
+window.saveSettings = async () => {
   const s = {
     storeName: document.getElementById('sName').value.trim() || 'متجر يزيد',
     heroTitle: document.getElementById('sHero').value.trim(),
@@ -2049,30 +2324,30 @@ window.saveSettings = async ()=>{
     storeImage: document.getElementById('sStoreImage').value || '',
     maxUsers: Number(document.getElementById('sMaxUsers').value) || 0
   };
-  try{ await set(ref(db,'settings'), s); toast('تم الحفظ ✓','ok'); }
-  catch{ toast('فشل','err'); }
+  try { await set(ref(db, 'settings'), s); toast('تم الحفظ ✓', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
-window.loadSettings = ()=> applySettings();
+window.loadSettings = () => applySettings();
 
-['Primary','Primary2','Accent'].forEach(k=>{
-  const ci = document.getElementById('s'+k);
-  const ti = document.getElementById('s'+k+'Txt');
-  if(ci && ti){
-    ci.oninput = e=> ti.value = e.target.value;
-    ti.oninput = e=>{ if(/^#[0-9a-fA-F]{6}$/.test(e.target.value)) ci.value = e.target.value; };
+['Primary', 'Primary2', 'Accent'].forEach(k => {
+  const ci = document.getElementById('s' + k);
+  const ti = document.getElementById('s' + k + 'Txt');
+  if (ci && ti) {
+    ci.oninput = e => ti.value = e.target.value;
+    ti.oninput = e => { if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) ci.value = e.target.value; };
   }
 });
 
-/* ========== IMAGE ========== */
+/* ========== Image Processing ========== */
 async function processImage(file, maxW = 800, quality = 0.75){
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = e=>{
+    reader.onload = e => {
       const img = new Image();
-      img.onload = ()=>{
+      img.onload = () => {
         const canvas = document.createElement('canvas');
         let w = img.width, h = img.height;
-        if(w > maxW){ h = (maxW / w) * h; w = maxW; }
+        if (w > maxW) { h = (maxW / w) * h; w = maxW; }
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
         resolve(canvas.toDataURL('image/jpeg', quality));
@@ -2085,116 +2360,122 @@ async function processImage(file, maxW = 800, quality = 0.75){
   });
 }
 
-window.handleProductImage = async e=>{
-  const file = e.target.files[0]; if(!file) return;
-  try{
-    toast('جاري المعالجة...','ok');
+window.handleProductImage = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    toast('جاري المعالجة...', 'ok');
     const data = await processImage(file, 800, 0.75);
     document.getElementById('pImage').value = data;
     document.getElementById('pImagePreview').innerHTML = `<img src="${data}">`;
-  }catch{ toast('فشل','err'); }
+  } catch { toast('فشل', 'err'); }
 };
-window.clearProductImage = ()=>{
+window.clearProductImage = () => {
   document.getElementById('pImage').value = '';
   document.getElementById('pImagePreview').innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p>اضغط لاختيار صورة أو التقط من الكاميرا</p>`;
 };
-window.handleLogo = async e=>{
-  const file = e.target.files[0]; if(!file) return;
-  try{
+window.handleLogo = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
     const data = await processImage(file, 400, 0.85);
     document.getElementById('sLogo').value = data;
     document.getElementById('sLogoPreview').innerHTML = `<img src="${data}">`;
-  }catch{ toast('فشل','err'); }
+  } catch { toast('فشل', 'err'); }
 };
-window.clearLogo = ()=>{
+window.clearLogo = () => {
   document.getElementById('sLogo').value = '';
   document.getElementById('sLogoPreview').innerHTML = `<i class="fas fa-image"></i><p>اضغط لاختيار شعار</p>`;
 };
-window.handleStoreImg = async e=>{
-  const file = e.target.files[0]; if(!file) return;
-  try{
+window.handleStoreImg = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
     const data = await processImage(file, 1000, 0.8);
     document.getElementById('sStoreImage').value = data;
     document.getElementById('sStorePreview').innerHTML = `<img src="${data}">`;
-  }catch{ toast('فشل','err'); }
+  } catch { toast('فشل', 'err'); }
 };
-window.clearStoreImg = ()=>{
+window.clearStoreImg = () => {
   document.getElementById('sStoreImage').value = '';
   document.getElementById('sStorePreview').innerHTML = `<i class="fas fa-store"></i><p>اضغط لاختيار صورة المتجر</p>`;
 };
 
-/* ========== ADMIN: PRODUCTS ========== */
-window.saveProduct = async ()=>{
+/* ========== Admin: Products ========== */
+window.saveProduct = async () => {
   const id = document.getElementById('pId').value;
   const name = document.getElementById('pName').value.trim();
   const price = Number(document.getElementById('pPrice').value);
   const discount = Number(document.getElementById('pDiscount').value) || 0;
-  if(!name || !price || price<=0) return toast('املأ الاسم والسعر','err');
-  if(discount < 0 || discount > 100) return toast('الخصم بين 0 و 100','err');
+  if (!name || !price || price <= 0) return toast('املأ الاسم والسعر', 'err');
+  if (discount < 0 || discount > 100) return toast('الخصم بين 0 و 100', 'err');
   const data = {
     name, price, discount,
     category: document.getElementById('pCategory').value.trim(),
-    stock: document.getElementById('pStock').value==='true',
-    visible: document.getElementById('pVisible').value==='true',
+    stock: document.getElementById('pStock').value === 'true',
+    visible: document.getElementById('pVisible').value === 'true',
     image: document.getElementById('pImage').value.trim(),
     description: document.getElementById('pDesc').value.trim(),
     updatedAt: Date.now()
   };
-  try{
-    if(id){ await update(ref(db,'products/'+id), data); toast('تم التحديث ✓','ok'); }
-    else { data.createdAt = Date.now(); await push(ref(db,'products'), data); toast('تم الإضافة ✓','ok'); }
+  try {
+    if (id) { await update(ref(db, 'products/' + id), data); toast('تم التحديث ✓', 'ok'); }
+    else { data.createdAt = Date.now(); await push(ref(db, 'products'), data); toast('تم الإضافة ✓', 'ok'); }
     resetProductForm();
-  }catch{ toast('فشل','err'); }
+  } catch { toast('فشل', 'err'); }
 };
-window.resetProductForm = ()=>{
-  ['pId','pName','pPrice','pCategory','pDesc'].forEach(i=> document.getElementById(i).value='');
+window.resetProductForm = () => {
+  ['pId', 'pName', 'pPrice', 'pCategory', 'pDesc'].forEach(i => document.getElementById(i).value = '');
   document.getElementById('pDiscount').value = '0';
-  document.getElementById('pStock').value='true';
-  document.getElementById('pVisible').value='true';
+  document.getElementById('pStock').value = 'true';
+  document.getElementById('pVisible').value = 'true';
   document.getElementById('saveBtnText').textContent = 'حفظ';
   clearProductImage();
 };
-window.editProduct = id=>{
-  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+window.editProduct = id => {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
   document.getElementById('pId').value = p.id;
-  document.getElementById('pName').value = p.name||'';
-  document.getElementById('pPrice').value = p.price||'';
-  document.getElementById('pDiscount').value = p.discount||0;
-  document.getElementById('pCategory').value = p.category||'';
+  document.getElementById('pName').value = p.name || '';
+  document.getElementById('pPrice').value = p.price || '';
+  document.getElementById('pDiscount').value = p.discount || 0;
+  document.getElementById('pCategory').value = p.category || '';
   document.getElementById('pStock').value = String(p.stock !== false);
   document.getElementById('pVisible').value = String(p.visible !== false);
-  document.getElementById('pImage').value = p.image||'';
+  document.getElementById('pImage').value = p.image || '';
   document.getElementById('pImagePreview').innerHTML = p.image ? `<img src="${p.image}">` : `<i class="fas fa-cloud-upload-alt"></i><p>اضغط لاختيار صورة</p>`;
-  document.getElementById('pDesc').value = p.description||'';
+  document.getElementById('pDesc').value = p.description || '';
   document.getElementById('saveBtnText').textContent = 'تحديث';
   document.querySelector('.menu-item[data-tab="products"]').click();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
-window.deleteProduct = async id=>{
-  if(!confirm('حذف المنتج؟')) return;
-  try{ await remove(ref(db,'products/'+id)); toast('تم الحذف','ok'); }
-  catch{ toast('فشل','err'); }
+window.deleteProduct = async id => {
+  if (!confirm('حذف المنتج؟')) return;
+  try { await remove(ref(db, 'products/' + id)); toast('تم الحذف', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
-window.toggleStock = async id=>{
-  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
-  await update(ref(db,'products/'+id), {stock: p.stock === false});
+window.toggleStock = async id => {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  await update(ref(db, 'products/' + id), { stock: p.stock === false });
 };
 function renderProductsAdmin(){
-  const el = document.getElementById('productsBody'); if(!el) return;
+  const el = document.getElementById('productsBody');
+  if (!el) return;
   document.getElementById('prodCount').textContent = PRODUCTS.length;
-  if(!PRODUCTS.length){
+  if (!PRODUCTS.length) {
     el.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fas fa-box-open"></i><p>لا توجد منتجات</p></div></td></tr>`;
     return;
   }
-  el.innerHTML = PRODUCTS.map(p=>{
-    const discount = Number(p.discount)||0;
+  el.innerHTML = PRODUCTS.map(p => {
+    const discount = Number(p.discount) || 0;
     return `
     <tr>
-      <td>${p.image?`<img class="prod-thumb" src="${p.image}" onerror="this.outerHTML='<div class=\\'prod-thumb-ph\\'><i class=\\'fas fa-image\\'></i></div>'">`:`<div class="prod-thumb-ph"><i class="fas fa-image"></i></div>`}</td>
-      <td><strong>${escapeHtml(p.name||'')}</strong><br><small style="color:var(--text-2)">${escapeHtml(p.category||'')}</small></td>
-      <td><strong style="color:var(--primary)">${Number(p.price||0).toLocaleString('ar-EG')} ج.م</strong></td>
-      <td>${discount>0?`<span style="color:var(--danger);font-weight:800">${discount}%</span>`:'-'}</td>
-      <td><span class="badge-status ${p.stock===false?'badge-cancelled':'badge-confirmed'}">${p.stock===false?'نفذ':'متوفر'}</span></td>
+      <td>${p.image ? `<img class="prod-thumb" src="${p.image}" onerror="this.outerHTML='<div class=\\'prod-thumb-ph\\'><i class=\\'fas fa-image\\'></i></div>'">` : `<div class="prod-thumb-ph"><i class="fas fa-image"></i></div>`}</td>
+      <td><strong>${escapeHtml(p.name || '')}</strong><br><small style="color:var(--text-2)">${escapeHtml(p.category || '')}</small></td>
+      <td><strong style="color:var(--primary)">${Number(p.price || 0).toLocaleString('ar-EG')} ج.م</strong></td>
+      <td>${discount > 0 ? `<span style="color:var(--danger);font-weight:800">${discount}%</span>` : '-'}</td>
+      <td><span class="badge-status ${p.stock === false ? 'badge-cancelled' : 'badge-confirmed'}">${p.stock === false ? 'نفذ' : 'متوفر'}</span></td>
       <td style="white-space:nowrap">
         <button class="mini-btn edit" onclick="editProduct('${p.id}')"><i class="fas fa-pen"></i></button>
         <button class="mini-btn view" onclick="toggleStock('${p.id}')"><i class="fas fa-box"></i></button>
@@ -2204,24 +2485,26 @@ function renderProductsAdmin(){
   }).join('');
 }
 
-/* ========== ADMIN: ORDERS ========== */
-window.filterOrders = f=>{ ORDER_FILTER = f; renderOrders(); };
-const STATUS_LABELS = {pending:'قيد الانتظار',confirmed:'مؤكد',shipped:'تم الشحن',delivered:'تم التسليم',cancelled:'ملغي'};
+/* ========== Admin: Orders ========== */
+window.filterOrders = f => { ORDER_FILTER = f; renderOrders(); };
+const STATUS_LABELS = { pending:'قيد الانتظار', confirmed:'مؤكد', shipped:'تم الشحن', delivered:'تم التسليم', cancelled:'ملغي' };
+
 function renderOrders(){
-  const el = document.getElementById('ordersBody'); if(!el) return;
-  let list = ORDER_FILTER==='all' ? ORDERS : ORDERS.filter(o=>o.status===ORDER_FILTER);
-  if(!list.length){
+  const el = document.getElementById('ordersBody');
+  if (!el) return;
+  let list = ORDER_FILTER === 'all' ? ORDERS : ORDERS.filter(o => o.status === ORDER_FILTER);
+  if (!list.length) {
     el.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد طلبات</p></div></td></tr>`;
     return;
   }
-  el.innerHTML = list.map(o=>`
+  el.innerHTML = list.map(o => `
     <tr>
-      <td><strong>${escapeHtml(o.userName||'-')}</strong><br><small style="color:var(--text-2)">${escapeHtml(o.userEmail||'')}</small></td>
-      <td>${escapeHtml(o.phone||'-')}</td>
-      <td><strong style="color:var(--primary)">${Number(o.total||0).toLocaleString('ar-EG')}</strong></td>
+      <td><strong>${escapeHtml(o.userName || '-')}</strong><br><small style="color:var(--text-2)">${escapeHtml(o.userEmail || '')}</small></td>
+      <td>${escapeHtml(o.phone || '-')}</td>
+      <td><strong style="color:var(--primary)">${Number(o.total || 0).toLocaleString('ar-EG')}</strong></td>
       <td>
         <select class="mini-btn" style="padding:6px;background:var(--bg);border:1px solid var(--border);color:var(--text)" onchange="changeStatus('${o.id}', this.value)">
-          ${Object.entries(STATUS_LABELS).map(([k,v])=>`<option value="${k}" ${o.status===k?'selected':''}>${v}</option>`).join('')}
+          ${Object.entries(STATUS_LABELS).map(([k, v]) => `<option value="${k}" ${o.status === k ? 'selected' : ''}>${v}</option>`).join('')}
         </select>
       </td>
       <td><small>${formatDate(o.createdAt)}</small></td>
@@ -2231,70 +2514,73 @@ function renderOrders(){
       </td>
     </tr>`).join('');
 }
-window.changeStatus = async (id, status)=>{
-  try{ await update(ref(db,'orders/'+id), {status}); toast('تم التحديث ✓','ok'); }
-  catch{ toast('فشل','err'); }
+window.changeStatus = async (id, status) => {
+  try { await update(ref(db, 'orders/' + id), { status }); toast('تم التحديث ✓', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
-window.deleteOrder = async id=>{
-  if(!confirm('حذف الطلب؟')) return;
-  try{ await remove(ref(db,'orders/'+id)); toast('تم','ok'); }catch{ toast('فشل','err'); }
+window.deleteOrder = async id => {
+  if (!confirm('حذف الطلب؟')) return;
+  try { await remove(ref(db, 'orders/' + id)); toast('تم', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
-window.viewOrder = id=>{
-  const o = ORDERS.find(x=>x.id===id); if(!o) return;
-  const itemsHtml = (o.items||[]).map(i=>`<div><span>${escapeHtml(i.name)} × ${i.qty}</span><span>${Number(i.price*i.qty).toLocaleString('ar-EG')} ج.م</span></div>`).join('');
+window.viewOrder = id => {
+  const o = ORDERS.find(x => x.id === id);
+  if (!o) return;
+  const itemsHtml = (o.items || []).map(i => `<div><span>${escapeHtml(i.name)} × ${i.qty}</span><span>${Number(i.price * i.qty).toLocaleString('ar-EG')} ج.م</span></div>`).join('');
   document.getElementById('orderModalBody').innerHTML = `
-    <div class="field"><label>العميل</label><div>${escapeHtml(o.userName||'-')} (${escapeHtml(o.userEmail||'')})</div></div>
-    <div class="field"><label>الهاتف</label><div>${escapeHtml(o.phone||'-')}</div></div>
-    <div class="field"><label>العنوان</label><div>${escapeHtml(o.address||'-')}</div></div>
-    ${o.notes?`<div class="field"><label>ملاحظات</label><div>${escapeHtml(o.notes)}</div></div>`:''}
+    <div class="field"><label>العميل</label><div>${escapeHtml(o.userName || '-')} (${escapeHtml(o.userEmail || '')})</div></div>
+    <div class="field"><label>الهاتف</label><div>${escapeHtml(o.phone || '-')}</div></div>
+    <div class="field"><label>العنوان</label><div>${escapeHtml(o.address || '-')}</div></div>
+    ${o.notes ? `<div class="field"><label>ملاحظات</label><div>${escapeHtml(o.notes)}</div></div>` : ''}
     <div class="field"><label>المنتجات</label><div class="order-items-list">${itemsHtml}</div></div>
-    ${o.discount>0?`<div class="field"><label>الخصم</label><div style="color:var(--success)">- ${Number(o.discount).toLocaleString('ar-EG')} ج.م</div></div>`:''}
+    ${o.discount > 0 ? `<div class="field"><label>الخصم</label><div style="color:var(--success)">- ${Number(o.discount).toLocaleString('ar-EG')} ج.م</div></div>` : ''}
     <div class="field" style="display:flex;justify-content:space-between;font-weight:900;font-size:17px;padding-top:10px;border-top:1px solid var(--border)">
-      <span>الإجمالي:</span><span style="color:var(--primary)">${Number(o.total||0).toLocaleString('ar-EG')} ج.م</span>
+      <span>الإجمالي:</span><span style="color:var(--primary)">${Number(o.total || 0).toLocaleString('ar-EG')} ج.م</span>
     </div>`;
   document.getElementById('orderModal').classList.add('show');
 };
 
-/* ========== ADMIN: USERS ========== */
+/* ========== Admin: Users ========== */
 function renderUsers(){
-  const el = document.getElementById('usersBody'); if(!el) return;
+  const el = document.getElementById('usersBody');
+  if (!el) return;
   document.getElementById('usersCount').textContent = USERS.length;
-  if(!USERS.length){
+  if (!USERS.length) {
     el.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-user-slash"></i><p>لا يوجد</p></div></td></tr>`;
     return;
   }
-  el.innerHTML = USERS.map(u=>{
-    const orders = ORDERS.filter(o=>o.uid===u.id).length;
+  el.innerHTML = USERS.map(u => {
+    const orders = ORDERS.filter(o => o.uid === u.id).length;
     const hasToken = u.fcmToken ? '<i class="fas fa-check-circle" style="color:var(--success)" title="الإشعارات مفعلة"></i>' : '<i class="fas fa-times-circle" style="color:var(--text-2)" title="لم يفعل الإشعارات"></i>';
     return `
     <tr>
-      <td><strong>${escapeHtml(u.name||'-')}</strong> ${hasToken}</td>
-      <td>${escapeHtml(u.email||'-')}</td>
-      <td>${escapeHtml(u.phone||'-')}</td>
+      <td><strong>${escapeHtml(u.name || '-')}</strong> ${hasToken}</td>
+      <td>${escapeHtml(u.email || '-')}</td>
+      <td>${escapeHtml(u.phone || '-')}</td>
       <td><small>${formatDate(u.createdAt)}</small></td>
       <td><strong>${orders}</strong></td>
     </tr>`;
   }).join('');
 }
 
-/* ========== ADMIN: COUPONS ========== */
-window.saveCoupon = async ()=>{
+/* ========== Admin: Coupons ========== */
+window.saveCoupon = async () => {
   const oldCode = document.getElementById('cOldCode').value;
   const code = document.getElementById('cCode').value.trim().toUpperCase();
   const type = document.getElementById('cType').value;
   const value = Number(document.getElementById('cValue').value);
   const min = Number(document.getElementById('cMin').value) || 0;
   const active = document.getElementById('cActive').value === 'true';
-  if(!code || !value) return toast('املأ الكود والقيمة','err');
-  if(type === 'percent' && value > 100) return toast('النسبة لا تتجاوز 100','err');
-  try{
-    if(oldCode && oldCode !== code) await remove(ref(db,'coupons/'+oldCode));
-    await set(ref(db,'coupons/'+code), {type, value, min, active, updatedAt: Date.now()});
-    toast('تم الحفظ ✓','ok');
+  if (!code || !value) return toast('املأ الكود والقيمة', 'err');
+  if (type === 'percent' && value > 100) return toast('النسبة لا تتجاوز 100', 'err');
+  try {
+    if (oldCode && oldCode !== code) await remove(ref(db, 'coupons/' + oldCode));
+    await set(ref(db, 'coupons/' + code), { type, value, min, active, updatedAt: Date.now() });
+    toast('تم الحفظ ✓', 'ok');
     resetCouponForm();
-  }catch{ toast('فشل','err'); }
+  } catch { toast('فشل', 'err'); }
 };
-window.resetCouponForm = ()=>{
+window.resetCouponForm = () => {
   document.getElementById('cOldCode').value = '';
   document.getElementById('cCode').value = '';
   document.getElementById('cType').value = 'percent';
@@ -2302,8 +2588,9 @@ window.resetCouponForm = ()=>{
   document.getElementById('cMin').value = '0';
   document.getElementById('cActive').value = 'true';
 };
-window.editCoupon = code=>{
-  const c = COUPONS[code]; if(!c) return;
+window.editCoupon = code => {
+  const c = COUPONS[code];
+  if (!c) return;
   document.getElementById('cOldCode').value = code;
   document.getElementById('cCode').value = code;
   document.getElementById('cType').value = c.type || 'percent';
@@ -2311,31 +2598,34 @@ window.editCoupon = code=>{
   document.getElementById('cMin').value = c.min || 0;
   document.getElementById('cActive').value = String(c.active !== false);
   document.querySelector('.menu-item[data-tab="coupons"]').click();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
-window.deleteCoupon = async code=>{
-  if(!confirm('حذف الكوبون؟')) return;
-  try{ await remove(ref(db,'coupons/'+code)); toast('تم','ok'); }catch{ toast('فشل','err'); }
+window.deleteCoupon = async code => {
+  if (!confirm('حذف الكوبون؟')) return;
+  try { await remove(ref(db, 'coupons/' + code)); toast('تم', 'ok'); }
+  catch { toast('فشل', 'err'); }
 };
-window.toggleCoupon = async code=>{
-  const c = COUPONS[code]; if(!c) return;
-  await update(ref(db,'coupons/'+code), {active: c.active === false});
+window.toggleCoupon = async code => {
+  const c = COUPONS[code];
+  if (!c) return;
+  await update(ref(db, 'coupons/' + code), { active: c.active === false });
 };
 function renderCoupons(){
-  const el = document.getElementById('couponsBody'); if(!el) return;
+  const el = document.getElementById('couponsBody');
+  if (!el) return;
   const list = Object.entries(COUPONS);
   document.getElementById('couponsCount').textContent = list.length;
-  if(!list.length){
+  if (!list.length) {
     el.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fas fa-tags"></i><p>لا توجد كوبونات</p></div></td></tr>`;
     return;
   }
-  el.innerHTML = list.map(([code,c])=>`
+  el.innerHTML = list.map(([code, c]) => `
     <tr>
       <td><strong>${escapeHtml(code)}</strong></td>
-      <td>${c.type==='percent'?'نسبة':'مبلغ'}</td>
-      <td><strong>${c.type==='percent'?c.value+'%':c.value+' ج.م'}</strong></td>
-      <td>${c.min||0} ج.م</td>
-      <td><span class="badge-status ${c.active===false?'badge-cancelled':'badge-confirmed'}">${c.active===false?'معطل':'مفعّل'}</span></td>
+      <td>${c.type === 'percent' ? 'نسبة' : 'مبلغ'}</td>
+      <td><strong>${c.type === 'percent' ? c.value + '%' : c.value + ' ج.م'}</strong></td>
+      <td>${c.min || 0} ج.م</td>
+      <td><span class="badge-status ${c.active === false ? 'badge-cancelled' : 'badge-confirmed'}">${c.active === false ? 'معطل' : 'مفعّل'}</span></td>
       <td style="white-space:nowrap">
         <button class="mini-btn edit" onclick="editCoupon('${code}')"><i class="fas fa-pen"></i></button>
         <button class="mini-btn view" onclick="toggleCoupon('${code}')"><i class="fas fa-power-off"></i></button>
@@ -2344,117 +2634,121 @@ function renderCoupons(){
     </tr>`).join('');
 }
 
-/* ========== ADMIN: STATS ========== */
+/* ========== Admin: Stats ========== */
 function renderStats(){
-  const t = document.getElementById('stTotalOrders'); if(!t) return;
+  const t = document.getElementById('stTotalOrders');
+  if (!t) return;
   const total = ORDERS.length;
-  const pending = ORDERS.filter(o=>o.status==='pending').length;
-  const revenue = ORDERS.filter(o=>o.status!=='cancelled').reduce((s,o)=>s+(Number(o.total)||0),0);
+  const pending = ORDERS.filter(o => o.status === 'pending').length;
+  const revenue = ORDERS.filter(o => o.status !== 'cancelled').reduce((s, o) => s + (Number(o.total) || 0), 0);
   document.getElementById('stTotalOrders').textContent = total;
   document.getElementById('stPending').textContent = pending;
   document.getElementById('stRevenue').textContent = revenue.toLocaleString('ar-EG');
   document.getElementById('stProducts').textContent = PRODUCTS.length;
   document.getElementById('stUsers').textContent = USERS.length;
   const badge = document.getElementById('ordersBadge');
-  if(pending){ badge.style.display='grid'; badge.textContent = pending; }
-  else badge.style.display='none';
+  if (pending) { badge.style.display = 'grid'; badge.textContent = pending; }
+  else badge.style.display = 'none';
 
-  const recent = ORDERS.slice(0,5);
+  const recent = ORDERS.slice(0, 5);
   const body = document.getElementById('recentOrdersBody');
-  if(!recent.length){
+  if (!recent.length) {
     body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد طلبات</p></div></td></tr>`;
     return;
   }
-  body.innerHTML = recent.map(o=>`
+  body.innerHTML = recent.map(o => `
     <tr>
-      <td><strong>${escapeHtml(o.userName||'-')}</strong></td>
-      <td>${escapeHtml(o.phone||'-')}</td>
-      <td><strong style="color:var(--primary)">${Number(o.total||0).toLocaleString('ar-EG')} ج.م</strong></td>
-      <td><span class="badge-status badge-${o.status||'pending'}">${STATUS_LABELS[o.status]||'-'}</span></td>
+      <td><strong>${escapeHtml(o.userName || '-')}</strong></td>
+      <td>${escapeHtml(o.phone || '-')}</td>
+      <td><strong style="color:var(--primary)">${Number(o.total || 0).toLocaleString('ar-EG')} ج.م</strong></td>
+      <td><span class="badge-status badge-${o.status || 'pending'}">${STATUS_LABELS[o.status] || '-'}</span></td>
       <td><small>${formatDate(o.createdAt)}</small></td>
     </tr>`).join('');
 
   const days = [];
-  for(let i=6;i>=0;i--){
-    const d = new Date(); d.setDate(d.getDate()-i);
-    const dayStart = new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     const dayEnd = dayStart + 86400000;
-    const count = ORDERS.filter(o=>o.createdAt>=dayStart && o.createdAt<dayEnd).length;
-    days.push({lbl:['أحد','إثن','ثلا','أرب','خمي','جمع','سبت'][d.getDay()], val:count});
+    const count = ORDERS.filter(o => o.createdAt >= dayStart && o.createdAt < dayEnd).length;
+    days.push({ lbl: ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'][d.getDay()], val: count });
   }
-  const max = Math.max(1, ...days.map(d=>d.val));
-  document.getElementById('barsChart').innerHTML = days.map(d=>`
+  const max = Math.max(1, ...days.map(d => d.val));
+  document.getElementById('barsChart').innerHTML = days.map(d => `
     <div class="bar-col">
-      <div class="bar" style="height:${(d.val/max*100)}%">${d.val?`<span class="bar-val">${d.val}</span>`:''}</div>
+      <div class="bar" style="height:${(d.val / max * 100)}%">${d.val ? `<span class="bar-val">${d.val}</span>` : ''}</div>
       <div class="bar-lbl">${d.lbl}</div>
     </div>`).join('');
 }
 
-/* ========== ADMIN: ANALYTICS ========== */
+/* ========== Admin: Analytics ========== */
 function renderAnalytics(){
-  const d = document.getElementById('stDelivered'); if(!d) return;
-  const delivered = ORDERS.filter(o=>o.status==='delivered').length;
-  const cancelled = ORDERS.filter(o=>o.status==='cancelled').length;
-  const valid = ORDERS.filter(o=>o.status!=='cancelled');
-  const avg = valid.length ? valid.reduce((s,o)=>s+(Number(o.total)||0),0)/valid.length : 0;
-  const success = ORDERS.length ? Math.round((delivered/ORDERS.length)*100) : 0;
+  const d = document.getElementById('stDelivered');
+  if (!d) return;
+  const delivered = ORDERS.filter(o => o.status === 'delivered').length;
+  const cancelled = ORDERS.filter(o => o.status === 'cancelled').length;
+  const valid = ORDERS.filter(o => o.status !== 'cancelled');
+  const avg = valid.length ? valid.reduce((s, o) => s + (Number(o.total) || 0), 0) / valid.length : 0;
+  const success = ORDERS.length ? Math.round((delivered / ORDERS.length) * 100) : 0;
   document.getElementById('stDelivered').textContent = delivered;
   document.getElementById('stCancelled').textContent = cancelled;
   document.getElementById('stAvgOrder').textContent = Math.round(avg).toLocaleString('ar-EG');
   document.getElementById('stSuccess').textContent = success + '%';
 
   const counts = {};
-  ORDERS.forEach(o=> (o.items||[]).forEach(it=>{
-    if(!counts[it.id]) counts[it.id] = {name:it.name, qty:0, revenue:0};
+  ORDERS.forEach(o => (o.items || []).forEach(it => {
+    if (!counts[it.id]) counts[it.id] = { name: it.name, qty: 0, revenue: 0 };
     counts[it.id].qty += it.qty;
     counts[it.id].revenue += it.price * it.qty;
   }));
-  const top = Object.values(counts).sort((a,b)=>b.qty-a.qty).slice(0,5);
+  const top = Object.values(counts).sort((a, b) => b.qty - a.qty).slice(0, 5);
   const body = document.getElementById('topProductsBody');
-  if(!top.length){
+  if (!top.length) {
     body.innerHTML = `<tr><td colspan="4"><div class="empty"><i class="fas fa-chart-bar"></i><p>لا توجد بيانات</p></div></td></tr>`;
     return;
   }
-  body.innerHTML = top.map((p,i)=>`
+  body.innerHTML = top.map((p, i) => `
     <tr>
-      <td><strong>${i+1}</strong></td>
+      <td><strong>${i + 1}</strong></td>
       <td>${escapeHtml(p.name)}</td>
       <td><strong style="color:var(--primary)">${p.qty}</strong></td>
       <td>${p.revenue.toLocaleString('ar-EG')} ج.م</td>
     </tr>`).join('');
 }
 
-/* ========== USER: MY ORDERS ========== */
+/* ========== User: My Orders ========== */
 function renderMyOrders(){
-  const el = document.getElementById('myOrdersList'); if(!el) return;
-  if(!CURRENT_USER){
+  const el = document.getElementById('myOrdersList');
+  if (!el) return;
+  if (!CURRENT_USER) {
     el.innerHTML = `<div class="empty-cart"><i class="fas fa-user-lock"></i><p>سجّل دخولك</p>
       <button class="btn btn-primary" style="margin-top:12px" onclick="openAuth()">دخول</button></div>`;
     return;
   }
-  const my = ORDERS.filter(o=>o.uid === CURRENT_USER.uid).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-  if(!my.length){
+  const my = ORDERS.filter(o => o.uid === CURRENT_USER.uid).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  if (!my.length) {
     el.innerHTML = `<div class="empty-cart"><i class="fas fa-inbox"></i><p>لا توجد طلبات</p></div>`;
     return;
   }
-  el.innerHTML = my.map(o=>`
+  el.innerHTML = my.map(o => `
     <div style="background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--border);margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
         <div><h4 style="font-size:14px;font-weight:800">طلب #${o.id.slice(-6)}</h4>
         <p style="font-size:11px;color:var(--text-2);margin-top:3px">${formatDate(o.createdAt)}</p></div>
-        <span class="badge-status badge-${o.status}" style="padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700">${STATUS_LABELS[o.status]||'-'}</span>
+        <span class="badge-status badge-${o.status}" style="padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700">${STATUS_LABELS[o.status] || '-'}</span>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-        ${(o.items||[]).slice(0,3).map(i=>`<span style="padding:5px 10px;background:var(--bg);border-radius:999px;font-size:11px">${escapeHtml(i.name)} ×${i.qty}</span>`).join('')}
+        ${(o.items || []).slice(0, 3).map(i => `<span style="padding:5px 10px;background:var(--bg);border-radius:999px;font-size:11px">${escapeHtml(i.name)} ×${i.qty}</span>`).join('')}
       </div>
       <strong style="color:var(--primary);font-size:16px">${formatPrice(o.total)} ج.م</strong>
     </div>`).join('');
 }
 
-/* ========== USER: PROFILE ========== */
+/* ========== User: Profile ========== */
 function renderProfile(){
-  if(!CURRENT_USER){ toast('سجّل دخولك','err'); showPage('home'); openAuth(); return; }
-  const photo = CURRENT_USER.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(CURRENT_USER.displayName||'U')}&background=6d28d9&color=fff`;
+  if (!CURRENT_USER) { toast('سجّل دخولك', 'err'); showPage('home'); openAuth(); return; }
+  const photo = CURRENT_USER.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(CURRENT_USER.displayName || 'U')}&background=6d28d9&color=fff`;
   document.getElementById('profileAvatar').src = photo;
   document.getElementById('profileName').textContent = CURRENT_USER.displayName || 'مستخدم';
   document.getElementById('profileEmail').textContent = CURRENT_USER.email;
@@ -2462,45 +2756,45 @@ function renderProfile(){
   document.getElementById('profPhone').value = USER_PROFILE?.phone || '';
   document.getElementById('profAddress').value = USER_PROFILE?.address || '';
 }
-window.saveProfile = async ()=>{
-  if(!CURRENT_USER) return;
+window.saveProfile = async () => {
+  if (!CURRENT_USER) return;
   const data = {
     name: document.getElementById('profName').value.trim(),
     phone: document.getElementById('profPhone').value.trim(),
     address: document.getElementById('profAddress').value.trim(),
     email: CURRENT_USER.email
   };
-  try{
-    await update(ref(db,'users/'+CURRENT_USER.uid), data);
-    if(data.name) await updateProfile(CURRENT_USER, {displayName: data.name});
-    USER_PROFILE = {...USER_PROFILE, ...data};
+  try {
+    await update(ref(db, 'users/' + CURRENT_USER.uid), data);
+    if (data.name) await updateProfile(CURRENT_USER, { displayName: data.name });
+    USER_PROFILE = { ...USER_PROFILE, ...data };
     renderUserArea();
-    toast('تم الحفظ ✓','ok');
-  }catch{ toast('فشل','err'); }
+    toast('تم الحفظ ✓', 'ok');
+  } catch { toast('فشل', 'err'); }
 };
 
-/* ========== CHECKOUT ========== */
-window.checkout = ()=>{
-  if(!Object.keys(CART).length) return toast('السلة فارغة','err');
-  if(!CURRENT_USER){ toast('سجّل دخولك','err'); closeCart(); setTimeout(openAuth,300); return; }
+/* ========== Checkout ========== */
+window.checkout = () => {
+  if (!Object.keys(CART).length) return toast('السلة فارغة', 'err');
+  if (!CURRENT_USER) { toast('سجّل دخولك', 'err'); closeCart(); setTimeout(openAuth, 300); return; }
   document.getElementById('ckName').value = USER_PROFILE?.name || CURRENT_USER.displayName || '';
-  if(USER_PROFILE?.phone) document.getElementById('ckPhone').value = USER_PROFILE.phone;
-  if(USER_PROFILE?.address) document.getElementById('ckAddress').value = USER_PROFILE.address;
+  if (USER_PROFILE?.phone) document.getElementById('ckPhone').value = USER_PROFILE.phone;
+  if (USER_PROFILE?.address) document.getElementById('ckAddress').value = USER_PROFILE.address;
   closeCart();
   document.getElementById('checkoutModal').classList.add('show');
 };
 
-window.submitOrder = async ()=>{
+window.submitOrder = async () => {
   const msg = document.getElementById('checkoutMsg');
   const phone = document.getElementById('ckPhone').value.trim();
   const address = document.getElementById('ckAddress').value.trim();
   const notes = document.getElementById('ckNotes').value.trim();
-  if(!phone || !address) return showMsg(msg,'الهاتف والعنوان مطلوبان','err');
-  const items = Object.values(CART).map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,image:i.image}));
-  const subtotal = items.reduce((s,i)=>s+i.price*i.qty,0);
+  if (!phone || !address) return showMsg(msg, 'الهاتف والعنوان مطلوبان', 'err');
+  const items = Object.values(CART).map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, image: i.image }));
+  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   let discount = 0;
-  if(APPLIED_COUPON && subtotal >= (APPLIED_COUPON.min||0)){
-    discount = APPLIED_COUPON.type==='percent' ? Math.round(subtotal * APPLIED_COUPON.value / 100) : APPLIED_COUPON.value;
+  if (APPLIED_COUPON && subtotal >= (APPLIED_COUPON.min || 0)) {
+    discount = APPLIED_COUPON.type === 'percent' ? Math.round(subtotal * APPLIED_COUPON.value / 100) : APPLIED_COUPON.value;
   }
   const total = Math.max(0, subtotal - discount);
   const order = {
@@ -2508,200 +2802,95 @@ window.submitOrder = async ()=>{
     userName: USER_PROFILE?.name || CURRENT_USER.displayName || '',
     userEmail: CURRENT_USER.email,
     phone, address, notes, items, subtotal, discount, total,
-    status:'pending', createdAt: Date.now()
+    status: 'pending', createdAt: Date.now()
   };
-  try{
-    showMsg(msg,'جاري الإرسال...','ok');
-    await push(ref(db,'orders'), order);
+  try {
+    showMsg(msg, 'جاري الإرسال...', 'ok');
+    await push(ref(db, 'orders'), order);
     CART = {}; APPLIED_COUPON = null; saveCart(); renderCart();
     closeModal('checkoutModal');
-    toast('تم استلام طلبك 🎉','ok');
-    setTimeout(()=>showPage('myorders'), 800);
-  }catch{ showMsg(msg,'فشل الإرسال','err'); }
+    toast('تم استلام طلبك 🎉', 'ok');
+    setTimeout(() => showPage('myorders'), 800);
+  } catch { showMsg(msg, 'فشل الإرسال', 'err'); }
 };
 
-/* ========== HELPERS ========== */
-function escapeHtml(s=''){
-  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ========== Helpers ========== */
+function escapeHtml(s = ''){
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-function formatPrice(n){ return (Number(n)||0).toLocaleString('ar-EG'); }
+function formatPrice(n){ return (Number(n) || 0).toLocaleString('ar-EG'); }
 function formatDate(ts){
-  if(!ts) return '-';
-  const d = new Date(ts); const pad = n=>String(n).padStart(2,'0');
-  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (!ts) return '-';
+  const d = new Date(ts);
+  const pad = n => String(n).padStart(2, '0');
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 let toastTimer;
-function toast(text, type=''){
+function toast(text, type = ''){
   const el = document.getElementById('toast');
-  el.textContent = text; el.className = 'toast show ' + type;
+  el.textContent = text;
+  el.className = 'toast show ' + type;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.className='toast '+type, 2800);
+  toastTimer = setTimeout(() => el.className = 'toast ' + type, 2800);
 }
 window.toast = toast;
-window.contactWhatsApp = ()=>{
-  window.open(`https://wa.me/201147975962?text=${encodeURIComponent('مرحباً')}`,'_blank');
+window.contactWhatsApp = () => {
+  window.open(`https://wa.me/201147975962?text=${encodeURIComponent('مرحباً')}`, '_blank');
 };
 
-function showIosHint(){
-  const h = document.getElementById('iosHint');
-  if(h) h.classList.add('show');
-}
-window.showIosHint = showIosHint;
-
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
     closeCart();
     closeNotifDrawer();
-    document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));
+    document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
   }
 });
-document.querySelectorAll('.modal').forEach(m=>{
-  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('show'); });
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
 });
 
-/* ========== PWA ========== */
+/* ========== PWA Install ========== */
 let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e=>{
-  e.preventDefault(); deferredPrompt = e;
-  if(!localStorage.getItem('ym_install_dismissed')){
-    setTimeout(()=> document.getElementById('installBanner').classList.add('show'), 3000);
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('ym_install_dismissed')) {
+    setTimeout(() => document.getElementById('installBanner').classList.add('show'), 3000);
   }
 });
-window.installApp = async ()=>{
-  if(!deferredPrompt){
-    if(IS_IOS) showIosHint();
-    else toast('لتثبيت: قائمة المتصفح → "إضافة إلى الشاشة الرئيسية"','ok');
+window.installApp = async () => {
+  if (!deferredPrompt) {
+    toast('لتثبيت: قائمة المتصفح → "إضافة إلى الشاشة الرئيسية"', 'ok');
     return;
   }
   deferredPrompt.prompt();
-  const {outcome} = await deferredPrompt.userChoice;
-  if(outcome === 'accepted'){
-    toast('تم التثبيت ✓','ok');
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    toast('تم التثبيت ✓', 'ok');
     document.getElementById('installBanner').classList.remove('show');
   }
   deferredPrompt = null;
 };
-window.addEventListener('appinstalled', ()=>{
-  toast('تم التثبيت 🎉','ok');
+window.addEventListener('appinstalled', () => {
+  toast('تم التثبيت 🎉', 'ok');
   document.getElementById('installBanner').classList.remove('show');
 });
 
-// iOS hint: يظهر للمستخدم iPhone لو مش مثبّت
-if(IS_IOS && !IS_STANDALONE && !localStorage.getItem('ym_ios_hint')){
-  setTimeout(()=>{
-    if(!CURRENT_USER || !MY_NOTIFS.length) showIosHint();
-  }, 5000);
-}
+/* ========== Save FCM on Visibility ========== */
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && CURRENT_USER && Notification.permission === 'granted') {
+    saveFCMToken();
+  }
+});
 
-/* ========== Service Worker ========== */
-if('serviceWorker' in navigator){
-  const swCode = `
-    const CACHE = 'ym-cache-v3';
-    
-    self.addEventListener('install', e=> self.skipWaiting());
-    self.addEventListener('activate', e=> {
-      e.waitUntil(
-        caches.keys().then(keys=> Promise.all(
-          keys.filter(k=> k !== CACHE).map(k=> caches.delete(k))
-        )).then(()=> self.clients.claim())
-      );
-    });
-
-    self.addEventListener('fetch', e=> {
-      if(e.request.method !== 'GET') return;
-      if(e.request.url.includes('firebase') || e.request.url.includes('googleapis')) return;
-      e.respondWith(
-        caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
-          if(resp.status === 200 && resp.type === 'basic'){
-            const clone = resp.clone();
-            caches.open(CACHE).then(c => c.put(e.request, clone));
-          }
-          return resp;
-        }).catch(()=> caches.match(e.request)))
-      );
-    });
-
-    self.addEventListener('push', e=>{
-      let data = {};
-      try { data = e.data ? e.data.json() : {}; } catch(err) { data = {title:'إشعار جديد', body:''}; }
-      const title = (data.notification && data.notification.title) || data.title || 'متجر يزيد';
-      const body = (data.notification && data.notification.body) || data.body || 'لديك إشعار جديد';
-      const type = (data.data && data.data.type) || data.type || 'system';
-      const priority = (data.data && data.data.priority) || data.priority || 'normal';
-      
-      const vibrate = priority === 'high' ? [400,200,400,200,400] : [200,100,200];
-
-      const options = {
-        body: body,
-        icon: '/favicon.ico',
-        badge: '/favicon.ico',
-        dir: 'rtl',
-        lang: 'ar',
-        vibrate: vibrate,
-        tag: 'ym-' + Date.now(),
-        requireInteraction: priority === 'high',
-        renotify: true,
-        silent: false,
-        data: data
-      };
-
-      e.waitUntil(self.registration.showNotification(title, options));
-    });
-
-    self.addEventListener('notificationclick', e=>{
-      e.notification.close();
-      e.waitUntil(
-        clients.matchAll({type:'window', includeUncontrolled:true}).then(list=>{
-          for(let c of list){
-            if(c.url.includes(self.location.origin)){
-              c.focus();
-              return;
-            }
-          }
-          return clients.openWindow('/');
-        })
-      );
-    });
-
-    self.addEventListener('message', e=>{
-      if(e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
-    });
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(()=> console.log('SW ok')).catch(e=> console.log('SW err:', e));
-}
-
-/* ========== بدء التشغيل ========== */
+/* ========== Init ========== */
 updateCartBadge();
 updateWishBadge();
 renderUserArea();
 
-// Polling fallback: يفحص كل 15 ثانية للـ Push notifications
-// (يعمل حتى لو الـ Push فشل على بعض الأجهزة)
-function startPolling(){
-  if(pollingTimer) clearInterval(pollingTimer);
-  pollingTimer = setInterval(()=>{
-    if(!CURRENT_USER || IS_ADMIN) return;
-    // Firebase onValue نفسه يعمل real-time، لكن polling هذا احتياطي
-    // لضمان تحديث الإشعارات على الأجهزة القديمة
-    filterMyNotifs();
-  }, 15000);
-}
-startPolling();
-
-// لما المستخدم يرجع للصفحة
-document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden){
-    if(CURRENT_USER && Notification.permission === 'granted'){
-      saveFCMToken();
-    }
-  }
-});
-
-console.log('🚀 Store initialized');
-console.log('📱 Device:', IS_IOS ? 'iOS' : IS_ANDROID ? 'Android' : 'Desktop');
-console.log('🔔 Notifications:', 'Notification' in window ? Notification.permission : 'not supported');
+console.log('🚀 متجر يزيد - النسخة النهائية');
+console.log('📱 الجهاز:', IS_IOS ? 'iOS' : IS_ANDROID ? 'Android' : 'Desktop');
+console.log('🔔 الإشعارات:', 'Notification' in window ? Notification.permission : 'غير مدعوم');
 </script>
 </body>
-          </html>
+</html>

@@ -1,7 +1,7 @@
-importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
+// firebase-messaging-sw.js
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
-// نفس إعدادات مشروعك
 firebase.initializeApp({
   apiKey: "AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",
   authDomain: "ym-pro-max.firebaseapp.com",
@@ -14,15 +14,40 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// معالجة الإشعارات الواردة أثناء إغلاق التطبيق (الخارجية)
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  
-  const notificationTitle = payload.notification.title || 'رسالة جديدة';
-  const notificationOptions = {
-    body: payload.notification.body || 'لديك إشعار جديد في MY Chat',
-    icon: '/favicon.ico' // يمكنك وضع مسار لوجو التطبيق هنا
-  };
+messaging.onBackgroundMessage(payload => {
+  console.log('[FCM-SW] Background:', payload);
+  const n = payload.notification || {};
+  const d = payload.data || {};
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  const title = n.title || d.title || 'متجر يزيد';
+  const body = n.body || d.body || 'لديك إشعار جديد';
+  const icon = n.icon || d.storeLogo || '/favicon.ico';
+  const image = n.image || d.storeImage || '';
+
+  return self.registration.showNotification(title, {
+    body,
+    icon,
+    badge: icon,
+    ...(image ? { image } : {}),
+    dir: 'rtl',
+    lang: 'ar',
+    vibrate: [500, 200, 500, 200, 500],
+    tag: 'fcm-' + Date.now(),
+    renotify: true,
+    requireInteraction: true,
+    silent: false,
+    data: { url: '/' }
+  });
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (c.url.includes(self.location.origin)) return c.focus();
+      }
+      return clients.openWindow('/');
+    })
+  );
 });

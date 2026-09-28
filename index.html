@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#6d28d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="متجر يزيد">
 <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi2YXYqtis2LEg2YrYstmK2K8iLCJzaG9ydF9uYW1lIjoiWU0gU3RvcmUiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiM2ZDI4ZDkiLCJ0aGVtZV9jb2xvciI6IiM2ZDI4ZDkiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1UQXdJaUJvWldsbmFIUTlJakV3TUNJZ2VIbHRiRzV6UFNKenRtUXRZMjlzYjNJdFptbHNaU0lnYzNSNWJHVTlJbk4wY205clpTNXdiR0Z5WjI5dWF5Qm5iRzk1SUhOMGIyMWhiQ0J6ZEhKdmEyVTZJajRpSUc1cGRtVnpQU0l3SUhWemJHRnVZWEpwYVc1aElqNTBaVzUwY205c2IzWnBZbWx1YVhNaUx6ND0iLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -60,8 +59,6 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdr
 .btn-google:hover{background:#f5f5f5;border-color:#999}
 .btn-google img{width:20px;height:20px}
 .btn-danger{background:var(--danger);color:#fff}
-.btn-admin{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;box-shadow:0 8px 20px rgba(245,158,11,.3)}
-.btn-admin:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(245,158,11,.45)}
 
 .hero{max-width:1400px;margin:0 auto;padding:40px 16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
 .hero-text h1{font-size:clamp(26px,5vw,50px);font-weight:900;line-height:1.15;margin-bottom:16px}
@@ -146,7 +143,7 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .divider{display:flex;align-items:center;gap:12px;margin:14px 0;color:var(--text-2);font-size:12px;font-weight:600}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ========== ADMIN DASHBOARD (داخل نفس الصفحة) ========== */
+/* ========== ADMIN DASHBOARD ========== */
 #adminApp{display:none;min-height:100vh;grid-template-columns:250px 1fr}
 #adminApp.show{display:grid}
 .admin-sidebar{background:var(--bg-2);border-left:1px solid var(--border);padding:18px;position:sticky;top:0;height:100vh;overflow-y:auto}
@@ -402,9 +399,8 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
 </footer>
 
 </div>
-<!-- ============ END STOREFRONT ============ -->
 
-<!-- ============ ADMIN APP (Hidden by default) ============ -->
+<!-- ============ ADMIN APP ============ -->
 <div id="adminApp">
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleAdminSidebar()"></div>
   <aside class="admin-sidebar" id="adminSidebar">
@@ -422,7 +418,8 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       <button class="menu-item" data-tab="coupons"><i class="fas fa-tags"></i> الكوبونات</button>
       <button class="menu-item" data-tab="notifications"><i class="fas fa-bell"></i> الإشعارات</button>
       <button class="menu-item" data-tab="settings"><i class="fas fa-palette"></i> الإعدادات</button>
-      <button class="menu-item" onclick="adminLogout()" style="color:var(--danger)"><i class="fas fa-sign-out-alt"></i> خروج</button>
+      <button class="menu-item" onclick="backToStore()" style="color:var(--primary)"><i class="fas fa-store"></i> المتجر</button>
+      <button class="menu-item" onclick="logout()" style="color:var(--danger)"><i class="fas fa-sign-out-alt"></i> خروج</button>
     </nav>
   </aside>
 
@@ -645,7 +642,6 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
     </div>
   </main>
 </div>
-<!-- ============ END ADMIN APP ============ -->
 
 <!-- ============ CART DRAWER ============ -->
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
@@ -671,31 +667,72 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
   </div>
 </div>
 
-<!-- ============ AUTH MODAL (موحد للمستخدم والأدمن) ============ -->
+<!-- ============ AUTH MODAL ============ -->
 <div class="modal" id="authModal">
   <div class="modal-box">
     <h2 id="authTitle">مرحباً بك 👋</h2>
-    <p class="sub" id="authSub">سجّل دخولك للاستمتاع بكامل المميزات</p>
+    <p class="sub">سجّل دخولك للمتابعة</p>
     <div class="form-msg" id="authMsg"></div>
-    <button class="btn btn-google" id="googleBtn" onclick="googleLogin()">
-      <img src="https://www.google.com/favicon.ico" alt="G"> الدخول بحساب Google
-    </button>
-    <div class="divider" id="authDivider">أو</div>
+    
+    <!-- تسجيل Google (للمستخدمين) -->
+    <div id="googleSection">
+      <button class="btn btn-google" onclick="googleLogin()">
+        <img src="https://www.google.com/favicon.ico" alt="G"> الدخول بحساب Google
+      </button>
+      <div class="divider">أو</div>
+    </div>
+
+    <!-- التابس (مستخدم عادي / أدمن) -->
     <div class="tabs" id="authTabs">
-      <button class="tab active" id="tabLogin" onclick="switchTab('login')">دخول</button>
-      <button class="tab" id="tabRegister" onclick="switchTab('register')">حساب جديد</button>
+      <button class="tab active" id="tabLogin" onclick="switchTab('login')">مستخدم</button>
+      <button class="tab" id="tabAdmin" onclick="switchTab('admin')">أدمن</button>
     </div>
-    <div id="loginForm">
-      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="loginEmail" autocomplete="username"></div>
-      <div class="field"><label>كلمة المرور</label><input type="password" id="loginPass" autocomplete="current-password"></div>
-      <button class="btn btn-primary" style="width:100%" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> دخول</button>
+
+    <!-- نموذج المستخدم -->
+    <div id="userForm">
+      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="userEmail" autocomplete="username" placeholder="example@mail.com"></div>
+      <div class="field"><label>كلمة المرور</label><input type="password" id="userPass" autocomplete="current-password" placeholder="••••••••"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="userLogin()">
+        <i class="fas fa-sign-in-alt"></i> دخول كمستخدم
+      </button>
+      <p style="text-align:center;font-size:12px;color:var(--text-2);margin-top:14px">
+        ليس لديك حساب؟ <a href="#" onclick="userRegister(event)" style="color:var(--primary);font-weight:700">سجّل الآن</a>
+      </p>
     </div>
-    <div id="registerForm" style="display:none">
-      <div class="field"><label>الاسم الكامل</label><input type="text" id="regName"></div>
-      <div class="field"><label>رقم الهاتف</label><input type="tel" id="regPhone"></div>
-      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="regEmail"></div>
-      <div class="field"><label>كلمة المرور</label><input type="password" id="regPass"></div>
-      <button class="btn btn-primary" style="width:100%" onclick="doRegister()"><i class="fas fa-user-plus"></i> إنشاء الحساب</button>
+
+    <!-- نموذج الأدمن -->
+    <div id="adminForm" style="display:none">
+      <div class="field">
+        <label>رقم الهاتف / يوزر الأدمن</label>
+        <input type="text" id="adminUser" placeholder="01147975962" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">
+        <i class="fas fa-shield-halved"></i> دخول كأدمن
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--text-2);margin-top:12px">
+        🔒 للدخول كمسؤول فقط
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ REGISTER MODAL ============ -->
+<div class="modal" id="registerModal">
+  <div class="modal-box">
+    <h2>حساب جديد</h2>
+    <p class="sub">سجّل بياناتك للبدء</p>
+    <div class="form-msg" id="regMsg"></div>
+    <div class="field"><label>الاسم الكامل</label><input type="text" id="regName"></div>
+    <div class="field"><label>رقم الهاتف</label><input type="tel" id="regPhone"></div>
+    <div class="field"><label>البريد الإلكتروني</label><input type="email" id="regEmail"></div>
+    <div class="field"><label>كلمة المرور</label><input type="password" id="regPass"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('registerModal')">إلغاء</button>
+      <button class="btn btn-primary" style="flex:1" onclick="doRegister()"><i class="fas fa-user-plus"></i> إنشاء</button>
     </div>
   </div>
 </div>
@@ -740,7 +777,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, onValue, push, set, get, update, remove }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, updateProfile }
+  onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, updateProfile,
+  fetchSignInMethodsForEmail }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -758,9 +796,12 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
 /* ========== بيانات الأدمن ========== */
-const ADMIN_EMAIL = "yazeedttv1@gmail.com";
-const ADMIN_PASSWORD = "John";
-const ADMIN_USERNAME = "yazeed_admin";
+// اليوزر كما هو
+const ADMIN_USERNAME = "01147975962";
+// تحويل اليوزر لإيميل داخلي لـ Firebase
+const ADMIN_EMAIL = "01147975962@ym-store.com";
+const ADMIN_PASSWORD = "Aa01147975962y";
+const ADMIN_DISPLAY_NAME = "المدير العام 👑";
 
 /* ========== STATE ========== */
 let PRODUCTS = [], ORDERS = [], USERS = [], SETTINGS = {}, COUPONS = {}, NOTIFS = [];
@@ -822,7 +863,6 @@ function applySettings(){
   const tc = document.querySelector('meta[name=theme-color]');
   if(tc) tc.content = SETTINGS.primary || '#6d28d9';
 
-  // Admin form fields (if they exist)
   const snf = document.getElementById('sName');
   if(snf){
     snf.value = SETTINGS.storeName || 'متجر يزيد';
@@ -870,6 +910,7 @@ onValue(ref(db,'orders'), snap=>{
   ORDERS = [];
   if(snap.exists()){ snap.forEach(c=> ORDERS.push({id:c.key, ...c.val()})); ORDERS.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); }
   if(IS_ADMIN){ renderOrders(); renderStats(); renderAnalytics(); }
+  if(document.getElementById('page-myorders').style.display !== 'none') renderMyOrders();
 });
 
 /* ========== USERS ========== */
@@ -878,7 +919,8 @@ onValue(ref(db,'users'), snap=>{
   if(snap.exists()){
     snap.forEach(c=>{
       const v = c.val();
-      if(v.role !== 'admin' && v.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+      // استبعاد الأدمن من قائمة العملاء
+      if(v.role !== 'admin' && v.email !== ADMIN_EMAIL){
         USERS.push({id:c.key, ...v});
       }
     });
@@ -893,7 +935,7 @@ onValue(ref(db,'notifications'), snap=>{
   if(IS_ADMIN) renderNotifs();
 });
 
-/* ==================== STOREFRONT LOGIC ==================== */
+/* ==================== STOREFRONT ==================== */
 function renderFilters(){
   const cats = ['all', ...new Set(PRODUCTS.map(p=>p.category).filter(Boolean))];
   const el = document.getElementById('filters');
@@ -1078,11 +1120,11 @@ function renderUserArea(){
     el.innerHTML = `
       <div class="user-chip" style="border-color:var(--accent)" onclick="toggleUserMenu()">
         <img class="avatar" style="border-color:var(--accent)" src="${photo}" alt="">
-        <span>الأدمن 👑</span>
+        <span>المدير 👑</span>
       </div>
       <div id="userMenu" style="position:absolute;top:64px;left:12px;background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:6px;box-shadow:var(--shadow-lg);display:none;min-width:190px;z-index:150">
         <button class="menu-item-u" onclick="openAdminPanel()"><i class="fas fa-shield-halved"></i> لوحة التحكم</button>
-        <button class="menu-item-u" onclick="closeAdminPanel()"><i class="fas fa-store"></i> المتجر</button>
+        <button class="menu-item-u" onclick="showPage('home')"><i class="fas fa-store"></i> المتجر</button>
         <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
         <button class="menu-item-u" onclick="logout()" style="color:var(--danger)"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>`;
@@ -1117,35 +1159,58 @@ document.addEventListener('click', e=>{
   if(m && !e.target.closest('.user-chip') && !e.target.closest('#userMenu')) m.style.display='none';
 });
 
-/* ========== AUTH MODAL (موحد) ========== */
+/* ========== AUTH MODAL ========== */
 window.openAuth = ()=>{
   if(CURRENT_USER){
     if(confirm('تسجيل الخروج؟')) logout();
     return;
   }
-  // إعادة الضبط للحالة الافتراضية
   switchTab('login');
   document.getElementById('authMsg').className = 'form-msg';
   document.getElementById('authModal').classList.add('show');
 };
 window.closeModal = id=> document.getElementById(id).classList.remove('show');
+
 window.switchTab = t=>{
-  document.getElementById('tabLogin').classList.toggle('active', t==='login');
-  document.getElementById('tabRegister').classList.toggle('active', t==='register');
-  document.getElementById('loginForm').style.display = t==='login'?'block':'none';
-  document.getElementById('registerForm').style.display = t==='register'?'block':'none';
+  const tabLogin = document.getElementById('tabLogin');
+  const tabAdmin = document.getElementById('tabAdmin');
+  const userForm = document.getElementById('userForm');
+  const adminForm = document.getElementById('adminForm');
+  const googleSection = document.getElementById('googleSection');
+  
+  if(t === 'login'){
+    tabLogin.classList.add('active');
+    tabAdmin.classList.remove('active');
+    userForm.style.display = 'block';
+    adminForm.style.display = 'none';
+    googleSection.style.display = 'block';
+  } else {
+    tabLogin.classList.remove('active');
+    tabAdmin.classList.add('active');
+    userForm.style.display = 'none';
+    adminForm.style.display = 'block';
+    googleSection.style.display = 'none';
+  }
   document.getElementById('authMsg').className = 'form-msg';
 };
+
 function showMsg(el, text, type){ el.textContent = text; el.className = 'form-msg ' + type; }
 function authError(code){
   const m = {
-    'auth/invalid-email':'بريد غير صالح','auth/user-not-found':'الحساب غير موجود',
-    'auth/wrong-password':'كلمة المرور خاطئة','auth/invalid-credential':'بيانات خاطئة',
-    'auth/email-already-in-use':'البريد مستخدم','auth/weak-password':'كلمة المرور ضعيفة',
-    'auth/popup-closed-by-user':'تم إغلاق النافذة','auth/cancelled-popup-request':'تم الإلغاء',
-    'auth/network-request-failed':'تعذر الاتصال'
+    'auth/invalid-email':'البريد الإلكتروني غير صالح',
+    'auth/user-not-found':'الحساب غير موجود',
+    'auth/wrong-password':'كلمة المرور خاطئة',
+    'auth/invalid-credential':'بيانات الدخول خاطئة',
+    'auth/email-already-in-use':'البريد الإلكتروني مستخدم بالفعل',
+    'auth/weak-password':'كلمة المرور ضعيفة جداً',
+    'auth/popup-closed-by-user':'تم إغلاق النافذة',
+    'auth/cancelled-popup-request':'تم إلغاء الطلب',
+    'auth/network-request-failed':'تعذر الاتصال بالإنترنت',
+    'auth/too-many-requests':'محاولات كثيرة، حاول لاحقاً',
+    'auth/account-exists-with-different-credential':'الحساب موجود بوسيلة دخول مختلفة',
+    'auth/operation-not-allowed':'هذه الطريقة غير مفعلة في Firebase'
   };
-  return m[code] || 'حدث خطأ';
+  return m[code] || `خطأ: ${code}`;
 }
 async function checkUserLimit(){
   if(!MAX_USERS) return true;
@@ -1156,22 +1221,24 @@ async function checkUserLimit(){
   }catch{ return true; }
 }
 
-// 🌟 Google Login
+// ============ GOOGLE LOGIN (للمستخدمين فقط) ============
 window.googleLogin = async ()=>{
   const msg = document.getElementById('authMsg');
   try{
-    showMsg(msg,'جاري التسجيل...','ok');
+    showMsg(msg,'جاري الاتصال بـ Google...','ok');
     const res = await signInWithPopup(auth, googleProvider);
     const u = res.user;
-    // فحص لو أدمن
-    if(u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-      // نسمح له كمستخدم عادي (بدون ما ندخله الأدمن إلا بالإيميل/باسورد)
-      toast('هذا بريد الأدمن - استخدم الإيميل/باسورد للوحة التحكم','err');
+
+    // 🚫 لو الإيميل ده إيميل الأدمن (تحويل من يوزر)
+    if(u.email === ADMIN_EMAIL){
       await signOut(auth);
+      showMsg(msg,'هذا البريد خاص بالأدمن، استخدم تبويب "أدمن"','err');
       return;
     }
+
     const ok = await checkUserLimit();
     if(!ok){ await signOut(auth); showMsg(msg,`تم الوصول للحد الأقصى (${MAX_USERS})`,'err'); return; }
+
     const userRef = ref(db, 'users/' + u.uid);
     const snap = await get(userRef);
     if(!snap.exists()){
@@ -1183,67 +1250,116 @@ window.googleLogin = async ()=>{
     }
     closeModal('authModal');
     toast('تم الدخول ✓','ok');
-  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
+  }catch(e){
+    console.error('Google error:', e);
+    showMsg(msg, authError(e.code), 'err');
+  }
 };
 
-// 🌟 Email/Password Login (يدعم أدمن + مستخدم)
-window.doLogin = async ()=>{
+// ============ USER EMAIL/PASSWORD LOGIN ============
+window.userLogin = async ()=>{
   const msg = document.getElementById('authMsg');
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  if(!email || !pass) return showMsg(msg,'املأ الحقول','err');
+  const email = document.getElementById('userEmail').value.trim();
+  const pass = document.getElementById('userPass').value;
+  if(!email || !pass) return showMsg(msg,'املأ البريد وكلمة المرور','err');
 
-  // 🔑 لو ده إيميل الأدمن + باسورد John
+  // 🚫 منع إيميل الأدمن من هنا
   if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-    if(pass !== ADMIN_PASSWORD){
-      return showMsg(msg,'❌ كلمة المرور خاطئة','err');
-    }
-    try{
-      showMsg(msg,'جاري الدخول كأدمن...','ok');
-      try{
-        await signInWithEmailAndPassword(auth, email, pass);
-      }catch(e){
-        if(e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password'){
-          const cred = await createUserWithEmailAndPassword(auth, email, pass);
-          await updateProfile(cred.user, {displayName: ADMIN_USERNAME});
-          await set(ref(db,'users/'+cred.user.uid), {
-            name: ADMIN_USERNAME, email: ADMIN_EMAIL, role: 'admin',
-            provider:'email', createdAt: Date.now()
-          });
-        } else throw e;
-      }
-      closeModal('authModal');
-      toast('تم الدخول كأدمن 👑','ok');
-    }catch(e){
-      if(e.code === 'auth/email-already-in-use'){
-        showMsg(msg,'الحساب مسجل بكلمة مرور مختلفة','err');
-      } else {
-        showMsg(msg, authError(e.code), 'err');
-      }
-    }
-    return;
+    return showMsg(msg,'استخدم تبويب "أدمن" للدخول','err');
   }
 
-  // 👤 مستخدم عادي
   try{
-    showMsg(msg,'جاري...','ok');
+    showMsg(msg,'جاري التحقق...','ok');
     await signInWithEmailAndPassword(auth, email, pass);
     closeModal('authModal');
     toast('تم الدخول ✓','ok');
-  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
+  }catch(e){
+    console.error('User login error:', e.code);
+    if(e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password'){
+      showMsg(msg,'البريد أو كلمة المرور غير صحيحة','err');
+    } else {
+      showMsg(msg, authError(e.code), 'err');
+    }
+  }
 };
 
-// 🌟 Register (للمستخدمين فقط)
-window.doRegister = async ()=>{
+// ============ ADMIN LOGIN ============
+window.adminLogin = async ()=>{
   const msg = document.getElementById('authMsg');
+  const user = document.getElementById('adminUser').value.trim();
+  const pass = document.getElementById('adminPass').value;
+
+  if(!user || !pass) return showMsg(msg,'املأ الحقول','err');
+
+  // التحقق من اليوزر والباسورد
+  if(user !== ADMIN_USERNAME){
+    return showMsg(msg,'❌ رقم الهاتف غير صحيح','err');
+  }
+  if(pass !== ADMIN_PASSWORD){
+    return showMsg(msg,'❌ كلمة المرور غير صحيحة','err');
+  }
+
+  try{
+    showMsg(msg,'جاري الدخول كأدمن...','ok');
+    
+    // محاولة تسجيل الدخول
+    try{
+      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
+    }catch(e){
+      console.log('Admin login attempt error:', e.code);
+      // لو الحساب مش موجود → ننشئه
+      if(e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password'){
+        try{
+          const cred = await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
+          await updateProfile(cred.user, {displayName: ADMIN_DISPLAY_NAME});
+          await set(ref(db,'users/'+cred.user.uid), {
+            name: ADMIN_DISPLAY_NAME,
+            email: ADMIN_EMAIL,
+            username: ADMIN_USERNAME,
+            role: 'admin',
+            provider: 'email',
+            createdAt: Date.now()
+          });
+          toast('تم إنشاء حساب الأدمن ✓','ok');
+        }catch(e2){
+          console.error('Admin create error:', e2);
+          if(e2.code === 'auth/email-already-in-use'){
+            showMsg(msg,'⚠️ الحساب موجود بكلمة مرور مختلفة. تواصل مع الدعم','err');
+          } else {
+            showMsg(msg, authError(e2.code), 'err');
+          }
+          return;
+        }
+      } else {
+        throw e;
+      }
+    }
+    closeModal('authModal');
+    toast('مرحباً بك يا مدير 👑','ok');
+  }catch(e){
+    console.error('Admin final error:', e);
+    showMsg(msg, authError(e.code), 'err');
+  }
+};
+
+// ============ USER REGISTER ============
+window.userRegister = (e)=>{
+  e.preventDefault();
+  closeModal('authModal');
+  document.getElementById('regMsg').className = 'form-msg';
+  document.getElementById('registerModal').classList.add('show');
+};
+
+window.doRegister = async ()=>{
+  const msg = document.getElementById('regMsg');
   const name = document.getElementById('regName').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pass = document.getElementById('regPass').value;
-  if(!name||!phone||!email||!pass) return showMsg(msg,'املأ الحقول','err');
+  if(!name||!phone||!email||!pass) return showMsg(msg,'املأ جميع الحقول','err');
   if(pass.length<6) return showMsg(msg,'كلمة المرور 6 أحرف على الأقل','err');
   if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-    return showMsg(msg,'هذا بريد محجوز','err');
+    return showMsg(msg,'هذا البريد محجوز','err');
   }
   try{
     showMsg(msg,'جاري الإنشاء...','ok');
@@ -1252,38 +1368,58 @@ window.doRegister = async ()=>{
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, {displayName: name});
     await set(ref(db,'users/'+cred.user.uid), {
-      name, phone, email, provider:'email', role: 'customer', createdAt: Date.now()
+      name, phone, email, provider: 'email', role: 'customer', createdAt: Date.now()
     });
-    closeModal('authModal');
+    closeModal('registerModal');
     toast('تم إنشاء الحساب 🎉','ok');
-  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
+  }catch(e){ 
+    console.error('Register error:', e.code);
+    if(e.code === 'auth/email-already-in-use'){
+      showMsg(msg,'البريد الإلكتروني مستخدم بالفعل','err');
+    } else {
+      showMsg(msg, authError(e.code), 'err');
+    }
+  }
 };
 
 window.logout = async ()=>{
   await signOut(auth);
   toast('تم الخروج','ok');
+  backToStore();
 };
 
 /* ==================== AUTH STATE ==================== */
+let adminTabsInit = false;
+
 onAuthStateChanged(auth, async u=>{
+  console.log('Auth state:', u ? u.email : 'none');
   CURRENT_USER = u;
   if(u){
-    IS_ADMIN = u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    // ✅ فحص إذا كان الأدمن (بالإيميل المحوّل)
+    IS_ADMIN = (u.email === ADMIN_EMAIL);
+    console.log('IS_ADMIN:', IS_ADMIN);
+
     try{
       const s = await get(ref(db,'users/'+u.uid));
       USER_PROFILE = s.exists() ? s.val() : {name: u.displayName || u.email.split('@')[0], email: u.email};
     }catch{ USER_PROFILE = {name: u.displayName || '', email: u.email}; }
+
+    // لو الإيميل ده إيميل الأدمن → فعّل لوحة التحكم تلقائياً
+    if(IS_ADMIN){
+      initAdminTabs();
+      const an = document.getElementById('adminName');
+      if(an) an.textContent = u.displayName || 'المدير';
+      // فتح لوحة التحكم تلقائياً
+      document.getElementById('storefront').style.display = 'none';
+      document.getElementById('adminApp').classList.add('show');
+    }
   } else {
     IS_ADMIN = false;
     USER_PROFILE = null;
-    // رجوع للمتجر
-    closeAdminPanel();
+    backToStore();
   }
   renderUserArea();
-  // لو أدمن: فعّل التابس والصفحات
   if(IS_ADMIN){
-    initAdminTabs();
-    document.getElementById('adminName').textContent = u.displayName || 'Admin';
     renderProductsAdmin(); renderOrders(); renderUsers(); renderCoupons(); renderNotifs();
     renderStats(); renderAnalytics();
   }
@@ -1297,21 +1433,20 @@ window.openAdminPanel = ()=>{
   window.scrollTo({top:0,behavior:'instant'});
   if(document.getElementById('userMenu')) document.getElementById('userMenu').style.display='none';
 };
-window.closeAdminPanel = ()=>{
+window.backToStore = ()=>{
   document.getElementById('storefront').style.display = 'block';
   document.getElementById('adminApp').classList.remove('show');
   const sb = document.getElementById('adminSidebar');
   const ov = document.getElementById('sidebarOverlay');
   if(sb) sb.classList.remove('show');
   if(ov) ov.classList.remove('show');
+  window.scrollTo({top:0,behavior:'instant'});
 };
-window.adminLogout = ()=>{ if(confirm('تسجيل الخروج؟')) logout(); };
 window.toggleAdminSidebar = ()=>{
   document.getElementById('adminSidebar').classList.toggle('show');
   document.getElementById('sidebarOverlay').classList.toggle('show');
 };
 
-let adminTabsInit = false;
 function initAdminTabs(){
   if(adminTabsInit) return; adminTabsInit = true;
   document.querySelectorAll('.menu-item[data-tab]').forEach(btn=>{
@@ -1355,7 +1490,7 @@ window.loadSettings = ()=> applySettings();
   }
 });
 
-/* ========== IMAGE PROCESSING ========== */
+/* ========== IMAGE ========== */
 async function processImage(file, maxW = 800, quality = 0.75){
   return new Promise((resolve, reject)=>{
     const reader = new FileReader();
@@ -1930,4 +2065,4 @@ updateWishBadge();
 renderUserArea();
 </script>
 </body>
-  </html>
+                                      </html>

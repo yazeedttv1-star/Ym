@@ -76,13 +76,7 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .filter-btn{padding:7px 16px;border-radius:999px;background:var(--bg-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;font-weight:600;font-size:12px;transition:all .25s;font-family:inherit}
 .filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-color:transparent}
 
-/* ========== شبكة المنتجات الجديدة (صفوف منتظمة) ========== */
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:14px;
-  align-items:stretch;
-}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;align-items:stretch}
 @media(min-width:1200px){ .products{grid-template-columns:repeat(5,1fr)} }
 @media(min-width:900px) and (max-width:1199px){ .products{grid-template-columns:repeat(4,1fr)} }
 @media(min-width:600px) and (max-width:899px){ .products{grid-template-columns:repeat(3,1fr)} }
@@ -136,10 +130,11 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .empty-cart{text-align:center;padding:50px 20px;color:var(--text-2)}
 .empty-cart i{font-size:56px;opacity:.3;margin-bottom:14px;display:block}
 
-/* ========== NOTIFICATIONS (واتساب/فيسبوك) ========== */
-.notif-item{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--bg);margin-bottom:8px;align-items:flex-start;transition:all .25s;border:1px solid transparent;cursor:pointer}
+/* ========== NOTIFICATIONS ========== */
+.notif-item{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--bg);margin-bottom:8px;align-items:flex-start;transition:all .25s;border:1px solid transparent;cursor:pointer;position:relative}
 .notif-item:hover{border-color:var(--primary);background:var(--bg-2)}
 .notif-item.unread{background:linear-gradient(135deg,rgba(109,40,217,.06),rgba(245,158,11,.06));border-color:rgba(109,40,217,.15)}
+.notif-item.unread::before{content:'';position:absolute;top:14px;right:-4px;width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 3px rgba(109,40,217,.2)}
 .notif-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:18px;flex-shrink:0;box-shadow:0 6px 16px rgba(109,40,217,.3)}
 .notif-icon.order{background:linear-gradient(135deg,#10b981,#059669)}
 .notif-icon.promo{background:linear-gradient(135deg,#f59e0b,#d97706)}
@@ -148,7 +143,6 @@ section{padding:24px 16px;max-width:1400px;margin:0 auto}
 .notif-content h4{font-size:14px;font-weight:800;margin-bottom:4px;line-height:1.4}
 .notif-content p{font-size:12px;color:var(--text-2);line-height:1.5;margin-bottom:4px}
 .notif-content .time{font-size:11px;color:var(--text-2);display:flex;align-items:center;gap:4px}
-.notif-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:6px;box-shadow:0 0 0 3px rgba(109,40,217,.2)}
 
 /* ========== MODAL ========== */
 .modal{position:fixed;inset:0;z-index:300;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)}
@@ -275,7 +269,6 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
 .toast.ok{background:var(--success);color:#fff}
 .toast.err{background:var(--danger);color:#fff}
 
-/* ========== إشعار منبثق (واتساب) ========== */
 .push-notif{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--bg-2);border:1px solid var(--border);border-radius:18px;padding:14px 18px;box-shadow:0 20px 50px rgba(0,0,0,.25);z-index:9999;display:flex;gap:12px;align-items:center;max-width:90vw;width:380px;transition:transform .4s cubic-bezier(.4,0,.2,1);cursor:pointer}
 .push-notif.show{transform:translateX(-50%) translateY(0)}
 .push-notif .pi-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:#fff;font-size:20px;flex-shrink:0}
@@ -420,6 +413,9 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       <div class="field"><label>الهاتف</label><input type="tel" id="profPhone"></div>
       <div class="field"><label>العنوان الافتراضي</label><textarea id="profAddress" rows="2"></textarea></div>
       <button class="btn btn-primary" style="width:100%" onclick="saveProfile()"><i class="fas fa-save"></i> حفظ</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="requestNotifPermission()">
+        <i class="fas fa-bell"></i> تفعيل الإشعارات
+      </button>
     </div>
   </section>
 </div>
@@ -446,7 +442,7 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
 
 </div>
 
-<!-- ============ ADMIN APP ========== -->
+<!-- ============ ADMIN APP ============ -->
 <div id="adminApp">
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleAdminSidebar()"></div>
   <aside class="admin-sidebar" id="adminSidebar">
@@ -462,7 +458,7 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       <button class="menu-item" data-tab="orders"><i class="fas fa-shopping-bag"></i> الطلبات <span id="ordersBadge" class="badge-mini" style="display:none"></span></button>
       <button class="menu-item" data-tab="users"><i class="fas fa-users"></i> العملاء</button>
       <button class="menu-item" data-tab="coupons"><i class="fas fa-tags"></i> الكوبونات</button>
-      <button class="menu-item" data-tab="notifications"><i class="fas fa-bell"></i> الإشعارات</button>
+      <button class="menu-item" data-tab="notifications"><i class="fas fa-bell"></i> إرسال إشعارات</button>
       <button class="menu-item" data-tab="settings"><i class="fas fa-palette"></i> الإعدادات</button>
       <button class="menu-item" data-tab="reset"><i class="fas fa-broom" style="color:#ef4444"></i> إعادة ضبط</button>
       <button class="menu-item" onclick="backToStore()" style="color:var(--primary)"><i class="fas fa-store"></i> المتجر</button>
@@ -564,7 +560,7 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
     <div class="tab-content" id="tab-orders">
       <div class="panel">
         <div class="panel-head">
-          <h3><i class="fas fa-shopping-bag" style="color:var(--primary)"></i> الطلبات</h3>
+          <h3><i class="fas fa-shopping-bag" style="color:var(--primary)"></i> الطلبات (خاصة بالأدمن فقط)</h3>
           <div style="display:flex;gap:5px;flex-wrap:wrap">
             <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px" onclick="filterOrders('all')">الكل</button>
             <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px" onclick="filterOrders('pending')">قيد الانتظار</button>
@@ -616,35 +612,58 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       </div>
     </div>
 
+    <!-- ========== إرسال الإشعارات (جديد) ========== -->
     <div class="tab-content" id="tab-notifications">
       <div class="panel">
-        <div class="panel-head"><h3><i class="fas fa-bell" style="color:var(--primary)"></i> إرسال إشعار</h3></div>
+        <div class="panel-head"><h3><i class="fas fa-paper-plane" style="color:var(--primary)"></i> إرسال إشعار جديد</h3></div>
         <div class="form-grid">
-          <div class="field"><label>نوع الإشعار</label>
+          <div class="field full">
+            <label>إرسال إلى *</label>
+            <select id="nTarget" onchange="handleTargetChange()">
+              <option value="all">👥 جميع المستخدمين</option>
+              <option value="specific">👤 مستخدم محدد</option>
+            </select>
+          </div>
+          <div class="field full" id="userSelectWrap" style="display:none">
+            <label>اختر المستخدم</label>
+            <select id="nTargetUser"></select>
+          </div>
+          <div class="field">
+            <label>نوع الإشعار</label>
             <select id="nType">
               <option value="promo">🎁 عرض / خصم</option>
-              <option value="order">🛒 طلب جديد</option>
+              <option value="order">🛒 طلب</option>
               <option value="system">ℹ️ رسالة إدارية</option>
             </select>
           </div>
-          <div class="field"><label>الأولوية</label>
+          <div class="field">
+            <label>الأولوية</label>
             <select id="nPriority">
               <option value="normal">عادي</option>
               <option value="high">مهم 🔥</option>
             </select>
           </div>
-          <div class="field full"><label>العنوان</label><input type="text" id="nTitle" placeholder="عرض خاص 🎉"></div>
-          <div class="field full"><label>الرسالة</label><textarea id="nBody" rows="3" placeholder="خصم 20% على جميع المنتجات"></textarea></div>
-          <div class="field full">
-            <button class="btn btn-primary" onclick="sendNotification()"><i class="fas fa-paper-plane"></i> إرسال للجميع</button>
+          <div class="field full"><label>العنوان *</label><input type="text" id="nTitle" placeholder="عرض خاص 🎉"></div>
+          <div class="field full"><label>الرسالة *</label><textarea id="nBody" rows="3" placeholder="خصم 20% على جميع المنتجات"></textarea></div>
+          <div class="field full" style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="sendNotification()"><i class="fas fa-paper-plane"></i> إرسال الإشعار</button>
+            <button class="btn btn-ghost" onclick="previewNotif()"><i class="fas fa-eye"></i> معاينة</button>
           </div>
         </div>
       </div>
+
       <div class="panel">
-        <div class="panel-head"><h3><i class="fas fa-history" style="color:var(--accent)"></i> سجل الإشعارات</h3></div>
+        <div class="panel-head">
+          <h3><i class="fas fa-history" style="color:var(--accent)"></i> الإشعارات المُرسلة (<span id="notifCount">0</span>)</h3>
+          <button class="btn btn-ghost" style="padding:6px 12px;font-size:11px" onclick="clearAllNotifs()">
+            <i class="fas fa-trash"></i> حذف الكل
+          </button>
+        </div>
         <div class="table-wrap">
-          <table><thead><tr><th>النوع</th><th>العنوان</th><th>الرسالة</th><th>التاريخ</th><th></th></tr></thead>
-          <tbody id="notifBody"><tr><td colspan="5"><div class="empty"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div></td></tr></tbody></table>
+          <table>
+            <thead><tr><th>المستهدف</th><th>النوع</th><th>العنوان</th><th>الرسالة</th><th>التاريخ</th><th></th></tr></thead>
+            <tbody id="notifBody"><tr><td colspan="6"><div class="empty"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div></td></tr></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -701,50 +720,31 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       </div>
     </div>
 
-    <!-- إعادة ضبط المتجر -->
     <div class="tab-content" id="tab-reset">
       <div class="danger-zone">
         <h3><i class="fas fa-exclamation-triangle"></i> منطقة الخطر - إعادة ضبط المتجر</h3>
-        <p>⚠️ هذه العمليات <strong>لا يمكن التراجع عنها</strong>. تأكد من أنك تعرف ما تفعل قبل الضغط على أي زر.</p>
+        <p>⚠️ هذه العمليات <strong>لا يمكن التراجع عنها</strong>.</p>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h3><i class="fas fa-user-slash" style="color:var(--danger)"></i> حذف جميع العملاء</h3></div>
-        <p style="color:var(--text-2);font-size:13px;margin-bottom:14px">مسح كل بيانات العملاء المسجلين (لا يمس الأدمن).</p>
-        <button class="btn-danger-full" onclick="resetUsers()">
-          <i class="fas fa-trash"></i> حذف جميع العملاء
-        </button>
+        <button class="btn-danger-full" onclick="resetUsers()"><i class="fas fa-trash"></i> حذف جميع العملاء</button>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h3><i class="fas fa-box-open" style="color:var(--danger)"></i> حذف جميع المنتجات</h3></div>
-        <p style="color:var(--text-2);font-size:13px;margin-bottom:14px">مسح كل المنتجات من المتجر نهائياً.</p>
-        <button class="btn-danger-full" onclick="resetProducts()">
-          <i class="fas fa-trash"></i> حذف جميع المنتجات
-        </button>
+        <button class="btn-danger-full" onclick="resetProducts()"><i class="fas fa-trash"></i> حذف جميع المنتجات</button>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h3><i class="fas fa-shopping-bag" style="color:var(--danger)"></i> حذف جميع الطلبات</h3></div>
-        <p style="color:var(--text-2);font-size:13px;margin-bottom:14px">مسح كل الطلبات والإحصائيات.</p>
-        <button class="btn-danger-full" onclick="resetOrders()">
-          <i class="fas fa-trash"></i> حذف جميع الطلبات
-        </button>
+        <button class="btn-danger-full" onclick="resetOrders()"><i class="fas fa-trash"></i> حذف جميع الطلبات</button>
       </div>
-
       <div class="panel">
         <div class="panel-head"><h3><i class="fas fa-bell-slash" style="color:var(--danger)"></i> حذف جميع الإشعارات</h3></div>
-        <p style="color:var(--text-2);font-size:13px;margin-bottom:14px">مسح سجل الإشعارات بالكامل.</p>
-        <button class="btn-danger-full" onclick="resetNotifications()">
-          <i class="fas fa-trash"></i> حذف جميع الإشعارات
-        </button>
+        <button class="btn-danger-full" onclick="resetNotifications()"><i class="fas fa-trash"></i> حذف جميع الإشعارات</button>
       </div>
-
       <div class="panel" style="border:2px solid #ef4444">
         <div class="panel-head"><h3><i class="fas fa-radiation" style="color:var(--danger)"></i> ⚠️ إعادة ضبط كاملة للمتجر</h3></div>
-        <p style="color:var(--text-2);font-size:13px;margin-bottom:14px">حذف <strong>كل شيء</strong> (منتجات + طلبات + عملاء + كوبونات + إشعارات). الأدمن فقط يبقى.</p>
         <button class="btn-danger-full" onclick="resetAll()" style="background:linear-gradient(135deg,#dc2626,#7f1d1d)">
-          <i class="fas fa-bomb"></i> إعادة ضبط كاملة (لا يمكن التراجع)
+          <i class="fas fa-bomb"></i> إعادة ضبط كاملة
         </button>
       </div>
     </div>
@@ -784,9 +784,6 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
       <button class="icon-btn" onclick="markAllRead()" title="تحديد الكل كمقروء">
         <i class="fas fa-check-double"></i>
       </button>
-      <button class="icon-btn" onclick="clearMyNotifs()" title="مسح الكل">
-        <i class="fas fa-trash"></i>
-      </button>
       <button class="icon-btn" onclick="closeNotifDrawer()"><i class="fas fa-times"></i></button>
     </div>
   </div>
@@ -796,45 +793,31 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
 <!-- ============ AUTH MODAL ============ -->
 <div class="modal" id="authModal">
   <div class="modal-box">
-    <h2 id="authTitle">مرحباً بك 👋</h2>
+    <h2>مرحباً بك 👋</h2>
     <p class="sub">سجّل دخولك للمتابعة</p>
     <div class="form-msg" id="authMsg"></div>
-    
     <div id="googleSection">
       <button class="btn btn-google" onclick="googleLogin()">
         <img src="https://www.google.com/favicon.ico" alt="G"> الدخول بحساب Google
       </button>
       <div class="divider">أو</div>
     </div>
-
     <div class="tabs" id="authTabs">
       <button class="tab active" id="tabLogin" onclick="switchTab('login')">مستخدم</button>
       <button class="tab" id="tabAdmin" onclick="switchTab('admin')">أدمن</button>
     </div>
-
     <div id="userForm">
       <div class="field"><label>البريد الإلكتروني</label><input type="email" id="userEmail" autocomplete="username" placeholder="example@mail.com"></div>
       <div class="field"><label>كلمة المرور</label><input type="password" id="userPass" autocomplete="current-password" placeholder="••••••••"></div>
-      <button class="btn btn-primary" style="width:100%" onclick="userLogin()">
-        <i class="fas fa-sign-in-alt"></i> دخول كمستخدم
-      </button>
+      <button class="btn btn-primary" style="width:100%" onclick="userLogin()"><i class="fas fa-sign-in-alt"></i> دخول كمستخدم</button>
       <p style="text-align:center;font-size:12px;color:var(--text-2);margin-top:14px">
         ليس لديك حساب؟ <a href="#" onclick="userRegister(event)" style="color:var(--primary);font-weight:700">سجّل الآن</a>
       </p>
     </div>
-
     <div id="adminForm" style="display:none">
-      <div class="field">
-        <label>رقم الهاتف / يوزر الأدمن</label>
-        <input type="text" id="adminUser" placeholder="01147975962" autocomplete="username">
-      </div>
-      <div class="field">
-        <label>كلمة المرور</label>
-        <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
-      </div>
-      <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">
-        <i class="fas fa-shield-halved"></i> دخول كأدمن
-      </button>
+      <div class="field"><label>رقم الهاتف / يوزر الأدمن</label><input type="text" id="adminUser" placeholder="01147975962"></div>
+      <div class="field"><label>كلمة المرور</label><input type="password" id="adminPass" placeholder="••••••••"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="adminLogin()"><i class="fas fa-shield-halved"></i> دخول كأدمن</button>
     </div>
   </div>
 </div>
@@ -900,14 +883,9 @@ footer{background:var(--bg-2);border-top:1px solid var(--border);padding:30px 16
   <button class="close-x" onclick="document.getElementById('installBanner').classList.remove('show');localStorage.setItem('ym_install_dismissed','1')"><i class="fas fa-times"></i></button>
 </div>
 
-<!-- صوت الإشعار -->
-<audio id="notifSound" preload="auto">
-  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
-</audio>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, push, set, get, update, remove, onChildAdded, query, limitToLast }
+import { getDatabase, ref, onValue, push, set, get, update, remove, query, orderByChild, equalTo }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, updateProfile }
@@ -931,14 +909,15 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-/* ========== بيانات الأدمن ========== */
 const ADMIN_USERNAME = "01147975962";
 const ADMIN_EMAIL = "01147975962@ym-store.com";
 const ADMIN_PASSWORD = "Aa01147975962y";
 const ADMIN_DISPLAY_NAME = "المدير العام 👑";
 
 /* ========== STATE ========== */
-let PRODUCTS = [], ORDERS = [], USERS = [], SETTINGS = {}, COUPONS = {}, NOTIFS = [], USER_NOTIFS = [];
+let PRODUCTS = [], ORDERS = [], USERS = [], SETTINGS = {}, COUPONS = {};
+let ALL_NOTIFS = [];       // كل الإشعارات (للأدمن)
+let MY_NOTIFS = [];        // الإشعارات اللي تخص المستخدم الحالي
 let CART = JSON.parse(localStorage.getItem('ym_cart') || '{}');
 let WISHLIST = JSON.parse(localStorage.getItem('ym_wishlist') || '[]');
 let CURRENT_USER = null;
@@ -950,9 +929,10 @@ let DYNAMIC_COUPONS = {};
 let MAX_USERS = 0;
 let IS_ADMIN = false;
 let ORDER_FILTER = 'all';
-let LAST_NOTIF_ID = localStorage.getItem('ym_last_notif') || '';
 let READ_NOTIFS = JSON.parse(localStorage.getItem('ym_read_notifs') || '[]');
 let audioEnabled = false;
+let lastKnownNotifId = null;
+let notifListenerActive = false;
 
 /* ========== THEME ========== */
 function applyTheme(t){
@@ -969,38 +949,38 @@ window.toggleTheme = ()=>{
 };
 applyTheme(localStorage.getItem('ym_theme')||'light');
 
-/* ========== صوت الإشعار (Web Audio API) ========== */
-function playNotifSound(){
+/* ========== الصوت (Web Audio API) ========== */
+function playNotifSound(priority){
   try{
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const now = ctx.currentTime;
-    
-    // نغمة واتساب مميزة (ثلاث نغمات)
-    const notes = [
-      {freq: 800, start: 0, dur: 0.12},
-      {freq: 1000, start: 0.13, dur: 0.12},
-      {freq: 1300, start: 0.26, dur: 0.18}
-    ];
-    
+    const notes = priority === 'high' 
+      ? [
+          {f:523, s:0, d:0.15},
+          {f:659, s:0.16, d:0.15},
+          {f:784, s:0.32, d:0.15},
+          {f:1046, s:0.48, d:0.28}
+        ]
+      : [
+          {f:800, s:0, d:0.12},
+          {f:1000, s:0.13, d:0.12},
+          {f:1300, s:0.26, d:0.18}
+        ];
     notes.forEach(n=>{
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(n.freq, now + n.start);
-      gain.gain.setValueAtTime(0, now + n.start);
-      gain.gain.linearRampToValueAtTime(0.3, now + n.start + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + n.start + n.dur);
+      osc.frequency.setValueAtTime(n.f, now + n.s);
+      gain.gain.setValueAtTime(0, now + n.s);
+      gain.gain.linearRampToValueAtTime(0.35, now + n.s + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + n.s + n.d);
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(now + n.start);
-      osc.stop(now + n.start + n.dur);
+      osc.start(now + n.s);
+      osc.stop(now + n.s + n.d);
     });
-  }catch(e){
-    console.log('Sound error:', e);
-  }
+  }catch(e){ console.log('sound err', e); }
 }
-
-// تفعيل الصوت بعد أول تفاعل من المستخدم (متطلب المتصفحات)
 document.addEventListener('click', ()=>{ audioEnabled = true; }, {once:true});
 
 /* ========== SETTINGS ========== */
@@ -1095,46 +1075,60 @@ onValue(ref(db,'users'), snap=>{
       }
     });
   }
-  if(IS_ADMIN){ renderUsers(); renderStats(); }
+  if(IS_ADMIN){ renderUsers(); renderStats(); renderUserSelect(); }
 });
 
-/* ========== NOTIFICATIONS (Global) ========== */
-let firstNotifLoad = true;
+/* ========== NOTIFICATIONS (كامل) ========== */
 onValue(ref(db,'notifications'), snap=>{
-  const oldIds = NOTIFS.map(n=>n.id);
-  NOTIFS = [];
+  ALL_NOTIFS = [];
   if(snap.exists()){ 
-    snap.forEach(c=> NOTIFS.push({id:c.key, ...c.val()})); 
-    NOTIFS.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
+    snap.forEach(c=> ALL_NOTIFS.push({id:c.key, ...c.val()})); 
+    ALL_NOTIFS.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
   }
   if(IS_ADMIN) renderNotifs();
-  renderUserNotifs();
-  
-  // لو في إشعار جديد وليس أول تحميل
-  if(!firstNotifLoad){
-    const newOnes = NOTIFS.filter(n => !oldIds.includes(n.id));
-    newOnes.forEach(n=>{
-      if(!READ_NOTIFS.includes(n.id)){
-        showPushNotif(n);
-      }
-    });
-  }
-  firstNotifLoad = false;
+  filterMyNotifs();
 });
 
-/* ========== USER NOTIFICATIONS (خاصة بالمستخدم) ========== */
-onValue(ref(db,'notifications'), snap=>{
-  // نفس القائمة للجميع حالياً - يمكن تخصيصها لاحقاً
-});
+/* فلترة الإشعارات اللي تخص المستخدم الحالي */
+function filterMyNotifs(){
+  if(!CURRENT_USER){ MY_NOTIFS = []; renderUserNotifs(); return; }
+  const uid = CURRENT_USER.uid;
+  MY_NOTIFS = ALL_NOTIFS.filter(n=>{
+    // لو الأدمن يبعت للكل
+    if(n.target === 'all') return true;
+    // لو مخصص لمستخدم معين
+    if(n.target === 'specific' && n.targetUid === uid) return true;
+    // إشعارات النظام الافتراضية
+    if(!n.target) return true;
+    return false;
+  });
+  renderUserNotifs();
+
+  // كشف إشعار جديد وإظهاره
+  if(notifListenerActive && MY_NOTIFS.length > 0){
+    const latest = MY_NOTIFS[0];
+    if(latest.id !== lastKnownNotifId && !READ_NOTIFS.includes(latest.id)){
+      const age = Date.now() - (latest.createdAt || 0);
+      // لو عمره أقل من 30 ثانية، اعرضه كإشعار جديد
+      if(age < 30000){
+        showPushNotif(latest);
+      }
+      lastKnownNotifId = latest.id;
+    }
+  } else if(MY_NOTIFS.length > 0){
+    lastKnownNotifId = MY_NOTIFS[0].id;
+  }
+  notifListenerActive = true;
+}
 
 function renderUserNotifs(){
   const el = document.getElementById('notifBodyUser');
   if(!el) return;
-  if(!NOTIFS.length){
+  if(!MY_NOTIFS.length){
     el.innerHTML = `<div class="empty-cart"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div>`;
     return;
   }
-  el.innerHTML = NOTIFS.map(n=>{
+  el.innerHTML = MY_NOTIFS.map(n=>{
     const isRead = READ_NOTIFS.includes(n.id);
     const typeIcon = n.type === 'order' ? 'fa-shopping-bag' : (n.type === 'promo' ? 'fa-gift' : 'fa-info-circle');
     return `
@@ -1145,14 +1139,13 @@ function renderUserNotifs(){
           <p>${escapeHtml(n.body||'')}</p>
           <div class="time"><i class="far fa-clock"></i> ${formatTimeAgo(n.createdAt)}</div>
         </div>
-        ${!isRead?'<div class="notif-dot"></div>':''}
       </div>`;
   }).join('');
   updateNotifBadge();
 }
 
 function updateNotifBadge(){
-  const unread = NOTIFS.filter(n => !READ_NOTIFS.includes(n.id)).length;
+  const unread = MY_NOTIFS.filter(n => !READ_NOTIFS.includes(n.id)).length;
   const b = document.getElementById('notifBadge');
   if(!b) return;
   if(unread > 0){ b.style.display = 'grid'; b.textContent = unread > 99 ? '99+' : unread; }
@@ -1167,17 +1160,10 @@ window.markNotifRead = id=>{
   }
 };
 window.markAllRead = ()=>{
-  READ_NOTIFS = NOTIFS.map(n=>n.id);
+  READ_NOTIFS = [...new Set([...READ_NOTIFS, ...MY_NOTIFS.map(n=>n.id)])];
   localStorage.setItem('ym_read_notifs', JSON.stringify(READ_NOTIFS));
   renderUserNotifs();
   toast('تم تحديد الكل كمقروء ✓','ok');
-};
-window.clearMyNotifs = ()=>{
-  if(!confirm('مسح كل الإشعارات؟')) return;
-  READ_NOTIFS = NOTIFS.map(n=>n.id);
-  localStorage.setItem('ym_read_notifs', JSON.stringify(READ_NOTIFS));
-  renderUserNotifs();
-  toast('تم المسح','ok');
 };
 window.openNotifDrawer = ()=>{
   renderUserNotifs();
@@ -1189,16 +1175,12 @@ window.closeNotifDrawer = ()=>{
   document.getElementById('notifDrawer').classList.remove('show');
 };
 
-/* ========== PUSH NOTIFICATION POPUP ========== */
+/* ========== PUSH POPUP ========== */
 let pushTimer;
 window.showPushNotif = (n)=>{
-  // الصوت
-  if(audioEnabled) playNotifSound();
-  
-  // الاهتزاز (للموبايل)
+  if(audioEnabled) playNotifSound(n.priority);
   if(navigator.vibrate) navigator.vibrate([200,100,200]);
   
-  // Popup
   const pn = document.getElementById('pushNotif');
   const typeIcon = n.type === 'order' ? 'fa-shopping-bag' : (n.type === 'promo' ? 'fa-gift' : 'fa-bell');
   document.getElementById('pushIcon').innerHTML = `<i class="fas ${typeIcon}"></i>`;
@@ -1206,13 +1188,12 @@ window.showPushNotif = (n)=>{
   document.getElementById('pushBody').textContent = n.body || '';
   pn.classList.add('show');
   clearTimeout(pushTimer);
-  pushTimer = setTimeout(hidePushNotif, 6000);
+  pushTimer = setTimeout(hidePushNotif, 7000);
 };
 window.hidePushNotif = ()=>{
   document.getElementById('pushNotif').classList.remove('show');
 };
 
-// Helper: الوقت
 function formatTimeAgo(ts){
   if(!ts) return 'الآن';
   const diff = Date.now() - ts;
@@ -1448,7 +1429,7 @@ document.addEventListener('click', e=>{
   if(m && !e.target.closest('.user-chip') && !e.target.closest('#userMenu')) m.style.display='none';
 });
 
-/* ========== AUTH MODAL ========== */
+/* ========== AUTH ========== */
 window.openAuth = ()=>{
   if(CURRENT_USER){
     if(confirm('تسجيل الخروج؟')) logout();
@@ -1461,25 +1442,11 @@ window.openAuth = ()=>{
 window.closeModal = id=> document.getElementById(id).classList.remove('show');
 
 window.switchTab = t=>{
-  const tabLogin = document.getElementById('tabLogin');
-  const tabAdmin = document.getElementById('tabAdmin');
-  const userForm = document.getElementById('userForm');
-  const adminForm = document.getElementById('adminForm');
-  const googleSection = document.getElementById('googleSection');
-  
-  if(t === 'login'){
-    tabLogin.classList.add('active');
-    tabAdmin.classList.remove('active');
-    userForm.style.display = 'block';
-    adminForm.style.display = 'none';
-    googleSection.style.display = 'block';
-  } else {
-    tabLogin.classList.remove('active');
-    tabAdmin.classList.add('active');
-    userForm.style.display = 'none';
-    adminForm.style.display = 'block';
-    googleSection.style.display = 'none';
-  }
+  document.getElementById('tabLogin').classList.toggle('active', t==='login');
+  document.getElementById('tabAdmin').classList.toggle('active', t==='admin');
+  document.getElementById('userForm').style.display = t==='login'?'block':'none';
+  document.getElementById('adminForm').style.display = t==='admin'?'block':'none';
+  document.getElementById('googleSection').style.display = t==='login'?'block':'none';
   document.getElementById('authMsg').className = 'form-msg';
 };
 
@@ -1492,14 +1459,13 @@ function authError(code){
     'auth/invalid-credential':'بيانات الدخول خاطئة',
     'auth/email-already-in-use':'البريد الإلكتروني مستخدم بالفعل',
     'auth/weak-password':'كلمة المرور ضعيفة جداً',
-    'auth/popup-closed-by-user':'تم إغلاق النافذة، حاول مرة أخرى',
+    'auth/popup-closed-by-user':'تم إغلاق النافذة',
     'auth/cancelled-popup-request':'تم إلغاء الطلب',
-    'auth/network-request-failed':'تعذر الاتصال بالإنترنت - تأكد من الشبكة',
+    'auth/network-request-failed':'تعذر الاتصال - تأكد من الشبكة',
     'auth/too-many-requests':'محاولات كثيرة، حاول لاحقاً',
-    'auth/account-exists-with-different-credential':'الحساب موجود بوسيلة دخول مختلفة',
-    'auth/operation-not-allowed':'هذه الطريقة غير مفعلة - راجع Firebase Console',
-    'auth/unauthorized-domain':'النطاق غير مصرح به - أضفه في Firebase',
-    'auth/popup-blocked':'المتصفح منع النافذة - اسمح بالـ popups'
+    'auth/operation-not-allowed':'الطريقة غير مفعلة في Firebase',
+    'auth/unauthorized-domain':'النطاق غير مصرح به',
+    'auth/popup-blocked':'المتصفح منع النافذة'
   };
   return m[code] || `خطأ: ${code||'غير معروف'}`;
 }
@@ -1512,20 +1478,15 @@ async function checkUserLimit(){
   }catch{ return true; }
 }
 
-// ============ GOOGLE ============
 window.googleLogin = async ()=>{
   const msg = document.getElementById('authMsg');
   try{
     showMsg(msg,'جاري الاتصال بـ Google...','ok');
     const res = await signInWithPopup(auth, googleProvider);
     const u = res.user;
-    if(u.email === ADMIN_EMAIL){
-      await signOut(auth);
-      showMsg(msg,'هذا البريد خاص بالأدمن','err');
-      return;
-    }
+    if(u.email === ADMIN_EMAIL){ await signOut(auth); showMsg(msg,'هذا البريد خاص بالأدمن','err'); return; }
     const ok = await checkUserLimit();
-    if(!ok){ await signOut(auth); showMsg(msg,`تم الوصول للحد الأقصى (${MAX_USERS})`,'err'); return; }
+    if(!ok){ await signOut(auth); showMsg(msg,`الحد الأقصى (${MAX_USERS})`,'err'); return; }
     const userRef = ref(db, 'users/' + u.uid);
     const snap = await get(userRef);
     if(!snap.exists()){
@@ -1538,37 +1499,30 @@ window.googleLogin = async ()=>{
     closeModal('authModal');
     toast('تم الدخول ✓','ok');
     audioEnabled = true;
-  }catch(e){
-    console.error('Google error:', e);
-    showMsg(msg, authError(e.code), 'err');
-  }
+    setTimeout(()=> requestNotifPermission(), 1000);
+  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
 };
 
-// ============ USER LOGIN ============
 window.userLogin = async ()=>{
   const msg = document.getElementById('authMsg');
   const email = document.getElementById('userEmail').value.trim();
   const pass = document.getElementById('userPass').value;
-  if(!email || !pass) return showMsg(msg,'املأ البريد وكلمة المرور','err');
-  if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-    return showMsg(msg,'استخدم تبويب "أدمن" للدخول','err');
-  }
+  if(!email || !pass) return showMsg(msg,'املأ الحقول','err');
+  if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return showMsg(msg,'استخدم تبويب "أدمن"','err');
   try{
     showMsg(msg,'جاري التحقق...','ok');
     await signInWithEmailAndPassword(auth, email, pass);
     closeModal('authModal');
     toast('تم الدخول ✓','ok');
     audioEnabled = true;
+    setTimeout(()=> requestNotifPermission(), 1000);
   }catch(e){
     if(e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password'){
       showMsg(msg,'البريد أو كلمة المرور غير صحيحة','err');
-    } else {
-      showMsg(msg, authError(e.code), 'err');
-    }
+    } else showMsg(msg, authError(e.code), 'err');
   }
 };
 
-// ============ ADMIN LOGIN ============
 window.adminLogin = async ()=>{
   const msg = document.getElementById('authMsg');
   const user = document.getElementById('adminUser').value.trim();
@@ -1576,12 +1530,10 @@ window.adminLogin = async ()=>{
   if(!user || !pass) return showMsg(msg,'املأ الحقول','err');
   if(user !== ADMIN_USERNAME) return showMsg(msg,'❌ رقم الهاتف غير صحيح','err');
   if(pass !== ADMIN_PASSWORD) return showMsg(msg,'❌ كلمة المرور غير صحيحة','err');
-
   try{
-    showMsg(msg,'جاري الدخول كأدمن...','ok');
-    try{
-      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
-    }catch(e){
+    showMsg(msg,'جاري الدخول...','ok');
+    try{ await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD); }
+    catch(e){
       if(e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password'){
         try{
           const cred = await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
@@ -1590,13 +1542,9 @@ window.adminLogin = async ()=>{
             name: ADMIN_DISPLAY_NAME, email: ADMIN_EMAIL, username: ADMIN_USERNAME,
             role: 'admin', provider: 'email', createdAt: Date.now()
           });
-          toast('تم إنشاء حساب الأدمن ✓','ok');
         }catch(e2){
-          if(e2.code === 'auth/email-already-in-use'){
-            showMsg(msg,'⚠️ الحساب موجود بكلمة مرور مختلفة','err');
-          } else {
-            showMsg(msg, authError(e2.code), 'err');
-          }
+          if(e2.code === 'auth/email-already-in-use') showMsg(msg,'⚠️ الحساب موجود بكلمة مرور مختلفة','err');
+          else showMsg(msg, authError(e2.code), 'err');
           return;
         }
       } else throw e;
@@ -1604,12 +1552,9 @@ window.adminLogin = async ()=>{
     closeModal('authModal');
     toast('مرحباً بك يا مدير 👑','ok');
     audioEnabled = true;
-  }catch(e){
-    showMsg(msg, authError(e.code), 'err');
-  }
+  }catch(e){ showMsg(msg, authError(e.code), 'err'); }
 };
 
-// ============ REGISTER ============
 window.userRegister = (e)=>{
   e.preventDefault();
   closeModal('authModal');
@@ -1629,7 +1574,7 @@ window.doRegister = async ()=>{
   try{
     showMsg(msg,'جاري الإنشاء...','ok');
     const ok = await checkUserLimit();
-    if(!ok){ showMsg(msg,`تم الوصول للحد الأقصى (${MAX_USERS})`,'err'); return; }
+    if(!ok){ showMsg(msg,`الحد الأقصى (${MAX_USERS})`,'err'); return; }
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, {displayName: name});
     await set(ref(db,'users/'+cred.user.uid), {
@@ -1638,12 +1583,10 @@ window.doRegister = async ()=>{
     closeModal('registerModal');
     toast('تم إنشاء الحساب 🎉','ok');
     audioEnabled = true;
+    setTimeout(()=> requestNotifPermission(), 1000);
   }catch(e){ 
-    if(e.code === 'auth/email-already-in-use'){
-      showMsg(msg,'البريد الإلكتروني مستخدم بالفعل','err');
-    } else {
-      showMsg(msg, authError(e.code), 'err');
-    }
+    if(e.code === 'auth/email-already-in-use') showMsg(msg,'البريد مستخدم','err');
+    else showMsg(msg, authError(e.code), 'err');
   }
 };
 
@@ -1652,6 +1595,49 @@ window.logout = async ()=>{
   toast('تم الخروج','ok');
   backToStore();
 };
+
+/* ========== طلب إذن الإشعارات + حفظ FCM Token ========== */
+window.requestNotifPermission = async ()=>{
+  if(!('Notification' in window)) return toast('المتصفح لا يدعم الإشعارات','err');
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm === 'granted'){
+      await saveFCMToken();
+      toast('تم تفعيل الإشعارات ✓','ok');
+    }
+  }catch(e){ console.log(e); }
+};
+
+async function saveFCMToken(){
+  if(!CURRENT_USER) return;
+  if(!('serviceWorker' in navigator)) return;
+  try{
+    const reg = await navigator.serviceWorker.ready;
+    const messaging = getMessaging(app);
+    const token = await getToken(messaging, {
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: reg
+    });
+    if(token){
+      await update(ref(db,'users/'+CURRENT_USER.uid), {fcmToken: token, notifyEnabled: true});
+      console.log('FCM token saved:', token);
+    }
+  }catch(e){ console.log('FCM save error:', e); }
+}
+
+// استقبال إشعارات أثناء فتح الموقع (Foreground)
+try{
+  if('Notification' in window){
+    const messaging = getMessaging(app);
+    onMessage(messaging, payload=>{
+      console.log('FCM foreground:', payload);
+      const title = payload.notification?.title || 'إشعار';
+      const body = payload.notification?.body || '';
+      const type = payload.data?.type || 'system';
+      showPushNotif({title, body, type});
+    });
+  }
+}catch(e){}
 
 /* ==================== AUTH STATE ==================== */
 let adminTabsInit = false;
@@ -1665,8 +1651,8 @@ onAuthStateChanged(auth, async u=>{
       USER_PROFILE = s.exists() ? s.val() : {name: u.displayName || u.email.split('@')[0], email: u.email};
     }catch{ USER_PROFILE = {name: u.displayName || '', email: u.email}; }
 
-    // تسجيل FCM Token
-    try{ await registerFCMToken(); }catch(e){ console.log('FCM:', e); }
+    // محاولة تسجيل FCM Token تلقائياً لو الإذن موجود
+    if(Notification.permission === 'granted'){ saveFCMToken(); }
 
     if(IS_ADMIN){
       initAdminTabs();
@@ -1675,51 +1661,21 @@ onAuthStateChanged(auth, async u=>{
       document.getElementById('storefront').style.display = 'none';
       document.getElementById('adminApp').classList.add('show');
     }
+    lastKnownNotifId = null;
+    notifListenerActive = false;
+    filterMyNotifs();
   } else {
     IS_ADMIN = false;
     USER_PROFILE = null;
+    MY_NOTIFS = [];
     backToStore();
   }
   renderUserArea();
   if(IS_ADMIN){
     renderProductsAdmin(); renderOrders(); renderUsers(); renderCoupons(); renderNotifs();
-    renderStats(); renderAnalytics();
+    renderStats(); renderAnalytics(); renderUserSelect();
   }
 });
-
-/* ==================== FCM (Push Notifications) ==================== */
-async function registerFCMToken(){
-  if(!('Notification' in window)) return;
-  try{
-    const perm = await Notification.requestPermission();
-    if(perm !== 'granted') return;
-    if(!('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.ready;
-    try{
-      const messaging = getMessaging(app);
-      const token = await getToken(messaging, {
-        vapidKey: VAPID_KEY,
-        serviceWorkerRegistration: reg
-      });
-      if(token && CURRENT_USER){
-        await update(ref(db,'users/'+CURRENT_USER.uid), {fcmToken: token, notifyEnabled: true});
-        console.log('FCM Token saved');
-      }
-    }catch(e){ console.log('FCM token error:', e); }
-  }catch(e){ console.log('Notification perm error:', e); }
-}
-
-// استقبال إشعارات أثناء فتح الموقع
-try{
-  if('Notification' in window){
-    const messaging = getMessaging(app);
-    onMessage(messaging, payload=>{
-      const title = payload.notification?.title || 'إشعار';
-      const body = payload.notification?.body || '';
-      showPushNotif({title, body, type: 'system'});
-    });
-  }
-}catch(e){}
 
 /* ==================== ADMIN PANEL ==================== */
 window.openAdminPanel = ()=>{
@@ -1752,50 +1708,136 @@ function initAdminTabs(){
       btn.classList.add('active');
       const id = btn.dataset.tab;
       document.getElementById('tab-'+id).classList.add('active');
-      const labels = {dashboard:'الإحصائيات',analytics:'التقارير',products:'المنتجات',orders:'الطلبات',users:'العملاء',coupons:'الكوبونات',notifications:'الإشعارات',settings:'الإعدادات',reset:'إعادة ضبط'};
+      const labels = {dashboard:'الإحصائيات',analytics:'التقارير',products:'المنتجات',orders:'الطلبات',users:'العملاء',coupons:'الكوبونات',notifications:'إرسال إشعارات',settings:'الإعدادات',reset:'إعادة ضبط'};
       document.getElementById('pageTitle').textContent = labels[id]||'';
       document.getElementById('adminSidebar').classList.remove('show');
       document.getElementById('sidebarOverlay').classList.remove('show');
+      if(id === 'notifications') renderUserSelect();
     };
   });
 }
 
+/* ========== ADMIN: NOTIFICATIONS ========== */
+window.handleTargetChange = ()=>{
+  const t = document.getElementById('nTarget').value;
+  document.getElementById('userSelectWrap').style.display = t==='specific'?'block':'none';
+  if(t === 'specific') renderUserSelect();
+};
+
+function renderUserSelect(){
+  const sel = document.getElementById('nTargetUser');
+  if(!sel) return;
+  if(!USERS.length){
+    sel.innerHTML = '<option value="">لا يوجد مستخدمون</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">— اختر مستخدم —</option>' + USERS.map(u=>
+    `<option value="${u.id}">${escapeHtml(u.name||u.email)} (${escapeHtml(u.email||'')})</option>`
+  ).join('');
+}
+
+window.sendNotification = async ()=>{
+  const target = document.getElementById('nTarget').value;
+  const targetUid = document.getElementById('nTargetUser').value;
+  const title = document.getElementById('nTitle').value.trim();
+  const body = document.getElementById('nBody').value.trim();
+  const type = document.getElementById('nType').value;
+  const priority = document.getElementById('nPriority').value;
+  
+  if(!title || !body) return toast('املأ العنوان والرسالة','err');
+  if(target === 'specific' && !targetUid) return toast('اختر المستخدم','err');
+  
+  try{
+    const notifData = {
+      title, body, type, priority,
+      target,
+      targetUid: target === 'specific' ? targetUid : 'all',
+      createdAt: Date.now(),
+      from: 'admin'
+    };
+    await push(ref(db,'notifications'), notifData);
+    
+    document.getElementById('nTitle').value = '';
+    document.getElementById('nBody').value = '';
+    
+    toast('تم إرسال الإشعار ✓','ok');
+  }catch(e){
+    console.error(e);
+    toast('فشل الإرسال','err');
+  }
+};
+
+window.previewNotif = ()=>{
+  const title = document.getElementById('nTitle').value.trim() || 'عرض خاص 🎉';
+  const body = document.getElementById('nBody').value.trim() || 'خصم 20% على جميع المنتجات';
+  const type = document.getElementById('nType').value;
+  const priority = document.getElementById('nPriority').value;
+  showPushNotif({title, body, type, priority});
+};
+
+window.deleteNotif = async id=>{
+  try{ await remove(ref(db,'notifications/'+id)); toast('تم','ok'); }catch{ toast('فشل','err'); }
+};
+
+window.clearAllNotifs = async ()=>{
+  if(!confirm('حذف جميع الإشعارات؟')) return;
+  try{ await remove(ref(db,'notifications')); toast('تم الحذف','ok'); }
+  catch{ toast('فشل','err'); }
+};
+
+function renderNotifs(){
+  const el = document.getElementById('notifBody'); if(!el) return;
+  document.getElementById('notifCount').textContent = ALL_NOTIFS.length;
+  if(!ALL_NOTIFS.length){
+    el.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div></td></tr>`;
+    return;
+  }
+  el.innerHTML = ALL_NOTIFS.map(n=>{
+    let targetLabel = 'الجميع';
+    if(n.target === 'specific' && n.targetUid){
+      const u = USERS.find(x=>x.id===n.targetUid);
+      targetLabel = u ? escapeHtml(u.name||u.email) : 'مستخدم';
+    }
+    return `
+    <tr>
+      <td><span class="badge-status badge-shipped">${targetLabel}</span></td>
+      <td><span class="badge-status badge-${n.type==='order'?'confirmed':(n.type==='promo'?'pending':'shipped')}">${n.type==='order'?'🛒':(n.type==='promo'?'🎁':'ℹ️')}</span></td>
+      <td><strong>${escapeHtml(n.title||'')}</strong></td>
+      <td>${escapeHtml(n.body||'')}</td>
+      <td><small>${formatDate(n.createdAt)}</small></td>
+      <td><button class="mini-btn del" onclick="deleteNotif('${n.id}')"><i class="fas fa-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
 /* ========== ADMIN: RESET ========== */
 window.resetUsers = async ()=>{
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع العملاء؟\nلا يمكن التراجع!')) return;
-  if(!confirm('تأكيد نهائي؟ سيتم حذف كل العملاء!')) return;
+  if(!confirm('⚠️ حذف جميع العملاء؟')) return;
+  if(!confirm('تأكيد نهائي؟')) return;
   try{
     const snap = await get(ref(db,'users'));
     if(snap.exists()){
       const updates = {};
       snap.forEach(c=>{
         const v = c.val();
-        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL){
-          updates['users/'+c.key] = null;
-        }
+        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/'+c.key] = null;
       });
       await update(ref(db), updates);
     }
     toast('تم حذف جميع العملاء ✓','ok');
-  }catch(e){ console.error(e); toast('فشل الحذف','err'); }
+  }catch{ toast('فشل','err'); }
 };
 
 window.resetProducts = async ()=>{
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المنتجات؟\nلا يمكن التراجع!')) return;
-  if(!confirm('تأكيد نهائي؟ سيتم حذف كل المنتجات!')) return;
-  try{
-    await remove(ref(db,'products'));
-    toast('تم حذف جميع المنتجات ✓','ok');
-  }catch(e){ toast('فشل الحذف','err'); }
+  if(!confirm('⚠️ حذف جميع المنتجات؟')) return;
+  try{ await remove(ref(db,'products')); toast('تم ✓','ok'); }
+  catch{ toast('فشل','err'); }
 };
 
 window.resetOrders = async ()=>{
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع الطلبات؟\nلا يمكن التراجع!')) return;
-  if(!confirm('تأكيد نهائي؟ سيتم حذف كل الطلبات!')) return;
-  try{
-    await remove(ref(db,'orders'));
-    toast('تم حذف جميع الطلبات ✓','ok');
-  }catch(e){ toast('فشل الحذف','err'); }
+  if(!confirm('⚠️ حذف جميع الطلبات؟')) return;
+  try{ await remove(ref(db,'orders')); toast('تم ✓','ok'); }
+  catch{ toast('فشل','err'); }
 };
 
 window.resetNotifications = async ()=>{
@@ -1804,35 +1846,32 @@ window.resetNotifications = async ()=>{
     await remove(ref(db,'notifications'));
     READ_NOTIFS = [];
     localStorage.setItem('ym_read_notifs', JSON.stringify([]));
-    toast('تم حذف الإشعارات ✓','ok');
-  }catch(e){ toast('فشل الحذف','err'); }
+    toast('تم ✓','ok');
+  }catch{ toast('فشل','err'); }
 };
 
 window.resetAll = async ()=>{
-  if(!confirm('⚠️⚠️⚠️ تحذير!\n\nسيتم حذف كل شيء:\n- المنتجات\n- الطلبات\n- العملاء\n- الكوبونات\n- الإشعارات\n\nهل أنت متأكد؟')) return;
-  const confirmText = prompt('اكتب "تأكيد" لحذف كل شيء:');
-  if(confirmText !== 'تأكيد') return toast('تم الإلغاء','err');
+  if(!confirm('⚠️⚠️ حذف كل شيء؟')) return;
+  const c = prompt('اكتب "تأكيد":');
+  if(c !== 'تأكيد') return;
   try{
     await remove(ref(db,'products'));
     await remove(ref(db,'orders'));
     await remove(ref(db,'coupons'));
     await remove(ref(db,'notifications'));
-    // حذف العملاء (بدون الأدمن)
     const snap = await get(ref(db,'users'));
     if(snap.exists()){
       const updates = {};
-      snap.forEach(c=>{
-        const v = c.val();
-        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL){
-          updates['users/'+c.key] = null;
-        }
+      snap.forEach(ch=>{
+        const v = ch.val();
+        if(v.role !== 'admin' && v.email !== ADMIN_EMAIL) updates['users/'+ch.key] = null;
       });
       if(Object.keys(updates).length) await update(ref(db), updates);
     }
     READ_NOTIFS = [];
     localStorage.setItem('ym_read_notifs', JSON.stringify([]));
-    toast('تم إعادة ضبط المتجر بالكامل ✓','ok');
-  }catch(e){ console.error(e); toast('فشل','err'); }
+    toast('تم إعادة ضبط المتجر ✓','ok');
+  }catch{ toast('فشل','err'); }
 };
 
 /* ========== ADMIN: SETTINGS ========== */
@@ -2141,42 +2180,6 @@ function renderCoupons(){
     </tr>`).join('');
 }
 
-/* ========== ADMIN: NOTIFICATIONS ========== */
-window.sendNotification = async ()=>{
-  const title = document.getElementById('nTitle').value.trim();
-  const body = document.getElementById('nBody').value.trim();
-  const type = document.getElementById('nType').value;
-  const priority = document.getElementById('nPriority').value;
-  if(!title || !body) return toast('املأ العنوان والرسالة','err');
-  try{
-    await push(ref(db,'notifications'), {
-      title, body, type, priority,
-      createdAt: Date.now()
-    });
-    document.getElementById('nTitle').value = '';
-    document.getElementById('nBody').value = '';
-    toast('تم إرسال الإشعار للجميع ✓','ok');
-  }catch{ toast('فشل','err'); }
-};
-window.deleteNotif = async id=>{
-  try{ await remove(ref(db,'notifications/'+id)); toast('تم','ok'); }catch{ toast('فشل','err'); }
-};
-function renderNotifs(){
-  const el = document.getElementById('notifBody'); if(!el) return;
-  if(!NOTIFS.length){
-    el.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-bell-slash"></i><p>لا توجد إشعارات</p></div></td></tr>`;
-    return;
-  }
-  el.innerHTML = NOTIFS.map(n=>`
-    <tr>
-      <td><span class="badge-status badge-${n.type==='order'?'confirmed':(n.type==='promo'?'pending':'shipped')}">${n.type==='order'?'🛒 طلب':(n.type==='promo'?'🎁 عرض':'ℹ️ نظام')}</span></td>
-      <td><strong>${escapeHtml(n.title||'')}</strong></td>
-      <td>${escapeHtml(n.body||'')}</td>
-      <td><small>${formatDate(n.createdAt)}</small></td>
-      <td><button class="mini-btn del" onclick="deleteNotif('${n.id}')"><i class="fas fa-trash"></i></button></td>
-    </tr>`).join('');
-}
-
 /* ========== ADMIN: STATS ========== */
 function renderStats(){
   const t = document.getElementById('stTotalOrders'); if(!t) return;
@@ -2279,7 +2282,6 @@ function renderMyOrders(){
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
         ${(o.items||[]).slice(0,3).map(i=>`<span style="padding:5px 10px;background:var(--bg);border-radius:999px;font-size:11px">${escapeHtml(i.name)} ×${i.qty}</span>`).join('')}
-        ${(o.items||[]).length>3?`<span style="padding:5px 10px;background:var(--bg);border-radius:999px;font-size:11px">+${o.items.length-3}</span>`:''}
       </div>
       <strong style="color:var(--primary);font-size:16px">${formatPrice(o.total)} ج.م</strong>
     </div>`).join('');
@@ -2347,11 +2349,7 @@ window.submitOrder = async ()=>{
   try{
     showMsg(msg,'جاري الإرسال...','ok');
     await push(ref(db,'orders'), order);
-    await push(ref(db,'notifications'), {
-      type:'order', title:'طلب جديد 🎉',
-      body: `طلب من ${order.userName} بقيمة ${total} ج.م`,
-      priority: 'high', createdAt: Date.now()
-    });
+    // ❌ لا نبعت إشعار هنا (الأدمن بس اللي يبعت)
     CART = {}; APPLIED_COUPON = null; saveCart(); renderCart();
     closeModal('checkoutModal');
     toast('تم استلام طلبك 🎉','ok');
@@ -2392,7 +2390,7 @@ document.querySelectorAll('.modal').forEach(m=>{
   m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('show'); });
 });
 
-/* ========== PWA ========== */
+/* ========== PWA + Service Worker ========== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e=>{
   e.preventDefault(); deferredPrompt = e;
@@ -2402,7 +2400,7 @@ window.addEventListener('beforeinstallprompt', e=>{
 });
 window.installApp = async ()=>{
   if(!deferredPrompt){
-    toast('لتثبيت: اضغط قائمة المتصفح → "إضافة إلى الشاشة الرئيسية"','ok');
+    toast('لتثبيت: قائمة المتصفح → "إضافة إلى الشاشة الرئيسية"','ok');
     return;
   }
   deferredPrompt.prompt();
@@ -2414,7 +2412,7 @@ window.installApp = async ()=>{
   deferredPrompt = null;
 };
 window.addEventListener('appinstalled', ()=>{
-  toast('تم تثبيت التطبيق بنجاح 🎉','ok');
+  toast('تم التثبيت 🎉','ok');
   document.getElementById('installBanner').classList.remove('show');
 });
 
@@ -2422,10 +2420,12 @@ if('serviceWorker' in navigator){
   const swCode = `
     self.addEventListener('install', e=> self.skipWaiting());
     self.addEventListener('activate', e=> e.waitUntil(self.clients.claim()));
+
     self.addEventListener('fetch', e=> {
+      if(e.request.method !== 'GET') return;
       e.respondWith(
         caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
-          if(e.request.method === 'GET' && resp.status === 200){
+          if(resp.status === 200 && resp.type === 'basic'){
             const clone = resp.clone();
             caches.open('ym-cache-v1').then(c => c.put(e.request, clone));
           }
@@ -2433,45 +2433,53 @@ if('serviceWorker' in navigator){
         }).catch(()=> caches.match(e.request)))
       );
     });
+
     self.addEventListener('push', e=>{
       let data = {};
       try { data = e.data ? e.data.json() : {}; } catch(err) { data = {title:'إشعار جديد', body:''}; }
       const title = (data.notification && data.notification.title) || data.title || 'متجر يزيد';
       const body = (data.notification && data.notification.body) || data.body || 'لديك إشعار جديد';
+      const type = (data.data && data.data.type) || 'system';
+
       const options = {
         body: body,
         icon: '/favicon.ico',
         badge: '/favicon.ico',
         dir: 'rtl',
         lang: 'ar',
-        vibrate: [200,100,200],
+        vibrate: [300, 100, 300, 100, 300],
         tag: 'ym-notif-' + Date.now(),
         requireInteraction: true,
+        renotify: true,
+        silent: false,
         data: data
       };
+
       e.waitUntil(self.registration.showNotification(title, options));
     });
+
     self.addEventListener('notificationclick', e=>{
       e.notification.close();
-      e.waitUntil(clients.matchAll({type:'window', includeUncontrolled:true}).then(list=>{
-        for(let c of list){ if(c.url.includes(location.origin)) return c.focus(); }
-        return clients.openWindow('/');
-      }));
+      e.waitUntil(
+        clients.matchAll({type:'window', includeUncontrolled:true}).then(list=>{
+          for(let c of list){
+            if(c.url.includes(self.location.origin)){
+              return c.focus();
+            }
+          }
+          return clients.openWindow('/');
+        })
+      );
     });
   `;
   const blob = new Blob([swCode], {type:'application/javascript'});
   const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(reg=>{
-    console.log('SW registered');
-  }).catch(err=>{
-    console.log('SW error:', err);
-  });
+  navigator.serviceWorker.register(swUrl).then(()=> console.log('SW ok')).catch(e=> console.log('SW err:', e));
 }
 
 updateCartBadge();
 updateWishBadge();
 renderUserArea();
-renderUserNotifs();
 </script>
 </body>
-            </html>
+                                            </html>

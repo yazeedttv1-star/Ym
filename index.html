@@ -482,6 +482,7 @@ body{padding-bottom:0}
 <div id="toasts" role="status" aria-live="polite"></div>
 <button class="btop" id="btop" data-a="scrollTop" aria-label="العودة للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
 <div id="suggestBox" class="sg hide"></div>
+<script type="module">
   import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,deleteUser,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getDatabase,ref,onValue,set,push,update,remove,get,query,orderByChild,equalTo,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -1192,7 +1193,6 @@ const pid=urlParams.get('product');
 if(pid){S.focusedProduct=pid;setTimeout(()=>productModal(pid),1500)}
 
 render();
-<script type="module">
 </script>
 </body>
 </html>

@@ -917,9 +917,9 @@ open:d=>{S.focusedProduct=d.id;productModal(d.id)},
 close:d=>closeOv(d.id),
 theme:()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'),
 scrollTop:()=>window.scrollTo({top:0,behavior:'smooth'}),
-install:async()=>{if(!dip){toast('التثبيت غير متاح حالياً');return}dip.prompt();await dip.userChoice;dip=null;$$('#instBtn,.instb').forEach(b=>b.classList.add('hide'))},
+install:async()=>{if(!dip){toast('التثبيت غير متاح حالياً ي نجم');return}dip.prompt();await dip.userChoice;dip=null;$$('#instBtn,.instb').forEach(b=>b.classList.add('hide'))},
 wish:d=>{const i=wish.indexOf(d.id);if(i<0)wish.push(d.id);else wish.splice(i,1);ls.set('yz_wish',wish);updateBadges();if(S.page==='wishlist')drawPage();else if(S.page==='home')drawGrid();if(S.open==='product')productModal(d.id)},
-add:d=>{const p=S.products[d.id];if(!p||!avail(p))return toast('المنتج غير متوفر','err');const q=(cart[d.id]||0)+1;if(q>Number(p.qty))return toast('الكمية المتاحة '+p.qty,'err');cart[d.id]=q;saveCart();updateBadges();toast('تمت الإضافة إلى السلة','ok');if(S.open==='cart')fillCart()},
+add:d=>{const p=S.products[d.id];if(!p||!avail(p))return toast('المنتج غير متوفر حاليا ','err');const q=(cart[d.id]||0)+1;if(q>Number(p.qty))return toast('الكمية المتاحة '+p.qty,'err');cart[d.id]=q;saveCart();updateBadges();toast('تمت الإضافة إلى السلة','ok');if(S.open==='cart')fillCart()},
 cart:()=>{S.open='cart';openOv('cart',cartHTML(),'dr')},
 qty:d=>{const p=S.products[d.id];if(!p)return;const q=(cart[d.id]||0)+Number(d.n);if(q<=0)delete cart[d.id];else{if(q>Number(p.qty))return toast('الكمية المتاحة '+p.qty,'err');cart[d.id]=q}saveCart();updateBadges();fillCart()},
 rm:d=>{const ci=$('#ci_'+d.id);if(ci)ci.classList.add('removing');setTimeout(()=>{delete cart[d.id];saveCart();updateBadges();fillCart()},300)},
@@ -945,19 +945,19 @@ auth:(d={})=>{S.auth={tab:d.tab||'user',mode:'login'};openOv('auth',authHTML(),'
 atab:d=>{S.auth.tab=d.t;setOv('auth',authHTML())},
 amode:d=>{S.auth.mode=d.m;setOv('auth',authHTML())},
 google:async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){toast(authErr(e.code),'err')}},
-forgotPwd:async()=>{const email=prompt('أدخل بريدك الإلكتروني:');if(!email)return;try{await sendPasswordResetEmail(auth,email.trim());toast('تم إرسال رابط الاستعادة','ok')}catch(e){toast(authErr(e.code),'err')}},
+forgotPwd:async()=>{const email=prompt('أدخل بريدك الإلكتروني:');if(!email)return;try{await sendPasswordResetEmail(auth,email.trim());toast('تم إرسال رابط الاستعادة الى الجيميل','ok')}catch(e){toast(authErr(e.code),'err')}},
 resetPwd:async()=>{
-if(!S.user?.email){toast('لا يوجد بريد مرتبط بالحساب','err');return}
+if(!S.user?.email){toast('لا يوجد بريد مرتبط بالحساب تاكد الاول','err');return}
 const choice=await confirmBox({title:'تغيير كلمة المرور',message:'هل تريد تغيير كلمة المرور الحالية أم إرسال رابط الاستعادة؟',okText:'تغيير الآن',cancelText:'إرسال رابط',icon:'fa-key'});
 if(choice){
 const newPass=prompt('أدخل كلمة المرور الجديدة (6 أحرف على الأقل):');
-if(!newPass||newPass.length<6){toast('كلمة المرور قصيرة جداً','err');return}
+if(!newPass||newPass.length<6){toast('كلمة المرور قصيرة جداً على فكرة','err');return}
 try{await updatePassword(S.user,newPass);toast('تم تغيير كلمة المرور بنجاح','ok')}catch(e){toast(authErr(e.code)||'يجب تسجيل الدخول مجدداً لتغيير كلمة المرور','err')}
 }else{
-try{await sendPasswordResetEmail(auth,S.user.email);toast('تم إرسال رابط تغيير كلمة المرور إلى بريدك','ok')}catch(e){toast(authErr(e.code),'err')}
+try{await sendPasswordResetEmail(auth,S.user.email);toast('تم إرسال رابط تغيير كلمة المرور إلى بريدك انظر الرسائل الغير مرغوب بها ان لم تجده','ok')}catch(e){toast(authErr(e.code),'err')}
 }
 },
-logout:async()=>{const ok=await confirmBox({title:'تسجيل الخروج',message:'هل تريد تسجيل الخروج؟',okText:'خروج',danger:true,icon:'fa-right-from-bracket'});if(!ok)return;await signOut(auth);go('home')},
+logout:async()=>{const ok=await confirmBox({title:'تسجيل الخروج',message:'هل تريد تسجيل الخروج؟ خلاص',okText:'خروج',danger:true,icon:'fa-right-from-bracket'});if(!ok)return;await signOut(auth);go('home')},
 toAdmin:()=>{S.adminMode=true;closeAllOv();render()},
 toStore:()=>{S.adminMode=false;closeAllOv();render()},
 tab:d=>{S.adminTab=d.t;drawTab()},
@@ -989,7 +989,7 @@ maintTog:async()=>{const on=S.maint?.enabled!==true;await set(ref(db,'maintenanc
 reset:async d=>{const names={users:'جميع العملاء',products:'جميع المنتجات',orders:'جميع الطلبات',notifs:'جميع الإشعارات',all:'كل بيانات المتجر'};
 const ok=await confirmBox({title:'تأكيد الحذف',message:`سيتم حذف ${names[d.k]} نهائياً. هل تريد المتابعة؟`,okText:'حذف نهائي',danger:true,icon:'fa-skull-crossbones'});
 if(!ok)return;
-const ok2=await confirmBox({title:'تأكيد أخير',message:'هذا الإجراء لا يمكن التراجع عنه!',okText:'نعم، احذف',danger:true,icon:'fa-triangle-exclamation'});
+const ok2=await confirmBox({title:'تأكيد أخير خلاص كده',message:'هذا الإجراء لا يمكن التراجع عنه احذر!',okText:'نعم، احذف',danger:true,icon:'fa-triangle-exclamation'});
 if(!ok2)return;
 const delUsers=async()=>{await Promise.all(Object.keys(S.users).filter(id=>id!==S.user.uid).map(id=>remove(ref(db,'users/'+id))));await set(ref(db,'counters/users'),0)};
 try{
@@ -999,12 +999,12 @@ if(d.k==='orders'||d.k==='all')await remove(ref(db,'orders'));
 if(d.k==='notifs'||d.k==='all')await remove(ref(db,'notifications'));
 if(d.k==='all'){await Promise.all([remove(ref(db,'messages')),remove(ref(db,'coupons')),remove(ref(db,'pages')),remove(ref(db,'reviews')),remove(ref(db,'activity')),delUsers(),set(ref(db,'settings'),DEF_SET),set(ref(db,'nav'),DEF_NAV)])}
 toast('تمت العملية بنجاح','ok');logActivity('إعادة ضبط',names[d.k])
-}catch{toast('تعذر تنفيذ العملية','err')}},
-submitReview:async d=>{if(!S.user)return toast('سجّل الدخول أولاً','err');const rating=Number($('#rateInput')?.dataset?.val||0);const text=$('#reviewText')?.value?.trim()||'';if(!rating)return toast('اختر تقييماً','err');await set(push(ref(db,'reviews')),{pid:d.id,uid:S.user.uid,uname:S.profile?.name||'عميل',rating,text,createdAt:Date.now()});toast('شكراً لتقييمك!','ok');productModal(d.id)},
+}catch{toast('تعذر تنفيذ العملية ي يزيد','err')}},
+submitReview:async d=>{if(!S.user)return toast('سجّل الدخول أولاً علشان تستفاد','err');const rating=Number($('#rateInput')?.dataset?.val||0);const text=$('#reviewText')?.value?.trim()||'';if(!rating)return toast('اختر تقييماً ','err');await set(push(ref(db,'reviews')),{pid:d.id,uid:S.user.uid,uname:S.profile?.name||'عميل',rating,text,createdAt:Date.now()});toast('شكراً لتقييمك!','ok');productModal(d.id)},
 shareProduct:async d=>{const p=S.products[d.id];if(!p)return;const url=location.origin+location.pathname+'?product='+d.id;const shared=await shareUrl(url,p.name);if(!shared){const ok=await copyText(url);toast(ok?'تم نسخ الرابط':'تعذر النسخ',ok?'ok':'err')}},
 qrProduct:d=>{const url=location.origin+location.pathname+'?product='+d.id;showQR(url)},
 copyQR:async d=>{const ok=await copyText(d.url);toast(ok?'تم النسخ':'تعذر النسخ',ok?'ok':'err')},
-clearActivity:async()=>{const ok=await confirmBox({title:'مسح السجل',message:'سيتم مسح سجل النشاط بالكامل',okText:'مسح',danger:true,icon:'fa-trash'});if(!ok)return;await remove(ref(db,'activity'));toast('تم المسح','ok')},
+clearActivity:async()=>{const ok=await confirmBox({title:'مسح السجل هاا',message:' سيتم مسح سجل النشاط بالكامل هاا',okText:'مسح',danger:true,icon:'fa-trash'});if(!ok)return;await remove(ref(db,'activity'));toast('تم المسح','ok')},
 prApply:()=>{S.minPrice=Number($('#prMin')?.value||0);S.maxPrice=Number($('#prMax')?.value||0);drawGrid()},
 prClear:()=>{S.minPrice=0;S.maxPrice=0;const a=$('#prMin'),b=$('#prMax');if(a)a.value='';if(b)b.value='';drawGrid()}
 };
@@ -1032,8 +1032,8 @@ const adj=dir=>Promise.all(Object.values(o.items||{}).map(i=>runTransaction(ref(
 if(!was&&now)await adj(-1);
 if(was&&!now)await adj(1);
 set(push(ref(db,'notifications')),{title:'تحديث حالة الطلب',body:'أصبحت حالة طلبك: '+ST[st][0],type:'order',priority:'high',target:'specific',targetUid:o.uid,by:S.user.uid,createdAt:Date.now()}).catch(()=>{});
-toast('تم تحديث حالة الطلب','ok');
-logActivity('تحديث حالة طلب',shortId(id)+' → '+ST[st][0])
+toast('تم تحديث حالة الطلب تابع وشوف','ok');
+logActivity('تحديث حالة طلبك',shortId(id)+' → '+ST[st][0])
 }
 
 function hideSuggest(){const el=$('#suggestBox');if(el)el.classList.add('hide')}
@@ -1042,12 +1042,12 @@ const el=$('#suggestBox');
 if(!el)return;
 if(!q||q.length<2){el.classList.add('hide');return}
 const l=arr(S.products).filter(p=>p.visible!==false&&p.name.toLowerCase().includes(q.toLowerCase())).slice(0,6);
-if(!l.length){el.innerHTML='<div class="no-res">لا توجد نتائج</div>';el.classList.remove('hide');return}
+if(!l.length){el.innerHTML='<div class="no-res">لا توجد نتائج حاول تاني</div>';el.classList.remove('hide');return}
 el.innerHTML=l.map(p=>`<button class="sg-it" data-a="open" data-id="${p.id}">${p.image?`<img src="${esc(p.image)}" alt="">`:`<div class="ph"><i class="fa-solid fa-image"></i></div>`}<div class="info"><b>${hi(p.name,q)}</b><small>${money(fin(p))}</small></div></button>`).join('');
 el.classList.remove('hide')
 }
 
-const run=r=>{if(r&&r.catch)r.catch(e=>{console.error(e);toast('حدث خطأ، حاول مرة أخرى','err')})};
+const run=r=>{if(r&&r.catch)r.catch(e=>{console.error(e);toast('حدث خطأ، حاول مرة أخرى لا تيأس','err')})};
 
 document.addEventListener('click',e=>{
 const t=e.target.closest('[data-a]');
@@ -1117,8 +1117,8 @@ $$('#instBtn,.instb').forEach(b=>b.classList.add('hide'));
 toast('تم تثبيت التطبيق بنجاح','ok')
 });
 
-window.addEventListener('online',()=>toast('تمت استعادة الاتصال','ok'));
-window.addEventListener('offline',()=>toast('لا يوجد اتصال بالإنترنت','err'));
+window.addEventListener('online',()=>toast('تمت استعادة الاتصالك','ok'));
+window.addEventListener('offline',()=>toast('لا يوجد اتصال بالإنترنت تحقق من اتصالك','err'));
 
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 

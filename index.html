@@ -323,21 +323,9 @@ tr:last-child td{border-bottom:0}
 .btop:active{transform:scale(.92)}
 @media(min-width:900px){.btop{bottom:20px;inset-inline-end:20px}}
 
-.share-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:14px 0}
-.share-it{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:14px;transition:.2s;font-size:11px;font-weight:600;color:var(--tx);cursor:pointer}
-.share-it:hover{border-color:var(--p);color:var(--p);background:var(--card);transform:translateY(-2px)}
-.share-it i{font-size:22px;color:var(--p)}
-
 .qr-wrap{text-align:center;padding:16px 0}
 .qr-wrap canvas,.qr-wrap img{border-radius:14px;background:#fff;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin:0 auto 16px;max-width:260px;display:block}
 .qr-url{padding:12px;background:var(--bg);border-radius:12px;font-size:12px;font-family:monospace;color:var(--mt);word-break:break-all;margin-bottom:14px}
-
-.al-it{display:flex;gap:10px;padding:12px;background:var(--card);border:1px solid var(--bd);border-radius:14px;margin-bottom:8px;align-items:flex-start}
-.al-it i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--p) 14%,transparent);color:var(--p)}
-.al-it .body{flex:1;min-width:0}
-.al-it .body b{font-size:13px;display:block;margin-bottom:2px}
-.al-it .body p{color:var(--mt);font-size:12px;margin:0}
-.al-it .body small{color:var(--mt);font-size:11px}
 
 .adm{min-height:100vh;display:flex;flex-direction:column}
 .as{background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:40;padding-top:env(safe-area-inset-top);order:2}
@@ -483,8 +471,8 @@ body{padding-bottom:0}
 <button class="btop" id="btop" data-a="scrollTop" aria-label="العودة للأعلى"><i class="fa-solid fa-arrow-up"></i></button>
 <div id="suggestBox" class="sg hide"></div>
 <script type="module">
-  import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,deleteUser,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,deleteUser,sendPasswordResetEmail,updatePassword}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getDatabase,ref,onValue,set,push,update,remove,get,query,orderByChild,equalTo,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import{getMessaging,getToken,onMessage,isSupported}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
@@ -499,13 +487,7 @@ let messaging=null,dip=null,AC=null;
 
 const BUILTIN=['home','wishlist','orders','contact','profile','about','faq','privacy'];
 const PAGE_NAMES={home:'الرئيسية',wishlist:'المفضلة',orders:'طلباتي',contact:'تواصل معنا',profile:'الملف الشخصي',about:'من نحن',faq:'الأسئلة الشائعة',privacy:'سياسة الخصوصية'};
-const DEF_NAV={
-home:{label:'الرئيسية',icon:'fa-house',enabled:true,order:1,path:'home'},
-wishlist:{label:'المفضلة',icon:'fa-heart',enabled:true,order:2,path:'wishlist'},
-orders:{label:'طلباتي',icon:'fa-bag-shopping',enabled:true,order:3,path:'orders'},
-contact:{label:'تواصل',icon:'fa-envelope',enabled:true,order:4,path:'contact'},
-profile:{label:'حسابي',icon:'fa-user',enabled:true,order:5,path:'profile'}
-};
+const DEF_NAV={home:{label:'الرئيسية',icon:'fa-house',enabled:true,order:1,path:'home'},wishlist:{label:'المفضلة',icon:'fa-heart',enabled:true,order:2,path:'wishlist'},orders:{label:'طلباتي',icon:'fa-bag-shopping',enabled:true,order:3,path:'orders'},contact:{label:'تواصل',icon:'fa-envelope',enabled:true,order:4,path:'contact'},profile:{label:'حسابي',icon:'fa-user',enabled:true,order:5,path:'profile'}};
 const DEF_SET={storeName:'متجر يزيد',heroTitle:'تسوّق بأناقة واستمتع بأفضل العروض',heroSubtitle:'منتجات مختارة بعناية وتوصيل لباب بيتك',primary:'#e91e63',primary2:'#f06292',accent:'#f59e0b',maxUsers:0,logo:'',storeImage:'',phone:'01147975962',email:'yazeedttv1@gmail.com',address:'',facebook:'',instagram:'',whatsapp:'',currency:'ج.م',footerText:'© 2025 متجر يزيد - جميع الحقوق محفوظة'};
 const ST={pending:['قيد الانتظار','fa-clock','#f59e0b'],confirmed:['مؤكد','fa-circle-check','#2563eb'],shipped:['تم الشحن','fa-truck-fast','#8b5cf6'],delivered:['تم التسليم','fa-box-open','#16a34a'],cancelled:['ملغي','fa-ban','#dc2626']};
 const NI={promo:'fa-tag',order:'fa-bag-shopping',system:'fa-circle-info'};
@@ -513,7 +495,7 @@ const NT={promo:'عرض',order:'طلب',system:'نظام'};
 const TONES={promo:[[880,.12],[1175,.12],[1568,.22]],order:[[660,.14],[880,.14],[660,.14],[990,.26]],system:[[523,.2],[392,.28]]};
 const TPL={hero:'<div class="ban"><h2 style="margin-bottom:8px">أهلاً بك في متجرنا</h2><p>اكتشف أحدث المنتجات وأفضل الأسعار</p></div>',features:'<div class="stg"><div class="sc"><i class="fa-solid fa-truck-fast"></i><div><b>توصيل سريع</b><small>لكل المحافظات</small></div></div><div class="sc"><i class="fa-solid fa-shield-halved"></i><div><b>ضمان الجودة</b><small>منتجات أصلية</small></div></div><div class="sc"><i class="fa-solid fa-headset"></i><div><b>دعم متواصل</b><small>نرد على استفساراتك</small></div></div></div>',offer:'<div class="ban" style="background:linear-gradient(135deg,#f59e0b,#e91e63)"><h2 style="margin-bottom:6px">عرض خاص</h2><p>خصومات لفترة محدودة على منتجات مختارة</p></div>',contact:'<div class="pn" style="text-align:center"><h3>هل تحتاج مساعدة؟</h3><p style="color:var(--mt);margin-bottom:12px">تواصل معنا في أي وقت</p><a class="btn" href="tel:01147975962"><i class="fa-solid fa-phone"></i> اتصل بنا</a></div>'};
 const SNIP={h:'<h2 style="margin:12px 0">عنوان رئيسي</h2>',p:'<p style="margin:8px 0;line-height:1.9">اكتب النص هنا</p>',banner:'<div class="ban"><h2>عنوان البانر</h2><p>وصف قصير</p></div>',card:'<div class="pn"><h3>عنوان البطاقة</h3><p style="color:var(--mt)">محتوى البطاقة</p></div>',hr:'<hr style="border:0;border-top:1px solid var(--bd);margin:16px 0">',grid:'<div class="stg"><div class="sc"><i class="fa-solid fa-star"></i><div><b>ميزة 1</b><small>وصف</small></div></div><div class="sc"><i class="fa-solid fa-heart"></i><div><b>ميزة 2</b><small>وصف</small></div></div></div>'};
-const ADM=[['stats','الإحصائيات','fa-chart-pie'],['analytics','التقارير','fa-chart-line'],['products','المنتجات','fa-box'],['orders','الطلبات','fa-cart-shopping'],['users','العملاء','fa-users'],['messages','الرسائل','fa-comments'],['coupons','الكوبونات','fa-ticket'],['notify','الإشعارات','fa-bell'],['navbar','إدارة الأزرار','fa-bars'],['editor','محرر الصفحات','fa-pen-ruler'],['settings','الإعدادات','fa-palette'],['activity','سجل النشاط','fa-clock-rotate-left'],['maint','إغلاق المتجر','fa-lock'],['reset','إعادة ضبط','fa-trash-can']];
+const ADM=[['stats','الإحصائيات','fa-chart-pie'],['analytics','التقارير','fa-chart-line'],['products','المنتجات','fa-box'],['orders','الطلبات','fa-cart-shopping'],['users','العملاء','fa-users'],['messages','الرسائل','fa-comments'],['coupons','الكوبونات','fa-ticket'],['notify','الإشعارات','fa-bell'],['navbar','إدارة الأزرار','fa-bars'],['settings','الإعدادات','fa-palette'],['activity','سجل النشاط','fa-clock-rotate-left'],['maint','إغلاق المتجر','fa-lock'],['reset','إعادة ضبط','fa-trash-can']];
 
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -622,7 +604,6 @@ sub(ref(db,'notifications'),'notifs',1)}
 
 function navAll(){return arr(Object.keys(S.nav).length?S.nav:DEF_NAV).sort((a,b)=>(a.order||0)-(b.order||0))}
 const navList=()=>navAll().filter(n=>n.enabled!==false);
-function customBlock(k){const pg=S.pages[k]||{};return(pg.customCode||'')+arr(pg.elements).sort((a,b)=>a.createdAt-b.createdAt).map(e=>e.code).join('')}
 
 function render(){
 const m=S.maint?.enabled===true&&!S.isAdmin;
@@ -649,16 +630,16 @@ function setBg(id,n){const e=$('#'+id);if(!e)return;const o=Number(e.textContent
 function updateBadges(){setBg('bC',cartItems().reduce((a,p)=>a+p.q,0));setBg('bW',wish.filter(id=>S.products[id]).length);setBg('bN',S.user?visibleNotifs().filter(n=>!readSet().has(n.id)).length:0)}
 
 function drawPage(){
-const p=S.page,cb=customBlock(p),top=cb?`<div class="cb">${cb}</div>`:'';
-if(p==='home')return drawHome(top);
-if(p==='wishlist')return drawWish(top);
-if(p==='orders')return drawOrders(top);
-if(p==='contact')return drawContact(top);
-if(p==='profile')return drawProfile(top);
-if(p==='about')return drawAbout(top);
-if(p==='faq')return drawFaq(top);
-if(p==='privacy')return drawPrivacy(top);
-$('#main').innerHTML=`<div>${top||EMPTY('هذه الصفحة فارغة حالياً','fa-file')}</div>`
+const p=S.page;
+if(p==='home')return drawHome('');
+if(p==='wishlist')return drawWish('');
+if(p==='orders')return drawOrders('');
+if(p==='contact')return drawContact('');
+if(p==='profile')return drawProfile('');
+if(p==='about')return drawAbout('');
+if(p==='faq')return drawFaq('');
+if(p==='privacy')return drawPrivacy('');
+$('#main').innerHTML=`<div>${EMPTY('هذه الصفحة فارغة حالياً','fa-file')}</div>`
 }
 function drawHome(top){const s={...DEF_SET,...S.settings};
 $('#main').innerHTML=`<div>${top}<section class="hero"><div><h1>${esc(s.heroTitle)}</h1><p>${esc(s.heroSubtitle)}</p><button class="btn" data-a="shop">تسوق الآن <i class="fa-solid fa-arrow-left"></i></button></div>${s.storeImage?`<img src="${esc(s.storeImage)}" alt="${esc(s.storeName)}">`:'<div class="hph"><i class="fa-solid fa-bag-shopping"></i></div>'}</section><div class="sm"><i class="fa-solid fa-magnifying-glass"></i><input id="qm" type="search" placeholder="ابحث عن المنتجات..." value="${esc(S.q)}" autocomplete="off"></div><div class="sort-w"><label><i class="fa-solid fa-sort"></i> ترتيب:</label><select data-sort="1"><option value="newest" ${S.sort==='newest'?'selected':''}>الأحدث</option><option value="price-asc" ${S.sort==='price-asc'?'selected':''}>الأرخص أولاً</option><option value="price-desc" ${S.sort==='price-desc'?'selected':''}>الأغلى أولاً</option><option value="discount" ${S.sort==='discount'?'selected':''}>أعلى خصم</option><option value="name" ${S.sort==='name'?'selected':''}>الاسم</option></select></div><div class="prd"><label>السعر من:</label><input type="number" min="0" id="prMin" value="${S.minPrice||''}" placeholder="0"><label>إلى:</label><input type="number" min="0" id="prMax" value="${S.maxPrice||''}" placeholder="∞"><button class="btn sm" data-a="prApply">تطبيق</button><button class="btn sm gh" data-a="prClear">مسح</button></div><div id="chips" class="chips"></div><div id="grid" class="grid"></div></div>`;
@@ -860,19 +841,6 @@ function nPrev(){const f=$('form[data-f=notify]'),el=$('#nPrev');if(!f||!el)retu
 
 T.navbar={deps:['nav'],html(){return`<div class="ph"><button class="btn" data-a="nvEdit"><i class="fa-solid fa-plus"></i> إضافة زر</button></div><div class="agrid">${navAll().map(n=>`<div class="ac"><div class="ncb"><i class="fa-solid ${esc(n.icon)}"></i><b>${esc(n.label)}</b><small>${esc(n.path)} · ترتيب ${n.order||0}</small><span class="bd ${n.enabled===false?'out':''}">${n.enabled===false?'متوقف':'مفعّل'}</span></div><div class="acb c3"><button data-a="nvEdit" data-id="${n.id}"><i class="fa-solid fa-pen"></i></button><button data-a="nvTog" data-id="${n.id}"><i class="fa-solid ${n.enabled===false?'fa-play':'fa-pause'}"></i></button><button class="dg" data-a="nvDel" data-id="${n.id}"><i class="fa-solid fa-trash"></i></button></div></div>`).join('')}</div>`}};
 
-const pageKeys=()=>{const s=new Set(BUILTIN);navAll().forEach(n=>{if(n.path&&!/^https?:/.test(n.path))s.add(n.path)});return[...s]};
-const pageLabel=k=>PAGE_NAMES[k]||navAll().find(n=>n.path===k)?.label||k;
-
-T.editor={deps:['pages'],html(){return`<div class="pn"><div class="fld"><label>الصفحة</label><select data-ep="1">${pageKeys().map(k=>`<option value="${esc(k)}" ${S.ep===k?'selected':''}>${esc(pageLabel(k))}</option>`).join('')}</select></div><div class="tb"><button data-a="edIns" data-s="h">عنوان</button><button data-a="edIns" data-s="p">فقرة</button><button data-a="edIns" data-s="btn">زر</button><button data-a="edIns" data-s="img">صورة</button><button data-a="edIns" data-s="banner">بانر</button><button data-a="edIns" data-s="card">بطاقة</button><button data-a="edIns" data-s="grid">شبكة مميزات</button><button data-a="edIns" data-s="hr">فاصل</button></div><div class="fld"><label>إضافة سريعة</label><select data-tpl="1"><option value="">اختر قالباً جاهزاً...</option><option value="hero">بانر ترحيبي</option><option value="features">قسم المميزات</option><option value="offer">بانر عرض خاص</option><option value="contact">بطاقة تواصل</option></select></div><textarea id="edCode" class="code" spellcheck="false" placeholder="اكتب كود HTML هنا"></textarea><div class="ph" style="margin-top:12px"><button class="btn sm" data-a="edSave"><i class="fa-solid fa-floppy-disk"></i> حفظ كود الصفحة</button><button class="btn sm gh" data-a="edAdd"><i class="fa-solid fa-plus"></i> إضافة كعنصر منفصل</button><button class="btn sm gh" data-a="edPrev"><i class="fa-solid fa-up-right-from-square"></i> معاينة</button></div></div><div class="pn"><h3>العناصر المضافة</h3><div id="elList"></div></div>`
-},part(){drawElList()},init(){loadEditor();drawElList()}};
-
-function loadEditor(){const t=$('#edCode');if(t)t.value=S.pages[S.ep]?.customCode||''}
-function drawElList(){const el=$('#elList');if(!el)return;const l=arr(S.pages[S.ep]?.elements).sort((a,b)=>a.createdAt-b.createdAt);
-el.innerHTML=l.length?l.map(e=>`<div class="eli"><code>${esc(e.code)}</code><button data-a="elDel" data-id="${e.id}"><i class="fa-solid fa-trash"></i></button></div>`).join(''):'<p style="color:var(--mt)">لا توجد عناصر مضافة لهذه الصفحة</p>'}
-function insertCode(h){const t=$('#edCode');if(!t||!h)return;const s=t.selectionStart??t.value.length;t.value=t.value.slice(0,s)+h+t.value.slice(t.selectionEnd??s);t.focus()}
-
-const upl=(k,l,v)=>`<div class="fld"><label>${l}</label><div class="upl"><div class="im upv" id="pv_${k}">${v?`<img src="${esc(v)}" alt="">`:'<i class="fa-solid fa-image"></i>'}</div><div class="upb"><label class="btn sm gh"><i class="fa-solid fa-upload"></i> رفع<input type="file" accept="image/*" hidden data-up="${k}"></label><label class="btn sm gh"><i class="fa-solid fa-camera"></i> كاميرا<input type="file" accept="image/*" capture="environment" hidden data-up="${k}"></label>${v?`<button type="button" class="btn sm dg" data-a="upDel" data-t="${k}"><i class="fa-solid fa-trash"></i> حذف</button>`:''}</div></div></div>`;
-
 T.settings={deps:[],html(){const s={...DEF_SET,...S.settings};
 return`<form class="pn" data-f="settings"><div class="fld"><label>اسم المتجر</label><input name="storeName" required value="${esc(s.storeName)}"></div><div class="fld"><label>العنوان الرئيسي</label><input name="heroTitle" value="${esc(s.heroTitle)}"></div><div class="fld"><label>الوصف الفرعي</label><input name="heroSubtitle" value="${esc(s.heroSubtitle||'')}"></div><div class="row">${upl('logo','شعار المتجر',s.logo)}${upl('storeImage','صورة Hero',s.storeImage)}</div><div class="row3"><div class="fld"><label>اللون الأساسي</label><input type="color" name="primary" value="${esc(s.primary)}"></div><div class="fld"><label>اللون الثانوي</label><input type="color" name="primary2" value="${esc(s.primary2)}"></div><div class="fld"><label>لون التمييز</label><input type="color" name="accent" value="${esc(s.accent)}"></div></div><div class="row"><div class="fld"><label>الهاتف</label><input name="phone" type="tel" value="${esc(s.phone||'')}"></div><div class="fld"><label>البريد</label><input name="email" type="email" value="${esc(s.email||'')}"></div></div><div class="fld"><label>العنوان</label><input name="address" value="${esc(s.address||'')}"></div><div class="row3"><div class="fld"><label>فيسبوك</label><input name="facebook" value="${esc(s.facebook||'')}"></div><div class="fld"><label>انستجرام</label><input name="instagram" value="${esc(s.instagram||'')}"></div><div class="fld"><label>واتساب</label><input name="whatsapp" value="${esc(s.whatsapp||'')}"></div></div><div class="row"><div class="fld"><label>العملة</label><input name="currency" value="${esc(s.currency||'ج.م')}"></div><div class="fld"><label>الحد الأقصى للعملاء (0=بلا حد)</label><input type="number" name="maxUsers" min="0" value="${Number(s.maxUsers)||0}"></div></div><div class="fld"><label>نص الفوتر</label><input name="footerText" value="${esc(s.footerText||'')}"></div><button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> حفظ الإعدادات</button></form>`
 }};
@@ -887,6 +855,8 @@ return`<div class="pn mc"><i class="fa-solid ${on?'fa-lock':'fa-lock-open'} big"
 
 T.reset={deps:[],html(){return`<div class="pn dz"><h3 style="color:var(--er)">منطقة الخطر — الحذف نهائي ولا يمكن التراجع عنه</h3><button class="btn gh" data-a="reset" data-k="users"><i class="fa-solid fa-users-slash"></i> حذف جميع العملاء</button><button class="btn gh" data-a="reset" data-k="products"><i class="fa-solid fa-box-open"></i> حذف جميع المنتجات</button><button class="btn gh" data-a="reset" data-k="orders"><i class="fa-solid fa-cart-arrow-down"></i> حذف جميع الطلبات</button><button class="btn gh" data-a="reset" data-k="notifs"><i class="fa-solid fa-bell-slash"></i> حذف جميع الإشعارات</button><button class="btn dg" data-a="reset" data-k="all"><i class="fa-solid fa-skull-crossbones"></i> إعادة ضبط كاملة</button></div>`
 }};
+
+const upl=(k,l,v)=>`<div class="fld"><label>${l}</label><div class="upl"><div class="im upv" id="pv_${k}">${v?`<img src="${esc(v)}" alt="">`:'<i class="fa-solid fa-image"></i>'}</div><div class="upb"><label class="btn sm gh"><i class="fa-solid fa-upload"></i> رفع<input type="file" accept="image/*" hidden data-up="${k}"></label><label class="btn sm gh"><i class="fa-solid fa-camera"></i> كاميرا<input type="file" accept="image/*" capture="environment" hidden data-up="${k}"></label>${v?`<button type="button" class="btn sm dg" data-a="upDel" data-t="${k}"><i class="fa-solid fa-trash"></i> حذف</button>`:''}</div></div></div>`;
 
 function exportCSV(rows,filename){if(!rows.length){toast('لا توجد بيانات للتصدير','err');return}
 const headers=Object.keys(rows[0]);
@@ -930,7 +900,7 @@ const t=T[S.adminTab];
 if(t&&t.deps.includes(k))t.part?t.part():drawTab();
 return
 }
-if(k==='settings'){applyTheme();drawHeader();if(S.page==='home')drawHome(customBlock('home')?`<div class="cb">${customBlock('home')}</div>`:'')}
+if(k==='settings'){applyTheme();drawHeader();if(S.page==='home')drawHome('')}
 else if(k==='nav')drawNav();
 else if(k==='pages'){if(!['contact','profile'].includes(S.page))drawPage()}
 else if(k==='products'){if(S.page==='home')drawGrid();else if(S.page==='wishlist')drawPage();updateBadges();if(S.open==='cart')fillCart();if(S.open==='product'&&S.focusedProduct)productModal(S.focusedProduct)}
@@ -976,7 +946,17 @@ atab:d=>{S.auth.tab=d.t;setOv('auth',authHTML())},
 amode:d=>{S.auth.mode=d.m;setOv('auth',authHTML())},
 google:async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){toast(authErr(e.code),'err')}},
 forgotPwd:async()=>{const email=prompt('أدخل بريدك الإلكتروني:');if(!email)return;try{await sendPasswordResetEmail(auth,email.trim());toast('تم إرسال رابط الاستعادة','ok')}catch(e){toast(authErr(e.code),'err')}},
-resetPwd:async()=>{if(!S.user?.email)return;try{await sendPasswordResetEmail(auth,S.user.email);toast('تم إرسال رابط تغيير كلمة المرور','ok')}catch(e){toast(authErr(e.code),'err')}},
+resetPwd:async()=>{
+if(!S.user?.email){toast('لا يوجد بريد مرتبط بالحساب','err');return}
+const choice=await confirmBox({title:'تغيير كلمة المرور',message:'هل تريد تغيير كلمة المرور الحالية أم إرسال رابط الاستعادة؟',okText:'تغيير الآن',cancelText:'إرسال رابط',icon:'fa-key'});
+if(choice){
+const newPass=prompt('أدخل كلمة المرور الجديدة (6 أحرف على الأقل):');
+if(!newPass||newPass.length<6){toast('كلمة المرور قصيرة جداً','err');return}
+try{await updatePassword(S.user,newPass);toast('تم تغيير كلمة المرور بنجاح','ok')}catch(e){toast(authErr(e.code)||'يجب تسجيل الدخول مجدداً لتغيير كلمة المرور','err')}
+}else{
+try{await sendPasswordResetEmail(auth,S.user.email);toast('تم إرسال رابط تغيير كلمة المرور إلى بريدك','ok')}catch(e){toast(authErr(e.code),'err')}
+}
+},
 logout:async()=>{const ok=await confirmBox({title:'تسجيل الخروج',message:'هل تريد تسجيل الخروج؟',okText:'خروج',danger:true,icon:'fa-right-from-bracket'});if(!ok)return;await signOut(auth);go('home')},
 toAdmin:()=>{S.adminMode=true;closeAllOv();render()},
 toStore:()=>{S.adminMode=false;closeAllOv();render()},
@@ -1005,11 +985,6 @@ nClear:async()=>{const ok=await confirmBox({title:'حذف الإشعارات',me
 nvEdit:d=>{const n=d.id?navAll().find(x=>x.id===d.id):null;S.mid=d.id||'';const icons=['fa-house','fa-heart','fa-bag-shopping','fa-envelope','fa-user','fa-store','fa-tag','fa-fire','fa-star','fa-gift','fa-phone','fa-circle-info','fa-list','fa-percent','fa-bell','fa-gear'];openOv('nm',`<button class="x" data-a="close" data-id="nm"><i class="fa-solid fa-xmark"></i></button><h2 class="mt">${n?'تعديل زر':'إضافة زر'}</h2><form data-f="nav"><div class="fld"><label>الاسم</label><input name="label" required maxlength="14" value="${esc(n?.label||'')}"></div><div class="row"><div class="fld"><label>الأيقونة</label><input name="icon" list="icl" required value="${esc(n?.icon||'fa-star')}"><datalist id="icl">${icons.map(i=>`<option value="${i}">`).join('')}</datalist></div><div class="fld"><label>الترتيب</label><input name="order" type="number" value="${n?.order??navAll().length+1}"></div></div><div class="fld"><label>الرابط (صفحة أو رابط خارجي)</label><input name="path" list="pgl" required value="${esc(n?.path||'')}"><datalist id="pgl">${BUILTIN.map(i=>`<option value="${i}">`).join('')}</datalist></div><label class="chk"><input type="checkbox" name="enabled" ${n?.enabled===false?'':'checked'}> مفعّل</label><button class="btn" type="submit" style="width:100%;margin-top:14px"><i class="fa-solid fa-floppy-disk"></i> حفظ</button></form>`,'md')},
 nvTog:async d=>{const n=navAll().find(x=>x.id===d.id),{id,...r}=n;await set(ref(db,'nav/'+d.id),{...r,enabled:n.enabled===false});logActivity('تغيير حالة زر',n.label)},
 nvDel:async d=>{const n=navAll().find(x=>x.id===d.id);const ok=await confirmBox({title:'حذف الزر',message:'سيتم حذف زر '+n?.label,okText:'حذف',danger:true,icon:'fa-trash'});if(!ok)return;await remove(ref(db,'nav/'+d.id));logActivity('حذف زر',n?.label);toast('تم الحذف','ok')},
-edIns:d=>{if(d.s==='btn'){const t=prompt('نص الزر','اضغط هنا');if(!t)return;const l=prompt('الرابط','#');insertCode(`<a href="${esc(l||'#')}" class="btn" style="display:inline-flex;margin:8px 0">${esc(t)}</a>`)}else if(d.s==='img'){const u=prompt('رابط الصورة');if(!u)return;insertCode(`<img src="${esc(u)}" alt="" style="width:100%;border-radius:16px;margin:8px 0">`)}else insertCode(SNIP[d.s])},
-edSave:async()=>{await set(ref(db,'pages/'+S.ep+'/customCode'),$('#edCode').value);toast('تم حفظ كود الصفحة','ok');logActivity('حفظ كود صفحة',S.ep)},
-edAdd:async()=>{const c=$('#edCode').value.trim();if(!c)return toast('اكتب الكود أولاً','err');await set(push(ref(db,'pages/'+S.ep+'/elements')),{code:c,createdAt:Date.now()});$('#edCode').value='';toast('تمت إضافة العنصر','ok')},
-edPrev:()=>{const w=window.open('','_blank');if(!w)return toast('المتصفح منع النافذة المنبثقة','err');const s={...DEF_SET,...S.settings};w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><style>:root{--p:${s.primary};--p2:${s.primary2};--ac:${s.accent};--bg:#fff5f8;--card:#fff;--tx:#2a1620;--mt:#8a6b78;--bd:#f6d9e3}*{box-sizing:border-box}body{font-family:Cairo,sans-serif;background:var(--bg);color:var(--tx);padding:16px;max-width:900px;margin:auto}.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:700;text-decoration:none}.ban{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border-radius:20px;padding:22px;margin:10px 0;text-align:center}.pn{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:14px}.stg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.sc{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center}.sc>i{color:var(--p);font-size:20px}</style></head><body>${$('#edCode').value}</body></html>`);w.document.close()},
-elDel:async d=>{await remove(ref(db,'pages/'+S.ep+'/elements/'+d.id))},
 maintTog:async()=>{const on=S.maint?.enabled!==true;await set(ref(db,'maintenance'),{enabled:on,updatedAt:Date.now()});logActivity(on?'إغلاق المتجر':'فتح المتجر')},
 reset:async d=>{const names={users:'جميع العملاء',products:'جميع المنتجات',orders:'جميع الطلبات',notifs:'جميع الإشعارات',all:'كل بيانات المتجر'};
 const ok=await confirmBox({title:'تأكيد الحذف',message:`سيتم حذف ${names[d.k]} نهائياً. هل تريد المتابعة؟`,okText:'حذف نهائي',danger:true,icon:'fa-skull-crossbones'});
@@ -1107,8 +1082,6 @@ if(pv)pv.innerHTML=`<img src="${S.up[k]}" alt="">`
 t.value='';
 return
 }
-if(t.dataset.ep){S.ep=t.value;loadEditor();drawElList();return}
-if(t.dataset.tpl&&t.value){insertCode(TPL[t.value]);t.value='';return}
 if(t.dataset.sort){S.sort=t.value;drawGrid();return}
 if(t.name==='target'&&t.form?.dataset.f==='notify'){const nU=$('#nU');if(nU)nU.style.display=t.value==='specific'?'block':'none'}
 if(t.dataset.prev)nPrev()
@@ -1195,4 +1168,4 @@ if(pid){S.focusedProduct=pid;setTimeout(()=>productModal(pid),1500)}
 render();
 </script>
 </body>
-</html>
+  </html>

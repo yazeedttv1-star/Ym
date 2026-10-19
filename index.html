@@ -367,6 +367,25 @@ mark{background:color-mix(in srgb,var(--p) 22%,transparent);color:var(--p);paddi
 @media(min-width:1200px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(min-width:1500px){.grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+img{max-width:100%;height:auto}
+.card .im>img,.pm .im>img,.pm .im img{object-fit:contain!important;padding:8px;background:var(--card)}
+.card .im{background:var(--card)}
+.adm{display:flex;flex-direction:row;direction:rtl;min-height:100vh;width:100%;align-items:stretch}
+.as{position:sticky;inset-block-start:0;inset-inline-start:auto;inset-inline-end:0;width:78px;min-width:78px;height:100dvh;max-height:100vh;overflow-x:hidden;overflow-y:auto;flex:0 0 78px;align-self:flex-start;direction:rtl}
+.an{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.an button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;white-space:normal;overflow-wrap:anywhere;font-size:10px;padding:7px 2px;line-height:1.25}
+.an button span{display:block;max-width:100%}
+.am{min-width:0;width:calc(100% - 78px);flex:1;padding:12px 8px 32px;overflow-wrap:anywhere}
+.am img{max-width:100%}
+button,input,select,textarea{max-width:100%}
+.ov,.md,.dr{max-width:100vw}
+@supports not (height:100dvh){.as{height:100vh}}
+@media(min-width:600px){.as{width:90px;min-width:90px;flex-basis:90px}.am{width:calc(100% - 90px);padding:18px 14px 36px}.an button{font-size:11px;padding:9px 4px}}
+@media(min-width:900px){.as{width:210px;min-width:210px;flex-basis:210px;padding-inline:10px}.as .ab{display:flex;flex-direction:row}.ab img{margin:0}.an button{flex-direction:row;justify-content:flex-start;align-items:center;text-align:start;font-size:14px;padding:10px 12px;gap:10px}.an button span{display:inline}.an button i{width:20px;flex:none;text-align:center}.am{width:calc(100% - 210px);padding:22px 26px}}
+@media(max-width:380px){.as{width:68px;min-width:68px;flex-basis:68px;padding-inline:3px}.am{width:calc(100% - 68px);padding-inline:6px}.an button{font-size:9px;min-height:48px}.an button i{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
@@ -400,7 +419,7 @@ import{getMessaging,getToken,onMessage,isSupported}from"https://www.gstatic.com/
 const FB={apiKey:"AIzaSyAN11agW-TWwAk3TvF7mRZRt6PHLcnl_aQ",authDomain:"ym-pro-max.firebaseapp.com",databaseURL:"https://ym-pro-max-default-rtdb.firebaseio.com",projectId:"ym-pro-max",storageBucket:"ym-pro-max.firebasestorage.app",messagingSenderId:"174657071953",appId:"1:174657071953:web:5e831fc337df46dbd18170"};
 const ADMIN_USER="01147975962";
 const ADMIN_EMAIL=ADMIN_USER+"@yazid.store";
-const VAPID_KEY="";
+const VAPID_KEY="ADD_FIREBASE_WEB_PUSH_CERTIFICATE_KEY";
 const app=initializeApp(FB);
 const auth=getAuth(app);
 const db=getDatabase(app);
@@ -418,7 +437,7 @@ const ls={get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=(s,n=200)=>String(s??'').replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,n);
 const num=(v,min=0,max=1e12)=>{const n=Number(v);return isNaN(n)?min:Math.min(max,Math.max(min,n))};
-const img=u=>/^(https:\/\/|data:image\/(png|jpe?g|webp|gif);base64,)/i.test(String(u||''))?String(u):'';
+const img=u=>/^(https:\\/\\/|data:image\\/(png|jpe?g|webp|gif);base64,)/i.test(String(u||''))?String(u):'';
 const money=(n,c)=>{const v=Number(n||0).toLocaleString('ar-EG',{maximumFractionDigits:2});return v+' '+(c||S.settings?.currency||'ج.م')};
 const arr=o=>Object.entries(o||{}).map(([id,v])=>(v&&typeof v==='object'?{id,...v}:{id,value:v}));
 const dt=t=>t?new Date(t).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):'';
@@ -430,7 +449,7 @@ const EMPTY=(t,i='fa-box-open',sub='')=>`<div class="empty"><i class="fa-solid $
 const LP=`<div class="empty"><i class="fa-regular fa-user"></i><h3>سجّل الدخول للمتابعة</h3><button class="btn" data-a="auth">تسجيل الدخول</button></div>`;
 
 function ago(t){const s=Math.floor((Date.now()-t)/1000);if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';if(s<604800)return'منذ '+Math.floor(s/86400)+' يوم';return new Date(t).toLocaleDateString('ar-EG')}
-function hi(text,q){if(!q)return esc(text);const safe=esc(text);const safeQ=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');try{return safe.replace(new RegExp(safeQ,'gi'),m=>`<mark>${m}</mark>`)}catch{return safe}}
+function hi(text,q){if(!q)return esc(text);const safe=esc(text);const safeQ=esc(q).replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');try{return safe.replace(new RegExp(safeQ,'gi'),m=>`<mark>${m}</mark>`)}catch{return safe}}
 function stars(n){n=Math.round(Number(n)||0);return'<span class="stars">'+[1,2,3,4,5].map(i=>`<i class="fa-${i<=n?'solid':'regular'} fa-star"></i>`).join('')+'</span>'}
 
 const S={user:null,profile:null,isAdmin:false,adminMode:false,adminTab:'stats',page:'home',cat:'all',q:'',sort:'newest',minPrice:0,maxPrice:0,settings:{},nav:{},products:{},orders:{},users:{},coupons:{},notifs:{},messages:{},reviews:{},activity:{},maint:{},ld:{},coupon:null,co:{},auth:{tab:'user',mode:'login'},up:{},pending:null,of:'all',eid:'',ceid:'',rating:0};
@@ -548,7 +567,7 @@ function render(){
 }
 
 function drawHeader(){const s=S.settings,u=S.user;
-  $('#hLogo').src=s.logo||'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'%3E%3Crect width=\'64\' height=\'64\' rx=\'16\' fill=\'%23e91e63\'/%3E%3Ctext x=\'32\' y=\'44\' font-size=\'34\' text-anchor=\'middle\' fill=\'white\'%3Eي%3C/text%3E%3C/svg%3E';
+  $('#hLogo').src=s.logo||'data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 64 64\\'%3E%3Crect width=\\'64\\' height=\\'64\\' rx=\\'16\\' fill=\\'%23e91e63\\'/%3E%3Ctext x=\\'32\\' y=\\'44\\' font-size=\\'34\\' text-anchor=\\'middle\\' fill=\\'white\\'%3Eي%3C/text%3E%3C/svg%3E';
   $('#hName').textContent=s.storeName||'متجر يزيد';
   $('#uArea').innerHTML=u?`${S.isAdmin?'<button class="ib" data-a="toAdmin" title="لوحة التحكم"><i class="fa-solid fa-gauge-high"></i></button>':''}<button class="ib av" data-a="go" data-p="profile">${esc((S.profile?.name||u.email||'؟')[0])}</button>`:`<button class="btn sm" data-a="auth">دخول</button>`;
   setTheme(document.documentElement.dataset.theme||'light');
@@ -578,7 +597,7 @@ function drawHome(){
 }
 
 function card(p){const f=fin(p),a=avail(p),w=wish.includes(p.id),d=Number(p.discount)>0,isNew=p.createdAt&&(Date.now()-p.createdAt)<7*864e5;
-  return`<article class="card" data-a="open" data-id="${p.id}"><div class="im">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="loading" onload="this.classList.remove('loading');this.classList.add('loaded')">`:'<i class="fa-solid fa-image"></i>'}<div class="bds">${!a?'<span class="bd out">نفذ</span>':(d?`<span class="bd ds">خصم ${Number(p.discount)}%</span>`:(isNew?'<span class="bd new">جديد</span>':'<span class="bd">متوفر</span>'))}</div><button class="hrt ${w?'on':''}" data-a="wish" data-id="${p.id}" aria-label="المفضلة"><i class="fa-${w?'solid':'regular'} fa-heart"></i></button></div><div class="inf"><h3>${hi(p.name,S.q)}</h3><div class="pr"><b>${money(f)}</b>${d?`<s>${money(p.price)}</s>`:''}</div><button class="btn sm" data-a="add" data-id="${p.id}" ${a?'':'disabled'}><i class="fa-solid fa-cart-plus"></i> ${a?'أضف للسلة':'غير متوفر'}</button></div></article>`
+  return`<article class="card" data-a="open" data-id="${p.id}"><div class="im">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="loading" onload="this.classList.remove('loading');this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<i class=\"fa-solid fa-image\"></i>')">`:'<i class="fa-solid fa-image"></i>'}<div class="bds">${!a?'<span class="bd out">نفذ</span>':(d?`<span class="bd ds">خصم ${Number(p.discount)}%</span>`:(isNew?'<span class="bd new">جديد</span>':'<span class="bd">متوفر</span>'))}</div><button class="hrt ${w?'on':''}" data-a="wish" data-id="${p.id}" aria-label="المفضلة"><i class="fa-${w?'solid':'regular'} fa-heart"></i></button></div><div class="inf"><h3>${hi(p.name,S.q)}</h3><div class="pr"><b>${money(f)}</b>${d?`<s>${money(p.price)}</s>`:''}</div><button class="btn sm" data-a="add" data-id="${p.id}" ${a?'':'disabled'}><i class="fa-solid fa-cart-plus"></i> ${a?'أضف للسلة':'غير متوفر'}</button></div></article>`
 }
 
 function drawGrid(){
@@ -638,7 +657,7 @@ function productModal(id){
   S.rating=0;
   const h=`<button class="x" data-a="close" data-id="product"><i class="fa-solid fa-xmark"></i></button>
   <div class="pm">
-    <div><div class="im">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" class="loading" onload="this.classList.remove('loading');this.classList.add('loaded')">`:'<i class="fa-solid fa-image"></i>'}<div class="bds" style="top:auto;bottom:10px">${!a?'<span class="bd out">نفذ</span>':(d?`<span class="bd ds">خصم ${Number(p.discount)}%</span>`:'<span class="bd">متوفر</span>')}</div></div></div>
+    <div><div class="im">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" class="loading" onload="this.classList.remove('loading');this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<i class=\"fa-solid fa-image\"></i>')">`:'<i class="fa-solid fa-image"></i>'}<div class="bds" style="top:auto;bottom:10px">${!a?'<span class="bd out">نفذ</span>':(d?`<span class="bd ds">خصم ${Number(p.discount)}%</span>`:'<span class="bd">متوفر</span>')}</div></div></div>
     <div class="pi">
       ${p.category?`<span class="cat">${esc(p.category)}</span>`:''}
       <h2>${esc(p.name)}</h2>
@@ -789,10 +808,15 @@ async function setupMessaging(force){
     if(!messaging)messaging=getMessaging(app);
     const perm=await Notification.requestPermission();
     if(perm!=='granted'){if(force)toast('تم رفض الإذن','err');return}
-    const reg=await navigator.serviceWorker.register('firebase-messaging-sw.js');
-    if(VAPID_KEY){try{const token=await getToken(messaging,{vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});if(token&&S.user){await update(ref(db,'users/'+S.user.uid),{fcmToken:token})}}catch{}}
-    if(!msgListenerSet){msgListenerSet=true;onMessage(messaging,payload=>{const n=payload.notification||{};try{new Notification(n.title||'إشعار',{body:n.body||'',icon:n.icon||S.settings.logo||''})}catch{}toast(n.title||'إشعار جديد','ok')})}
-    if(force)toast('تم تفعيل الإشعارات','ok');
+    if(!('serviceWorker' in navigator)||!window.isSecureContext){if(force)toast('الإشعارات تحتاج HTTPS أو localhost ومتصفحاً يدعم Service Worker','err');return}
+    const reg=await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+    let token='';
+    if(VAPID_KEY&&VAPID_KEY!=='ADD_FIREBASE_WEB_PUSH_CERTIFICATE_KEY'){
+      token=await getToken(messaging,{vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});
+      if(token&&S.user)await update(ref(db,'users/'+S.user.uid),{fcmToken:token});
+    }
+    if(!msgListenerSet){msgListenerSet=true;onMessage(messaging,payload=>{const n=payload.notification||payload.data||{};try{new Notification(n.title||'إشعار من متجر يزيد',{body:n.body||'',icon:n.icon||S.settings.logo||'./icon.svg',tag:payload.messageId||'yz-store'})}catch{}toast(n.title||'إشعار جديد','ok')})}
+    if(force)toast(token?'تم تفعيل إشعارات المتجر والخلفية':'تم السماح بالإشعارات؛ أضف مفتاح VAPID لتفعيل الإشعارات في الخلفية','ok');
   }catch(e){if(force)toast('تعذر تفعيل الإشعارات','err')}
 }
 

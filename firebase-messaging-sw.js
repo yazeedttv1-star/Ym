@@ -1,4 +1,3 @@
-// firebase-messaging-sw.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
@@ -14,40 +13,17 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
-  console.log('[FCM-SW] Background:', payload);
-  const n = payload.notification || {};
-  const d = payload.data || {};
-
-  const title = n.title || d.title || 'متجر يزيد';
-  const body = n.body || d.body || 'لديك إشعار جديد';
-  const icon = n.icon || d.storeLogo || '/favicon.ico';
-  const image = n.image || d.storeImage || '';
-
-  return self.registration.showNotification(title, {
-    body,
-    icon,
-    badge: icon,
-    ...(image ? { image } : {}),
+messaging.onBackgroundMessage((payload) => {
+  const n = payload.notification || payload.data || {};
+  const title = n.title || 'متجر يزيد';
+  const options = {
+    body: n.body || '',
+    icon: 'icon.svg',
+    badge: 'icon.svg',
     dir: 'rtl',
     lang: 'ar',
-    vibrate: [500, 200, 500, 200, 500],
-    tag: 'fcm-' + Date.now(),
-    renotify: true,
-    requireInteraction: true,
-    silent: false,
-    data: { url: '/' }
-  });
-});
-
-self.addEventListener('notificationclick', e => {
-  e.notification.close();
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      for (const c of list) {
-        if (c.url.includes(self.location.origin)) return c.focus();
-      }
-      return clients.openWindow('/');
-    })
-  );
+    vibrate: [200, 100, 200],
+    tag: 'yz-' + Date.now()
+  };
+  self.registration.showNotification(title, options);
 });

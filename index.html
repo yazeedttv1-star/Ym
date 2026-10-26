@@ -137,18 +137,18 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   border:0;display:block;background:#000;object-fit:contain;
 }
 .pl.crop-yt iframe{
-  height:130%!important;top:-15%!important;
-  width:130%!important;left:-15%!important;
+  height:135%!important;top:-17.5%!important;
+  width:135%!important;left:-17.5%!important;
   pointer-events:none!important;
 }
 .pl.crop-yt .yt-top-mask{
-  position:absolute;top:0;left:0;right:0;height:70px;
-  background:linear-gradient(180deg,#000 0%,#000 60%,transparent 100%);
+  position:absolute;top:0;left:0;right:0;height:80px;
+  background:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);
   z-index:11;pointer-events:none;display:block!important;
 }
 .pl.crop-yt .yt-bottom-mask{
-  position:absolute;bottom:0;left:0;right:0;height:90px;
-  background:linear-gradient(0deg,#000 0%,#000 60%,transparent 100%);
+  position:absolute;bottom:0;left:0;right:0;height:110px;
+  background:linear-gradient(0deg,#000 0%,#000 70%,transparent 100%);
   z-index:11;pointer-events:none;display:block!important;
 }
 .pl.crop-yt .yt-shield{
@@ -167,8 +167,10 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 }
 .pl:fullscreen.crop-yt iframe,
 .pl:-webkit-full-screen.crop-yt iframe{
-  width:120%!important;height:120%!important;margin:-10%!important;
+  width:125%!important;height:125%!important;margin:-12.5%!important;
 }
+.pl:fullscreen .yt-top-mask,.pl:-webkit-full-screen .yt-top-mask{height:100px}
+.pl:fullscreen .yt-bottom-mask,.pl:-webkit-full-screen .yt-bottom-mask{height:130px}
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
@@ -180,7 +182,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   border:1px solid var(--bd);padding:16px 18px;border-radius:var(--r-lg);
   margin-top:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;
 }
-.ctrl .row1{display:flex;align-items:center;gap:10px}
+.ctrl .row1{display:flex;align-items:center;gap:8px}
 .ctrl .play{
   background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:50%;
   width:56px;height:56px;display:flex;align-items:center;justify-content:center;
@@ -191,9 +193,9 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .ctrl .play:active{transform:scale(.96)}
 .ctrl .play svg{width:24px;height:24px;fill:#fff;margin-right:2px}
 .ctrl .skip{
-  padding:8px 12px;font-size:13px;font-weight:800;
+  padding:8px 10px;font-size:12px;font-weight:800;
   background:var(--ac-soft);color:var(--ac2);border:1px solid var(--ac);
-  border-radius:10px;min-width:52px;flex-shrink:0;
+  border-radius:10px;min-width:44px;flex-shrink:0;
 }
 .ctrl .skip:hover{background:var(--ac);color:#fff}
 .ctrl .bar-wrap{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -236,6 +238,24 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .ctrl .speed label{margin:0;font-size:12px;color:var(--tx2)}
 .ctrl .speed select{width:auto;padding:4px 8px;margin:0;font-size:13px;
   border-radius:6px;border:1px solid var(--bd);background:var(--surface2);color:var(--tx)}
+
+.fs-ctrl{
+  position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.35);
+  display:none;align-items:center;justify-content:center;padding:20px;
+  pointer-events:none;
+}
+.fs-ctrl.show{display:flex}
+.fs-ctrl .fs-play{
+  pointer-events:auto;
+  background:rgba(37,99,235,.92);color:#fff;border:0;border-radius:50%;
+  width:90px;height:90px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.2s;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+}
+.fs-ctrl .fs-play:hover{transform:scale(1.1);background:rgba(37,99,235,1)}
+.fs-ctrl .fs-play:active{transform:scale(.95)}
+.fs-ctrl .fs-play svg{width:44px;height:44px;fill:#fff;margin-right:4px}
 
 .bottombar{position:fixed;bottom:0;left:0;z-index:40;background:var(--surface);
   border:1px solid var(--bd);border-bottom:0;border-radius:22px 22px 0 0;
@@ -364,8 +384,8 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   h2{font-size:18px}
   .top-bar{padding:16px}
   .top-bar .welcome h1{font-size:18px}
-  .pl.crop-yt .yt-top-mask{height:55px}
-  .pl.crop-yt .yt-bottom-mask{height:70px}
+  .pl.crop-yt .yt-top-mask{height:65px}
+  .pl.crop-yt .yt-bottom-mask{height:85px}
 }
 @media(max-width:520px){
   .pl{max-height:60vh}
@@ -374,8 +394,10 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   .card b{font-size:14px}
   .ctrl{padding:12px}
   .ctrl .play{width:48px;height:48px}
-  .ctrl .skip{padding:6px 8px;font-size:12px;min-width:44px}
+  .ctrl .skip{padding:6px 8px;font-size:11px;min-width:40px}
   .ctrl .tool{padding:6px 10px;font-size:12px}
+  .fs-ctrl .fs-play{width:80px;height:80px}
+  .fs-ctrl .fs-play svg{width:38px;height:38px}
   .stats-table{font-size:11px}
   .stats-table th,.stats-table td{padding:8px 6px}
 }
@@ -404,6 +426,12 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 </div>
 <div id="app"></div>
 <div id="t" role="status" aria-live="polite"></div>
+
+<div class="fs-ctrl" id="fsCtrl">
+  <button class="fs-play" id="fsPlayBtn" onclick="togglePlay()" aria-label="تشغيل/إيقاف">
+    <svg id="fsPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+</div>
 
 <div class="modal" id="notiModal" onclick="if(event.target===this)closeNoti()">
   <div class="modal-content" style="max-width:460px">
@@ -483,6 +511,7 @@ let unsubs=[],showingBan=false,renderSeq=0,loadedTeachers=false,studentStatsFilt
 let currentPlayerType=null,currentYTPlayer=null,currentYTUiTimer=null;
 let ytApiReady=false,ytApiLoading=false,ytApiQueue=[];
 let iframeTimer=null,iframeTime=0,iframeDuration=0,iframePlaying=false;
+let fsShowing=false,fsTouchTimer=null;
 
 function loadYouTubeAPI(){
   if(window.YT&&window.YT.Player){ytApiReady=true;flushYTQueue();return;}
@@ -638,6 +667,7 @@ function destroyPlayer(){
   if(iframeTimer){clearInterval(iframeTimer);iframeTimer=null;}
   iframeTime=0;iframeDuration=0;iframePlaying=false;
   currentPlayerType=null;
+  hideFsCtrl();
 }
 function stopHB(){if(hb)clearInterval(hb);hb=null;}
 
@@ -1217,11 +1247,11 @@ async function vWatch(){
   else playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"></iframe>`;
   const controlsHTML=`<div class="ctrl">
     <div class="row1">
-      <button class="skip" onclick="seekRel(-15)" aria-label="تأخير 15 ثانية" title="-15 ثانية">-15</button>
+      <button class="skip" onclick="seekRel(-5)" aria-label="تأخير 5 ثوان" title="-5 ثوان">-5</button>
       <button class="play" id="playPauseBtn" onclick="togglePlay()" aria-label="تشغيل/إيقاف">
         <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
-      <button class="skip" onclick="seekRel(15)" aria-label="تقديم 15 ثانية" title="+15 ثانية">+15</button>
+      <button class="skip" onclick="seekRel(5)" aria-label="تقديم 5 ثوان" title="+5 ثوان">+5</button>
       <div class="bar-wrap">
         <div class="seek-box">
           <div class="seek-track"><div class="seek-fill" id="seekFill" style="width:0%"></div></div>
@@ -1700,6 +1730,54 @@ async function vVid(){
   <h2>الأكواد</h2><div class="box tw"><table><thead><tr><th>الكود</th><th>الحالة</th><th>استخدمه</th><th>الوقت</th><th></th></tr></thead><tbody>${cs.map(x=>`<tr><td><span class="code">${esc(x.c)}</span></td><td>${x.used?'<span class="b r">مستخدم</span>':'<span class="b g">متاح</span>'}</td><td>${esc(x.usedByName||'-')}</td><td>${fd(x.usedAt)}</td><td>${x.used?'':`<button class="s" style="padding:5px 12px" onclick="cp('${esc(x.c)}')">نسخ</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
+function showFsCtrl(){
+  if(fsShowing)return;
+  const el=$('#fsCtrl');
+  if(el){el.classList.add('show');fsShowing=true;}
+}
+function hideFsCtrl(){
+  const el=$('#fsCtrl');
+  if(el){el.classList.remove('show');}
+  fsShowing=false;
+  clearTimeout(fsTouchTimer);
+}
+function onFsChange(){
+  const isFs=!!(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement);
+  if(isFs){showFsCtrl();}
+  else{hideFsCtrl();}
+  setTimeout(syncPlayIcons,100);
+}
+document.addEventListener('fullscreenchange',onFsChange);
+document.addEventListener('webkitfullscreenchange',onFsChange);
+document.addEventListener('mozfullscreenchange',onFsChange);
+document.addEventListener('MSFullscreenChange',onFsChange);
+document.addEventListener('webkitbeginfullscreen',()=>{setTimeout(showFsCtrl,50);});
+document.addEventListener('webkitendfullscreen',()=>{hideFsCtrl();});
+
+function syncPlayIcons(){
+  let playing=false;
+  if(currentPlayerType==='native'){
+    const v=document.querySelector('.pl video');
+    playing=v&&!v.paused;
+  }else if(currentPlayerType==='yt'&&currentYTPlayer&&currentYTPlayer.getPlayerState){
+    try{playing=currentYTPlayer.getPlayerState()===1;}catch(e){}
+  }else if(currentPlayerType==='iframe'){
+    playing=iframePlaying;
+  }
+  const playIcon=$('#playIcon');
+  if(playIcon){
+    playIcon.innerHTML=playing
+      ?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
+      :'<path d="M8 5v14l11-7z"/>';
+  }
+  const fsIcon=$('#fsPlayIcon');
+  if(fsIcon){
+    fsIcon.innerHTML=playing
+      ?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
+      :'<path d="M8 5v14l11-7z"/>';
+  }
+}
+
 function initPlayer(){
   destroyPlayer();
   const pending=window.__pendingEmbed||null;
@@ -1717,18 +1795,8 @@ function initNativePlayer(){
   video.setAttribute('x5-playsinline','');
   video.setAttribute('preload','metadata');
   video.style.background='#000';
-  const playIcon=$('#playIcon');
   const seekFill=$('#seekFill');
-  const updatePlayIcon=()=>{
-    if(!playIcon)return;
-    playIcon.innerHTML=video.paused
-      ?'<path d="M8 5v14l11-7z"/>'
-      :'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-  };
-  video.addEventListener('play',updatePlayIcon);
-  video.addEventListener('pause',updatePlayIcon);
-  video.addEventListener('ended',updatePlayIcon);
-  video.addEventListener('timeupdate',()=>{
+  const onUpdate=()=>{
     const cur=$('#cTime'),dur=$('#dTime'),seek=$('#cSeek');
     if(cur)cur.textContent=fmtTime(video.currentTime);
     if(dur)dur.textContent=fmtTime(video.duration);
@@ -1737,12 +1805,16 @@ function initNativePlayer(){
       seek.value=String(pct);
       if(seekFill)seekFill.style.width=pct+'%';
     }
-  });
+  };
+  video.addEventListener('play',syncPlayIcons);
+  video.addEventListener('pause',syncPlayIcons);
+  video.addEventListener('ended',syncPlayIcons);
+  video.addEventListener('timeupdate',onUpdate);
   video.addEventListener('loadedmetadata',()=>{
     const dur=$('#dTime');
     if(dur)dur.textContent=fmtTime(video.duration);
   });
-  updatePlayIcon();
+  syncPlayIcons();
 }
 function initYTPlayer(videoId){
   currentPlayerType='yt';
@@ -1756,9 +1828,7 @@ function initYTPlayer(videoId){
           'onStateChange':(ev)=>{updateYTPlayIcon(ev.data);}
         }
       });
-    }catch(err){
-      initIframeFallback(0);
-    }
+    }catch(err){initIframeFallback(0);}
   });
 }
 function attachYTControls(yt){
@@ -1791,13 +1861,13 @@ function attachYTControls(yt){
   },250);
 }
 function updateYTPlayIcon(state){
-  const icon=$('#playIcon');
-  if(!icon)return;
-  if(state===1){
-    icon.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-  }else{
-    icon.innerHTML='<path d="M8 5v14l11-7z"/>';
-  }
+  const playIcon=$('#playIcon');
+  const fsIcon=$('#fsPlayIcon');
+  const html=state===1
+    ?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
+    :'<path d="M8 5v14l11-7z"/>';
+  if(playIcon)playIcon.innerHTML=html;
+  if(fsIcon)fsIcon.innerHTML=html;
 }
 function initIframeFallback(durationMinutes){
   currentPlayerType='iframe';
@@ -1846,12 +1916,7 @@ function togglePlay(){
   }
   if(currentPlayerType==='iframe'){
     iframePlaying=!iframePlaying;
-    const icon=$('#playIcon');
-    if(icon){
-      icon.innerHTML=iframePlaying
-        ?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
-        :'<path d="M8 5v14l11-7z"/>';
-    }
+    syncPlayIcons();
     if(iframePlaying)toast('اضغط تشغيل داخل المشغل إن لم يبدأ تلقائياً');
   }
 }
@@ -1912,26 +1977,18 @@ function setRate(value){
 function toggleFullscreen(){
   const el=document.querySelector('.pl');
   const video=document.querySelector('.pl video');
-  const iframe=document.querySelector('.pl iframe');
   if(video&&video.webkitEnterFullscreen&&!document.fullscreenEnabled){
     try{video.webkitEnterFullscreen();return;}catch(e){}
   }
   if(el){
-    if(document.fullscreenElement||document.webkitFullscreenElement){
-      (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
+    if(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement){
+      (document.exitFullscreen||document.webkitExitFullscreen||document.mozCancelFullScreen||document.msExitFullscreen||function(){}).call(document);
       return;
     }
-    if(el.requestFullscreen){
-      el.requestFullscreen().catch(()=>toast('ملء الشاشة غير مدعوم'));
-      return;
-    }
-    if(el.webkitRequestFullscreen){
-      try{el.webkitRequestFullscreen();return;}catch(e){}
-    }
-  }
-  if(iframe){
-    toast('اضغط زر ملء الشاشة داخل مشغل يوتيوب');
-    return;
+    if(el.requestFullscreen){el.requestFullscreen().catch(()=>toast('ملء الشاشة غير مدعوم'));return;}
+    if(el.webkitRequestFullscreen){try{el.webkitRequestFullscreen();return;}catch(e){}}
+    if(el.mozRequestFullScreen){try{el.mozRequestFullScreen();return;}catch(e){}}
+    if(el.msRequestFullscreen){try{el.msRequestFullscreen();return;}catch(e){}}
   }
   toast('ملء الشاشة غير مدعوم على هذا الجهاز');
 }

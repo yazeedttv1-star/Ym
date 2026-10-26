@@ -159,27 +159,40 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .mut{color:var(--mu);text-align:center;padding:40px 20px}
 
 /* =========================================================
-   9) PLAYER (Updated for full crop & no black borders)
+   9) PLAYER — عرض كامل بدون قص
    ========================================================= */
 .player-wrap{width:100%;margin-bottom:16px}
-.pl{position:relative;background:#000;border-radius:var(--r);overflow:hidden;width:100%;
-  aspect-ratio:16/9;max-height:80vh;margin:0 auto;box-shadow:var(--shadow-lg)}
-.pl iframe,.pl video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
 
-/* تعديل قص يوتيوب لإخفاء الحواف السوداء واسم القناة بالكامل */
-.pl.crop-yt iframe{
-  width: 106%!important;
-  height: 135%!important;
-  top: -17.5%!important;
-  left: -3%!important;
+/* الحاوية: نسبة 16:9 ثابتة، وتتكيّف مع الشاشة */
+.pl{
+  position:relative;
+  background:#000;
+  border-radius:var(--r);
+  overflow:hidden;
+  width:100%;
+  aspect-ratio:16/9;
+  max-height:80vh;
+  margin:0 auto;
+  box-shadow:var(--shadow-lg);
 }
 
-.yt-top-mask{position:absolute;top:0;left:0;right:0;height:65px;z-index:11;
-  background:#000;pointer-events:none}
-.yt-bottom-mask{position:absolute;bottom:0;left:0;right:0;height:65px;z-index:11;
-  background:#000;pointer-events:none}
+/* الفيديو/الـ iframe يملأ الحاوية بالكامل دون قص */
+.pl iframe,
+.pl video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#000;
+}
 
+/* حماية يوتيوب فقط: طبقة شفافة لاعتراض النقر فوق أدوات التحكم الافتراضية
+   (اختياري — احذفها إن أردت السماح بالتفاعل المباشر مع يوتيوب) */
 .yt-shield{position:absolute;inset:0;z-index:10;background:transparent;cursor:pointer}
+
+/* العلامة المائية المتحركة */
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
@@ -386,7 +399,7 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 .ban-screen p{color:var(--tx2);margin-bottom:24px;line-height:1.7}
 
 /* =========================================================
-   19) NEWS (Updated to show images fully)
+   19) NEWS
    ========================================================= */
 .news-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);
   padding:16px;margin-bottom:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
@@ -403,16 +416,8 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   h2{font-size:18px}
   .top-bar{padding:16px}
   .top-bar .welcome h1{font-size:18px}
-  
-  /* تعديل إضافي للموبايل لحجب الأجزاء تماماً */
-  .pl.crop-yt iframe{
-    width: 110%!important;
-    height: 140%!important;
-    top: -20%!important;
-    left: -5%!important;
-  }
-  .yt-bottom-mask{height:75px}
-  .yt-top-mask{height:75px}
+  /* على الموبايل: حافظ على نسبة 16:9 ولا تقص */
+  .pl{aspect-ratio:16/9;max-height:70vh}
 }
 @media(max-width:520px){
   .pl{max-height:60vh}
@@ -480,6 +485,17 @@ import {
 import {getMessaging,getToken,onMessage} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
 /* =========================================================
+   SERVICE WORKER REGISTRATION
+   ========================================================= */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js')
+      .then(r=>console.log('SW registered:',r.scope))
+      .catch(e=>console.warn('SW registration failed:',e));
+  });
+}
+
+/* =========================================================
    GLOBAL ERROR HANDLERS
    ========================================================= */
 window.addEventListener('unhandledrejection',e=>{console.error('خطأ غير معالج:',e.reason);});
@@ -531,7 +547,7 @@ let loadedTeachers=false;
 let studentStatsFilter='all';
 
 /* Universal player state */
-let currentPlayerType = null;   // 'native' | 'yt' | 'iframe'
+let currentPlayerType = null;
 let currentYTPlayer = null;
 let currentYTUiTimer = null;
 let ytApiReady = false;
@@ -1443,9 +1459,8 @@ async function vWatch(){
   return`<button class="s" onclick="go('teacher','${esc(v.teacherId)}')">← رجوع</button>
   <h2 style="margin-top:14px">${esc(v.title)} ${isStaff?'<span class="b g">إدارة</span>':''}</h2>
   <div class="player-wrap">
-    <div class="pl ${isYT?'crop-yt':''}" id="plbox">
+    <div class="pl" id="plbox">
       ${playerHTML}
-      ${isYT?'<div class="yt-bottom-mask"></div><div class="yt-top-mask"></div>':''}
       ${wm}
     </div>
     ${controlsHTML}

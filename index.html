@@ -14,9 +14,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <style>
-/* =========================================================
-   1) ROOT & THEME
-   ========================================================= */
 :root{
   --bg:#f8fafc; --surface:#ffffff; --surface2:#f1f5f9;
   --tx:#0f172a; --tx2:#475569; --mu:#94a3b8;
@@ -34,10 +31,6 @@ html.dark{
   --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
   --shadow-lg:0 10px 40px rgba(0,0,0,.5);
 }
-
-/* =========================================================
-   2) BASE
-   ========================================================= */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{min-height:100%;height:auto}
 body{font-family:Cairo,system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;
@@ -46,10 +39,6 @@ body{font-family:Cairo,system-ui,sans-serif;background:var(--bg);color:var(--tx)
 input,select,textarea{-webkit-user-select:text;user-select:text}
 h1,h2,h3{font-weight:800;line-height:1.3}
 h2{font-size:20px;margin-bottom:16px;color:var(--tx)}
-
-/* =========================================================
-   3) LOADING
-   ========================================================= */
 #loading-overlay{position:fixed;inset:0;z-index:9999;background:rgba(248,250,252,.85);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .3s ease}
@@ -58,10 +47,6 @@ html.dark #loading-overlay{background:rgba(11,18,32,.85)}
 .spinner{width:40px;height:40px;border:4px solid var(--ac-soft);border-top-color:var(--ac);
   border-radius:50%;animation:spin 1s linear infinite;margin-bottom:16px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* =========================================================
-   4) TOP BAR
-   ========================================================= */
 .top-bar{background:linear-gradient(135deg,var(--ac) 0%,var(--ac2) 100%);color:#fff;
   padding:24px 20px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;
   margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;
@@ -84,12 +69,7 @@ html.dark #loading-overlay{background:rgba(11,18,32,.85)}
   min-width:18px;height:18px;padding:0 4px;border-radius:99px;background:#ef4444!important;
   color:#fff!important;border:2px solid #fff!important;align-items:center;justify-content:center;
   font-size:10px;font-weight:800;display:flex}
-
 main{max-width:1000px;margin:0 auto;padding:0 20px 40px}
-
-/* =========================================================
-   5) CARDS & ROWS
-   ========================================================= */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);padding:0;
   cursor:pointer;text-align:center;transition:.2s;overflow:hidden;position:relative;
@@ -101,7 +81,6 @@ main{max-width:1000px;margin:0 auto;padding:0 20px 40px}
 .card .card-body{padding:12px 10px;background:var(--surface);flex:1;
   display:flex;flex-direction:column;justify-content:center}
 .card b{font-size:16px;display:block;color:var(--tx);font-weight:800}
-
 .row{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);
   padding:16px 18px;margin-bottom:12px;display:flex;align-items:center;gap:12px;
   cursor:pointer;transition:.15s;flex-wrap:wrap}
@@ -110,10 +89,6 @@ main{max-width:1000px;margin:0 auto;padding:0 20px 40px}
 .row>div{flex:1;min-width:0}
 .row b{font-size:15px;display:block;color:var(--tx)}
 .row small{color:var(--mu);font-size:13px;display:block;margin-top:2px}
-
-/* =========================================================
-   6) BUTTONS / INPUTS
-   ========================================================= */
 button,.btn{font-family:inherit;font-weight:700;border:0;border-radius:var(--r-sm);
   padding:10px 18px;background:var(--ac);color:#fff;cursor:pointer;transition:.15s;font-size:14px}
 button:hover{background:var(--ac2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.3)}
@@ -123,27 +98,18 @@ button.s{background:var(--surface2);color:var(--tx)}
 button.s:hover{background:var(--bd);box-shadow:none;transform:none}
 button.d{background:var(--er)}button.d:hover{background:#dc2626}
 button.g{background:var(--ok)}button.g:hover{background:#059669}
-
 label{font-size:13px;color:var(--tx2);font-weight:700;display:block;margin-bottom:6px}
 input,select,textarea{font-family:inherit;font-size:14px;width:100%;padding:12px 14px;
   border-radius:var(--r-sm);border:1px solid var(--bd);background:var(--surface);color:var(--tx);
   margin-bottom:14px;transition:.15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac);
   box-shadow:0 0 0 3px var(--ac-soft)}
-
-/* =========================================================
-   7) BOXES / TABLES
-   ========================================================= */
 .box{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);
   padding:22px;margin-bottom:20px;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:10px;text-align:right;border-bottom:1px solid var(--bd)}
 th{background:var(--surface2);font-weight:700;color:var(--tx2);font-size:12px}
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r)}
-
-/* =========================================================
-   8) BADGES
-   ========================================================= */
 .b{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;
   background:var(--surface2);color:var(--tx2);display:inline-block}
 .b.g{background:#d1fae5;color:#065f46}
@@ -157,51 +123,21 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   display:inline-block;background:var(--surface2);padding:3px 10px;border-radius:6px;
   color:var(--ac2);font-weight:700}
 .mut{color:var(--mu);text-align:center;padding:40px 20px}
-
-/* =========================================================
-   9) PLAYER — عرض كامل بدون قص
-   ========================================================= */
 .player-wrap{width:100%;margin-bottom:16px}
-
-/* الحاوية: نسبة 16:9 ثابتة، وتتكيّف مع الشاشة */
-.pl{
-  position:relative;
-  background:#000;
-  border-radius:var(--r);
-  overflow:hidden;
-  width:100%;
-  aspect-ratio:16/9;
-  max-height:80vh;
-  margin:0 auto;
-  box-shadow:var(--shadow-lg);
-}
-
-/* الفيديو/الـ iframe يملأ الحاوية بالكامل دون قص */
-.pl iframe,
-.pl video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  border:0;
-  display:block;
-  background:#000;
-}
-
-/* حماية يوتيوب فقط: طبقة شفافة لاعتراض النقر فوق أدوات التحكم الافتراضية
-   (اختياري — احذفها إن أردت السماح بالتفاعل المباشر مع يوتيوب) */
-.yt-shield{position:absolute;inset:0;z-index:10;background:transparent;cursor:pointer}
-
-/* العلامة المائية المتحركة */
+.pl{position:relative;background:#000;border-radius:var(--r);overflow:hidden;width:100%;
+  aspect-ratio:16/9;max-height:80vh;margin:0 auto;box-shadow:var(--shadow-lg)}
+.pl iframe,.pl video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+.pl .yt-mask-top,.pl .yt-mask-bottom{position:absolute;left:0;right:0;background:#000;z-index:12;pointer-events:none;display:none}
+.pl .yt-mask-top{top:0;height:14%}
+.pl .yt-mask-bottom{bottom:0;height:16%}
+.pl.is-yt .yt-mask-top,.pl.is-yt .yt-mask-bottom{display:block}
+.pl .blocker{position:absolute;inset:0;z-index:13;background:transparent;cursor:pointer;display:none}
+.pl.is-yt .blocker{display:block}
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
 .wm img{width:22px;height:22px;border-radius:50%;object-fit:contain}
 @keyframes mv{0%{top:20%;left:4%}25%{top:70%;left:55%}50%{top:35%;left:70%}75%{top:80%;left:8%}100%{top:20%;left:60%}}
-
-/* =========================================================
-   10) PLAYER CONTROLS (universal)
-   ========================================================= */
 .custom-player-ctrl{
   background:linear-gradient(180deg,var(--surface) 0%,var(--surface2) 100%);
   border:1px solid var(--bd);padding:16px 18px;border-radius:var(--r-lg);
@@ -253,10 +189,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .custom-player-ctrl .speed-box label{margin:0;font-size:12px;color:var(--tx2)}
 .custom-player-ctrl .speed-box select{width:auto;padding:4px 8px;margin:0;font-size:12px;
   border-radius:6px;border:1px solid var(--bd);background:var(--surface2);color:var(--tx)}
-
-/* =========================================================
-   11) BOTTOM NAV
-   ========================================================= */
 .bottombar{position:fixed;bottom:0;left:0;z-index:40;background:var(--surface);
   border:1px solid var(--bd);border-bottom:0;border-radius:22px 22px 0 0;
   display:flex;justify-content:space-around;gap:4px;
@@ -269,26 +201,17 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .bottombar button.on{color:var(--ac);background:var(--ac-soft)}
 .bottombar button.on svg{fill:var(--ac)}
 .bottombar button svg{width:22px;height:22px;fill:var(--tx2);transition:.15s}
-
-/* =========================================================
-   12) TOAST
-   ========================================================= */
 #t{position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
   background:var(--tx);color:var(--bg);padding:12px 22px;border-radius:var(--r);
   font-weight:700;display:none;z-index:300;box-shadow:var(--shadow-lg);
   max-width:90vw;text-align:center;font-size:14px}
 #t.show{display:block;animation:pop .25s}
 @keyframes pop{0%{transform:translateX(-50%) scale(.8);opacity:0}100%{transform:translateX(-50%) scale(1);opacity:1}}
-
-/* =========================================================
-   13) PROFILE / MODALS
-   ========================================================= */
 .profile-card{text-align:center;padding:30px 20px}
 .profile-card img{width:100px;height:100px;border-radius:50%;border:4px solid var(--ac-soft);
   margin-bottom:16px;object-fit:contain;background:var(--surface2)}
 .profile-card h2{margin-bottom:8px}
 .profile-card p{color:var(--mu);font-size:15px;margin-bottom:24px}
-
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;
   align-items:center;justify-content:center;padding:20px}
 .modal.show{display:flex;animation:pop .2s}
@@ -298,10 +221,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   justify-content:space-between;align-items:center}
 .modal-header h3{font-size:16px;margin:0}
 .modal-body{padding:16px;overflow-y:auto;flex:1}
-
-/* =========================================================
-   14) NOTIFICATIONS
-   ========================================================= */
 .noti-item{
   display:flex;align-items:flex-start;gap:12px;padding:14px;margin-bottom:10px;
   background:var(--surface2);border:1px solid var(--bd);border-radius:14px;
@@ -327,10 +246,6 @@ html.dark .noti-item.unread{background:rgba(30,58,138,.35)}
 .noti-actions button:hover{background:var(--er);color:#fff;border-color:var(--er)}
 .noti-empty{text-align:center;padding:50px 20px;color:var(--mu)}
 .noti-empty svg{width:60px;height:60px;fill:var(--bd);margin-bottom:14px}
-
-/* =========================================================
-   15) STUDENT STATS
-   ========================================================= */
 .stats-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
   gap:12px;margin-bottom:20px}
 .stat-box{background:linear-gradient(135deg,var(--surface),var(--surface2));
@@ -340,7 +255,6 @@ html.dark .noti-item.unread{background:rgba(30,58,138,.35)}
 .stat-box .stat-label{font-size:12px;color:var(--mu);font-weight:700}
 .stat-box.ok .stat-num{color:var(--ok)}
 .stat-box.warn .stat-num{color:var(--warn)}
-
 .stats-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;
   border-radius:var(--r);border:1px solid var(--bd)}
 .stats-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface)}
@@ -352,15 +266,10 @@ html.dark .noti-item.unread{background:rgba(30,58,138,.35)}
 .stats-table .grade-chip{display:inline-block;padding:3px 8px;border-radius:8px;
   background:var(--ac-soft);color:var(--ac2);font-size:11px;font-weight:700;white-space:nowrap}
 html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
-
 .stats-filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .stats-filter button{padding:8px 16px;font-size:12px;border-radius:99px;
   background:var(--surface2);color:var(--tx2);border:1px solid var(--bd)}
 .stats-filter button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-
-/* =========================================================
-   16) AUTH
-   ========================================================= */
 .auth-container{max-width:400px;margin:0 auto;padding:40px 20px;text-align:center}
 .auth-container h1{font-size:32px;color:var(--ac);margin-bottom:8px;font-weight:800;letter-spacing:-1px}
 .auth-container p{color:var(--mu);margin-bottom:24px;font-size:15px}
@@ -373,10 +282,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 .auth-form input{margin-bottom:12px}
 .auth-form .error{color:var(--er);font-size:13px;margin-bottom:10px;display:none;line-height:1.6}
 .link-btn{color:var(--ac);font-weight:700;text-decoration:none;cursor:pointer}
-
-/* =========================================================
-   17) ADMIN
-   ========================================================= */
 .admin-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;
   background:var(--surface2);padding:6px;border-radius:12px}
 .admin-tabs button{flex:1 1 calc(50% - 6px);padding:10px;font-size:13px;border-radius:8px;
@@ -384,39 +289,25 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 .admin-tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac);
   box-shadow:0 2px 8px rgba(37,99,235,.3)}
 @media(max-width:768px){.admin-tabs button{flex:1 1 100%}}
-
 .code-input{font-size:26px;text-align:center;letter-spacing:8px;font-family:monospace}
 .notice{background:var(--ac-soft);border:1px solid var(--ac);border-radius:var(--r);
   padding:14px 16px;margin-bottom:16px;color:var(--tx);line-height:1.7}
-
-/* =========================================================
-   18) BAN
-   ========================================================= */
 .ban-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);
   display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
 .ban-screen .box-max{max-width:420px}
 .ban-screen h1{font-size:28px;color:var(--er);margin-bottom:14px}
 .ban-screen p{color:var(--tx2);margin-bottom:24px;line-height:1.7}
-
-/* =========================================================
-   19) NEWS
-   ========================================================= */
 .news-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);
   padding:16px;margin-bottom:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
 .news-card img{width:100%;max-height:400px;object-fit:contain;border-radius:var(--r-sm);
   border:1px solid var(--bd);background:var(--surface2)}
 .news-text{font-size:15px;line-height:1.7;color:var(--tx);white-space:pre-wrap}
 .news-date{font-size:12px;color:var(--mu);font-weight:700;margin-top:4px}
-
-/* =========================================================
-   20) RESPONSIVE
-   ========================================================= */
 @media(max-width:720px){
   main{padding:0 14px 40px}
   h2{font-size:18px}
   .top-bar{padding:16px}
   .top-bar .welcome h1{font-size:18px}
-  /* على الموبايل: حافظ على نسبة 16:9 ولا تقص */
   .pl{aspect-ratio:16/9;max-height:70vh}
 }
 @media(max-width:520px){
@@ -439,8 +330,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 </div>
 <div id="app"></div>
 <div id="t" role="status" aria-live="polite"></div>
-
-<!-- Notifications modal -->
 <div class="modal" id="notiModal" onclick="if(event.target===this)closeNoti()">
   <div class="modal-content" style="max-width:460px">
     <div class="modal-header">
@@ -455,8 +344,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
     </div>
   </div>
 </div>
-
-<!-- Crop modal -->
 <div class="modal" id="cropModal">
   <div class="modal-content" style="max-width:500px">
     <div class="modal-header"><h3>قص الصورة</h3></div>
@@ -469,11 +356,7 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
     </div>
   </div>
 </div>
-
 <script type="module">
-/* =========================================================
-   IMPORTS
-   ========================================================= */
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,onAuthStateChanged,signOut,setPersistence,browserLocalPersistence,
@@ -483,27 +366,13 @@ import {
   getDatabase,ref,get,set,update,remove,runTransaction,query,orderByChild,equalTo,onValue
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {getMessaging,getToken,onMessage} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
-
-/* =========================================================
-   SERVICE WORKER REGISTRATION
-   ========================================================= */
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js')
-      .then(r=>console.log('SW registered:',r.scope))
-      .catch(e=>console.warn('SW registration failed:',e));
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
   });
 }
-
-/* =========================================================
-   GLOBAL ERROR HANDLERS
-   ========================================================= */
 window.addEventListener('unhandledrejection',e=>{console.error('خطأ غير معالج:',e.reason);});
 window.addEventListener('error',e=>{console.error('خطأ:',e.error||e.message)});
-
-/* =========================================================
-   CONFIG
-   ========================================================= */
 const ADMIN_PHONES=["01147975962","01123543649"];
 const VAPID_KEY='BL3dfL6xBF8jnLy87cWLRwsoLAclt5HIWzkwa4R84L_GJ41vT2y2nBpFwgxPItJ2BmQej6_iZsegmidN6IVTREs';
 const app=initializeApp({
@@ -517,14 +386,10 @@ const app=initializeApp({
 });
 const auth=getAuth(app),db=getDatabase(app);
 let messaging=null;
-try{messaging=getMessaging(app)}catch(e){console.log('Messaging not supported',e)}
+try{messaging=getMessaging(app)}catch(e){}
 setPersistence(auth,browserLocalPersistence).catch(()=>{});
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
 const R=p=>ref(db,p);
-const G=async p=>{try{return (await get(R(p))).val()}catch(e){console.warn('Permission error on',p);return null}};
+const G=async p=>{try{return (await get(R(p))).val()}catch(e){return null}};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fd=t=>t?new Date(t).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'}):'-';
@@ -532,56 +397,37 @@ const normDigits=s=>String(s??'').replace(/[\u0660-\u0669]/g,d=>String(d.charCod
 const normPhone=s=>normDigits(s).replace(/[\s\-()]/g,'');
 const avatarOf=name=>'https://ui-avatars.com/api/?name='+encodeURIComponent(name||'U')+'&background=2563eb&color=fff&size=200';
 const hasNotifApi=()=>typeof window!=='undefined'&&'Notification' in window;
-
 const pending=new Set();
 async function once(key,fn){if(pending.has(key))return;pending.add(key);try{return await fn()}finally{pending.delete(key)}}
-
-/* =========================================================
-   STATE
-   ========================================================= */
 let U=null,A=false,IS_SUPERVISOR=false,S={v:'home'};
 let teachers={},videos={},library={},news={},notifications={},ownNotifications={},broadcastNotifications={},adminNotifications={};
 let badge='',myPhoto='',myPhone='',hb=null,ip=null,pollInterval=null,cropper=null,cropResolve=null;
 let unsubs=[],showingBan=false,renderSeq=0;
 let loadedTeachers=false;
 let studentStatsFilter='all';
-
-/* Universal player state */
-let currentPlayerType = null;
-let currentYTPlayer = null;
-let currentYTUiTimer = null;
-let ytApiReady = false;
-let ytApiLoading = false;
-let ytApiQueue = [];
-let iframeTimer = null;
-let iframeTime = 0;
-let iframeDuration = 0;
-let iframePlaying = false;
-
-/* =========================================================
-   YOUTUBE IFRAME API LOADER
-   ========================================================= */
+let currentPlayerType=null;
+let currentYTPlayer=null;
+let currentYTUiTimer=null;
+let ytApiReady=false;
+let ytApiLoading=false;
+let ytApiQueue=[];
+let iframeTimer=null;
+let iframeTime=0;
+let iframeDuration=0;
+let iframePlaying=false;
+let isSeeking=false;
+let seekResumeState=null;
 function loadYouTubeAPI(){
-  if(window.YT && window.YT.Player){ ytApiReady=true; flushYTQueue(); return; }
-  if(ytApiLoading) return;
-  ytApiLoading = true;
-  const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
+  if(window.YT&&window.YT.Player){ytApiReady=true;flushYTQueue();return;}
+  if(ytApiLoading)return;
+  ytApiLoading=true;
+  const tag=document.createElement('script');
+  tag.src="https://www.youtube.com/iframe_api";
   document.head.appendChild(tag);
-  window.onYouTubeIframeAPIReady = ()=>{ ytApiReady = true; flushYTQueue(); };
+  window.onYouTubeIframeAPIReady=()=>{ytApiReady=true;flushYTQueue();};
 }
-function flushYTQueue(){
-  ytApiQueue.forEach(fn=>{ try{fn()}catch(e){} });
-  ytApiQueue = [];
-}
-function onYTReady(fn){
-  if(ytApiReady) fn();
-  else { ytApiQueue.push(fn); loadYouTubeAPI(); }
-}
-
-/* =========================================================
-   DEVICE / THEME
-   ========================================================= */
+function flushYTQueue(){ytApiQueue.forEach(fn=>{try{fn()}catch(e){}});ytApiQueue=[];}
+function onYTReady(fn){if(ytApiReady)fn();else{ytApiQueue.push(fn);loadYouTubeAPI();}}
 const DEVICE_KEY='sigma-device-id';
 function getDeviceId(){
   let id=localStorage.getItem(DEVICE_KEY);
@@ -597,7 +443,6 @@ function deviceLabel(){
   if(/Linux/i.test(ua))return'Linux';
   return'جهاز';
 }
-
 const THEME_KEY='sigma-theme';
 function initTheme(){
   const saved=localStorage.getItem(THEME_KEY);
@@ -605,16 +450,11 @@ function initTheme(){
   if(saved==='dark'||(!saved&&prefersDark))document.documentElement.classList.add('dark');
 }
 initTheme();
-
 function toast(m){
   const t=$('#t');if(!t)return;
   t.textContent=m;t.classList.add('show');
   clearTimeout(t.h);t.h=setTimeout(()=>t.classList.remove('show'),2600);
 }
-
-/* =========================================================
-   IMAGE CROP
-   ========================================================= */
 function img(f,s){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -654,10 +494,6 @@ function confirmCrop(){
   cropResolve(c.toDataURL('image/jpeg'));
 }
 function cancelCrop(){if(cropResolve)cropResolve(null)}
-
-/* =========================================================
-   MESSAGING / PUSH NOTIFICATIONS
-   ========================================================= */
 async function enableNotifications(silent){
   if(!messaging||!hasNotifApi()){if(!silent)toast('الإشعارات غير مدعومة في هذا المتصفح');return}
   try{
@@ -665,7 +501,7 @@ async function enableNotifications(silent){
     if(p!=='granted'){if(!silent)toast('لم يتم السماح بالإشعارات من إعدادات المتصفح');return}
     const token=await getToken(messaging,{vapidKey:VAPID_KEY});
     if(token){await set(R('users/'+U.uid+'/fcmToken'),token);if(!silent)toast('تم تفعيل الإشعارات ✅')}
-  }catch(e){console.error('Notifications error:',e);if(!silent)toast('تعذر تفعيل الإشعارات')}
+  }catch(e){if(!silent)toast('تعذر تفعيل الإشعارات')}
 }
 if(messaging){
   try{
@@ -676,19 +512,15 @@ if(messaging){
       }
       refreshNotifications();
     });
-  }catch(e){console.log('onMessage failed',e)}
+  }catch(e){}
 }
-
-/* =========================================================
-   VIDEO EMBED PARSER
-   ========================================================= */
 function embed(u){
   u=String(u||'').trim();let m;
   if(m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([\w-]{11})/))
     return{
       t:'yt',
       id:m[1],
-      s:`https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&controls=0&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&origin=${encodeURIComponent(location.origin)}`
+      s:`https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&controls=0&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&cc_load_policy=0&origin=${encodeURIComponent(location.origin)}`
     };
   if(m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*?id=)([\w-]+)/))
     return{t:'drive',s:`https://drive.google.com/file/d/${m[1]}/preview`,id:m[1]};
@@ -696,10 +528,6 @@ function embed(u){
   if(/\.(mp4|webm|ogg)(\?|$)/i.test(u))return{t:'v',s:u};
   return{t:'f',s:u};
 }
-
-/* =========================================================
-   SINGLE-DEVICE ENFORCEMENT
-   ========================================================= */
 async function enforceSingleDevice(){
   if(A||IS_SUPERVISOR)return true;
   try{
@@ -722,33 +550,27 @@ async function enforceSingleDevice(){
     const ban=await G('bans/'+U.uid);
     if(ban&&ban.newDevice===devId)await remove(R('bans/'+U.uid));
     return true;
-  }catch(e){console.warn('enforceSingleDevice',e);return true}
+  }catch(e){return true}
 }
 function renderBanned(ban){
   showingBan=true;
   document.body.innerHTML=`<div class="ban-screen"><div class="box-max"><h1>⛔ تم حظر حسابك</h1><p>تم اكتشاف تسجيل دخول من جهاز آخر.<br>حسابك مسجّل على: <b>${esc(ban.oldDeviceLabel||'جهاز سابق')}</b><br>حاول الدخول من: <b>${esc(ban.newDeviceLabel||'جهاز جديد')}</b><br><br>تواصل مع المدير لفك الحظر.</p><p style="font-size:12px;color:var(--mu)">الحساب: ${esc(ban.email||'')}</p><button onclick="out()">خروج</button></div></div>`;
 }
-
-/* =========================================================
-   LIFECYCLE / CLEANUP
-   ========================================================= */
 function clearListeners(){unsubs.forEach(fn=>{try{if(typeof fn==='function')fn()}catch(e){}});unsubs=[]}
 function destroyPlayer(){
-  if(currentYTUiTimer){ clearInterval(currentYTUiTimer); currentYTUiTimer=null; }
+  if(currentYTUiTimer){clearInterval(currentYTUiTimer);currentYTUiTimer=null;}
   if(currentYTPlayer){
-    try{ currentYTPlayer.destroy(); }catch(e){}
-    currentYTPlayer = null;
+    try{currentYTPlayer.destroy();}catch(e){}
+    currentYTPlayer=null;
   }
-  if(iframeTimer){ clearInterval(iframeTimer); iframeTimer=null; }
-  iframeTime = 0; iframeDuration = 0; iframePlaying = false;
-  currentPlayerType = null;
+  if(iframeTimer){clearInterval(iframeTimer);iframeTimer=null;}
+  iframeTime=0;iframeDuration=0;iframePlaying=false;
+  currentPlayerType=null;
+  isSeeking=false;
+  seekResumeState=null;
 }
 function stopHB(){if(hb)clearInterval(hb);hb=null}
 function stopPoll(){if(pollInterval){clearInterval(pollInterval);pollInterval=null}}
-
-/* =========================================================
-   NOTIFICATIONS STATE
-   ========================================================= */
 function refreshNotifications(){
   const merged={};
   if(A && adminNotifications){
@@ -762,12 +584,7 @@ function refreshNotifications(){
   const dot=$('#notiBadge');
   if(dot){dot.textContent=unread>99?'99+':String(unread);dot.style.display=unread?'flex':'none'}
 }
-
 function hideOverlay(){setTimeout(()=>{const ov=$('#loading-overlay');if(ov)ov.classList.add('hide')},300)}
-
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
 onAuthStateChanged(auth,async u=>{
   clearListeners();
   U=u;myPhoto='';myPhone='';
@@ -784,7 +601,6 @@ onAuthStateChanged(auth,async u=>{
     IS_SUPERVISOR=userData?.isSupervisor===true;
     myPhoto=userData?.photo||'';
     myPhone=userData?.phone||'';
-
     if(!A&&!IS_SUPERVISOR){
       const ban=await G('bans/'+u.uid);
       if(ban){
@@ -798,34 +614,25 @@ onAuthStateChanged(auth,async u=>{
         if(b){renderBanned(b);hideOverlay();return}
       }
     }
-
     const savedCodes=(await G('users/'+u.uid+'/videos'))||{};
     window.__mineVideos={...savedCodes};
-
     unsubs.push(onValue(R('teachers'),s=>{
       teachers=s.val()||{};loadedTeachers=true;
       if(S.v!=='watch')render();
     },()=>{loadedTeachers=true}));
-
     unsubs.push(onValue(R('videos'),s=>{videos=s.val()||{};if(S.v!=='watch')render()},()=>{}));
     unsubs.push(onValue(R('library'),s=>{library=s.val()||{};if(S.v!=='watch')render()},()=>{}));
     unsubs.push(onValue(R('news'),s=>{news=s.val()||{};if(S.v==='news')render()},()=>{}));
-
     unsubs.push(onValue(R('notifications/'+u.uid),snap=>{ownNotifications=snap.val()||{};refreshNotifications()},()=>{}));
     unsubs.push(onValue(R('notifications/all'),snap=>{broadcastNotifications=snap.val()||{};refreshNotifications()},()=>{}));
     if(A){
       unsubs.push(onValue(R('adminNotifications'),snap=>{adminNotifications=snap.val()||{};refreshNotifications()},()=>{}));
     }
-
     badge=(await G('settings/badge'))||'';
     if(hasNotifApi()&&Notification.permission==='granted')enableNotifications(true);
-  }catch(e){console.error(e)}
+  }catch(e){}
   render();hideOverlay();
 });
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
 const go=(v,id,tab,filter)=>{
   stopHB();stopPoll();destroyPlayer();
   S={v,id,tab:tab!==undefined?tab:S.tab,filter:filter!==undefined?filter:S.filter};
@@ -835,10 +642,6 @@ const go=(v,id,tab,filter)=>{
 const inst=async()=>{if(!ip)return;ip.prompt();await ip.userChoice;ip=null;render()};
 const out=()=>{stopHB();stopPoll();destroyPlayer();clearListeners();signOut(auth)};
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;render()});
-
-/* =========================================================
-   PWA ICON & MANIFEST
-   ========================================================= */
 (()=>{
   const c=document.createElement('canvas');c.width=c.height=192;const x=c.getContext('2d');
   const g=x.createLinearGradient(0,0,192,192);g.addColorStop(0,'#2563eb');g.addColorStop(1,'#1d4ed8');
@@ -851,13 +654,8 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;render()});
     icons:[{src:u,sizes:'192x192',type:'image/png'}]};
   $('#mf').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
 })();
-
-/* =========================================================
-   NOTIFICATIONS UI
-   ========================================================= */
 function openNoti(){$('#notiModal').classList.add('show');renderNoti()}
 function closeNoti(){$('#notiModal').classList.remove('show')}
-
 function renderNoti(){
   const list=Object.values(notifications).sort((a,b)=>(b.created||0)-(a.created||0));
   const body=$('#notiBody');
@@ -919,10 +717,6 @@ async function clearAllMyNotis(){
     toast('تم مسح الإشعارات');renderNoti();
   }catch(e){toast('تعذر المسح')}
 }
-
-/* =========================================================
-   AUTH SCREENS
-   ========================================================= */
 function vAuth(){
   return `<div class="auth-container">
     <h1>Σ سيجما</h1>
@@ -968,7 +762,6 @@ function authMsg(e){
   if(c==='auth/invalid-credential'||c==='auth/wrong-password'||c==='auth/user-not-found'||c==='auth/invalid-login-credentials')return null;
   return 'حدث خطأ: '+(e?.message||c||'غير معروف');
 }
-
 function registerPhone(){return once('register',doRegister)}
 async function doRegister(){
   const name=$('#reg-name').value.trim().replace(/\s+/g,' ');
@@ -993,7 +786,6 @@ async function doRegister(){
     showErr('reg-error',m||'حدث خطأ غير متوقع');
   }
 }
-
 function loginPhone(){return once('login',doLogin)}
 async function doLogin(){
   const phone=normPhone($('#login-phone').value);
@@ -1026,10 +818,6 @@ async function doLogin(){
     }
   }
 }
-
-/* =========================================================
-   RENDER ENGINE
-   ========================================================= */
 function render(){
   const a=$('#app');if(!a)return;
   const seq=++renderSeq;
@@ -1043,7 +831,7 @@ function render(){
   const fn=views[S.v]||vHome;
   let res;
   try{res=fn()}
-  catch(e){console.error(e);a.innerHTML=shell(`<div class="mut">حدث خطأ: ${esc(e.message)}</div>`);return}
+  catch(e){a.innerHTML=shell(`<div class="mut">حدث خطأ: ${esc(e.message)}</div>`);return}
   if(res&&typeof res.then==='function'){
     a.innerHTML=shell('<div class="mut">جارٍ التحميل…</div>');
     res.then(html=>{
@@ -1051,7 +839,7 @@ function render(){
       a.innerHTML=shell(html??'');afterRender();
     }).catch(e=>{
       if(seq!==renderSeq)return;
-      console.error(e);a.innerHTML=shell(`<div class="mut">خطأ: ${esc(e.message)}</div>`);
+      a.innerHTML=shell(`<div class="mut">خطأ: ${esc(e.message)}</div>`);
     });
     return;
   }
@@ -1060,7 +848,6 @@ function render(){
 function afterRender(){
   if(S.v==='watch')setTimeout(initPlayer,300);
 }
-
 function topBarHTML(){
   if(!U)return '';
   const firstName=(U.displayName||'الطالب').split(' ')[0];
@@ -1085,7 +872,6 @@ function topBarHTML(){
 function shell(body){
   return `<div id="topbar-slot">${topBarHTML()}</div><main style="padding-bottom:calc(100px + env(safe-area-inset-bottom))">${body}</main>${bottomBar()}`;
 }
-
 function bottomBar(){
   const on=k=>S.v===k||(k==='home'&&['teacher','code','watch'].includes(S.v));
   const svgHome=`<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`;
@@ -1102,25 +888,18 @@ function bottomBar(){
     ${A||IS_SUPERVISOR?`<button class="${adminOn?'on':''}" onclick="go('admin','','videos')">${svgAdmin} <span>التحكم</span></button>`:''}
   </nav>`;
 }
-
 function toggleTheme(){
   document.documentElement.classList.toggle('dark');
   localStorage.setItem(THEME_KEY,document.documentElement.classList.contains('dark')?'dark':'light');
   const slot=$('#topbar-slot');
   if(slot)slot.innerHTML=topBarHTML();else render();
 }
-
-/* =========================================================
-   SETTINGS + STUDENT STATS
-   ========================================================= */
 async function vSettings(){
   const photo=myPhoto||U.photoURL||avatarOf(U.displayName);
   const canNotify=!!messaging&&hasNotifApi()&&Notification.permission!=='granted';
   const role=A?'<span class="b g">إدارة</span>':IS_SUPERVISOR?'<span class="b y">مشرف</span>':'<span class="b">طالب</span>';
-
   let statsHtml='';
   if(!A && !IS_SUPERVISOR) statsHtml = await buildStudentStats();
-
   return `<div class="box profile-card">
     <img src="${esc(photo)}" alt="صورة الملف الشخصي" id="profile-img">
     <h2>${esc(U.displayName||'')}</h2>
@@ -1142,7 +921,6 @@ async function vSettings(){
   </div>
   ${statsHtml}`;
 }
-
 async function buildStudentStats(){
   const myVideos=window.__mineVideos||{};
   const allLogs=(await G('logs'))||{};
@@ -1151,12 +929,10 @@ async function buildStudentStats(){
     const rec=allLogs[vid] && allLogs[vid][U.uid];
     if(rec) mine[vid]=rec;
   }
-
   const totalVideos=Object.keys(videos).length;
   const watchedCount=Object.keys(mine).length;
   const openedCount=Object.keys(myVideos).length;
   const lockedCount=totalVideos-openedCount;
-
   const rows=[];
   for(const [vid,v] of Object.entries(videos)){
     const teacher=teachers[v.teacherId];
@@ -1168,7 +944,6 @@ async function buildStudentStats(){
     else if(log&&log.completed) status='<span class="b g">حضره كاملاً</span>';
     else if(log) status='<span class="b y">شاهد جزءاً</span>';
     else status='<span class="b g">مفتوح</span>';
-
     rows.push({
       vid,title:v.title||'-',teacher:teacher?.name||'-',grade:v.grade||'-',
       desc:v.desc||'',isOpen,status,log,watched:!!log,
@@ -1176,19 +951,16 @@ async function buildStudentStats(){
       disabled:!!v.disabled
     });
   }
-
   let filtered=rows;
   if(studentStatsFilter==='watched') filtered=rows.filter(r=>r.watched);
   else if(studentStatsFilter==='available') filtered=rows.filter(r=>r.isOpen&&!r.disabled);
   else if(studentStatsFilter==='locked') filtered=rows.filter(r=>!r.isOpen);
-
   filtered.sort((a,b)=>{
     const score=r=>r.watched?3:(r.isOpen?2:1);
     const d=score(b)-score(a);
     if(d) return d;
     return (b.log?.lastAt||0)-(a.log?.lastAt||0);
   });
-
   const summary=`
     <div class="stats-summary">
       <div class="stat-box"><div class="stat-num">${totalVideos}</div><div class="stat-label">إجمالي المحاضرات</div></div>
@@ -1196,7 +968,6 @@ async function buildStudentStats(){
       <div class="stat-box warn"><div class="stat-num">${lockedCount}</div><div class="stat-label">تحتاج كود</div></div>
       <div class="stat-box"><div class="stat-num">${watchedCount}</div><div class="stat-label">حضرتها</div></div>
     </div>`;
-
   const filterBar=`
     <div class="stats-filter">
       <button class="${studentStatsFilter==='all'?'on':''}" onclick="setStatsFilter('all')">الكل</button>
@@ -1204,7 +975,6 @@ async function buildStudentStats(){
       <button class="${studentStatsFilter==='available'?'on':''}" onclick="setStatsFilter('available')">مفتوحة (${openedCount})</button>
       <button class="${studentStatsFilter==='locked'?'on':''}" onclick="setStatsFilter('locked')">مقفلة (${lockedCount})</button>
     </div>`;
-
   if(!filtered.length){
     return `<div class="box">
       <h2 style="color:var(--ac2);margin-bottom:14px">📊 إحصائياتي</h2>
@@ -1213,7 +983,6 @@ async function buildStudentStats(){
       <div class="mut" style="padding:30px">لا توجد محاضرات مطابقة.</div>
     </div>`;
   }
-
   const tableRows=filtered.map(r=>{
     const watchBtn=r.isOpen&&!r.disabled
       ? `<button class="s" style="padding:5px 10px;font-size:11px;border-radius:8px" onclick="go('watch','${r.vid}')">مشاهدة</button>`
@@ -1228,7 +997,6 @@ async function buildStudentStats(){
       <td>${watchBtn}</td>
     </tr>`;
   }).join('');
-
   return `<div class="box">
     <h2 style="color:var(--ac2);margin-bottom:14px">📊 إحصائياتي</h2>
     ${summary}
@@ -1246,10 +1014,6 @@ async function buildStudentStats(){
   </div>`;
 }
 function setStatsFilter(f){studentStatsFilter=f;render()}
-
-/* =========================================================
-   PROFILE ACTIONS
-   ========================================================= */
 function updateProfilePhoto(){return once('photo',doUpdatePhoto)}
 async function doUpdatePhoto(){
   const f=$('#profile-photo-input').files?.[0];
@@ -1262,9 +1026,8 @@ async function doUpdatePhoto(){
     myPhoto=data;
     toast('تم تحديث الصورة بنجاح');
     render();
-  }catch(e){console.error(e);toast('تعذر تحديث الصورة: '+e.message)}
+  }catch(e){toast('تعذر تحديث الصورة: '+e.message)}
 }
-
 function changePassword(){return once('pass',doChangePassword)}
 async function doChangePassword(){
   const newPass=$('#new-pass').value;
@@ -1289,10 +1052,6 @@ async function doChangePassword(){
     }
   }
 }
-
-/* =========================================================
-   HOME / TEACHER / LIBRARY / NEWS
-   ========================================================= */
 function vHome(){
   if(!loadedTeachers)return'<div class="mut">جارٍ التحميل…</div>';
   const t=Object.entries(teachers);
@@ -1303,7 +1062,6 @@ function vHome(){
       <div class="card-body"><b>${esc(x.name)}</b></div>
     </div>`).join('')}</div>`;
 }
-
 function vTeacher(){
   const t=teachers[S.id];if(!t)return vHome();
   const mine=window.__mineVideos||{};
@@ -1326,7 +1084,6 @@ function vTeacher(){
   });
   return html;
 }
-
 function vCode(){
   const v=videos[S.id];
   if(!v||v.disabled)return`<div class="mut">هذا الفيديو موقوف حالياً.</div>`;
@@ -1358,12 +1115,8 @@ async function doRedeem(vid){
     await set(R(`users/${U.uid}/videos/${vid}`),c);
     window.__mineVideos={...(window.__mineVideos||{}),[vid]:c};
     go('watch',vid);
-  }catch(e){console.error(e);toast('حدث خطأ أثناء التحقق من الكود')}
+  }catch(e){toast('حدث خطأ أثناء التحقق من الكود')}
 }
-
-/* =========================================================
-   WATCH — controls for ALL types
-   ========================================================= */
 async function vWatch(){
   const v=videos[S.id];if(!v)return vHome();
   const isStaff=A||IS_SUPERVISOR;
@@ -1381,15 +1134,12 @@ async function vWatch(){
       }
     }
   }catch(e){return`<div class="mut">ليس لديك صلاحية لمشاهدة هذا الفيديو.</div>`}
-
   const e=embed(rec.url);
   if(!e.s)return`<div class="mut">رابط الفيديو غير صالح، تواصل مع الإدارة.</div>`;
-
   const lp=`logs/${S.id}/${U.uid}`;
   const old=isStaff?{}:((await G(lp))||{});
   let sec=old.seconds||0;
   const dur=(+v.duration||0)*60;
-
   stopHB();
   if(!isStaff){
     try{
@@ -1398,7 +1148,7 @@ async function vWatch(){
         openedAt:old.openedAt||Date.now(),lastAt:Date.now(),
         seconds:sec,completed:!!old.completed
       });
-    }catch(err){console.warn('log init failed',err)}
+    }catch(err){}
     hb=setInterval(async()=>{
       if(document.hidden)return;
       sec+=10;
@@ -1406,16 +1156,13 @@ async function vWatch(){
       await update(R(lp),{seconds:sec,lastAt:Date.now(),completed:!!(done||old.completed)}).catch(()=>{});
     },10000);
   }
-
   const wm=isStaff?'':`<div class="wm">${badge?`<img src="${esc(badge)}" alt="">`:''}${esc(U.displayName||'')} · ${esc(myPhone||U.email||'')}</div>`;
   const isYT=e.t==='yt';
-
   let playerHTML='';
   if(e.t==='v')playerHTML=`<video id="vplayer" src="${esc(e.s)}" playsinline controlsList="nodownload"></video>`;
   else if(isYT)playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   else if(e.t==='drive')playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   else playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"></iframe>`;
-
   const controlsHTML = `<div class="custom-player-ctrl">
     <div class="progress-row">
       <button id="playPauseBtn" class="play-btn" onclick="togglePlay()" aria-label="تشغيل/إيقاف">
@@ -1424,7 +1171,10 @@ async function vWatch(){
       <div class="progress-container">
         <div class="slider-wrap">
           <div class="slider-fill" id="seekFill" style="width:0%"></div>
-          <input type="range" id="cSeek" min="0" max="100" value="0" step="0.1" oninput="onSeek(this.value)" aria-label="شريط التقدم">
+          <input type="range" id="cSeek" min="0" max="100" value="0" step="0.1"
+            oninput="onSeek(this.value)" onchange="onSeekEnd(this.value)"
+            onpointerdown="onSeekStart()" onpointerup="onSeekEnd(this.value)"
+            aria-label="شريط التقدم">
         </div>
         <div class="time-row">
           <span class="time" id="cTime">0:00</span>
@@ -1449,28 +1199,23 @@ async function vWatch(){
       <button class="tool-btn" onclick="toggleFullscreen()">⛶ ملء الشاشة</button>
     </div>
   </div>`;
-
   setTimeout(()=>{
     window.__pendingEmbed={
       type:e.t,id:e.id||'',src:e.s,duration:+(v.duration||0)
     };
   },0);
-
   return`<button class="s" onclick="go('teacher','${esc(v.teacherId)}')">← رجوع</button>
   <h2 style="margin-top:14px">${esc(v.title)} ${isStaff?'<span class="b g">إدارة</span>':''}</h2>
   <div class="player-wrap">
-    <div class="pl" id="plbox">
+    <div class="pl ${isYT?'is-yt':''}" id="plbox">
       ${playerHTML}
+      ${isYT?'<div class="yt-mask-top"></div><div class="yt-mask-bottom"></div><div class="blocker" onclick="togglePlay()"></div>':''}
       ${wm}
     </div>
     ${controlsHTML}
   </div>
   <p style="color:var(--tx2);margin-top:14px;line-height:1.7">${esc(v.desc||'')}</p>`;
 }
-
-/* =========================================================
-   LIBRARY / NEWS
-   ========================================================= */
 function openLibraryItem(enc){
   let url='';try{url=decodeURIComponent(enc)}catch(e){}
   try{
@@ -1488,7 +1233,6 @@ function vLibrary(){
       <div class="card-body"><b>${esc(item.title)}</b><small style="color:var(--mu);display:block;margin-top:4px">${esc(item.desc||'')}</small></div>
     </div>`).join('')}</div>`;
 }
-
 function vNews(){
   const list=Object.entries(news).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
   if(!list.length)return'<div class="mut">لا توجد أخبار منشورة حالياً.</div>';
@@ -1509,10 +1253,6 @@ function vNews(){
     </div>`;
   }).join('');
 }
-
-/* =========================================================
-   ADMIN
-   ========================================================= */
 async function vAdmin(){
   if(!A&&!IS_SUPERVISOR)return'<div class="mut">غير مصرح.</div>';
   const tab=S.tab||'videos';
@@ -1521,17 +1261,13 @@ async function vAdmin(){
     :[['videos','الفيديوهات'],['news','أخبار السنتر']];
   const effTab=allowedTabs.some(([k])=>k===tab)?tab:'videos';
   const tb=`<div class="admin-tabs">${allowedTabs.map(([k,n])=>`<button class="${effTab===k?'on':''}" onclick="go('admin','','${k}')">${n}</button>`).join('')}</div>`;
-
   if(effTab==='teachers')return tb+`<div class="box"><h2>إضافة مدرس</h2><label for="tn">الاسم</label><input id="tn"><label for="tp">الصورة</label><input id="tp" type="file" accept="image/*"><button onclick="addT()">إضافة</button></div><div class="grid">${Object.entries(teachers).map(([id,x])=>`<div class="card" style="cursor:default"><div class="card-img-wrap"><img src="${esc(x.photo||avatarOf(x.name))}" alt=""></div><div class="card-body"><b>${esc(x.name)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('edit','${id}','teacher')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delT('${id}')">حذف</button></div></div></div>`).join('')}</div>`;
-
   if(effTab==='library')return tb+`<div class="box"><h2>إضافة ملف PDF</h2><label for="ltn">العنوان</label><input id="ltn"><label for="ltd">الوصف</label><input id="ltd"><label for="ltp">صورة الغلاف (اختياري)</label><input id="ltp" type="file" accept="image/*"><label for="ltu">رابط الملف</label><input id="ltu" dir="ltr" placeholder="https://..."><button onclick="addLib()">إضافة</button></div><div class="grid">${Object.entries(library).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="card" style="cursor:default"><img src="${esc(x.photo||avatarOf('PDF'))}" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:contain;margin:16px auto 12px;display:block;background:var(--surface2);border:3px solid var(--ac-soft)"><div class="card-body"><b>${esc(x.title)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('editLib','${id}')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delLib('${id}')">حذف</button></div></div></div>`).join('')}</div>`;
-
   if(effTab==='students')return tb+await vAdminStudents();
   if(effTab==='send_notification')return tb+vSendNotification();
   if(effTab==='badge')return tb+`<div class="box"><h2>صورة التعريف</h2><p style="color:var(--tx2);margin-bottom:14px;line-height:1.7">تظهر بجانب اسم كل طالب وعلى العلامة المائية. ليس لها علاقة بالصور الشخصية.</p>${badge?`<img src="${esc(badge)}" alt="" style="width:100px;height:100px;border-radius:50%;margin-bottom:14px;border:3px solid var(--ac-soft);object-fit:contain">`:''}<input id="bp" type="file" accept="image/*"><button onclick="setB()">حفظ</button></div>`;
   if(effTab==='bans')return tb+await renderBans();
   if(effTab==='news')return tb+`<div class="box"><h2>إضافة خبر جديد</h2><label for="newText">نص الخبر (اختياري)</label><textarea id="newText" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea><label for="newVid">رابط فيديو الخبر (اختياري)</label><input id="newVid" dir="ltr" placeholder="https://youtube.com/..."><label for="newImg">صورة الخبر (اختياري)</label><input id="newImg" type="file" accept="image/*"><button onclick="addNews()">نشر الخبر</button></div><h2>الأخبار المنشورة</h2>${Object.entries(news).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="news-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:var(--ac)">خبر منشور</b><button class="d" onclick="delNews('${esc(id)}')" style="padding:4px 10px;font-size:12px">حذف</button></div>${x.photo?`<img src="${esc(x.photo)}" alt="" style="max-height:200px;object-fit:contain">`:''}<p style="font-size:13px;white-space:pre-wrap">${esc(x.text||'')}</p><span class="news-date">${fd(x.created)}</span></div>`).join('')}`;
-
   const tOpts=Object.entries(teachers).map(([id,x])=>`<option value="${esc(id)}">${esc(x.name)}</option>`).join('');
   const vidList=Object.entries(videos).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
   return tb+`<div class="box"><h2>إضافة فيديو</h2>
@@ -1546,7 +1282,6 @@ async function vAdmin(){
     <button onclick="addV()">حفظ وتوليد الأكواد</button></div>
     <h2>الفيديوهات</h2>${vidList.map(([id,v])=>`<div class="row"><div onclick="go('vid','${id}')" style="cursor:pointer"><b>${esc(v.title)}</b><small>${esc(teachers[v.teacherId]?.name||'-')} | ${esc(v.grade||'-')}${v.disabled?' — موقوف':''}</small></div><button class="s" onclick="go('edit','${id}','video')" style="padding:8px 14px;font-size:13px">تعديل</button><button class="s" onclick="go('vid','${id}')" style="padding:8px 14px;font-size:13px">السجل</button></div>`).join('')||'<div class="mut">لا توجد فيديوهات.</div>'}`;
 }
-
 function addNews(){return once('news',doAddNews)}
 async function doAddNews(){
   const text=$('#newText').value.trim();
@@ -1566,23 +1301,19 @@ async function delNews(id){
   if(!confirm('حذف هذا الخبر؟'))return;
   try{await remove(R('news/'+id));toast('تم الحذف');render()}catch(e){toast('تعذر الحذف')}
 }
-
 async function vAdminStudents(){
   if(!A)return'<div class="mut">غير مصرح.</div>';
   const users=(await G('users'))||{};
   const arr=Object.entries(users).map(([id,u])=>({id,...u}))
     .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
   if(!arr.length)return'<div class="mut">لا يوجد طلاب مسجلون بعد.</div>';
-
   let html=`<div class="box"><label for="searchStudent">بحث سريع (بالاسم / الهاتف / الكود)</label><input id="searchStudent" placeholder="اكتب الاسم، الهاتف، أو الكود..." oninput="filterStudents(this.value)"></div>
   <h2>الطلاب المسجلون (${arr.length})</h2><div class="tw"><table id="studentsTable"><thead><tr><th>الاسم</th><th>رقم الهاتف</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody>`;
-
   for(const u of arr){
     const isSup=u.isSupervisor===true;
     const isAdmin=ADMIN_PHONES.includes(u.phone||'');
     const uVids=await G('users/'+u.id+'/videos')||{};
     const codesStr=Object.values(uVids).join(' ');
-
     html+=`<tr class="student-row" data-search="${esc(u.name)} ${esc(u.phone)} ${esc(u.email)} ${codesStr}">
       <td><b onclick="go('studentProfile','${esc(u.id)}')" style="cursor:pointer;color:var(--ac)">${esc(u.name||'-')}</b></td>
       <td dir="ltr">${esc(u.phone||'-')}</td>
@@ -1598,7 +1329,6 @@ function filterStudents(q){
     row.style.display=(row.getAttribute('data-search')||'').toLowerCase().includes(query)?'':'none';
   });
 }
-
 async function vStudentProfile(){
   if(!A)return'<div class="mut">غير مصرح.</div>';
   const uid=S.id;
@@ -1628,7 +1358,6 @@ async function vStudentProfile(){
     </table></div>
   </div>`;
 }
-
 async function toggleSupervisor(uid,isSup){
   if(!A)return toast('غير مصرح');
   if(!confirm(isSup?'إلغاء صلاحية الإشراف؟':'تعيين هذا الطالب كمشرف؟ (سيتمكن من إضافة فيديوهات فقط)'))return;
@@ -1644,7 +1373,6 @@ async function delUser(uid){
     await remove(R('users/'+uid));toast('تم حذف المستخدم بنجاح');render();
   }catch(e){toast('تعذر حذف المستخدم')}
 }
-
 function vSendNotification(){
   return`<div class="box"><h2>إرسال إشعار للطلاب</h2><p style="color:var(--tx2);margin-bottom:14px">سيتم إرسال هذا الإشعار لجميع الطلاب فوراً.</p><label for="notiText">نص الإشعار</label><textarea id="notiText" rows="3" placeholder="اكتب رسالتك هنا..."></textarea><div style="display:flex;gap:10px;flex-wrap:wrap"><button onclick="sendAdminNotification()">إرسال الإشعار</button><button class="d" onclick="clearAllNotifications()">حذف كل الإشعارات</button></div></div>`;
 }
@@ -1653,14 +1381,13 @@ async function doSendNotification(){
   const text=$('#notiText').value.trim();
   if(!text)return toast('اكتب نص الإشعار');
   try{await set(R('notifications/all/'+Date.now()),{text,created:Date.now()});$('#notiText').value='';toast('تم إرسال الإشعار بنجاح')}
-  catch(e){console.error(e);toast('تعذر إرسال الإشعار: '+(e.code||e.message))}
+  catch(e){toast('تعذر إرسال الإشعار: '+(e.code||e.message))}
 }
 async function clearAllNotifications(){
   if(!confirm('هل أنت متأكد من حذف جميع الإشعارات للجميع؟'))return;
   try{await remove(R('notifications/all'));toast('تم حذف جميع الإشعارات')}
-  catch(e){console.error(e);toast('تعذر حذف الإشعارات: '+(e.code||e.message))}
+  catch(e){toast('تعذر حذف الإشعارات: '+(e.code||e.message))}
 }
-
 async function renderBans(){
   const bans=(await G('bans'))||{};
   const entries=Object.values(bans);
@@ -1680,7 +1407,6 @@ async function unban(uid){
   try{await remove(R('bans/'+uid));toast('تم فك الحظر');render()}catch(e){toast('تعذر فك الحظر')}
 }
 function keepBan(){toast('بقي محظوراً')}
-
 function addT(){return once('addT',doAddT)}
 async function doAddT(){
   const n=$('#tn').value.trim(),f=$('#tp').files[0];
@@ -1706,7 +1432,6 @@ async function setB(){
     badge=data;toast('تم الحفظ');render();
   }catch(e){toast('تعذر الحفظ: '+e.message)}
 }
-
 function addV(){return once('addV',doAddV)}
 async function doAddV(){
   const v={
@@ -1726,7 +1451,7 @@ async function doAddV(){
       toast('تم الحفظ وتوليد الأكواد');
     }else toast('تم الحفظ');
     go('vid',k);
-  }catch(e){console.error(e);toast('تعذر الحفظ: '+(e.code||e.message))}
+  }catch(e){toast('تعذر الحفظ: '+(e.code||e.message))}
 }
 function syncGradeOptions(){
   const stage=$('#vs')?.value||'prep',grade=$('#vg');if(!grade)return;
@@ -1746,7 +1471,6 @@ function syncEditGradeOptions(){
   grade.innerHTML=vals.map(x=>`<option>${x}</option>`).join('');
   if(vals.includes(previous))grade.value=previous;
 }
-
 function vEdit(){
   if(!A)return'<div class="mut">غير مصرح.</div>';
   const isT=S.tab==='teacher';
@@ -1802,11 +1526,10 @@ async function doSaveEditV(id){
       const updates={};
       s.forEach(c=>{updates['codes/'+c.key+'/url']=nv.url;updates['codes/'+c.key+'/title']=nv.title});
       if(Object.keys(updates).length)await update(R('/'),updates);
-    }catch(e){console.warn('codes sync failed',e)}
+    }catch(e){}
     toast('تم التعديل');go('admin','','videos');
   }catch(e){toast('تعذر الحفظ: '+(e.code||e.message))}
 }
-
 function addLib(){return once('addLib',doAddLib)}
 async function doAddLib(){
   if(!A)return toast('غير مصرح');
@@ -1819,13 +1542,13 @@ async function doAddLib(){
     if(file){photo=await img(file,200);if(!photo)return toast('تم إلغاء القص')}
     await set(R('library/l'+Date.now()),{title,desc,url,photo,created:Date.now()});
     toast('تمت إضافة الملف للمكتبة');go('admin','','library');
-  }catch(e){console.error(e);toast('تعذر إضافة الملف: '+(e.code||e.message||'خطأ'))}
+  }catch(e){toast('تعذر إضافة الملف: '+(e.code||e.message||'خطأ'))}
 }
 async function delLib(id){
   if(!A)return toast('غير مصرح');
   if(!confirm('هل تريد حذف هذا الملف من المكتبة؟'))return;
   try{await remove(R('library/'+id));toast('تم حذف الملف');go('admin','','library')}
-  catch(e){console.error(e);toast('تعذر حذف الملف: '+(e.code||'خطأ'))}
+  catch(e){toast('تعذر حذف الملف: '+(e.code||'خطأ'))}
 }
 function saveEditLib(id){return once('editLib',()=>doSaveEditLib(id))}
 async function doSaveEditLib(id){
@@ -1840,10 +1563,6 @@ async function doSaveEditLib(id){
     toast('تم التعديل');go('admin','','library');
   }catch(e){toast('تعذر الحفظ: '+e.message)}
 }
-
-/* =========================================================
-   CODES
-   ========================================================= */
 async function gen(vid,n,video){
   const v=video||videos[vid];
   if(!v)throw new Error('الفيديو غير موجود لتوليد الأكواد');
@@ -1899,10 +1618,6 @@ async function copyFree(id){
     cp(a.join('\n'));
   }catch(e){toast('تعذر جلب الأكواد')}
 }
-
-/* =========================================================
-   PDF EXPORT
-   ========================================================= */
 function exportPDF(vid){
   const v=videos[vid];if(!v)return;
   const rows=[];
@@ -1917,10 +1632,6 @@ function exportPDF(vid){
   win.document.close();
   setTimeout(()=>{try{win.focus();win.print()}catch(e){}},600);
 }
-
-/* =========================================================
-   VIDEO ADMIN VIEW
-   ========================================================= */
 async function vVid(){
   const id=S.id,v=videos[id];if(!v)return vAdmin();
   const cs=[];
@@ -1944,44 +1655,35 @@ async function vVid(){
   <h2>سجل الطلاب</h2><div class="box tw"><table id="pdf-src"><thead><tr><th>الطالب</th><th>الهاتف</th><th>الكود المستخدم</th><th>أول فتح</th><th>آخر نشاط</th><th>المشاهدة</th><th>الحالة</th></tr></thead><tbody>${lg.map(l=>`<tr><td>${esc(l.name)}</td><td>${esc(l.email)}</td><td>${esc(l.code||'-')}</td><td>${fd(l.openedAt)}</td><td>${fd(l.lastAt)}</td><td>${Math.round((l.seconds||0)/60)} د</td><td>${st(l)}</td></tr>`).join('')||'<tr><td colspan="7" class="mut">لم يفتحه أحد بعد.</td></tr>'}</tbody></table></div>
   <h2>الأكواد</h2><div class="box tw"><table><thead><tr><th>الكود</th><th>الحالة</th><th>استخدمه</th><th>الوقت</th><th></th></tr></thead><tbody>${cs.map(x=>`<tr><td><span class="code">${esc(x.c)}</span></td><td>${x.used?'<span class="b r">مستخدم</span>':'<span class="b g">متاح</span>'}</td><td>${esc(x.usedByName||'-')}</td><td>${fd(x.usedAt)}</td><td>${x.used?'':`<button class="s" style="padding:5px 12px" onclick="cp('${esc(x.c)}')">نسخ</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
-
-/* =========================================================
-   UNIVERSAL PLAYER INIT
-   ========================================================= */
 function initPlayer(){
   destroyPlayer();
-  const pending = window.__pendingEmbed || null;
+  const pending=window.__pendingEmbed||null;
   if(!pending) return;
-
-  if(pending.type === 'v'){
+  if(pending.type==='v'){
     initNativePlayer();
-  } else if(pending.type === 'yt'){
+  } else if(pending.type==='yt'){
     initYTPlayer(pending.id);
   } else {
     initIframeFallback(pending.duration);
   }
 }
-
 function initNativePlayer(){
   const video=document.querySelector('.pl video');
   if(!video)return;
   currentPlayerType='native';
-
   const playIcon=$('#playIcon');
   const seekFill=$('#seekFill');
-
   const updatePlayIcon=()=>{
     if(!playIcon)return;
     playIcon.innerHTML=video.paused
       ? '<path d="M8 5v14l11-7z"/>'
       : '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
   };
-
   video.addEventListener('play',updatePlayIcon);
   video.addEventListener('pause',updatePlayIcon);
   video.addEventListener('ended',updatePlayIcon);
-
   video.addEventListener('timeupdate',()=>{
+    if(isSeeking)return;
     const cur=$('#cTime'),dur=$('#dTime'),seek=$('#cSeek');
     if(cur)cur.textContent=fmtTime(video.currentTime);
     if(dur)dur.textContent=fmtTime(video.duration);
@@ -1991,15 +1693,12 @@ function initNativePlayer(){
       if(seekFill)seekFill.style.width=pct+'%';
     }
   });
-
   video.addEventListener('loadedmetadata',()=>{
     const dur=$('#dTime');
     if(dur)dur.textContent=fmtTime(video.duration);
   });
-
   updatePlayIcon();
 }
-
 function initYTPlayer(videoId){
   currentPlayerType='yt';
   onYTReady(()=>{
@@ -2013,22 +1712,19 @@ function initYTPlayer(videoId){
         }
       });
     }catch(err){
-      console.warn('YT init failed, using iframe fallback',err);
       initIframeFallback(0);
     }
   });
 }
-
 function attachYTControls(yt){
   currentYTPlayer=yt;
-  const playIcon=$('#playIcon');
   const seekFill=$('#seekFill');
   const cTime=$('#cTime');
   const dTime=$('#dTime');
   const seek=$('#cSeek');
-
   const updateUI=()=>{
     if(!currentYTPlayer||!currentYTPlayer.getCurrentTime) return;
+    if(isSeeking) return;
     try{
       const cur=currentYTPlayer.getCurrentTime()||0;
       const total=currentYTPlayer.getDuration()||0;
@@ -2041,17 +1737,15 @@ function attachYTControls(yt){
       }
     }catch(e){}
   };
-
   if(currentYTUiTimer){clearInterval(currentYTUiTimer)}
   currentYTUiTimer=setInterval(()=>{
     if(!currentYTPlayer||typeof currentYTPlayer.getPlayerState!=='function'){
       clearInterval(currentYTUiTimer);currentYTUiTimer=null;return;
     }
     const st=currentYTPlayer.getPlayerState();
-    if(st===1) updateUI();
+    if(st===1||st===2||st===0) updateUI();
   },250);
 }
-
 function updateYTPlayIcon(state){
   const icon=$('#playIcon');
   if(!icon) return;
@@ -2061,19 +1755,17 @@ function updateYTPlayIcon(state){
     icon.innerHTML='<path d="M8 5v14l11-7z"/>';
   }
 }
-
 function initIframeFallback(durationMinutes){
   currentPlayerType='iframe';
   iframePlaying=false;
   iframeTime=0;
   iframeDuration=(durationMinutes||0)*60;
-
   const dTime=$('#dTime');
   if(dTime&&iframeDuration>0) dTime.textContent=fmtTime(iframeDuration);
-
   if(iframeTimer)clearInterval(iframeTimer);
   iframeTimer=setInterval(()=>{
     if(document.hidden)return;
+    if(isSeeking)return;
     if(iframePlaying&&iframeDuration>0){
       iframeTime=Math.min(iframeDuration,iframeTime+1);
       const cTime=$('#cTime');
@@ -2088,16 +1780,11 @@ function initIframeFallback(durationMinutes){
     }
   },1000);
 }
-
 function fmtTime(value){
   if(!Number.isFinite(value)||value<0)return '0:00';
   const n=Math.floor(value);
   return Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
 }
-
-/* =========================================================
-   UNIVERSAL PLAYER CONTROLS
-   ========================================================= */
 function togglePlay(){
   if(currentPlayerType==='native'){
     const v=document.querySelector('.pl video');
@@ -2122,34 +1809,67 @@ function togglePlay(){
         ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'
         : '<path d="M8 5v14l11-7z"/>';
     }
-    if(iframePlaying){
-      toast('الفيديو الخارجي — اضغط تشغيل داخل المشغل إن لم يبدأ تلقائياً');
-    }
     return;
   }
 }
-
+function onSeekStart(){
+  isSeeking=true;
+  if(currentPlayerType==='native'){
+    const v=document.querySelector('.pl video');
+    seekResumeState=v?{wasPlaying:!v.paused,time:v.currentTime}:null;
+  } else if(currentPlayerType==='yt'&&currentYTPlayer&&currentYTPlayer.getPlayerState){
+    try{
+      const st=currentYTPlayer.getPlayerState();
+      seekResumeState={wasPlaying:st===1};
+    }catch(e){seekResumeState={wasPlaying:false}}
+  } else {
+    seekResumeState={wasPlaying:iframePlaying};
+  }
+}
 function onSeek(value){
   const pct=Number(value)||0;
+  const seekFill=$('#seekFill');
+  if(seekFill)seekFill.style.width=pct+'%';
   if(currentPlayerType==='native'){
     const v=document.querySelector('.pl video');
     if(v&&Number.isFinite(v.duration)&&v.duration>0){
-      v.currentTime=pct/100*v.duration;
+      const newTime=pct/100*v.duration;
+      v.currentTime=newTime;
+      const cTime=$('#cTime');
+      if(cTime)cTime.textContent=fmtTime(newTime);
     }
   } else if(currentPlayerType==='yt'&&currentYTPlayer&&currentYTPlayer.getDuration){
     try{
       const total=currentYTPlayer.getDuration();
-      if(total>0) currentYTPlayer.seekTo(pct/100*total,true);
+      if(total>0){
+        const newTime=pct/100*total;
+        currentYTPlayer.seekTo(newTime,true);
+        const cTime=$('#cTime');
+        if(cTime)cTime.textContent=fmtTime(newTime);
+      }
     }catch(e){}
   } else if(currentPlayerType==='iframe'&&iframeDuration>0){
     iframeTime=pct/100*iframeDuration;
     const cTime=$('#cTime');
     if(cTime)cTime.textContent=fmtTime(iframeTime);
-    const seekFill=$('#seekFill');
-    if(seekFill)seekFill.style.width=pct+'%';
   }
 }
-
+function onSeekEnd(value){
+  onSeek(value);
+  const wasPlaying=seekResumeState?.wasPlaying;
+  isSeeking=false;
+  if(currentPlayerType==='native'){
+    const v=document.querySelector('.pl video');
+    if(v&&wasPlaying){v.play().catch(()=>{})}
+  } else if(currentPlayerType==='yt'&&currentYTPlayer&&currentYTPlayer.playVideo){
+    if(wasPlaying){
+      try{currentYTPlayer.playVideo()}catch(e){}
+    }
+  } else if(currentPlayerType==='iframe'){
+    iframePlaying=!!wasPlaying;
+  }
+  seekResumeState=null;
+}
 function seekRel(seconds){
   const delta=Number(seconds)||0;
   if(currentPlayerType==='native'){
@@ -2174,7 +1894,6 @@ function seekRel(seconds){
     if(seek)seek.value=String(pct);
   }
 }
-
 function setRate(value){
   const rate=Number(value);
   if(!Number.isFinite(rate)||rate<=0)return;
@@ -2185,7 +1904,6 @@ function setRate(value){
     try{currentYTPlayer.setPlaybackRate(rate)}catch(e){}
   }
 }
-
 function toggleFullscreen(){
   const el=document.querySelector('.pl');
   if(!el)return;
@@ -2197,21 +1915,16 @@ function toggleFullscreen(){
     toast('ملء الشاشة غير مدعوم في هذا المتصفح');
   }
 }
-
-/* =========================================================
-   EXPOSE HANDLERS
-   ========================================================= */
 Object.assign(window,{
   go,out,inst,redeem,addT,delT,setB,addV,moreCodes,delV,cp,copyFree,toggleVid,exportPDF,
-  toggleTheme,unban,keepBan,saveEditT,saveEditV,togglePlay,onSeek,seekRel,setRate,toggleFullscreen,
+  toggleTheme,unban,keepBan,saveEditT,saveEditV,togglePlay,onSeek,onSeekStart,onSeekEnd,seekRel,setRate,toggleFullscreen,
   addLib,delLib,saveEditLib,openNoti,closeNoti,syncGradeOptions,syncEditGradeOptions,openLibraryItem,
   sendAdminNotification,clearAllNotifications,registerPhone,loginPhone,switchPhoneMode,
   updateProfilePhoto,toggleSupervisor,delUser,confirmCrop,cancelCrop,addNews,delNews,
   filterStudents,delNoti,clearAllMyNotis,enableNotifications,changePassword,
   setStatsFilter
 });
-
 render();
 </script>
 </body>
-</html>
+   </html>

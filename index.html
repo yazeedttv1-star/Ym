@@ -137,16 +137,25 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   border:0;display:block;background:#000;pointer-events:none;object-fit:contain}
 .pl.is-embed iframe{pointer-events:auto}
 
+/* حل جذري لإخفاء عناصر يوتيوب على الهواتف */
 .pl.is-yt iframe {
-  width: 125% !important;
-  height: 125% !important;
-  top: -12.5% !important;
-  left: -12.5% !important;
+  width: 140% !important;
+  height: 140% !important;
+  top: -20% !important;
+  left: -20% !important;
   right: auto !important;
   bottom: auto !important;
   max-width: none !important;
   max-height: none !important;
   pointer-events: none !important;
+}
+.pl.is-yt::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 15%;
+  background: #000; z-index: 10; pointer-events: none;
+}
+.pl.is-yt::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 18%;
+  background: #000; z-index: 10; pointer-events: none;
 }
 
 .pl .video-blocker{position:absolute;top:0;right:0;bottom:0;left:0;z-index:15;background:transparent;
@@ -203,14 +212,15 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   aspect-ratio:auto;border-radius:0;box-shadow:none}
 .player-wrap:fullscreen .custom-player-ctrl,.player-wrap:-webkit-full-screen .custom-player-ctrl{border-radius:0;margin-top:0}
 
-@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+/* ملء الشاشة الجذري للهواتف في الوضع الأفقي */
+@media (orientation: landscape) and (pointer: coarse) {
   body.is-watching .bottombar { display: none !important; }
-  body.is-watching { padding-bottom: 0 !important; }
+  body.is-watching main { padding: 0 !important; }
   body.is-watching .player-wrap {
     position: fixed !important;
     top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
     width: 100vw !important; height: 100vh !important;
-    z-index: 9999 !important;
+    z-index: 99999 !important;
     margin: 0 !important; padding: 0 !important;
     background: #000 !important;
     display: flex !important; flex-direction: column !important;
@@ -219,6 +229,12 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
     flex: 1 !important; min-height: 0 !important; height: auto !important; width: 100% !important;
     padding-bottom: 0 !important; aspect-ratio: auto !important; border-radius: 0 !important; box-shadow: none !important;
     margin: 0 !important;
+  }
+  body.is-watching .pl.is-yt iframe {
+    width: 140% !important;
+    height: 140% !important;
+    top: -20% !important;
+    left: -20% !important;
   }
   body.is-watching .custom-player-ctrl {
     width: 100% !important; border-radius: 0 !important; margin-top: 0 !important;

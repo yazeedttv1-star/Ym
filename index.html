@@ -159,7 +159,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .mut{color:var(--mu);text-align:center;padding:40px 20px}
 
 /* =========================================================
-   9) PLAYER — FULL DISPLAY + FULLSCREEN
+   9) PLAYER — YOUTUBE CLEAN MODE (فيديو فقط)
    ========================================================= */
 .player-wrap{width:100%;margin-bottom:16px}
 
@@ -187,12 +187,49 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   background:#000;
   object-fit:contain;
 }
-/* لا نقصّ يوتيوب — يظهر كاملاً */
-.pl.crop-yt iframe{height:100%!important;top:0!important}
-.pl.crop-yt .yt-bottom-mask,
-.pl.crop-yt .yt-top-mask{display:none!important}
 
-/* عند ملء الشاشة: الفيديو يملأ الشاشة كاملة */
+/* ---- YouTube: تكبير الـ iframe + تغطية الأطراف ---- */
+.pl.crop-yt iframe{
+  height:130%!important;
+  top:-15%!important;
+  width:130%!important;
+  left:-15%!important;
+  pointer-events:none!important;
+}
+
+/* طبقة تغطية علوية (تخفي اسم القناة والشعار) */
+.pl.crop-yt .yt-top-mask{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:70px;
+  background:linear-gradient(180deg,#000 0%,#000 60%,transparent 100%);
+  z-index:11;
+  pointer-events:none;
+  display:block!important;
+}
+
+/* طبقة تغطية سفلية (تخفي زر المشاركة وأزرار يوتيوب) */
+.pl.crop-yt .yt-bottom-mask{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:90px;
+  background:linear-gradient(0deg,#000 0%,#000 60%,transparent 100%);
+  z-index:11;
+  pointer-events:none;
+  display:block!important;
+}
+
+/* حاجز يمنع النقر على يوتيوب (كل التفاعل عبر أزرارنا) */
+.pl.crop-yt .yt-shield{
+  position:absolute;
+  inset:0;
+  z-index:12;
+  background:transparent;
+  display:block!important;
+  cursor:pointer;
+}
+
+/* عند ملء الشاشة */
 .pl:fullscreen,
 .pl:-webkit-full-screen{
   max-height:100vh!important;
@@ -214,12 +251,19 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   height:100%!important;
   object-fit:contain;
 }
+.pl:fullscreen.crop-yt iframe,
+.pl:-webkit-full-screen.crop-yt iframe{
+  width:120%!important;
+  height:120%!important;
+  margin:-10%!important;
+}
 
 .yt-bottom-mask{position:absolute;bottom:0;left:0;right:0;height:50px;z-index:11;
   background:#000;pointer-events:none}
 .yt-top-mask{position:absolute;top:0;left:0;right:0;height:50px;z-index:11;
   background:#000;pointer-events:none}
 .yt-shield{position:absolute;inset:0;z-index:10;background:transparent;cursor:pointer}
+
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
@@ -227,7 +271,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 @keyframes mv{0%{top:20%;left:4%}25%{top:70%;left:55%}50%{top:35%;left:70%}75%{top:80%;left:8%}100%{top:20%;left:60%}}
 
 /* =========================================================
-   10) PLAYER CONTROLS — with skip buttons inside progress row
+   10) PLAYER CONTROLS
    ========================================================= */
 .custom-player-ctrl{
   background:linear-gradient(180deg,var(--surface) 0%,var(--surface2) 100%);
@@ -453,8 +497,8 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   h2{font-size:18px}
   .top-bar{padding:16px}
   .top-bar .welcome h1{font-size:18px}
-  .yt-bottom-mask{height:55px}
-  .yt-top-mask{height:55px}
+  .pl.crop-yt .yt-top-mask{height:55px}
+  .pl.crop-yt .yt-bottom-mask{height:70px}
 }
 @media(max-width:520px){
   .pl{max-height:60vh}
@@ -480,7 +524,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   .custom-player-ctrl input[type=range]::-webkit-slider-thumb{
     width:22px;height:22px;
   }
-  /* iOS يدعم -webkit-full-screen وليس :fullscreen */
   .pl:-webkit-full-screen iframe,
   .pl:-webkit-full-screen video{
     width:100vw!important;height:100vh!important;object-fit:contain;
@@ -500,7 +543,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 <div id="app"></div>
 <div id="t" role="status" aria-live="polite"></div>
 
-<!-- Notifications modal -->
 <div class="modal" id="notiModal" onclick="if(event.target===this)closeNoti()">
   <div class="modal-content" style="max-width:460px">
     <div class="modal-header">
@@ -516,7 +558,6 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   </div>
 </div>
 
-<!-- Crop modal -->
 <div class="modal" id="cropModal">
   <div class="modal-content" style="max-width:500px">
     <div class="modal-header"><h3>قص الصورة</h3></div>
@@ -729,7 +770,7 @@ if(messaging){
 }
 
 /* =========================================================
-   VIDEO EMBED PARSER
+   VIDEO EMBED PARSER — CLEAN YOUTUBE (فيديو فقط)
    ========================================================= */
 function embed(u){
   u=String(u||'').trim();let m;
@@ -737,7 +778,7 @@ function embed(u){
     return{
       t:'yt',
       id:m[1],
-      s:`https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&controls=0&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&origin=${encodeURIComponent(location.origin)}`
+      s:`https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1&playsinline=1&enablejsapi=1&controls=0&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&autohide=1&cc_load_policy=0&color=white&origin=${encodeURIComponent(location.origin)}`
     };
   if(m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*?id=)([\w-]+)/))
     return{t:'drive',s:`https://drive.google.com/file/d/${m[1]}/preview`,id:m[1]};
@@ -1411,7 +1452,7 @@ async function doRedeem(vid){
 }
 
 /* =========================================================
-   WATCH — controls for ALL types + skip buttons
+   WATCH — YouTube CLEAN (فيديو فقط)
    ========================================================= */
 async function vWatch(){
   const v=videos[S.id];if(!v)return vHome();
@@ -1461,7 +1502,7 @@ async function vWatch(){
 
   let playerHTML='';
   if(e.t==='v')playerHTML=`<video id="vplayer" src="${esc(e.s)}" playsinline webkit-playsinline preload="metadata" controlsList="nodownload"></video>`;
-  else if(isYT)playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  else if(isYT)playerHTML=`<iframe id="vplayer" src="${esc(e.s)}&t=0" allow="autoplay;encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   else if(e.t==='drive')playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   else playerHTML=`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay;encrypted-media;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"></iframe>`;
 
@@ -1510,7 +1551,7 @@ async function vWatch(){
   <div class="player-wrap">
     <div class="pl ${isYT?'crop-yt':''}" id="plbox">
       ${playerHTML}
-      ${isYT?'<div class="yt-bottom-mask"></div><div class="yt-top-mask"></div>':''}
+      ${isYT?'<div class="yt-top-mask"></div><div class="yt-bottom-mask"></div><div class="yt-shield"></div>':''}
       ${wm}
     </div>
     ${controlsHTML}
@@ -2017,7 +2058,6 @@ function initNativePlayer(){
   if(!video)return;
   currentPlayerType='native';
 
-  // iOS: خصائص إلزامية للتشغيل المضمّن
   video.setAttribute('playsinline','');
   video.setAttribute('webkit-playsinline','');
   video.setAttribute('x5-playsinline','');
@@ -2247,7 +2287,6 @@ function toggleFullscreen(){
   const video=document.querySelector('.pl video');
   const iframe=document.querySelector('.pl iframe');
 
-  // iPhone: Fullscreen API لا يدعم <div>، نستخدم الفيديو المباشر
   if(video && video.webkitEnterFullscreen && !document.fullscreenEnabled){
     try{ video.webkitEnterFullscreen(); return; }catch(e){}
   }
@@ -2266,7 +2305,6 @@ function toggleFullscreen(){
     }
   }
 
-  // يوتيوب: اضغط زر يوتيوب المدمج
   if(iframe){
     toast('اضغط زر ملء الشاشة داخل مشغل يوتيوب');
     return;
@@ -2291,4 +2329,4 @@ Object.assign(window,{
 render();
 </script>
 </body>
-  </html>
+</html>

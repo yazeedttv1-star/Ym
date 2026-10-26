@@ -136,11 +136,19 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .pl iframe,.pl video{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;
   border:0;display:block;background:#000;pointer-events:none;object-fit:contain}
 .pl.is-embed iframe{pointer-events:auto}
-.pl .yt-mask-top{position:absolute;top:0;left:0;right:0;height:14%;background:#000;
-  z-index:12;pointer-events:none;display:none}
-.pl .yt-bottom-cover{position:absolute;bottom:0;left:0;right:0;height:16%;background:#000;
-  z-index:11;pointer-events:none;display:none}
-.pl.is-yt .yt-mask-top,.pl.is-yt .yt-bottom-cover{display:block}
+
+.pl.is-yt iframe {
+  width: 125% !important;
+  height: 125% !important;
+  top: -12.5% !important;
+  left: -12.5% !important;
+  right: auto !important;
+  bottom: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  pointer-events: none !important;
+}
+
 .pl .video-blocker{position:absolute;top:0;right:0;bottom:0;left:0;z-index:15;background:transparent;
   cursor:pointer;display:block}
 .pl .end-cover{position:absolute;top:0;right:0;bottom:0;left:0;z-index:17;background:#000;
@@ -196,16 +204,26 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .player-wrap:fullscreen .custom-player-ctrl,.player-wrap:-webkit-full-screen .custom-player-ctrl{border-radius:0;margin-top:0}
 
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
-  .player-wrap{position:fixed;top:0;right:0;bottom:0;left:0;z-index:250;margin:0;padding:0;background:#000;
-    display:flex;flex-direction:column;justify-content:center}
-  .pl{flex:1;min-height:0;height:auto;padding-bottom:0;aspect-ratio:auto;border-radius:0;box-shadow:none}
-  .custom-player-ctrl{border-radius:0;margin-top:0}
-}
-@media (max-width:600px){
-  .custom-player-ctrl{padding:8px 8px}
-  .custom-player-ctrl .slider-wrap{margin:0 6px;order:0}
-  .custom-player-ctrl .time{font-size:11px;min-width:30px}
-  .custom-player-ctrl .icon-btn{min-width:32px;min-height:32px;margin:0}
+  body.is-watching .bottombar { display: none !important; }
+  body.is-watching { padding-bottom: 0 !important; }
+  body.is-watching .player-wrap {
+    position: fixed !important;
+    top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
+    width: 100vw !important; height: 100vh !important;
+    z-index: 9999 !important;
+    margin: 0 !important; padding: 0 !important;
+    background: #000 !important;
+    display: flex !important; flex-direction: column !important;
+  }
+  body.is-watching .pl {
+    flex: 1 !important; min-height: 0 !important; height: auto !important; width: 100% !important;
+    padding-bottom: 0 !important; aspect-ratio: auto !important; border-radius: 0 !important; box-shadow: none !important;
+    margin: 0 !important;
+  }
+  body.is-watching .custom-player-ctrl {
+    width: 100% !important; border-radius: 0 !important; margin-top: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
 }
 
 .bottombar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--surface);
@@ -845,6 +863,11 @@ function isPlayingForTracking(){
 const go=(v,id,tab,filter)=>{
   stopHB();destroyPlayer();
   S={v,id,tab:tab!==undefined?tab:S.tab,filter:filter!==undefined?filter:S.filter};
+  if(v==='watch'){
+    document.body.classList.add('is-watching');
+  }else{
+    document.body.classList.remove('is-watching');
+  }
   window.scrollTo({top:0,behavior:'auto'});
   render();
 };
@@ -875,6 +898,7 @@ onAuthStateChanged(auth,async u=>{
     teachers={};videos={};library={};news={};badge='';mineVideos={};
     notifications={};ownNotifications={};broadcastNotifications={};adminNotifications={};
     IS_SUPERVISOR=false;A=false;S={v:'home'};
+    document.body.classList.remove('is-watching');
     render();hideOverlay();return;
   }
   try{
@@ -1471,7 +1495,6 @@ async function vWatch(){
   <div class="player-wrap" id="playerWrap">
     <div class="pl ${isYT?'is-yt':''} ${e.t==='drive'||e.t==='f'?'is-embed':''}" id="plbox">
       ${playerHTML}
-      ${isYT?'<div class="yt-mask-top"></div><div class="yt-bottom-cover"></div>':''}
       ${hasCtrl?'<div class="video-blocker" onclick="togglePlay()"></div>':''}
       ${hasCtrl?`<div class="big-play-overlay" id="bigPlayOverlay">
         <button class="big-play-btn" onclick="togglePlay()" aria-label="تشغيل">

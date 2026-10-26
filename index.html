@@ -137,40 +137,32 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   border:0;display:block;background:#000;pointer-events:none;object-fit:contain}
 .pl.is-embed iframe{pointer-events:auto}
 
-/* حل جذري لإخفاء عناصر يوتيوب على الهواتف */
+/* حل جذري: تغطية العناصر بشفافية سوداء بدل التكبير والتقصيص */
 .pl.is-yt iframe {
-  width: 140% !important;
-  height: 140% !important;
-  top: -20% !important;
-  left: -20% !important;
-  right: auto !important;
-  bottom: auto !important;
-  max-width: none !important;
-  max-height: none !important;
   pointer-events: none !important;
 }
-.pl.is-yt::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 15%;
-  background: #000; z-index: 10; pointer-events: none;
+.pl.is-yt .yt-top-mask {
+  position: absolute; top: 0; left: 0; right: 0; height: 15%;
+  background: #000; z-index: 20; pointer-events: none; display: block;
 }
-.pl.is-yt::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 18%;
-  background: #000; z-index: 10; pointer-events: none;
+.pl.is-yt .yt-bottom-mask {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 18%;
+  background: #000; z-index: 20; pointer-events: none; display: block;
 }
 
 .pl .video-blocker{position:absolute;top:0;right:0;bottom:0;left:0;z-index:15;background:transparent;
   cursor:pointer;display:block}
-.pl .end-cover{position:absolute;top:0;right:0;bottom:0;left:0;z-index:17;background:#000;
+.pl .end-cover{position:absolute;top:0;right:0;bottom:0;left:0;z-index:30;background:#000;
   display:none;align-items:center;justify-content:center}
 .pl .end-cover button{background:var(--ac);color:#fff;padding:12px 22px;font-size:15px}
-.pl .big-play-overlay{position:absolute;top:0;right:0;bottom:0;left:0;z-index:16;display:none;
+.pl .big-play-overlay{position:absolute;top:0;right:0;bottom:0;left:0;z-index:25;display:none;
   align-items:center;justify-content:center;background:transparent;pointer-events:none;transition:opacity .2s}
 .pl .big-play-btn{width:80px;height:80px;border-radius:50%;background:rgba(15,15,15,.7);border:2px solid #fff;
   display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;
   transition:transform .2s;padding:0}
 .pl .big-play-btn:hover{transform:scale(1.1);background:rgba(15,15,15,.9)}
 .pl .big-play-btn svg{width:40px;height:40px;fill:#fff;margin-left:4px}
-.wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
+.wm{position:absolute;pointer-events:none;z-index:22;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff;white-space:nowrap}
 .wm img{width:22px;height:22px;border-radius:50%;object-fit:contain}
@@ -212,7 +204,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   aspect-ratio:auto;border-radius:0;box-shadow:none}
 .player-wrap:fullscreen .custom-player-ctrl,.player-wrap:-webkit-full-screen .custom-player-ctrl{border-radius:0;margin-top:0}
 
-/* ملء الشاشة الجذري للهواتف في الوضع الأفقي */
+/* شاشة كاملة في وضع التدوير (Landscape) */
 @media (orientation: landscape) and (pointer: coarse) {
   body.is-watching .bottombar { display: none !important; }
   body.is-watching main { padding: 0 !important; }
@@ -229,12 +221,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
     flex: 1 !important; min-height: 0 !important; height: auto !important; width: 100% !important;
     padding-bottom: 0 !important; aspect-ratio: auto !important; border-radius: 0 !important; box-shadow: none !important;
     margin: 0 !important;
-  }
-  body.is-watching .pl.is-yt iframe {
-    width: 140% !important;
-    height: 140% !important;
-    top: -20% !important;
-    left: -20% !important;
   }
   body.is-watching .custom-player-ctrl {
     width: 100% !important; border-radius: 0 !important; margin-top: 0 !important;
@@ -1511,6 +1497,7 @@ async function vWatch(){
   <div class="player-wrap" id="playerWrap">
     <div class="pl ${isYT?'is-yt':''} ${e.t==='drive'||e.t==='f'?'is-embed':''}" id="plbox">
       ${playerHTML}
+      ${isYT?'<div class="yt-top-mask"></div><div class="yt-bottom-mask"></div>':''}
       ${hasCtrl?'<div class="video-blocker" onclick="togglePlay()"></div>':''}
       ${hasCtrl?`<div class="big-play-overlay" id="bigPlayOverlay">
         <button class="big-play-btn" onclick="togglePlay()" aria-label="تشغيل">

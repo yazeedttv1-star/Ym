@@ -127,7 +127,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   color:var(--ac2);font-weight:700}
 .mut{color:var(--mu);text-align:center;padding:40px 20px}
 
-/* ===== مشغل الفيديو ===== */
 .player-wrap{width:100%;margin-bottom:16px;background:transparent}
 .pl{position:relative;background:#000;border-radius:var(--r);overflow:hidden;width:100%;
   height:0;padding-bottom:56.25%;margin:0 auto;box-shadow:var(--shadow-lg)}
@@ -137,9 +136,9 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .pl iframe,.pl video{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;
   border:0;display:block;background:#000;pointer-events:none;object-fit:contain}
 .pl.is-embed iframe{pointer-events:auto}
-.pl .yt-mask-top{position:absolute;top:0;left:0;right:0;height:11%;background:#000;
+.pl .yt-mask-top{position:absolute;top:0;left:0;right:0;height:14%;background:#000;
   z-index:12;pointer-events:none;display:none}
-.pl .yt-bottom-cover{position:absolute;bottom:0;left:0;right:0;height:13%;background:#000;
+.pl .yt-bottom-cover{position:absolute;bottom:0;left:0;right:0;height:16%;background:#000;
   z-index:11;pointer-events:none;display:none}
 .pl.is-yt .yt-mask-top,.pl.is-yt .yt-bottom-cover{display:block}
 .pl .video-blocker{position:absolute;top:0;right:0;bottom:0;left:0;z-index:15;background:transparent;
@@ -188,7 +187,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   background:#ff0000;border:0;cursor:pointer}
 .custom-player-ctrl .slider-wrap input[type=range]::-ms-track{background:transparent;border-color:transparent;color:transparent}
 
-/* ملء الشاشة: الحاوية كاملة (الفيديو + التحكم) */
 .player-wrap:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center;
   width:100%;height:100%;margin:0;padding:0}
 .player-wrap:-webkit-full-screen{background:#000;display:flex;flex-direction:column;justify-content:center;
@@ -197,7 +195,6 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   aspect-ratio:auto;border-radius:0;box-shadow:none}
 .player-wrap:fullscreen .custom-player-ctrl,.player-wrap:-webkit-full-screen .custom-player-ctrl{border-radius:0;margin-top:0}
 
-/* الهاتف في الوضع الأفقي: الفيديو يملأ الشاشة */
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
   .player-wrap{position:fixed;top:0;right:0;bottom:0;left:0;z-index:250;margin:0;padding:0;background:#000;
     display:flex;flex-direction:column;justify-content:center}
@@ -376,8 +373,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {getMessaging,getToken,onMessage} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
-window.addEventListener('unhandledrejection',e=>{console.error('خطأ غير معالج:',e.reason);});
-window.addEventListener('error',e=>{console.error('خطأ:',e.error||e.message)});
+window.addEventListener('unhandledrejection',e=>{});
+window.addEventListener('error',e=>{});
 
 const GRADES_PREP=['الصف الأول الإعدادي','الصف الثاني الإعدادي','الصف الثالث الإعدادي'];
 const GRADES_SEC=['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي'];
@@ -405,7 +402,6 @@ let messaging=null;
 try{messaging=getMessaging(app)}catch(e){}
 setPersistence(auth,browserLocalPersistence).catch(()=>{});
 
-/* ===== أدوات مساعدة ===== */
 const R=p=>ref(db,p);
 const G=async p=>{try{return (await get(R(p))).val()}catch(e){return null}};
 const $=s=>document.querySelector(s);
@@ -430,9 +426,8 @@ let teachers={},videos={},library={},news={},notifications={},ownNotifications={
 let mineVideos={};
 let badge='',myPhoto='',myPhone='',hb=null,ip=null,cropper=null,cropResolve=null;
 let unsubs=[],showingBan=false,renderSeq=0,loadedTeachers=false,studentStatsFilter='all';
-let pendingEmbed=null;
+let pendingEmbed=null,pendingEmbedSnapshot=null;
 
-/* ===== تسجيل الجهاز ===== */
 const DEVICE_KEY='sigma-device-id';
 function getDeviceId(){
   let id=store.get(DEVICE_KEY);
@@ -462,7 +457,6 @@ function toast(m){
   clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-/* ===== قص الصورة ===== */
 function img(f,s){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -504,7 +498,6 @@ function confirmCrop(){
 }
 function cancelCrop(){if(cropResolve)cropResolve(null)}
 
-/* ===== الإشعارات ===== */
 async function enableNotifications(silent){
   if(!messaging||!hasNotifApi()){if(!silent)toast('الإشعارات غير مدعومة في هذا المتصفح');return}
   try{
@@ -526,7 +519,6 @@ if(messaging){
   }catch(e){}
 }
 
-/* ===== استخراج روابط الفيديو ===== */
 function ytId(u){
   try{
     const url=new URL(u);
@@ -557,7 +549,6 @@ function embed(u,full){
   return{t:'f',s:u};
 }
 
-/* ===== جهاز واحد للطالب ===== */
 async function enforceSingleDevice(){
   if(A||IS_SUPERVISOR)return true;
   try{
@@ -587,9 +578,6 @@ function renderBanned(ban){
 function clearListeners(){unsubs.forEach(fn=>{try{if(typeof fn==='function')fn()}catch(e){}});unsubs=[]}
 function stopHB(){if(hb)clearInterval(hb);hb=null}
 
-/* =====================================================
-   مشغل الفيديو
-   ===================================================== */
 const P={type:null,el:null,yt:null,ytTimer:null,seeking:false,token:0};
 const ICON=(p)=>`<path d="${p}"/>`;
 
@@ -696,7 +684,6 @@ function initPlayer(){
   else P.type='embed';
   bindSeek();
 }
-let pendingEmbedSnapshot=null;
 
 function initNative(token){
   const v=document.getElementById('vplayer');
@@ -809,7 +796,6 @@ function replayYT(){
   showEndCover(false);
 }
 
-/* ملء الشاشة: الحاوية كاملة (الفيديو + شريط التحكم) */
 function isFS(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
 function lockLandscape(){
   try{const o=screen.orientation;if(o&&o.lock)o.lock('landscape').catch(()=>{})}catch(e){}
@@ -856,7 +842,6 @@ function isPlayingForTracking(){
   return false;
 }
 
-/* ===== عام ===== */
 const go=(v,id,tab,filter)=>{
   stopHB();destroyPlayer();
   S={v,id,tab:tab!==undefined?tab:S.tab,filter:filter!==undefined?filter:S.filter};
@@ -1003,7 +988,6 @@ async function clearAllMyNotis(){
   }catch(e){toast('تعذر المسح')}
 }
 
-/* ===== المصادقة ===== */
 function vAuth(){
   return `<div class="auth-container">
     <h1>Σ سيجما</h1>
@@ -1106,7 +1090,6 @@ async function doLogin(){
   }
 }
 
-/* ===== العرض ===== */
 function render(){
   const a=$('#app');if(!a)return;
   const seq=++renderSeq;
@@ -1190,7 +1173,6 @@ function toggleTheme(){
   renderTopbar();
 }
 
-/* ===== الإعدادات ===== */
 async function vSettings(){
   const photo=myPhoto||U.photoURL||avatarOf(U.displayName);
   const canNotify=!!messaging&&hasNotifApi()&&Notification.permission!=='granted';
@@ -1344,7 +1326,6 @@ async function doChangePassword(){
   $('#new-pass').value='';$('#confirm-pass').value='';
 }
 
-/* ===== الصفحة الرئيسية والمدرسين ===== */
 function vHome(){
   if(!loadedTeachers)return'<div class="mut">جارٍ التحميل…</div>';
   const t=Object.entries(teachers);
@@ -1377,7 +1358,6 @@ function vTeacher(){
   return html;
 }
 
-/* ===== الأكواد ===== */
 function vCode(){
   const v=videos[S.id];
   if(!v||v.disabled)return`<div class="mut">هذا الفيديو موقوف حالياً.</div>`;
@@ -1409,7 +1389,6 @@ async function doRedeem(vid){
   }catch(e){toast('حدث خطأ أثناء التحقق من الكود')}
 }
 
-/* ===== صفحة المشاهدة ===== */
 async function vWatch(){
   const v=videos[S.id];if(!v)return vHome();
   const isStaff=A||IS_SUPERVISOR;
@@ -1507,7 +1486,6 @@ async function vWatch(){
   <p style="color:var(--tx2);margin-top:14px;line-height:1.7">${esc(v.desc||'')}</p>`;
 }
 
-/* ===== المكتبة ===== */
 function openLibraryItem(url){
   try{
     const p=new URL(url,location.href);
@@ -1525,7 +1503,6 @@ function vLibrary(){
     </div>`).join('')}</div>`;
 }
 
-/* ===== الأخبار ===== */
 function vNews(){
   const list=Object.entries(news).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
   if(!list.length)return'<div class="mut">لا توجد أخبار منشورة حالياً.</div>';
@@ -1546,7 +1523,6 @@ function vNews(){
   }).join('');
 }
 
-/* ===== لوحة التحكم ===== */
 async function vAdmin(){
   if(!A&&!IS_SUPERVISOR)return'<div class="mut">غير مصرح.</div>';
   const tab=S.tab||'videos';
@@ -1856,7 +1832,6 @@ async function doSaveEditLib(id){
   }catch(e){toast('تعذر الحفظ: '+e.message)}
 }
 
-/* ===== الأكواد ===== */
 async function gen(vid,n,video){
   const v=video||videos[vid];
   if(!v)throw new Error('الفيديو غير موجود لتوليد الأكواد');
@@ -1954,7 +1929,6 @@ async function vVid(){
   <h2>الأكواد</h2><div class="box tw"><table><thead><tr><th>الكود</th><th>الحالة</th><th>استخدمه</th><th>الوقت</th><th></th></tr></thead><tbody>${cs.map(x=>`<tr><td><span class="code">${esc(x.c)}</span></td><td>${x.used?'<span class="b r">مستخدم</span>':'<span class="b g">متاح</span>'}</td><td>${esc(x.usedByName||'-')}</td><td>${fd(x.usedAt)}</td><td>${x.used?'':`<button class="s" style="padding:5px 12px" onclick="cp('${esc(x.c)}')">نسخ</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
-/* ===== الدوال المكشوفة للأزرار ===== */
 Object.assign(window,{
   go,out,inst,redeem,addT,delT,setB,addV,moreCodes,delV,cp,copyFree,toggleVid,exportPDF,
   toggleTheme,unban,keepBan,saveEditT,saveEditV,togglePlay,seekRel,toggleMute,toggleFullscreen,replayYT,

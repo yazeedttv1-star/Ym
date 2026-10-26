@@ -127,68 +127,62 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .pl{position:relative;background:#000;border-radius:var(--r);overflow:hidden;width:100%;
   aspect-ratio:16/9;max-height:80vh;margin:0 auto;box-shadow:var(--shadow-lg)}
 .pl iframe,.pl video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
-.pl .yt-mask-top,.pl .yt-mask-bottom{position:absolute;left:0;right:0;background:#000;z-index:12;pointer-events:none;display:none}
-.pl .yt-mask-top{top:0;height:14%}
-.pl .yt-mask-bottom{bottom:0;height:16%}
-.pl.is-yt .yt-mask-top,.pl.is-yt .yt-mask-bottom{display:block}
-.pl .blocker{position:absolute;inset:0;z-index:13;background:transparent;cursor:pointer;display:none}
-.pl.is-yt .blocker{display:block}
+.pl .yt-mask-top{position:absolute;top:0;left:0;right:0;height:12%;background:#000;z-index:12;pointer-events:none;display:none}
+.pl .yt-bottom-cover{position:absolute;bottom:0;left:0;right:0;height:26%;background:#000;z-index:11;display:none}
+.pl .yt-blocker{position:absolute;inset:0;z-index:13;background:transparent;cursor:pointer;display:none}
+.pl.is-yt .yt-mask-top,.pl.is-yt .yt-bottom-cover,.pl.is-yt .yt-blocker{display:block}
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
 .wm img{width:22px;height:22px;border-radius:50%;object-fit:contain}
 @keyframes mv{0%{top:20%;left:4%}25%{top:70%;left:55%}50%{top:35%;left:70%}75%{top:80%;left:8%}100%{top:20%;left:60%}}
 .custom-player-ctrl{
-  background:linear-gradient(180deg,var(--surface) 0%,var(--surface2) 100%);
-  border:1px solid var(--bd);padding:16px 18px;border-radius:var(--r-lg);
-  margin-top:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;
+  background:#0f0f0f;
+  border:1px solid #272727;
+  padding:12px 18px;
+  border-radius:12px;
+  margin-top:14px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
-.custom-player-ctrl .progress-row{display:flex;align-items:center;gap:14px}
+.custom-player-ctrl .progress-row{display:flex;align-items:center;gap:16px}
 .custom-player-ctrl .play-btn{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:50%;
-  width:56px;height:56px;font-size:22px;display:flex;align-items:center;justify-content:center;
+  background:transparent;color:#fff;border:0;border-radius:50%;
+  width:40px;height:40px;font-size:22px;display:flex;align-items:center;justify-content:center;
   cursor:pointer;transition:.2s;flex-shrink:0;padding:0;margin:0;
-  box-shadow:0 4px 14px rgba(37,99,235,.4);position:relative;
 }
-.custom-player-ctrl .play-btn:hover{transform:scale(1.08);box-shadow:0 6px 20px rgba(37,99,235,.55)}
-.custom-player-ctrl .play-btn:active{transform:scale(.96)}
+.custom-player-ctrl .play-btn:hover{transform:scale(1.1);background:rgba(255,255,255,0.1);box-shadow:none}
+.custom-player-ctrl .play-btn:active{transform:scale(.95)}
 .custom-player-ctrl .play-btn svg{width:24px;height:24px;fill:#fff;margin-right:2px}
-.custom-player-ctrl .progress-container{flex:1;display:flex;flex-direction:column;gap:6px}
-.custom-player-ctrl .slider-wrap{position:relative;width:100%;height:6px;background:var(--bd);
-  border-radius:99px;overflow:hidden}
+.custom-player-ctrl .tool-btn-icon{
+  background:transparent;color:#fff;border:0;border-radius:50%;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.2s;padding:0;margin:0;
+}
+.custom-player-ctrl .tool-btn-icon:hover{background:rgba(255,255,255,0.1);box-shadow:none;transform:scale(1.1)}
+.custom-player-ctrl .tool-btn-icon svg{width:22px;height:22px;fill:#fff}
+.custom-player-ctrl .progress-container{flex:1;display:flex;align-items:center;gap:12px}
+.custom-player-ctrl .time{font-family:Cairo,system-ui,sans-serif;font-size:13px;font-weight:600;color:#fff;direction:ltr;min-width:36px;text-align:center}
+.custom-player-ctrl .slider-wrap{position:relative;flex:1;height:4px;background:rgba(255,255,255,0.2);
+  border-radius:99px;}
 .custom-player-ctrl .slider-fill{position:absolute;top:0;right:0;height:100%;
-  background:linear-gradient(90deg,var(--ac2),var(--ac));border-radius:99px;
-  transition:width .1s linear;pointer-events:none}
+  background:#ff0000;border-radius:99px;
+  pointer-events:none}
 .custom-player-ctrl input[type=range]{
-  -webkit-appearance:none;appearance:none;width:100%;padding:0;margin:0;height:6px;
-  background:transparent;cursor:pointer;border:0;position:relative;z-index:2;
+  -webkit-appearance:none;appearance:none;width:100%;padding:0;margin:0;height:4px;
+  background:transparent;cursor:pointer;border:0;position:absolute;top:0;right:0;z-index:2;outline:none;
 }
 .custom-player-ctrl input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;
-  background:#fff;border:3px solid var(--ac);cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.15s;
+  -webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;
+  background:#ff0000;cursor:pointer;
+  transition:.15s;
 }
-.custom-player-ctrl input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.custom-player-ctrl input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
 .custom-player-ctrl input[type=range]::-moz-range-thumb{
-  width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--ac);cursor:pointer;
+  width:12px;height:12px;border-radius:50%;background:#ff0000;border:0;cursor:pointer;
 }
-.custom-player-ctrl .time-row{display:flex;justify-content:space-between;font-size:12px;
-  font-weight:700;color:var(--tx2)}
-.custom-player-ctrl .time{font-family:'Courier New',monospace;direction:ltr}
-.custom-player-ctrl .tools-row{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
-  border-top:1px solid var(--bd);padding-top:14px;
-}
-.custom-player-ctrl .tool-btn{
-  padding:8px 14px;font-size:13px;border-radius:10px;background:var(--surface);color:var(--tx);
-  border:1px solid var(--bd);display:inline-flex;align-items:center;gap:6px;font-weight:700;
-}
-.custom-player-ctrl .tool-btn:hover{background:var(--ac);color:#fff;border-color:var(--ac);transform:translateY(-1px)}
-.custom-player-ctrl .speed-box{display:inline-flex;align-items:center;gap:6px;
-  background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:4px 10px}
-.custom-player-ctrl .speed-box label{margin:0;font-size:12px;color:var(--tx2)}
-.custom-player-ctrl .speed-box select{width:auto;padding:4px 8px;margin:0;font-size:12px;
-  border-radius:6px;border:1px solid var(--bd);background:var(--surface2);color:var(--tx)}
 .bottombar{position:fixed;bottom:0;left:0;z-index:40;background:var(--surface);
   border:1px solid var(--bd);border-bottom:0;border-radius:22px 22px 0 0;
   display:flex;justify-content:space-around;gap:4px;
@@ -315,9 +309,14 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   .grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .card .card-img-wrap{height:130px}
   .card b{font-size:14px}
-  .custom-player-ctrl{padding:12px}
-  .custom-player-ctrl .play-btn{width:48px;height:48px}
-  .custom-player-ctrl .tool-btn{padding:6px 10px;font-size:12px}
+  .custom-player-ctrl{padding:10px 12px;gap:8px}
+  .custom-player-ctrl .play-btn{width:34px;height:34px}
+  .custom-player-ctrl .play-btn svg{width:20px;height:20px}
+  .custom-player-ctrl .tool-btn-icon{width:30px;height:30px}
+  .custom-player-ctrl .tool-btn-icon svg{width:18px;height:18px}
+  .custom-player-ctrl .progress-row{gap:10px}
+  .custom-player-ctrl .progress-container{gap:8px}
+  .custom-player-ctrl .time{font-size:11px;min-width:30px}
   .stats-table{font-size:11px}
   .stats-table th,.stats-table td{padding:8px 6px}
 }
@@ -1168,7 +1167,14 @@ async function vWatch(){
       <button id="playPauseBtn" class="play-btn" onclick="togglePlay()" aria-label="تشغيل/إيقاف">
         <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
+      <button class="tool-btn-icon" onclick="seekRel(-15)" title="رجوع 15 ثانية">
+        <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+      </button>
+      <button class="tool-btn-icon" onclick="seekRel(15)" title="تقديم 15 ثانية">
+        <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+      </button>
       <div class="progress-container">
+        <span class="time" id="cTime">0:00</span>
         <div class="slider-wrap">
           <div class="slider-fill" id="seekFill" style="width:0%"></div>
           <input type="range" id="cSeek" min="0" max="100" value="0" step="0.1"
@@ -1176,27 +1182,8 @@ async function vWatch(){
             onpointerdown="onSeekStart()" onpointerup="onSeekEnd(this.value)"
             aria-label="شريط التقدم">
         </div>
-        <div class="time-row">
-          <span class="time" id="cTime">0:00</span>
-          <span class="time" id="dTime">0:00</span>
-        </div>
+        <span class="time" id="dTime">0:00</span>
       </div>
-    </div>
-    <div class="tools-row">
-      <button class="tool-btn" onclick="seekRel(-5)">⏪ -5ث</button>
-      <button class="tool-btn" onclick="seekRel(5)">+5ث ⏩</button>
-      <div class="speed-box">
-        <label>السرعة</label>
-        <select id="speedSelector" onchange="setRate(this.value)" aria-label="سرعة التشغيل">
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1" selected>1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-        </select>
-      </div>
-      <button class="tool-btn" onclick="toggleFullscreen()">⛶ ملء الشاشة</button>
     </div>
   </div>`;
   setTimeout(()=>{
@@ -1209,7 +1196,7 @@ async function vWatch(){
   <div class="player-wrap">
     <div class="pl ${isYT?'is-yt':''}" id="plbox">
       ${playerHTML}
-      ${isYT?'<div class="yt-mask-top"></div><div class="yt-mask-bottom"></div><div class="blocker" onclick="togglePlay()"></div>':''}
+      ${isYT?'<div class="yt-mask-top"></div><div class="yt-bottom-cover"></div><div class="yt-blocker" onclick="togglePlay()"></div>':''}
       ${wm}
     </div>
     ${controlsHTML}
@@ -1927,4 +1914,4 @@ Object.assign(window,{
 render();
 </script>
 </body>
-   </html>
+  </html>

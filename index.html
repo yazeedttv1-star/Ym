@@ -134,21 +134,22 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 }
 .pl iframe,.pl video{
   position:absolute;inset:0;width:100%;height:100%;
-  border:0;display:block;background:#000;object-fit:contain;
+  border:0;display:block;background:#000;object-fit:cover;
 }
 .pl.crop-yt iframe{
-  height:135%!important;top:-17.5%!important;
-  width:135%!important;left:-17.5%!important;
+  height:100%!important;top:0!important;
+  width:100%!important;left:0!important;
   pointer-events:none!important;
+  object-fit:cover;
 }
 .pl.crop-yt .yt-top-mask{
-  position:absolute;top:0;left:0;right:0;height:80px;
-  background:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);
+  position:absolute;top:0;left:0;right:0;height:60px;
+  background:linear-gradient(180deg,#000 0%,#000 60%,transparent 100%);
   z-index:11;pointer-events:none;display:block!important;
 }
 .pl.crop-yt .yt-bottom-mask{
-  position:absolute;bottom:0;left:0;right:0;height:110px;
-  background:linear-gradient(0deg,#000 0%,#000 70%,transparent 100%);
+  position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(0deg,#000 0%,#000 60%,transparent 100%);
   z-index:11;pointer-events:none;display:block!important;
 }
 .pl.crop-yt .yt-shield{
@@ -167,10 +168,11 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 }
 .pl:fullscreen.crop-yt iframe,
 .pl:-webkit-full-screen.crop-yt iframe{
-  width:125%!important;height:125%!important;margin:-12.5%!important;
+  width:100%!important;height:100%!important;margin:0!important;
+  object-fit:contain;
 }
-.pl:fullscreen .yt-top-mask,.pl:-webkit-full-screen .yt-top-mask{height:100px}
-.pl:fullscreen .yt-bottom-mask,.pl:-webkit-full-screen .yt-bottom-mask{height:130px}
+.pl:fullscreen .yt-top-mask,.pl:-webkit-full-screen .yt-top-mask{height:90px}
+.pl:fullscreen .yt-bottom-mask,.pl:-webkit-full-screen .yt-bottom-mask{height:110px}
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
@@ -240,7 +242,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   border-radius:6px;border:1px solid var(--bd);background:var(--surface2);color:var(--tx)}
 
 .fs-ctrl{
-  position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.35);
+  position:fixed;inset:0;z-index:9998;background:transparent;
   display:none;align-items:center;justify-content:center;padding:20px;
   pointer-events:none;
 }
@@ -248,14 +250,16 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .fs-ctrl .fs-play{
   pointer-events:auto;
   background:rgba(37,99,235,.92);color:#fff;border:0;border-radius:50%;
-  width:90px;height:90px;display:flex;align-items:center;justify-content:center;
+  width:100px;height:100px;display:flex;align-items:center;justify-content:center;
   cursor:pointer;transition:.2s;
   box-shadow:0 8px 32px rgba(0,0,0,.5);
   -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  opacity:.85;
+  margin:auto;
 }
-.fs-ctrl .fs-play:hover{transform:scale(1.1);background:rgba(37,99,235,1)}
+.fs-ctrl .fs-play:hover{transform:scale(1.1);background:rgba(37,99,235,1);opacity:1}
 .fs-ctrl .fs-play:active{transform:scale(.95)}
-.fs-ctrl .fs-play svg{width:44px;height:44px;fill:#fff;margin-right:4px}
+.fs-ctrl .fs-play svg{width:50px;height:50px;fill:#fff;margin-right:4px}
 
 .bottombar{position:fixed;bottom:0;left:0;z-index:40;background:var(--surface);
   border:1px solid var(--bd);border-bottom:0;border-radius:22px 22px 0 0;
@@ -384,8 +388,8 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   h2{font-size:18px}
   .top-bar{padding:16px}
   .top-bar .welcome h1{font-size:18px}
-  .pl.crop-yt .yt-top-mask{height:65px}
-  .pl.crop-yt .yt-bottom-mask{height:85px}
+  .pl.crop-yt .yt-top-mask{height:50px}
+  .pl.crop-yt .yt-bottom-mask{height:65px}
 }
 @media(max-width:520px){
   .pl{max-height:60vh}
@@ -396,8 +400,8 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   .ctrl .play{width:48px;height:48px}
   .ctrl .skip{padding:6px 8px;font-size:11px;min-width:40px}
   .ctrl .tool{padding:6px 10px;font-size:12px}
-  .fs-ctrl .fs-play{width:80px;height:80px}
-  .fs-ctrl .fs-play svg{width:38px;height:38px}
+  .fs-ctrl .fs-play{width:85px;height:85px}
+  .fs-ctrl .fs-play svg{width:42px;height:42px}
   .stats-table{font-size:11px}
   .stats-table th,.stats-table td{padding:8px 6px}
 }
@@ -511,7 +515,7 @@ let unsubs=[],showingBan=false,renderSeq=0,loadedTeachers=false,studentStatsFilt
 let currentPlayerType=null,currentYTPlayer=null,currentYTUiTimer=null;
 let ytApiReady=false,ytApiLoading=false,ytApiQueue=[];
 let iframeTimer=null,iframeTime=0,iframeDuration=0,iframePlaying=false;
-let fsShowing=false,fsTouchTimer=null;
+let fsShowing=false;
 
 function loadYouTubeAPI(){
   if(window.YT&&window.YT.Player){ytApiReady=true;flushYTQueue();return;}
@@ -1739,7 +1743,6 @@ function hideFsCtrl(){
   const el=$('#fsCtrl');
   if(el){el.classList.remove('show');}
   fsShowing=false;
-  clearTimeout(fsTouchTimer);
 }
 function onFsChange(){
   const isFs=!!(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement);
@@ -2006,4 +2009,4 @@ Object.assign(window,{
 render();
 </script>
 </body>
-</html>
+  </html>

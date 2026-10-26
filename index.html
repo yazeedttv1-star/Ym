@@ -70,7 +70,7 @@ html.dark #loading-overlay{background:rgba(11,18,32,.85)}
 .top-bar .welcome p{font-size:14px;opacity:.9;margin-bottom:12px}
 .top-bar .user-area{display:flex;align-items:center;gap:8px}
 .top-bar .avatar-lg{width:56px;height:56px;border-radius:50%;border:3px solid rgba(255,255,255,.4);
-  object-fit:cover;cursor:pointer;background:#fff}
+  object-fit:contain;cursor:pointer;background:#fff}
 .top-bar .actions{display:flex;gap:8px;align-items:center}
 .top-bar .action-btn{background:rgba(255,255,255,.2);color:#fff;border:0;padding:6px 12px;
   border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
@@ -97,7 +97,7 @@ main{max-width:1000px;margin:0 auto;padding:0 20px 40px}
 .card:hover{border-color:var(--ac);box-shadow:var(--shadow-lg);transform:translateY(-3px)}
 .card:active{transform:scale(.98)}
 .card .card-img-wrap{width:100%;height:160px;background:linear-gradient(135deg,#e0e7ff 0%,#f1f5f9 100%);position:relative}
-.card .card-img-wrap img{width:100%;height:100%;object-fit:cover}
+.card .card-img-wrap img{width:100%;height:100%;object-fit:contain;background:var(--surface2)}
 .card .card-body{padding:12px 10px;background:var(--surface);flex:1;
   display:flex;flex-direction:column;justify-content:center}
 .card b{font-size:16px;display:block;color:var(--tx);font-weight:800}
@@ -183,7 +183,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
 .wm{position:absolute;pointer-events:none;z-index:20;display:flex;align-items:center;gap:6px;
   font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
   animation:mv 24s linear infinite alternate;direction:ltr;color:#fff}
-.wm img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+.wm img{width:22px;height:22px;border-radius:50%;object-fit:contain}
 @keyframes mv{0%{top:20%;left:4%}25%{top:70%;left:55%}50%{top:35%;left:70%}75%{top:80%;left:8%}100%{top:20%;left:60%}}
 
 /* =========================================================
@@ -272,7 +272,7 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
    ========================================================= */
 .profile-card{text-align:center;padding:30px 20px}
 .profile-card img{width:100px;height:100px;border-radius:50%;border:4px solid var(--ac-soft);
-  margin-bottom:16px;object-fit:cover}
+  margin-bottom:16px;object-fit:contain;background:var(--surface2)}
 .profile-card h2{margin-bottom:8px}
 .profile-card p{color:var(--mu);font-size:15px;margin-bottom:24px}
 
@@ -386,12 +386,12 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
 .ban-screen p{color:var(--tx2);margin-bottom:24px;line-height:1.7}
 
 /* =========================================================
-   19) NEWS
+   19) NEWS (Updated to show images fully)
    ========================================================= */
 .news-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);
   padding:16px;margin-bottom:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
-.news-card img{width:100%;max-height:300px;object-fit:cover;border-radius:var(--r-sm);
-  border:1px solid var(--bd)}
+.news-card img{width:100%;max-height:400px;object-fit:contain;border-radius:var(--r-sm);
+  border:1px solid var(--bd);background:var(--surface2)}
 .news-text{font-size:15px;line-height:1.7;color:var(--tx);white-space:pre-wrap}
 .news-date{font-size:12px;color:var(--mu);font-weight:700;margin-top:4px}
 
@@ -456,7 +456,7 @@ html.dark .stats-table .grade-chip{background:rgba(30,58,138,.5);color:#93c5fd}
   <div class="modal-content" style="max-width:500px">
     <div class="modal-header"><h3>قص الصورة</h3></div>
     <div class="modal-body" style="padding:0;background:#333;display:flex;justify-content:center;align-items:center;min-height:300px;">
-      <img id="cropImage" alt="" style="max-width:100%;display:block;">
+      <img id="cropImage" alt="" style="max-width:100%;display:block;object-fit:contain;">
     </div>
     <div style="padding:16px;display:flex;gap:10px;">
       <button onclick="confirmCrop()" style="flex:1">حفظ القص</button>
@@ -1469,7 +1469,7 @@ function vLibrary(){
   if(!lib.length)return'<h2>المكتبة الرقمية</h2><div class="mut">لا توجد ملفات بعد.</div>';
   return`<h2>المكتبة الرقمية</h2><div class="grid">${lib.map(([id,item])=>`
     <div class="card" onclick="openLibraryItem('${encodeURIComponent(item.url||'')}')" role="button" tabindex="0">
-      <img src="${esc(item.photo||avatarOf('PDF'))}" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin:16px auto 12px;display:block;background:var(--surface2);border:3px solid var(--ac-soft)">
+      <img src="${esc(item.photo||avatarOf('PDF'))}" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:contain;margin:16px auto 12px;display:block;background:var(--surface2);border:3px solid var(--ac-soft)">
       <div class="card-body"><b>${esc(item.title)}</b><small style="color:var(--mu);display:block;margin-top:4px">${esc(item.desc||'')}</small></div>
     </div>`).join('')}</div>`;
 }
@@ -1509,13 +1509,13 @@ async function vAdmin(){
 
   if(effTab==='teachers')return tb+`<div class="box"><h2>إضافة مدرس</h2><label for="tn">الاسم</label><input id="tn"><label for="tp">الصورة</label><input id="tp" type="file" accept="image/*"><button onclick="addT()">إضافة</button></div><div class="grid">${Object.entries(teachers).map(([id,x])=>`<div class="card" style="cursor:default"><div class="card-img-wrap"><img src="${esc(x.photo||avatarOf(x.name))}" alt=""></div><div class="card-body"><b>${esc(x.name)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('edit','${id}','teacher')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delT('${id}')">حذف</button></div></div></div>`).join('')}</div>`;
 
-  if(effTab==='library')return tb+`<div class="box"><h2>إضافة ملف PDF</h2><label for="ltn">العنوان</label><input id="ltn"><label for="ltd">الوصف</label><input id="ltd"><label for="ltp">صورة الغلاف (اختياري)</label><input id="ltp" type="file" accept="image/*"><label for="ltu">رابط الملف</label><input id="ltu" dir="ltr" placeholder="https://..."><button onclick="addLib()">إضافة</button></div><div class="grid">${Object.entries(library).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="card" style="cursor:default"><img src="${esc(x.photo||avatarOf('PDF'))}" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin:16px auto 12px;display:block;background:var(--surface2);border:3px solid var(--ac-soft)"><div class="card-body"><b>${esc(x.title)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('editLib','${id}')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delLib('${id}')">حذف</button></div></div></div>`).join('')}</div>`;
+  if(effTab==='library')return tb+`<div class="box"><h2>إضافة ملف PDF</h2><label for="ltn">العنوان</label><input id="ltn"><label for="ltd">الوصف</label><input id="ltd"><label for="ltp">صورة الغلاف (اختياري)</label><input id="ltp" type="file" accept="image/*"><label for="ltu">رابط الملف</label><input id="ltu" dir="ltr" placeholder="https://..."><button onclick="addLib()">إضافة</button></div><div class="grid">${Object.entries(library).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="card" style="cursor:default"><img src="${esc(x.photo||avatarOf('PDF'))}" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:contain;margin:16px auto 12px;display:block;background:var(--surface2);border:3px solid var(--ac-soft)"><div class="card-body"><b>${esc(x.title)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('editLib','${id}')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delLib('${id}')">حذف</button></div></div></div>`).join('')}</div>`;
 
   if(effTab==='students')return tb+await vAdminStudents();
   if(effTab==='send_notification')return tb+vSendNotification();
-  if(effTab==='badge')return tb+`<div class="box"><h2>صورة التعريف</h2><p style="color:var(--tx2);margin-bottom:14px;line-height:1.7">تظهر بجانب اسم كل طالب وعلى العلامة المائية. ليس لها علاقة بالصور الشخصية.</p>${badge?`<img src="${esc(badge)}" alt="" style="width:100px;height:100px;border-radius:50%;margin-bottom:14px;border:3px solid var(--ac-soft);object-fit:cover">`:''}<input id="bp" type="file" accept="image/*"><button onclick="setB()">حفظ</button></div>`;
+  if(effTab==='badge')return tb+`<div class="box"><h2>صورة التعريف</h2><p style="color:var(--tx2);margin-bottom:14px;line-height:1.7">تظهر بجانب اسم كل طالب وعلى العلامة المائية. ليس لها علاقة بالصور الشخصية.</p>${badge?`<img src="${esc(badge)}" alt="" style="width:100px;height:100px;border-radius:50%;margin-bottom:14px;border:3px solid var(--ac-soft);object-fit:contain">`:''}<input id="bp" type="file" accept="image/*"><button onclick="setB()">حفظ</button></div>`;
   if(effTab==='bans')return tb+await renderBans();
-  if(effTab==='news')return tb+`<div class="box"><h2>إضافة خبر جديد</h2><label for="newText">نص الخبر (اختياري)</label><textarea id="newText" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea><label for="newVid">رابط فيديو الخبر (اختياري)</label><input id="newVid" dir="ltr" placeholder="https://youtube.com/..."><label for="newImg">صورة الخبر (اختياري)</label><input id="newImg" type="file" accept="image/*"><button onclick="addNews()">نشر الخبر</button></div><h2>الأخبار المنشورة</h2>${Object.entries(news).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="news-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:var(--ac)">خبر منشور</b><button class="d" onclick="delNews('${esc(id)}')" style="padding:4px 10px;font-size:12px">حذف</button></div>${x.photo?`<img src="${esc(x.photo)}" alt="" style="max-height:100px;object-fit:cover">`:''}<p style="font-size:13px;white-space:pre-wrap">${esc(x.text||'')}</p><span class="news-date">${fd(x.created)}</span></div>`).join('')}`;
+  if(effTab==='news')return tb+`<div class="box"><h2>إضافة خبر جديد</h2><label for="newText">نص الخبر (اختياري)</label><textarea id="newText" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea><label for="newVid">رابط فيديو الخبر (اختياري)</label><input id="newVid" dir="ltr" placeholder="https://youtube.com/..."><label for="newImg">صورة الخبر (اختياري)</label><input id="newImg" type="file" accept="image/*"><button onclick="addNews()">نشر الخبر</button></div><h2>الأخبار المنشورة</h2>${Object.entries(news).sort((a,b)=>(b[1].created||0)-(a[1].created||0)).map(([id,x])=>`<div class="news-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:var(--ac)">خبر منشور</b><button class="d" onclick="delNews('${esc(id)}')" style="padding:4px 10px;font-size:12px">حذف</button></div>${x.photo?`<img src="${esc(x.photo)}" alt="" style="max-height:200px;object-fit:contain">`:''}<p style="font-size:13px;white-space:pre-wrap">${esc(x.text||'')}</p><span class="news-date">${fd(x.created)}</span></div>`).join('')}`;
 
   const tOpts=Object.entries(teachers).map(([id,x])=>`<option value="${esc(id)}">${esc(x.name)}</option>`).join('');
   const vidList=Object.entries(videos).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
@@ -1599,7 +1599,7 @@ async function vStudentProfile(){
   return`<button class="s" onclick="go('admin','','students')" style="margin-bottom:16px">← رجوع للطلاب</button>
   <div class="box">
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
-      <img src="${esc(user.photo||avatarOf(user.name))}" alt="" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--ac);object-fit:cover">
+      <img src="${esc(user.photo||avatarOf(user.name))}" alt="" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--ac);object-fit:contain">
       <div>
         <h2 style="margin:0">${esc(user.name)}</h2>
         <p style="margin:4px 0;color:var(--mu);direction:ltr">${esc(user.phone)}</p>
@@ -1653,7 +1653,7 @@ async function renderBans(){
   if(!entries.length)return note+`<div class="mut">لا يوجد طلاب محظورون.</div>`;
   return note+`<h2>الطلاب المحظورون (${entries.length})</h2>`+entries.map(b=>`<div class="box">
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
-      ${b.photo?`<img src="${esc(b.photo)}" alt="" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`:''}
+      ${b.photo?`<img src="${esc(b.photo)}" alt="" style="width:50px;height:50px;border-radius:50%;object-fit:contain">`:''}
       <div style="flex:1"><b>${esc(b.name||'')}</b><br><small style="color:var(--mu)">${esc(b.email||'')}</small></div>
       <span class="b r">محظور</span>
     </div>

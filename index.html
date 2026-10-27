@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" id="mf">
 <link rel="apple-touch-icon" id="ai">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <style>
@@ -23,6 +23,11 @@
   --bd:#e2e8f0; --r:16px; --r-sm:10px; --r-lg:22px;
   --shadow:0 1px 3px rgba(15,23,42,.06),0 4px 12px rgba(15,23,42,.04);
   --shadow-lg:0 10px 40px rgba(15,23,42,.12);
+  
+  /* Neon Colors */
+  --neon-blue: #00f3ff;
+  --neon-pink: #ff00ff;
+  --neon-bg: #0b0217;
 }
 html.dark{
   --bg:#0b1220; --surface:#111a2e; --surface2:#1a2440;
@@ -127,104 +132,129 @@ html.dark .b.y{background:#78350f;color:#fcd34d}
   color:var(--ac2);font-weight:700}
 .mut{color:var(--mu);text-align:center;padding:40px 20px}
 
-/* ===== مشغل الفيديو ===== */
-.player-wrap{width:100%;margin-bottom:16px;background:transparent}
-.pl{position:relative;background:#000;border-radius:var(--r);overflow:hidden;width:100%;
-  height:0;padding-bottom:56.25%;margin:0 auto;box-shadow:var(--shadow-lg)}
-@supports (aspect-ratio:16/9){
-  .pl{height:auto;padding-bottom:0;aspect-ratio:16/9}
+/* ===== مشغل الفيديو النيون (Neon Player) ===== */
+.player-wrap {
+  width: 100%;
+  margin: 20px auto;
+  background: var(--neon-bg);
+  border: 3px solid var(--neon-blue);
+  border-radius: 16px;
+  box-shadow: 0 0 15px var(--neon-blue), inset 0 0 15px rgba(0, 243, 255, 0.2);
+  position: relative;
+  padding: 4px;
 }
-.pl iframe,.pl video{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;
-  border:0;display:block;background:#000;pointer-events:none;object-fit:contain}
-.pl.is-embed iframe{pointer-events:auto}
+.player-wrap::before {
+  content: ''; position: absolute; inset: -3px;
+  border: 3px solid var(--neon-pink);
+  border-radius: 18px; z-index: -1;
+  box-shadow: 0 0 20px var(--neon-pink);
+  pointer-events: none;
+}
+.player-header {
+  display: flex; justify-content: center; align-items: center;
+  margin-top: -20px; margin-bottom: 10px; position: relative; z-index: 10;
+}
+.player-header .header-box {
+  background: var(--neon-bg);
+  border: 2px solid var(--neon-pink);
+  padding: 4px 20px;
+  border-radius: 8px;
+  color: var(--neon-blue);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700; font-size: 16px;
+  box-shadow: 0 0 10px var(--neon-pink);
+  display: flex; align-items: center; gap: 8px;
+}
+.player-header .header-box::before,
+.player-header .header-box::after {
+  content: '•'; color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue);
+}
 
-/* حل جذري: شفافية تامة ومقاس 100% بدون قص لمنع أي واجهة ليوتيوب */
-.pl.is-yt {
+.pl {
+  position: relative;
   background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
 }
-.pl.is-yt iframe {
-  pointer-events: none !important;
-  width: 100% !important;
-  height: 100% !important;
-  transform: scale(1.01) !important;
+@supports (aspect-ratio: 16/9) {
+  .pl { height: auto; padding-bottom: 0; aspect-ratio: 16/9; }
 }
+.pl iframe,.pl video {
+  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%; height: 100%; border: 0; display: block; background: #000;
+  pointer-events: none; object-fit: contain;
+}
+.pl.is-embed iframe { pointer-events: auto; }
+.pl.is-yt iframe { pointer-events: none !important; width: 100% !important; height: 100% !important; transform: scale(1.01) !important; }
 
-.pl .video-blocker{position:absolute;top:0;right:0;bottom:0;left:0;z-index:99;background:transparent;
-  cursor:pointer;display:block;touch-action:none;}
-.pl .end-cover{position:absolute;top:0;right:0;bottom:0;left:0;z-index:100;background:#000;
-  display:none;align-items:center;justify-content:center}
-.pl .end-cover button{background:var(--ac);color:#fff;padding:12px 22px;font-size:15px}
-.pl .big-play-overlay{position:absolute;top:0;right:0;bottom:0;left:0;z-index:101;display:none;
-  align-items:center;justify-content:center;background:transparent;pointer-events:none;transition:opacity .1s}
-.pl .big-play-btn{width:80px;height:80px;border-radius:50%;background:rgba(15,15,15,.7);border:2px solid #fff;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;
-  transition:transform .2s;padding:0}
-.pl .big-play-btn:hover{transform:scale(1.1);background:rgba(15,15,15,.9)}
-.pl .big-play-btn svg{width:40px;height:40px;fill:#fff;margin-left:4px}
-.wm{position:absolute;pointer-events:none;z-index:22;display:flex;align-items:center;gap:6px;
-  font-size:12px;opacity:.45;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:99px;
-  animation:mv 24s linear infinite alternate;direction:ltr;color:#fff;white-space:nowrap}
-.wm img{width:22px;height:22px;border-radius:50%;object-fit:contain}
-@keyframes mv{0%{top:20%;left:4%}25%{top:70%;left:55%}50%{top:35%;left:70%}75%{top:80%;left:8%}100%{top:20%;left:60%}}
+.pl .video-blocker { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 99; background: transparent; cursor: pointer; display: block; touch-action: none; }
+.pl .end-cover { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 100; background: rgba(11,2,23,0.9); display: none; align-items: center; justify-content: center; }
+.pl .end-cover button { background: var(--neon-pink); color: #fff; padding: 12px 22px; font-size: 15px; border-radius: 8px; box-shadow: 0 0 10px var(--neon-pink); border: none; }
+.pl .big-play-overlay { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 101; display: none; align-items: center; justify-content: center; background: transparent; pointer-events: none; transition: opacity .1s; }
+.pl .big-play-btn { width: 80px; height: 80px; border-radius: 50%; background: rgba(11,2,23,0.8); border: 2px solid var(--neon-blue); display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; transition: transform .2s; padding: 0; box-shadow: 0 0 15px var(--neon-blue); }
+.pl .big-play-btn:hover { transform: scale(1.1); background: rgba(11,2,23,1); box-shadow: 0 0 25px var(--neon-blue); }
+.pl .big-play-btn svg { width: 40px; height: 40px; fill: var(--neon-blue); margin-left: 4px; }
+.wm { position: absolute; pointer-events: none; z-index: 22; display: flex; align-items: center; gap: 6px; font-size: 12px; opacity: .6; background: rgba(0,0,0,.7); padding: 4px 10px; border-radius: 99px; animation: mv 24s linear infinite alternate; direction: ltr; color: var(--neon-blue); white-space: nowrap; border: 1px solid var(--neon-blue); }
+.wm img { width: 22px; height: 22px; border-radius: 50%; object-fit: contain; }
+@keyframes mv { 0%{top:20%;left:4%} 25%{top:70%;left:55%} 50%{top:35%;left:70%} 75%{top:80%;left:8%} 100%{top:20%;left:60%} }
 
-.custom-player-ctrl{direction:ltr;background:#1e1e2f;padding:10px 14px;border-radius:6px;margin-top:8px;
-  box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.custom-player-ctrl .ctrl-left{display:flex;align-items:center;flex-shrink:0}
-.custom-player-ctrl .ctrl-right{display:flex;align-items:center;flex-shrink:0}
-.custom-player-ctrl .icon-btn{background:transparent;color:#fff;border:0;border-radius:0;padding:6px;margin:0 2px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;min-width:36px;min-height:36px;
-  transition:transform .15s;touch-action:manipulation}
-.custom-player-ctrl .icon-btn:hover{transform:scale(1.1);background:transparent;box-shadow:none}
-.custom-player-ctrl .icon-btn svg{width:22px;height:22px;fill:#fff}
-.custom-player-ctrl .time{font-family:Cairo,sans-serif;font-size:12px;font-weight:600;color:#fff;
-  direction:ltr;margin:0 4px;white-space:nowrap;min-width:36px;text-align:center}
-.custom-player-ctrl .time-sep{color:#fff;margin:0 2px}
-.custom-player-ctrl .slider-wrap{position:relative;flex:1;height:4px;background:rgba(255,255,255,.3);
-  border-radius:99px;margin:0 10px;min-width:80px;order:0}
-.custom-player-ctrl .slider-fill{position:absolute;top:0;left:0;height:100%;width:0;background:#ff0000;
-  border-radius:99px;pointer-events:none}
-.custom-player-ctrl .slider-wrap input[type=range]{position:absolute;left:0;top:-9px;width:100%;height:22px;
-  margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:none;
-  -webkit-appearance:none;appearance:none;cursor:pointer;z-index:2;touch-action:none}
-.custom-player-ctrl .slider-wrap input[type=range]:focus{box-shadow:none;outline:none}
-.custom-player-ctrl .slider-wrap input[type=range]::-webkit-slider-runnable-track{height:22px;background:transparent;border:0}
-.custom-player-ctrl .slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
-  width:14px;height:14px;border-radius:50%;background:#ff0000;border:0;margin-top:4px;cursor:pointer}
-.custom-player-ctrl .slider-wrap input[type=range]::-moz-range-track{height:22px;background:transparent;border:0}
-.custom-player-ctrl .slider-wrap input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-  background:#ff0000;border:0;cursor:pointer}
-.custom-player-ctrl .slider-wrap input[type=range]::-ms-track{background:transparent;border-color:transparent;color:transparent}
+/* أزرار التحكم بداخل الإطار */
+.custom-player-ctrl {
+  direction: ltr;
+  background: transparent;
+  padding: 12px 10px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.custom-player-ctrl .ctrl-left,
+.custom-player-ctrl .ctrl-right { display: flex; align-items: center; flex-shrink: 0; }
+.custom-player-ctrl .icon-btn {
+  background: transparent; color: var(--neon-blue); border: 0; border-radius: 0; padding: 6px; margin: 0 2px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 0;
+  min-width: 36px; min-height: 36px; transition: transform .15s; touch-action: manipulation;
+}
+.custom-player-ctrl .icon-btn:hover { transform: scale(1.1); background: transparent; box-shadow: none; filter: drop-shadow(0 0 8px var(--neon-blue)); }
+.custom-player-ctrl .icon-btn svg { width: 22px; height: 22px; fill: currentColor; }
+.custom-player-ctrl .time { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 600; color: var(--neon-blue); direction: ltr; margin: 0 4px; white-space: nowrap; min-width: 36px; text-align: center; }
+.custom-player-ctrl .time-sep { color: var(--neon-blue); margin: 0 2px; }
+.custom-player-ctrl .slider-wrap { position: relative; flex: 1; height: 4px; background: rgba(0, 243, 255, 0.2); border-radius: 99px; margin: 0 10px; min-width: 80px; order: 0; border: 1px solid var(--neon-blue); }
+.custom-player-ctrl .slider-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0; background: var(--neon-pink); border-radius: 99px; pointer-events: none; box-shadow: 0 0 8px var(--neon-pink); }
+.custom-player-ctrl .slider-wrap input[type=range] { position: absolute; left: 0; top: -9px; width: 100%; height: 22px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; outline: none; -webkit-appearance: none; appearance: none; cursor: pointer; z-index: 2; touch-action: none; }
+.custom-player-ctrl .slider-wrap input[type=range]:focus { box-shadow: none; outline: none; }
+.custom-player-ctrl .slider-wrap input[type=range]::-webkit-slider-runnable-track { height: 22px; background: transparent; border: 0; }
+.custom-player-ctrl .slider-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--neon-pink); border: 0; margin-top: 4px; cursor: pointer; box-shadow: 0 0 8px var(--neon-pink); }
+.custom-player-ctrl .slider-wrap input[type=range]::-moz-range-track { height: 22px; background: transparent; border: 0; }
+.custom-player-ctrl .slider-wrap input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--neon-pink); border: 0; cursor: pointer; box-shadow: 0 0 8px var(--neon-pink); }
+.custom-player-ctrl .slider-wrap input[type=range]::-ms-track { background: transparent; border-color: transparent; color: transparent; }
 
-.player-wrap:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center;
-  width:100%;height:100%;margin:0;padding:0}
-.player-wrap:-webkit-full-screen{background:#000;display:flex;flex-direction:column;justify-content:center;
-  width:100%;height:100%;margin:0;padding:0}
-.player-wrap:fullscreen .pl,.player-wrap:-webkit-full-screen .pl{flex:1;min-height:0;height:auto;padding-bottom:0;
-  aspect-ratio:auto;border-radius:0;box-shadow:none}
-.player-wrap:fullscreen .custom-player-ctrl,.player-wrap:-webkit-full-screen .custom-player-ctrl{border-radius:0;margin-top:0}
+/* Fullscreen */
+.player-wrap:fullscreen { background: var(--neon-bg); display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; margin: 0; padding: 0; border: none; box-shadow: none; }
+.player-wrap:-webkit-full-screen { background: var(--neon-bg); display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; margin: 0; padding: 0; border: none; box-shadow: none; }
+.player-wrap:fullscreen::before, .player-wrap:-webkit-full-screen::before { display: none; }
+.player-wrap:fullscreen .player-header, .player-wrap:-webkit-full-screen .player-header { display: none; }
+.player-wrap:fullscreen .pl, .player-wrap:-webkit-full-screen .pl { flex: 1; min-height: 0; height: auto; padding-bottom: 0; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+.player-wrap:fullscreen .custom-player-ctrl, .player-wrap:-webkit-full-screen .custom-player-ctrl { border-radius: 0; margin-top: 0; background: var(--neon-bg); border-top: 1px solid var(--neon-blue); }
 
-/* ملء الشاشة التلقائي في الوضع الأفقي (Landscape) */
+/* Landscape Auto Fullscreen */
 @media (orientation: landscape) and (pointer: coarse) {
   body.is-watching .bottombar { display: none !important; }
   body.is-watching main { padding: 0 !important; }
   body.is-watching .player-wrap {
-    position: fixed !important;
-    top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
-    width: 100vw !important; height: 100vh !important;
-    z-index: 99999 !important;
-    margin: 0 !important; padding: 0 !important;
-    background: #000 !important;
-    display: flex !important; flex-direction: column !important;
+    position: fixed !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
+    width: 100vw !important; height: 100vh !important; z-index: 99999 !important; margin: 0 !important; padding: 0 !important;
+    background: var(--neon-bg) !important; display: flex !important; flex-direction: column !important; border: none !important; box-shadow: none !important; border-radius: 0 !important;
   }
-  body.is-watching .pl {
-    flex: 1 !important; min-height: 0 !important; height: auto !important; width: 100% !important;
-    padding-bottom: 0 !important; aspect-ratio: auto !important; border-radius: 0 !important; box-shadow: none !important;
-    margin: 0 !important;
-  }
-  body.is-watching .custom-player-ctrl {
-    width: 100% !important; border-radius: 0 !important; margin-top: 0 !important;
-    padding-bottom: env(safe-area-inset-bottom) !important;
-  }
+  body.is-watching .player-wrap::before { display: none !important; }
+  body.is-watching .player-header { display: none !important; }
+  body.is-watching .pl { flex: 1 !important; min-height: 0 !important; height: auto !important; width: 100% !important; padding-bottom: 0 !important; aspect-ratio: auto !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; }
+  body.is-watching .custom-player-ctrl { width: 100% !important; border-radius: 0 !important; margin-top: 0 !important; padding-bottom: env(safe-area-inset-bottom) !important; background: var(--neon-bg) !important; border-top: 1px solid var(--neon-blue) !important; }
 }
 
 .bottombar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--surface);
@@ -518,7 +548,7 @@ function confirmCrop(){
 function cancelCrop(){if(cropResolve)cropResolve(null)}
 
 async function enableNotifications(silent){
-  if(!messaging||!hasNotifApi()){if(!silent)toast('الإشعارات غير مدعومة في هذا المتصفح');return}
+  if(!messaging||!hasNotifApi()||!U){if(!silent)toast('الإشعارات غير مدعومة في هذا المتصفح');return}
   try{
     const p=await Notification.requestPermission();
     if(p!=='granted'){if(!silent)toast('لم يتم السماح بالإشعارات من إعدادات المتصفح');return}
@@ -569,6 +599,7 @@ function embed(u,full){
 }
 
 async function enforceSingleDevice(){
+  if(!U)return true;
   if(A||IS_SUPERVISOR)return true;
   try{
     const devId=getDeviceId();const sessionsRef=R('sessions/'+U.uid);
@@ -781,18 +812,15 @@ function bindSeek(){
   s.addEventListener('pointercancel',endDrag);
 }
 
-/* التعديل الجذري: تحديث واجهة الزر لحظياً قبل إرسال الأمر */
 function togglePlay(){
   const isPlaying = pIsPlaying();
   const nextState = !isPlaying;
 
-  // تحديث الواجهة فوراً (بدون انتظار استجابة يوتيوب)
   const icon = document.getElementById('playIcon');
   if(icon) icon.innerHTML = ICON(nextState ? PAUSE_PATH : PLAY_PATH);
   const ov = document.getElementById('bigPlayOverlay');
   if(ov) ov.style.display = nextState ? 'none' : 'flex';
 
-  // إرسال أمر التشغيل أو الإيقاف للمشغل
   if(P.type==='native'&&P.el){
     if(nextState) P.el.play().catch(()=>toast('تعذر التشغيل، اضغط مرة أخرى'));
     else P.el.pause();
@@ -1505,6 +1533,9 @@ async function vWatch(){
   return`<button class="s" onclick="go('teacher','${esc(v.teacherId)}')">← رجوع</button>
   <h2 style="margin-top:14px">${esc(v.title)} ${isStaff?'<span class="b g">إدارة</span>':''}</h2>
   <div class="player-wrap" id="playerWrap">
+    <div class="player-header">
+      <div class="header-box">Sigma</div>
+    </div>
     <div class="pl ${isYT?'is-yt':''} ${e.t==='drive'||e.t==='f'?'is-embed':''}" id="plbox">
       ${playerHTML}
       ${hasCtrl?'<div class="video-blocker" onclick="togglePlay()"></div>':''}

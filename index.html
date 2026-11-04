@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>منصة سيجما التعليمية</title>
-<meta name="application-version" content="3.5.3">
+<meta name="application-version" content="3.6.0">
 <meta name="theme-color" content="#2563eb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -377,7 +377,7 @@ import {getAuth,onAuthStateChanged,signOut,setPersistence,browserLocalPersistenc
 import {getDatabase,ref,get,set,update,remove,runTransaction,query,orderByChild,equalTo,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {getMessaging,getToken,onMessage} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
-const APP_VERSION='3.5.3';
+const APP_VERSION='3.6.0';
 const GRADES_PRIMARY=['الصف الأول الابتدائي','الصف الثاني الابتدائي','الصف الثالث الابتدائي','الصف الرابع الابتدائي','الصف الخامس الابتدائي','الصف السادس الابتدائي'];
 const GRADES_PREP=['الصف الأول الإعدادي','الصف الثاني الإعدادي','الصف الثالث الإعدادي'];
 const GRADES_SEC=['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي'];
@@ -398,9 +398,7 @@ try{messaging=getMessaging(app)}catch(e){}
 setPersistence(auth,browserLocalPersistence).catch(()=>{});
 
 const R=p=>ref(db,p);
-/* G القديمة: تُرجع null عند الفشل (للأماكن التي لا تحتاج تمييزاً) */
 const G=async p=>{try{return (await get(R(p))).val()}catch(e){return null}};
-/* GTry: تُرجع {ok,val,error} لتمييز الفشل عن الفراغ */
 const GTry=async p=>{
   try{const s=await get(R(p));return {ok:true,val:s.val()}}
   catch(e){return {ok:false,val:null,error:e?.message||e?.code||'unknown'}}
@@ -469,13 +467,16 @@ let arcadeData={};
 let labEnabled={};
 let labActiveLab=null,labCurrentExpIdx=0,labSelectedEls=[],labSelectedTool=null,labShowingResult=false,labLastResult=null;
 let memState=null,huntState=null,orderState=null,balState=null;
+let whoState=null,tfState=null,speedState=null;
 let freeLab={els:[],tool:null,result:null};
 let adminUsersList={};
-/* تعريف activeExamState في الأعلى لتجنّب TDZ */
+let studentsLiveUnsub=null;
+let studentsCache=null;
+let studentsCacheAt=0;
 let activeExamState=null;
 let activeExamTimer=null;
 
-const LAB_KEYS=[['quiz','اختر الناتج'],['memory','مطابقة الرموز'],['hunt','صيد الرموز'],['order','رتّب العناصر'],['balance','موازنة المعادلات'],['lab','المختبر الافتراضي'],['free','طلع الكيميائي اللي جواك']];
+const LAB_KEYS=[['quiz','اختر الناتج'],['memory','مطابقة الرموز'],['hunt','صيد الرموز'],['order','رتّب العناصر'],['balance','موازنة المعادلات'],['who','من أنا؟'],['tf','صح أم خطأ'],['speed','سرعة البرق'],['lab','المختبر الافتراضي'],['free','طلع الكيميائي اللي جواك']];
 const isLabOn=k=>labEnabled?.[k]!==false;
 
 const QUIZ_QUESTIONS={
@@ -580,12 +581,45 @@ const BAL_EQUATIONS=[
 {left:[{f:'Fe',a:{Fe:1}},{f:'O₂',a:{O:2}}],right:[{f:'Fe₂O₃',a:{Fe:2,O:3}}]},
 {left:[{f:'CH₄',a:{C:1,H:4}},{f:'O₂',a:{O:2}}],right:[{f:'CO₂',a:{C:1,O:2}},{f:'H₂O',a:{H:2,O:1}}]}
 ];
+const WHO_AM_I=[
+{clues:['فلز قلوي','رمزه Na','يشتعل بلهب أصفر'],answer:'صوديوم'},
+{clues:['غاز نبيل','رمزه He','يُستخدم في البالونات'],answer:'هيليوم'},
+{clues:['فلز انتقالي','رمزه Fe','يصدأ في الهواء الرطب'],answer:'حديد'},
+{clues:['لافلز','رمزه O','ضروري للاحتراق'],answer:'أكسجين'},
+{clues:['فلز خفيف','رمزه Mg','يحترق بضوء أبيض ساطع'],answer:'مغنيسيوم'},
+{clues:['غاز سام','رمزه Cl','يُستخدم في تعقيم المياه'],answer:'كلور'},
+{clues:['فلز نبيل','رمزه Au','لا يصدأ'],answer:'ذهب'},
+{clues:['لافلز','رمزه C','يوجد في الماس والجرافيت'],answer:'كربون'},
+{clues:['فلز','رمزه Cu','موصل جيد للكهرباء'],answer:'نحاس'},
+{clues:['فلز','رمزه Zn','يُستخدم في جلفنة الحديد'],answer:'زنك'}
+];
+const TRUE_FALSE=[
+{q:'الماء مركب من عنصري الهيدروجين والأكسجين',a:true},
+{q:'الرموز الكيميائية تُكتب بالعربية',a:false},
+{q:'الاحتراق يحتاج أكسجين',a:true},
+{q:'الصدأ تفاعل كيميائي',a:true},
+{q:'الرمز الكيميائي للذهب هو Ag',a:false},
+{q:'الجدول الدوري يرتب العناصر حسب العدد الذري',a:true},
+{q:'الكلور غاز نبيل',a:false},
+{q:'الماء النقي موصل جيد للكهرباء',a:false},
+{q:'الهيدروجين أخف العناصر',a:true},
+{q:'الرمز Fe يمثل الفلور',a:false}
+];
+const SPEED_QUIZ=[
+{q:'H₂O',a:'ماء'},{q:'CO₂',a:'ثاني أكسيد الكربون'},{q:'O₂',a:'أكسجين'},
+{q:'NaCl',a:'ملح الطعام'},{q:'NH₃',a:'أمونيا'},{q:'CH₄',a:'ميثان'},
+{q:'HCl',a:'حمض الهيدروكلوريك'},{q:'CaCO₃',a:'كربونات الكالسيوم'},
+{q:'H₂SO₄',a:'حمض الكبريتيك'},{q:'NaOH',a:'هيدروكسيد الصوديوم'}
+];
 const GAME_CARDS=[
 {k:'quiz',i:'🧪',n:'اختر الناتج',d:'30 سؤالاً على التفاعلات في 3 مستويات'},
 {k:'memory',i:'🃏',n:'مطابقة الرموز',d:'اربط الرمز الكيميائي باسم العنصر'},
 {k:'hunt',i:'🎯',n:'صيد الرموز',d:'اختر رمز العنصر الصحيح بسرعة'},
 {k:'order',i:'📊',n:'رتّب العناصر',d:'رتّب العناصر حسب العدد الذري'},
-{k:'balance',i:'⚖️',n:'موازنة المعادلات',d:'عدّل المعاملات حتى تتوازن المعادلة'}
+{k:'balance',i:'⚖️',n:'موازنة المعادلات',d:'عدّل المعاملات حتى تتوازن المعادلة'},
+{k:'who',i:'🕵️',n:'من أنا؟',d:'خمّن العنصر من وصفه'},
+{k:'tf',i:'✅',n:'صح أم خطأ',d:'اختبر مفاهيمك الكيميائية'},
+{k:'speed',i:'⚡',n:'سرعة البرق',d:'أجب في 30 ثانية'}
 ];
 
 const FAV_KEY='sigma-favs';
@@ -643,14 +677,6 @@ function bindGlobalScreenshotGuard(){
 bindGlobalScreenshotGuard();
 window.addEventListener('beforeprint',()=>{if(activeExamState&&!activeExamState.submitted){toast('الطباعة ممنوعة');submitExam(true,'print')}});
 
-async function notifyAdmins(text,targetUid){
-  if(!text)return;
-  const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  const payload={text:String(text).slice(0,500),created:Date.now(),read:false};
-  if(targetUid)payload.userId=targetUid;
-  try{await set(R('adminNotifications/'+id),payload)}catch(e){}
-}
-
 async function enforceSingleDevice(){
   if(A||IS_SUPERVISOR||!U)return true;
   try{
@@ -660,18 +686,30 @@ async function enforceSingleDevice(){
     const now=Date.now();
     const existingDevice=cur.deviceId,existingTs=cur.updatedAt||0;
     if(existingDevice&&existingDevice!==devId&&now-existingTs<24*60*60*1000){
-      const rec={uid:U.uid,name:U.displayName||'',email:U.email||'',photo:myPhoto||'',phone:normPhone(myPhone||''),oldDevice:existingDevice,oldDeviceLabel:cur.deviceLabel||'',newDevice:devId,newDeviceLabel:deviceLabel(),bannedAt:now,reason:'تسجيل دخول من جهاز آخر — حظر تلقائي'};
+      const userData=await G('users/'+U.uid);
+      const phone=normPhone(userData?.phone||myPhone||'');
+      const photo=userData?.photo||myPhoto||'';
+      const name=userData?.name||U.displayName||'';
+      const email=userData?.email||U.email||'';
+      const rec={uid:U.uid,name,email,photo,phone,oldDevice:existingDevice,oldDeviceLabel:cur.deviceLabel||'',newDevice:devId,newDeviceLabel:deviceLabel(),bannedAt:now,reason:'تسجيل دخول من جهاز آخر — حظر تلقائي',auto:true};
       const ops=[
         set(R('bans/'+U.uid),rec),
         update(R('users/'+U.uid),{banned:true}),
         remove(R('sessions/'+U.uid)).catch(()=>{})
       ];
-      if(rec.phone)ops.push(set(R('bansByPhone/'+rec.phone),rec));
+      if(phone)ops.push(set(R('bansByPhone/'+phone),rec));
+      ops.push(set(R('autoBans/'+U.uid+'/'+now),rec).catch(()=>{}));
       await Promise.all(ops);
-      await notifyAdmins('🚨 حظر تلقائي: '+rec.name+' سجّل من جهاز آخر ('+rec.newDeviceLabel+'). الحساب: '+(rec.phone||rec.uid),U.uid).catch(()=>{});
+      try{
+        const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+        await set(R('adminNotifications/'+id),{
+          text:'🚨 حظر تلقائي: '+name+' سجّل من جهاز آخر ('+deviceLabel()+'). الهاتف: '+(phone||'-'),
+          created:now,read:false,userId:U.uid
+        });
+      }catch(e){}
       return false;
     }
-    await update(R('sessions/'+U.uid),{deviceId:devId,deviceLabel:deviceLabel(),updatedAt:now,name:U.displayName||'',email:U.email||''});
+    await update(R('sessions/'+U.uid),{deviceId:devId,deviceLabel:deviceLabel(),updatedAt:now,name:U.displayName||'',email:U.email||'',phone:normPhone(myPhone||'')});
     return true;
   }catch(e){return true}
 }
@@ -708,6 +746,8 @@ function clearListeners(){
   unsubs.forEach(fn=>{try{if(typeof fn==='function')fn()}catch(e){}});unsubs=[];
   banUnsubs.forEach(fn=>{try{fn()}catch(e){}});banUnsubs=[];
   if(typeof bansLiveUnsub==='function'){try{bansLiveUnsub()}catch(e){}bansLiveUnsub=null}
+  if(typeof studentsLiveUnsub==='function'){try{studentsLiveUnsub()}catch(e){}studentsLiveUnsub=null}
+  studentsCache=null;studentsCacheAt=0;
 }
 function stopHB(){if(hb){clearInterval(hb);hb=null}hbGuard=0}
 
@@ -946,7 +986,6 @@ onAuthStateChanged(auth,async u=>{
     unsubs.push(onValue(R('exams'),s=>{exams=s.val()||{};if(['exams','exam','admin'].includes(S.v))render()},()=>{}));
     unsubs.push(onValue(R('examAttempts/'+u.uid),s=>{examAttempts=s.val()||{};if(['exams','exam','examResult'].includes(S.v))render()},()=>{}));
     if(A||IS_SUPERVISOR)unsubs.push(onValue(R('examAttempts'),s=>{allExamAttempts=s.val()||{};if(S.v==='exam')render()},()=>{}));
-    /* إصلاح: قراءة سجلات الطالب فقط من الفيديوهات المفتوحة له، بدل قراءة logs كاملة */
     if(!A&&!IS_SUPERVISOR){
       const openVids=Object.keys(mineVideos||{});
       openVids.forEach(vid=>{
@@ -960,7 +999,6 @@ onAuthStateChanged(auth,async u=>{
     }
     unsubs.push(onValue(R('labGame/'+u.uid),snap=>{labUserData=snap.val()||{labs:{},discoveries:0};if(S.v==='games')render()},()=>{}));
     unsubs.push(onValue(R('quizGame'),snap=>{quizLeaderData=snap.val()||{};if(S.v==='games')render()},()=>{}));
-    /* إصلاح: لا تُعِد رسم صفحة الإدارة عند تحديث arcade إلا داخل تبويب lab */
     unsubs.push(onValue(R('arcade'),snap=>{
       arcadeData=snap.val()||{};
       if(S.v==='games'||(S.v==='admin'&&S.tab==='lab'))render()
@@ -1547,7 +1585,7 @@ async function vAdmin(){
   if(!A&&!IS_SUPERVISOR)return '<div class="mut">غير مصرح.</div>';
   const tab=S.tab||'videos';
   const allowedTabs=A
-    ?[['videos','الفيديوهات'],['news','أخبار السنتر'],['teachers','المدرسون'],['library','المكتبة'],['students','الطلاب'],['exams','الامتحانات'],['support','الشكاوى'],['send_notification','إرسال إشعار'],['bans','الحظر'],['lab','المختبر'],['badge','صورة التعريف']]
+    ?[['videos','الفيديوهات'],['news','أخبار السنتر'],['teachers','المدرسون'],['library','المكتبة'],['students','الطلاب'],['exams','الامتحانات'],['support','الشكاوى'],['send_notification','إرسال إشعار'],['bans','الحظر'],['autobans','حظر تلقائي'],['lab','المختبر'],['badge','صورة التعريف']]
     :[['videos','الفيديوهات'],['news','أخبار السنتر'],['exams','الامتحانات']];
   const effTab=allowedTabs.some(([k])=>k===tab)?tab:'videos';
   const tb=`<div class="admin-tabs">${allowedTabs.map(([k,n])=>`<button class="${effTab===k?'on':''}" onclick="go('admin','','${k}')">${n}</button>`).join('')}</div>`;
@@ -1559,6 +1597,7 @@ async function vAdmin(){
   if(effTab==='support')return tb+await vAdminSupport();
   if(effTab==='badge')return tb+vAdminBadge();
   if(effTab==='bans')return tb+await vAdminBans();
+  if(effTab==='autobans')return tb+await vAdminAutoBans();
   if(effTab==='lab')return tb+await vAdminLab();
   if(effTab==='news')return tb+vAdminNews();
   return tb+vAdminVideos();
@@ -1641,6 +1680,20 @@ function buildBansHTML(){
   if(!entries.length)return note+`<div class="mut">لا يوجد طلاب محظورون.</div>`;
   return note+`<h2>الطلاب المحظورون (${entries.length})</h2>`+entries.map(b=>`<div class="box"><div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">${b.photo?`<img src="${esc(b.photo)}" alt="" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`:''}<div style="flex:1"><b>${esc(b.name||'')}</b><br><small style="color:var(--mu)">${esc(b.email||b.phone||'')}</small></div><span class="b r">محظور</span></div><p style="color:var(--tx2);font-size:13px;line-height:1.8;margin-bottom:12px">السبب: ${esc(b.reason||'قرار إداري')}<br>وقت الحظر: ${fd(b.bannedAt)}<br>الجهاز السابق: <b>${esc(b.oldDeviceLabel||'-')}</b> — الجهاز الجديد: <b>${esc(b.newDeviceLabel||'-')}</b><br>مصدر الحظر: ${b._sources.includes('uid')?'UID':''}${b._sources.includes('uid')&&b._sources.includes('phone')?' + ':''}${b._sources.includes('phone')?'الهاتف':''}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="g" onclick="unban('${esc(b.uid)}')">فك الحظر</button><button class="s" onclick="keepBan()">تركه محظوراً</button></div></div>`).join('');
 }
+async function vAdminAutoBans(){
+  if(!A)return '<div class="mut">غير مصرح.</div>';
+  const r=await GTry('autoBans');
+  if(!r.ok)return `<div class="err-box">تعذر التحميل: ${esc(r.error)}</div>`;
+  const data=r.val||{};
+  const rows=[];
+  Object.entries(data).forEach(([uid,byTime])=>{
+    Object.entries(byTime||{}).forEach(([ts,rec])=>{if(rec)rows.push({...rec,_ts:+ts})});
+  });
+  rows.sort((a,b)=>b._ts-a._ts);
+  if(!rows.length)return `<div class="notice">لا يوجد حظر تلقائي مسجّل.</div>`;
+  return `<div class="notice"><b>ملاحظة:</b> هذه الحسابات حُظرت تلقائياً بسبب تسجيل الدخول من جهاز آخر.</div><h2>الحظر التلقائي (${rows.length})</h2>`+
+    rows.map(r=>`<div class="box"><div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">${r.photo?`<img src="${esc(r.photo)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`:''}<div style="flex:1"><b>${esc(r.name||'')}</b><br><small style="color:var(--mu)" dir="ltr">${esc(r.phone||r.email||r.uid)}</small></div><span class="b r">محظور</span></div><p style="color:var(--tx2);font-size:13px;line-height:1.8">الجهاز السابق: <b>${esc(r.oldDeviceLabel||'-')}</b> — الجديد: <b>${esc(r.newDeviceLabel||'-')}</b><br>الوقت: ${fd(r.bannedAt)}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="g" onclick="unban('${esc(r.uid)}')">فك الحظر</button><button class="s" onclick="go('studentProfile','${esc(r.uid)}')">ملف الطالب</button></div></div>`).join('');
+}
 async function unban(uid){
   if(!A)return toast('غير مصرح');
   try{
@@ -1649,7 +1702,10 @@ async function unban(uid){
     const ops=[remove(R('bans/'+uid)).catch(()=>{}),update(R('users/'+uid),{banned:false}).catch(()=>{}),remove(R('sessions/'+uid)).catch(()=>{})];
     if(phone)ops.push(remove(R('bansByPhone/'+phone)).catch(()=>{}));
     await Promise.all(ops);
-    await notifyAdmins('تم فك الحظر عن: '+(u?.name||uid),uid).catch(()=>{});
+    try{
+      const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      await set(R('adminNotifications/'+id),{text:'تم فك الحظر عن: '+(u?.name||uid),created:Date.now(),read:false,userId:uid});
+    }catch(e){}
     toast('تم فك الحظر');
     if(S.v==='admin'&&S.tab==='bans')renderBansLive();
   }catch(e){toast('تعذر فك الحظر')}
@@ -1763,7 +1819,6 @@ async function reopenStudentExam(examId,uid){
 async function vExamDetail(){
   if(!A&&!IS_SUPERVISOR)return '<div class="mut">غير مصرح.</div>';
   const e=exams[S.id];if(!e)return vAdmin();
-  /* إصلاح: مصدر واحد فقط للمحاولات لتجنّب التكرار */
   const attempts=[];
   Object.values(allExamAttempts||{}).forEach(byExam=>{
     const a=byExam?.[S.id];
@@ -1940,23 +1995,54 @@ async function delNews(id){
   try{await remove(R('news/'+id));toast('تم الحذف');render()}catch(e){toast('تعذر الحذف')}
 }
 
-/* ============ إصلاح رئيسي: vAdminStudents ============ */
 async function vAdminStudents(){
   if(!A)return '<div class="mut">غير مصرح.</div>';
-  /* نستخدم GTry لتمييز الفشل عن الفراغ */
+  if(studentsCache && Date.now()-studentsCacheAt < 30000){
+    return buildStudentsHTML(studentsCache);
+  }
   const ru=await GTry('users');
   if(!ru.ok){
-    return `<div class="err-box"><b>تعذر تحميل قائمة الطلاب.</b><br>السبب: ${esc(ru.error)}<br><br>تأكد من:<br>• اتصال الإنترنت.<br>• أن قواعد Firebase Realtime Database تسمح للمدير بقراءة <code>users</code>.<br>• أن حسابك موجود في <code>ADMIN_PHONES</code> داخل الكود ومطابق لرقم هاتفك في قاعدة البيانات.</div>`;
+    if(studentsCache){
+      return buildStudentsHTML(studentsCache)+`<div class="err-box" style="margin-top:12px">تعذر التحديث: ${esc(ru.error)} — تُعرض بيانات مخزنة.</div>`;
+    }
+    return `<div class="err-box"><b>تعذر تحميل قائمة الطلاب.</b><br>السبب: ${esc(ru.error)}<br><br>تأكد من:<br>• اتصال الإنترنت.<br>• أن قواعد Firebase Realtime Database تسمح للمدير بقراءة <code>users</code>.<br>• أن حسابك موجود في <code>ADMIN_PHONES</code>.<br><button class="s" style="margin-top:10px" onclick="reloadStudents()">إعادة المحاولة</button></div>`;
   }
   const users=ru.val||{};
   adminUsersList=users;
+  studentsCache=users;
+  studentsCacheAt=Date.now();
+  if(!studentsLiveUnsub){
+    studentsLiveUnsub=onValue(R('users'),snap=>{
+      studentsCache=snap.val()||{};
+      studentsCacheAt=Date.now();
+      adminUsersList=studentsCache;
+      if(S.v==='admin'&&S.tab==='students'){
+        const box=document.getElementById('studentsLiveBox');
+        if(box)box.innerHTML=buildStudentsHTML(studentsCache);
+      }
+    },()=>{});
+  }
   const rb=await GTry('bans');
   const rbp=await GTry('bansByPhone');
   const bans=rb.ok?(rb.val||{}):{};
   const bansByPhone=rbp.ok?(rbp.val||{}):{};
-  const arr=Object.entries(users).map(([id,u])=>({id,...u})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-  if(!arr.length)return `<div class="students-toolbar"><span class="count-pill">0 طالب</span></div><div class="mut">لا يوجد طلاب مسجلون بعد.<br><small style="font-size:12px">إذا كنت متأكداً من وجود حسابات، تحقق من قواعد Firebase.</small></div>`;
-  let html=`<div class="students-toolbar"><span class="count-pill">${arr.length} طالب</span><input id="searchStudent" placeholder="بحث: الاسم / الهاتف / الكود..." oninput="filterStudents(this.value)" style="margin-bottom:0;flex:1;min-width:200px"></div><div class="tw"><table id="studentsTable"><thead><tr><th>الاسم</th><th>رقم الهاتف</th><th>الصف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>`;
+  return `<div id="studentsLiveBox">${buildStudentsHTML(users,bans,bansByPhone)}</div>`;
+}
+
+function reloadStudents(){
+  studentsCache=null;studentsCacheAt=0;
+  if(studentsLiveUnsub){try{studentsLiveUnsub()}catch(e){}studentsLiveUnsub=null}
+  render();
+}
+
+function buildStudentsHTML(users,bans,bansByPhone){
+  bans=bans||{};
+  bansByPhone=bansByPhone||{};
+  const arr=Object.entries(users||{}).map(([id,u])=>({id,...u})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(!arr.length){
+    return `<div class="students-toolbar"><span class="count-pill">0 طالب</span><button class="s" onclick="reloadStudents()">تحديث</button></div><div class="mut">لا يوجد طلاب مسجلون بعد.</div>`;
+  }
+  let html=`<div class="students-toolbar"><span class="count-pill">${arr.length} طالب</span><input id="searchStudent" placeholder="بحث: الاسم / الهاتف / الكود..." oninput="filterStudents(this.value)" style="margin-bottom:0;flex:1;min-width:200px"><button class="s" onclick="reloadStudents()">تحديث</button></div><div class="tw"><table id="studentsTable"><thead><tr><th>الاسم</th><th>رقم الهاتف</th><th>الصف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>`;
   for(const u of arr){
     const isSup=u.isSupervisor===true;
     const isAdmin=isAdminPhone(u.phone||'');
@@ -1969,7 +2055,8 @@ async function vAdminStudents(){
        +(isBanned?menuBtn('g',`unbanStudent('${esc(u.id)}')`,'فك الحظر'):menuBtn('d',`banStudent('${esc(u.id)}')`,'حظر كامل'))
        +menuBtn('d',`delUser('${esc(u.id)}')`,'حذف')
       :`<div style="padding:8px 10px;font-size:12px;color:var(--mu)">حساب إدارة محمي</div>`;
-    html+=`<tr class="student-row" data-search="${esc(u.name)} ${esc(u.phone)} ${esc(u.email)} ${esc(codesStr)}"><td><b onclick="go('studentProfile','${esc(u.id)}')" style="cursor:pointer;color:var(--ac)">${esc(u.name||'-')}</b></td><td dir="ltr">${esc(u.phone||'-')}</td><td>${u.grade?`<span class="b">${esc(u.grade)}</span>`:'<span class="b y">غير محدد</span>'}</td><td>${isAdmin?'<span class="b r">أدمن</span>':isSup?'<span class="b y">مشرف</span>':isBanned?'<span class="b r">محظور</span>':'<span class="b">طالب</span>'}</td><td><div style="position:relative;display:inline-block"><button class="s" style="padding:6px 12px;font-size:12px" onclick="toggleStudentMenu('${esc(u.id)}',event)">⋯ إجراءات</button><div id="menu_${esc(u.id)}" style="display:none;position:absolute;top:100%;right:0;z-index:30;background:var(--surface);border:1px solid var(--bd);border-radius:10px;box-shadow:var(--shadow-lg);min-width:190px;padding:6px;margin-top:4px">${menu}</div></div></td></tr>`;
+    const searchStr=[u.name,u.phone,u.email,codesStr].filter(Boolean).join(' ').toLowerCase();
+    html+=`<tr class="student-row" data-search="${esc(searchStr)}"><td><b onclick="go('studentProfile','${esc(u.id)}')" style="cursor:pointer;color:var(--ac)">${esc(u.name||'-')}</b></td><td dir="ltr">${esc(u.phone||'-')}</td><td>${u.grade?`<span class="b">${esc(u.grade)}</span>`:'<span class="b y">غير محدد</span>'}</td><td>${isAdmin?'<span class="b r">أدمن</span>':isSup?'<span class="b y">مشرف</span>':isBanned?'<span class="b r">محظور</span>':'<span class="b">طالب</span>'}</td><td><div style="position:relative;display:inline-block"><button class="s" style="padding:6px 12px;font-size:12px" onclick="toggleStudentMenu('${esc(u.id)}',event)">⋯ إجراءات</button><div id="menu_${esc(u.id)}" style="display:none;position:absolute;top:100%;right:0;z-index:30;background:var(--surface);border:1px solid var(--bd);border-radius:10px;box-shadow:var(--shadow-lg);min-width:190px;padding:6px;margin-top:4px">${menu}</div></div></td></tr>`;
   }
   return html+`</tbody></table></div>`;
 }
@@ -1985,10 +2072,25 @@ function toggleStudentMenu(uid,ev){
   }
 }
 function filterStudents(q){
-  const query=String(q||'').toLowerCase();
+  const query=String(q||'').toLowerCase().trim();
+  let visible=0;
   document.querySelectorAll('.student-row').forEach(row=>{
-    row.style.display=(row.getAttribute('data-search')||'').toLowerCase().includes(query)?'':'none';
+    const match=(row.getAttribute('data-search')||'').includes(query);
+    row.style.display=match?'':'none';
+    if(match)visible++;
   });
+  let empty=document.getElementById('studentsEmpty');
+  if(!visible){
+    if(!empty){
+      empty=document.createElement('div');
+      empty.id='studentsEmpty';
+      empty.className='mut';
+      empty.style.padding='20px';
+      empty.textContent='لا نتائج مطابقة.';
+      const table=document.getElementById('studentsTable');
+      if(table&&table.parentElement)table.parentElement.appendChild(empty);
+    }
+  }else if(empty){empty.remove()}
 }
 async function setGrade(uid){
   if(!A)return toast('غير مصرح');
@@ -2004,18 +2106,24 @@ async function banStudent(uid){
   const u=await G('users/'+uid);
   if(!u||!u.phone)return toast('لا يوجد رقم هاتف لهذا الطالب');
   if(isAdminPhone(u.phone))return toast('لا يمكن حظر حساب إدارة');
-  const reason=prompt('سبب الحظر:','مخالفة قواعد المنصة')||'قرار إداري';
+  const reason=prompt('سبب الحظر:','مخالفة قواعد المنصة');
+  if(reason===null)return;
   if(!confirm('سيتم حظر الحساب بالكامل. متابعة؟'))return;
   const phone=normPhone(u.phone);
-  const rec={uid,phone,name:u.name||'',email:u.email||'',photo:u.photo||'',reason,bannedAt:Date.now(),by:U.uid};
+  const now=Date.now();
+  const rec={uid,phone,name:u.name||'',email:u.email||'',photo:u.photo||'',reason:reason||'قرار إداري',bannedAt:now,by:U.uid,manual:true};
   try{
     await Promise.all([
       set(R('bans/'+uid),rec),
       set(R('bansByPhone/'+phone),rec),
+      set(R('autoBans/'+uid+'/'+now),rec).catch(()=>{}),
       update(R('users/'+uid),{banned:true}),
       remove(R('sessions/'+uid)).catch(()=>{})
     ]);
-    await notifyAdmins('تم حظر الطالب: '+(u.name||uid)+' — السبب: '+reason,uid).catch(()=>{});
+    try{
+      const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      await set(R('adminNotifications/'+id),{text:'تم حظر الطالب: '+(u.name||uid)+' — السبب: '+(reason||'قرار إداري'),created:now,read:false,userId:uid});
+    }catch(e){}
     toast('تم حظر الطالب');
     if(S.v==='admin'&&S.tab==='students')render();
   }catch(e){toast('تعذر الحظر: '+(e.message||''))}
@@ -2033,7 +2141,10 @@ async function unbanStudent(uid){
       remove(R('sessions/'+uid)).catch(()=>{}),
       update(R('users/'+uid),{banned:false})
     ]);
-    await notifyAdmins('تم فك الحظر عن: '+(u.name||uid),uid).catch(()=>{});
+    try{
+      const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      await set(R('adminNotifications/'+id),{text:'تم فك الحظر عن: '+(u.name||uid),created:Date.now(),read:false,userId:uid});
+    }catch(e){}
     toast('تم فك الحظر');
     if(S.v==='admin'&&S.tab==='students')render();
   }catch(e){toast('تعذر فك الحظر')}
@@ -2044,10 +2155,10 @@ async function vStudentProfile(){
   const uid=S.id;
   const user=(adminUsersList&&adminUsersList[uid])||(await G('users/'+uid));
   if(!user)return '<div class="mut">الطالب غير موجود.</div>';
-  const openVids=Object.keys(user.videos||{});
+  const allLogs=(await G('logs'))||{};
   const studentVideos=[];
-  for(const vid of openVids){
-    const rec=await G('logs/'+vid+'/'+uid);
+  for(const [vid,byUser] of Object.entries(allLogs)){
+    const rec=byUser?.[uid];
     if(rec)studentVideos.push({vid,title:videos[vid]?.title||'محذوف',...rec});
   }
   studentVideos.sort((a,b)=>(b.lastAt||0)-(a.lastAt||0));
@@ -2070,7 +2181,7 @@ async function saveStudentName(uid){
   try{
     await update(R('users/'+uid),{name});
     if(adminUsersList[uid])adminUsersList[uid].name=name;
-    toast('تم حفظ الاسم في القاعدة والملف الشخصي');
+    toast('تم حفظ الاسم');
     if(U&&U.uid===uid){try{await updateProfile(auth.currentUser,{displayName:name})}catch(e){}}
   }catch(e){toast('تعذر حفظ الاسم: '+(e.message||''))}
 }
@@ -2416,6 +2527,7 @@ function resetGames(){
   labActiveLab=null;labCurrentExpIdx=0;labSelectedEls=[];labSelectedTool=null;labShowingResult=false;labLastResult=null;
   freeLab={els:[],tool:null,result:null};
   memState=null;huntState=null;orderState=null;balState=null;
+  whoState=null;tfState=null;speedState=null;
 }
 function openGame(key){
   if(!isLabOn(key))return toast('هذه اللعبة موقوفة حالياً');
@@ -2424,6 +2536,9 @@ function openGame(key){
   else if(key==='hunt')huntStart();
   else if(key==='order')orderStart();
   else if(key==='balance')balStart();
+  else if(key==='who')whoStart();
+  else if(key==='tf')tfStart();
+  else if(key==='speed')speedStart();
   go('games','',key);
 }
 function gameBack(){resetGames();go('games','','hub')}
@@ -2705,6 +2820,91 @@ function vBalance(){
   return `<div class="game-wrap">${gameTop('gameBack()','الألعاب',`<span class="b g">النقاط: ${st.score}</span><span class="b y">${st.idx+1}/${BAL_EQUATIONS.length}</span>`)}<p class="game-sub" style="text-align:center">عدّل المعاملات حتى تتساوى الذرات في الطرفين</p>${msg}<div class="bal-row">${side(eq.left,0)}<span class="bal-op">→</span>${side(eq.right,off)}</div><div class="game-actions"><button onclick="balCheck()">تحقق</button></div></div>`;
 }
 
+function whoStart(){if(!isLabOn('who'))return;whoState={rounds:shuffle(WHO_AM_I).slice(0,5),i:0,score:0,picked:null,done:false}}
+function whoAnswer(ans){
+  const st=whoState;if(!st||st.done||st.picked!==null)return;
+  st.picked=ans;
+  if(ans===st.rounds[st.i].answer)st.score+=15;
+  render();
+  setTimeout(()=>{
+    if(whoState!==st)return;
+    st.i++;st.picked=null;
+    if(st.i>=st.rounds.length){st.done=true;saveArcade('who',st.score)}
+    render();
+  },1000);
+}
+function vWho(){
+  const st=whoState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+  if(st.done)return resultCard('من أنا؟',st.score,'who');
+  const r=st.rounds[st.i];
+  const opts=shuffle([r.answer,...shuffle(WHO_AM_I.map(x=>x.answer).filter(a=>a!==r.answer)).slice(0,3)]);
+  const btns=opts.map(o=>{
+    const cls=st.picked===null?'':o===r.answer?'correct':o===st.picked?'wrong':'';
+    return `<button class="quiz-opt ${cls}" ${st.picked!==null?'disabled':''} onclick="whoAnswer('${esc(o)}')">${esc(o)}</button>`;
+  }).join('');
+  return `<div class="game-wrap">${gameTop('gameBack()','الألعاب',`<span class="b g">النقاط: ${st.score}</span><span class="b y">${st.i+1}/${st.rounds.length}</span>`)}<div class="quiz-arena"><div class="lab-scenario" style="margin-bottom:16px">${r.clues.map(c=>`<div class="sc-text" style="font-size:14px">• ${esc(c)}</div>`).join('')}</div><div class="quiz-options">${btns}</div></div></div>`;
+}
+
+function tfStart(){if(!isLabOn('tf'))return;tfState={rounds:shuffle(TRUE_FALSE).slice(0,8),i:0,score:0,picked:null,done:false}}
+function tfAnswer(val){
+  const st=tfState;if(!st||st.done||st.picked!==null)return;
+  st.picked=val;
+  if(val===st.rounds[st.i].a)st.score+=10;
+  render();
+  setTimeout(()=>{
+    if(tfState!==st)return;
+    st.i++;st.picked=null;
+    if(st.i>=st.rounds.length){st.done=true;saveArcade('tf',st.score)}
+    render();
+  },800);
+}
+function vTF(){
+  const st=tfState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+  if(st.done)return resultCard('صح أم خطأ',st.score,'tf');
+  const r=st.rounds[st.i];
+  const mk=(val,label)=>{
+    let cls='';
+    if(st.picked!==null){if(val===r.a)cls='correct';else if(val===st.picked)cls='wrong'}
+    return `<button class="quiz-opt ${cls}" ${st.picked!==null?'disabled':''} onclick="tfAnswer(${val})" style="direction:rtl">${label}</button>`;
+  };
+  return `<div class="game-wrap">${gameTop('gameBack()','الألعاب',`<span class="b g">النقاط: ${st.score}</span><span class="b y">${st.i+1}/${st.rounds.length}</span>`)}<div class="quiz-arena"><div class="quiz-question" style="direction:rtl">${esc(r.q)}</div><div class="quiz-options">${mk(true,'✓ صح')}${mk(false,'✗ خطأ')}</div></div></div>`;
+}
+
+function speedStart(){if(!isLabOn('speed'))return;speedState={rounds:shuffle(SPEED_QUIZ).slice(0,10),i:0,score:0,timeLeft:30,picked:null,done:false,timer:null};speedTick()}
+function speedTick(){
+  const st=speedState;if(!st||st.done)return;
+  if(st.timer){clearInterval(st.timer);st.timer=null}
+  st.timer=setInterval(()=>{
+    if(speedState!==st||st.done){clearInterval(st.timer);st.timer=null;return}
+    st.timeLeft--;
+    if(st.timeLeft<=0){clearInterval(st.timer);st.timer=null;st.done=true;saveArcade('speed',st.score);render();return}
+    if(S.v==='games'&&S.tab==='speed')render();
+  },1000);
+}
+function speedAnswer(ans){
+  const st=speedState;if(!st||st.done||st.picked!==null)return;
+  st.picked=ans;
+  if(ans===st.rounds[st.i].a)st.score+=12;
+  render();
+  setTimeout(()=>{
+    if(speedState!==st)return;
+    st.i++;st.picked=null;
+    if(st.i>=st.rounds.length){if(st.timer){clearInterval(st.timer);st.timer=null}st.done=true;saveArcade('speed',st.score)}
+    render();
+  },700);
+}
+function vSpeed(){
+  const st=speedState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+  if(st.done)return resultCard('سرعة البرق',st.score,'speed');
+  const r=st.rounds[st.i];
+  const opts=shuffle([r.a,...shuffle(SPEED_QUIZ.map(x=>x.a).filter(a=>a!==r.a)).slice(0,3)]);
+  const btns=opts.map(o=>{
+    const cls=st.picked===null?'':o===r.a?'correct':o===st.picked?'wrong':'';
+    return `<button class="quiz-opt ${cls}" ${st.picked!==null?'disabled':''} onclick="speedAnswer('${esc(o)}')" style="direction:rtl">${esc(o)}</button>`;
+  }).join('');
+  return `<div class="game-wrap">${gameTop('gameBack()','الألعاب',`<span class="b ${st.timeLeft<=10?'r':'g'}">⏱️ ${st.timeLeft} ث</span><span class="b y">${st.i+1}/${st.rounds.length}</span><span class="b">${st.score} نقطة</span>`)}<div class="quiz-arena"><div class="quiz-question">${esc(r.q)}</div><div class="quiz-options">${btns}</div></div></div>`;
+}
+
 function vLabHub(){
   const cards=Object.entries(LAB_INFO).map(([k,info])=>{
     const d=labDone(k),n=LAB_EXPERIMENTS[k].length,pct=Math.round(d/n*100);
@@ -2762,6 +2962,9 @@ function vGames(){
   if(t==='hunt'){if(!huntState)huntStart();return vHunt()}
   if(t==='order'){if(!orderState)orderStart();return vOrder()}
   if(t==='balance'){if(!balState)balStart();return vBalance()}
+  if(t==='who'){if(!whoState)whoStart();return vWho()}
+  if(t==='tf'){if(!tfState)tfStart();return vTF()}
+  if(t==='speed'){if(!speedState)speedStart();return vSpeed()}
   return vGamesHub();
 }
 
@@ -2778,6 +2981,7 @@ Object.assign(window,{
   banStudent,unbanStudent,outBan,toggleStudentMenu,delCode,resetStudentProgress,
   openGame,openLabHub,openLab,openFree,gameBack,labBack,labPick,labUndo,labClear,labTool,labRun,labNext,
   freePick,freeTool,freeRun,freeReset,quizStart,quizExit,quizAnswer,memFlip,huntAnswer,orderPick,orderNext,balStep,balCheck,
+  whoAnswer,tfAnswer,speedAnswer,reloadStudents,
   vGames,toggleLab,removeFromLeaderboard,removeFromQuizLeader,saveStudentName
 });
 
@@ -2802,4 +3006,4 @@ window.addEventListener('unhandledrejection',e=>{try{console.warn('Unhandled rej
 render();
 </script>
 </body>
- </html>
+  </html>

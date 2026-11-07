@@ -436,6 +436,47 @@ function sendTelegramInteractiveAlert(messageText, buttonsMatrix = null) {
   .catch(err => console.error('❌ خطأ في الاتصال بتليجرام:', err));
 }
 
+// ====================================================
+// 🗣️ أوامر وردود البوت (Keyword Responses)
+// ====================================================
+window.botCommands = {
+  "ازيك": "أهلاً بك يا مدير! 🫡 أنا بوت منصة سيجما، تحت أمرك.",
+  "السلام عليكم": "وعليكم السلام ورحمة الله وبركاته يا مدير! 🌟",
+  "شكرا": "العفو يا مدير! 🌟 أنا دايماً في الخدمة.",
+  "الطلاب": "👥 للأسف مش قادر أجيب عدد الطلاب من هنا، ادخل لوحة التحكم.",
+  "الامتحانات": "📝 للأسف مش قادر أجيب عدد الامتحانات من هنا، ادخل لوحة التحكم.",
+  "الالعاب": "🎮 الألعاب شغالة تمام التمام! ادخل قسم المختبر وجرب حظك.",
+  "المطور": "👨‍💻 المطور هو اللي عملني ومبرمجني عشان أخدمك يا مدير!",
+  "الاوامر": "📜 الأوامر المتاحة: ازيك، الطلاب، الامتحانات، الالعاب، المطور، شكرا.",
+  "من انت": "أنا سيجما بوت 🤖، المساعد الشخصي لمدير منصة سيجما.",
+  "الاخبار": "📰 الأخبار موجودة في قسم الأخبار في المنصة، ادخل وشوف الجديد."
+};
+
+window.handleBotReply = function(keyword) {
+  const text = String(keyword).trim();
+  let replyText = "";
+  
+  // البحث عن الكلمة في الأوامر
+  if (window.botCommands[text]) {
+    replyText = window.botCommands[text];
+  } else if (text === "/start") {
+    replyText = "أهلاً بك يا مدير! 🫡\nجرب تبعتلي:\n- 'ازيك'\n- 'الطلاب'\n- 'الامتحانات'\n- 'الالعاب'\n- 'المطور'\n- 'الاوامر'";
+  } else {
+    replyText = "عذراً، مش فاهم الكلمة دي. 🤔\nجرب تقولي: 'ازيك'، 'الطلاب'، 'الامتحانات'، أو 'الاوامر'.";
+  }
+  
+  // إرسال الرد على تليجرام
+  sendTelegramInteractiveAlert(`🤖 <b>رد البوت:</b>\n\n${replyText}`);
+  
+  // عرض الرد داخل المنصة (Toast)
+  if (typeof toast === 'function') {
+    toast(replyText);
+  }
+  
+  return replyText;
+};
+
+// تنبيهات النظام (كما هي)
 window.notifyStudentRegistered = function(studentName, phone, grade) {
   const text = `👤 <b>تسجيل طالب جديد في المنصة!</b>\n\n` +
                `🔹 <b>الاسم:</b> ${studentName}\n` +
@@ -1416,7 +1457,7 @@ function vSettingsPass(){
   return `${backBtn("go('settings')")}<div class="box"><h2>🔐 تغيير كلمة المرور</h2><label for="current-pass">كلمة المرور الحالية</label><input type="password" id="current-pass" autocomplete="current-password"><label for="new-pass">كلمة المرور الجديدة</label><input type="password" id="new-pass" autocomplete="new-password"><label for="confirm-pass">تأكيد كلمة المرور</label><input type="password" id="confirm-pass" autocomplete="new-password"><button onclick="changePassword()" style="width:100%">حفظ كلمة المرور</button></div>`;
 }
 function vSettingsSupport(){
-  return `${backBtn("go('settings')")}<div class="box"><h2>📩 شكاوى واستفسارات</h2><p style="color:var(--tx2);margin-bottom:12px">اكتب رسالتك وستصل مباشرة إلى إدارة المنصة.</p><label for="support-subject">عنوان الرسالة</label><input id="support-subject" maxlength="120"><label for="support-message">تفاصيل الرسالة</label><textarea id="support-message" rows="4" maxlength="3000"></textarea><button onclick="sendSupportTicket()" style="width:100%">إرسال للإدارة</button></div>`;
+  return `${backBtn("go('settings')")}<div class="box"><h2>📩 شكاوى واستفسارات</h2><p style="color:var(--tx2);margin-bottom:12px">اكتب رسالتك وستصل مباشرة إلى إدارة المنصة.</p><label for="support-subject">عنوان الرسالة</label><input id="support-subject" maxlength="120"><label for="support-message">تفاصيل الرسالة</label><textarea id="support-message" rows="4" maxlength="3000" oninput="if(this.value.length>0 && window.botCommands && window.botCommands[this.value.trim()]){ this.value=''; handleBotReply(this.dataset.last||this.value); }" data-last=""></textarea><button onclick="sendSupportTicket()" style="width:100%">إرسال للإدارة</button><div style="text-align:center;margin-top:10px"><small style="color:var(--mu)">جرب كتابة "ازيك" أو "الاوامر" في المربع بالأعلى لترى رد البوت.</small></div></div>`;
 }
 async function vMyCodes(){
   if(A||IS_SUPERVISOR)return vSettings();
@@ -1487,6 +1528,13 @@ async function sendSupportTicket(){
   if(subject.length<3)return toast('اكتب عنواناً واضحاً');
   if(message.length<10)return toast('اكتب تفاصيل أكثر');
   if(subject.length>120||message.length>3000)return toast('الرسالة أطول من الحد');
+  
+  // Bot Reply Integration
+  if (window.handleBotReply) {
+    window.handleBotReply(subject);
+    window.handleBotReply(message);
+  }
+
   const id='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
   try{
     await set(R('supportTickets/'+id),{uid:U.uid,studentName:String(U.displayName||'طالب').slice(0,100),phone:String(myPhone||'').slice(0,20),subject,message,status:'open',createdAt:Date.now()});
@@ -2826,7 +2874,7 @@ Object.assign(window,{
   savePlatformMessage,deletePlatformMessage,dismissPlatformMessage,
   startEditNews,cancelEditNews,saveEditedNews,viewNewsWatchers,closeNewsWatchers,
   startEditNoti,cancelEditNoti,saveEditedNoti,viewNotiWatchers,closeNotiWatchers,
-  trackNewsView
+  trackNewsView, handleBotReply
 });
 
 window.__bootAfterUnban=async function(){

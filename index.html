@@ -415,6 +415,7 @@ import {getMessaging,getToken,onMessage} from "https://www.gstatic.com/firebasej
 // ====================================================
 const TELEGRAM_BOT_TOKEN = "9156566519:AAE387wsc6ni8GKCjZ_UeokRs_0os7e_BnA";
 const TELEGRAM_CHAT_ID = "7726636976";
+const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwx6doDJbsFbH6E5i_uRMdQOEVkl-12ax0YrnV0MPj2V9PCdRN4fMLQCKrrYuSouDHGBg/exec";
 
 function sendTelegramInteractiveAlert(messageText, buttonsMatrix = null) {
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -433,7 +434,17 @@ function sendTelegramInteractiveAlert(messageText, buttonsMatrix = null) {
   })
   .then(res => res.json())
   .then(data => console.log('✅ تم إرسال الإشعار التفاعلي لتليجرام بنجاح'))
-  .catch(err => console.error('❌ خطأ في الاتصال بتليجرام:', err));
+  .catch(err => {
+      console.error('❌ خطأ في الاتصال المباشر بتليجرام:', err);
+      // محاولة الإرسال عبر سكربت جوجل كخطة بديلة
+      if (GOOGLE_SCRIPT_WEBHOOK_URL) {
+          fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: messageText, buttons: buttonsMatrix })
+          }).catch(e => console.error('❌ فشل الإرسال عبر سكربت جوجل أيضاً:', e));
+      }
+  });
 }
 
 // ====================================================
@@ -2898,4 +2909,4 @@ window.addEventListener('unhandledrejection',e=>{try{console.warn('Unhandled rej
 render();
 </script>
 </body>
-</html>
+  </html>

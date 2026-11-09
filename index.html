@@ -2143,4 +2143,234 @@ const tube=labSelectedEls.length?labSelectedEls.map(el=>`<span class="chip" styl
 const res=labLastResult;
 const resultHTML=res?`<div style="background:var(--surface2);border:2px solid ${res.correct?'var(--ok)':'var(--er)'};border-radius:14px;padding:16px;margin-top:14px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--ac2);direction:ltr;margin-bottom:10px">${esc(res.formula)}</div><div style="font-size:14px;color:var(--tx2)">${esc(res.result)}</div>${res.correct?`<div style="font-size:14px;color:var(--ok);margin-top:10px">${esc(res.desc)}</div>`:''}</div>`:'';
 const controls=labShowingResult?`<div style="display:flex;gap:8px;justify-content:center;margin-top:14px"><button class="btn" onclick="labNext()">${labCurrentExpIdx+1>=exps.length?'إنهاء المختبر':'التجربة التالية'}</button></div>`:`<div style="font-size:13px;font-weight:800;color:var(--tx2);margin:12px 0 8px;text-align:center">العناصر</div><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:14px">${pool.map(el=>`<button class="chip" style="${elStyle(el)};width:60px;height:60px;border-radius:50%;font-size:16px;${labSelectedEls.includes(el)?'outline:4px solid var(--ac);outline-offset:3px':''}" onclick="labPick('${el}')">${esc(LAB_ELEMENT_LABELS[el]||el)}</button>`).join('')}</div><div style="font-size:13px;font-weight:800;color:var(--tx2);margin:12px 0 8px;text-align:center">الأداة</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px">${Object.entries(LAB_TOOLS).map(([k,t])=>`<button class="btn ${labSelectedTool===k?'':'ghost'}" style="padding:10px 16px;font-size:13px" onclick="labTool('${k}')">${t.icon} ${t.label}</button>`).join('')}</div><div style="display:flex;gap:8px;justify-content:center;margin-top:14px"><button class="btn ghost" onclick="labUndo()">تراجع</button><button class="btn ghost" onclick="labClear()">مسح</button><button class="btn" onclick="labRun()">▶ تنفيذ</button></div>`;
-return `${gameTop('labBack()','المختبرات',`<span class="badge brand">${esc(info.name)}</span><span class="badge warn">${labCurrentExpIdx+1}/${exps.length}</span>`)}<div class="question-card" style="text-align:center"><div style="font-size:32px;margin-bottom:
+return `${gameTop('labBack()','المختبرات',`<span class="badge brand">${esc(info.name)}</span><span class="badge warn">${labCurrentExpIdx+1}/${exps.length}</span>`)}<div class="question-card" style="text-align:center"><div style="font-size:32px;margin-bottom:10px">🎯</div><div style="font-size:15px;font-weight:800;color:var(--warn);margin-bottom:16px">${esc(exp.scenario)}</div><div style="background:var(--ac-soft);border:2px dashed var(--ac);border-radius:16px;min-height:150px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;padding:20px;gap:12px;margin-bottom:14px">${tube}</div>${resultHTML}${controls}</div>`;
+}
+function vFreeLab(){
+const r=freeLab.result;
+const chosen=freeLab.els.length?freeLab.els.map(e=>`<span class="chip" style="${elStyle(e)};width:60px;height:60px;margin:5px">${esc(LAB_ELEMENT_LABELS[e])}</span>`).join('<span style="font-size:28px;color:var(--mu)">+</span>'):'<span style="color:var(--mu);font-weight:700">اختر عنصرين من الأسفل</span>';
+const res=r?(r.none?`<div style="background:#fee2e2;color:#991b1b;border-radius:12px;padding:16px;margin-top:14px;text-align:center">${esc(r.text)}</div>`:`<div style="background:var(--surface2);border:2px solid var(--ok);border-radius:14px;padding:16px;margin-top:14px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--ac2);direction:ltr;margin-bottom:10px">${esc(r.formula)}</div><div style="font-size:14px;color:var(--tx2)">${esc(r.explain)}</div></div>`):'';
+return `${gameTop('gameBack()','الألعاب',`<span class="badge brand">🧑‍🔬 طلع الكيميائي</span>`)}<div class="question-card" style="text-align:center"><div style="background:var(--ac-soft);border:2px dashed var(--ac);border-radius:16px;min-height:150px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;padding:20px;gap:12px;margin-bottom:14px">${chosen}</div>${res}</div><div class="question-card" style="margin-top:14px"><div style="font-size:13px;font-weight:800;color:var(--tx2);margin-bottom:10px;text-align:center">اختر عنصرين</div><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:14px">${FREE_LAB_ELEMENTS.map(el=>`<button class="chip" style="${elStyle(el)};width:60px;height:60px;border-radius:50%;font-size:16px;${freeLab.els.includes(el)?'outline:4px solid var(--ac);outline-offset:3px':''}" onclick="freePick('${el}')">${esc(LAB_ELEMENT_LABELS[el])}</button>`).join('')}</div><div style="font-size:13px;font-weight:800;color:var(--tx2);margin-bottom:10px;text-align:center">الأداة (اختياري)</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px">${Object.entries(LAB_TOOLS).map(([k,t])=>`<button class="btn ${freeLab.tool===k?'':'ghost'}" style="padding:8px 14px;font-size:12px" onclick="freeTool('${k}')">${t.icon} ${t.label}</button>`).join('')}</div><div style="display:flex;gap:8px;justify-content:center"><button class="btn" onclick="freeRun()">▶ نفذ التفاعل</button><button class="btn ghost" onclick="freeReset()">مسح</button></div></div>`;
+}
+function vQuizHome(){
+const p=quizLeaderData[U.uid]||{};
+const levels=[['easy','🥉','المستوى السهل','تفاعلات أساسية'],['medium','🥈','المستوى المتوسط','إحلال وترسيب'],['hard','🥇','المستوى الصعب','أكسدة واختزال']];
+return `${gameTop('gameBack()','الألعاب',`<span class="badge brand">${canPlayNow()?'نقاطك: '+(p.points||0):'وضع المشاهدة'}</span>`)}<div class="section-head"><div class="section-title">اختر الناتج</div></div><div class="games-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px">${levels.map(([k,ic,n,d])=>`<div class="game-tile" onclick="quizStart('${k}')"><div class="game-icon" style="font-size:40px;background:transparent;box-shadow:none">${ic}</div><div class="game-name">${n}</div><div class="game-desc">${d}</div></div>`).join('')}</div>`;
+}
+function vQuizScreen(){
+const level=quizActiveLevel;const order=window._quizOrder||QUIZ_QUESTIONS[level].map((_,i)=>i);const origIdx=order[quizCurrentIndex];const q=QUIZ_QUESTIONS[level][origIdx];const optOrder=userShuffle(q.opts.map((_,i)=>i),origIdx+33);const name={easy:'السهل',medium:'المتوسط',hard:'الصعب'}[level];
+return `${gameTop('quizExit()','المستويات',`<span class="badge brand">${name}</span><span class="badge warn">${quizCurrentIndex+1}/${order.length}</span>`)}<div class="video-progress" style="margin-bottom:16px"><span style="width:${quizCurrentIndex/order.length*100}%"></span></div><div class="question-card"><div class="q-text" style="text-align:center;font-size:22px;direction:ltr;padding:20px;background:var(--surface2);border-radius:14px;margin-bottom:20px">${esc(q.q)}</div><div style="display:flex;flex-direction:column;gap:10px">${optOrder.map((origOptIdx,displayIdx)=>`<button class="opt quiz-opt" style="justify-content:center;direction:ltr" onclick="quizAnswer(${displayIdx})">${esc(q.opts[origOptIdx])}</button>`).join('')}</div></div>`;
+}
+function vMemory(){
+const st=memState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('مطابقة الرموز',st.score,'memory');
+const cells=st.cards.map((c,i)=>{const up=st.open.includes(i)||st.matched.includes(i);return `<button class="chip" style="width:100%;aspect-ratio:1;border-radius:14px;font-size:15px;background:${up?(st.matched.includes(i)?'#d1fae5':'var(--surface)'):'var(--grad-brand)'};color:${up?(st.matched.includes(i)?'#065f46':'var(--tx)'):'#fff'};border:2px solid ${up?'var(--ac)':'transparent'};display:flex;align-items:center;justify-content:center;text-align:center;padding:4px" onclick="memFlip(${i})">${up?esc(c.t):'?'}</button>`}).join('');
+return `${gameTop('gameBack()','الألعاب',`<span class="badge">المحاولات: ${st.moves}</span><span class="badge ok">${st.matched.length/2}/${MEM_PAIRS.length}</span>`)}<div class="question-card"><p style="text-align:center;font-weight:800;margin-bottom:16px;color:var(--tx2)">اربط الرمز الكيميائي باسم العنصر</p><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:480px;margin:0 auto">${cells}</div></div>`;
+}
+function vHunt(){
+const st=huntState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('صيد الرموز',st.score,'hunt');
+const r=st.rounds[st.i];
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ok">النقاط: ${st.score}</span><span class="badge warn">${st.i+1}/${st.rounds.length}</span>`)}<div class="question-card"><div class="q-text" style="text-align:center;font-size:20px;margin-bottom:20px">ما رمز عنصر <b>${esc(r.target.n)}</b>؟</div><div style="display:flex;flex-direction:column;gap:10px">${r.opts.map(e=>{const cls=st.picked===null?'':e.s===r.target.s?'ok':e.s===st.picked?'er':'';return `<button class="opt ${cls?'selected':''}" style="justify-content:center;font-size:18px" ${st.picked!==null?'disabled':''} onclick="huntAnswer('${e.s}')">${esc(e.s)}</button>`}).join('')}</div></div>`;
+}
+function vOrder(){
+const st=orderState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('رتّب العناصر',st.score,'order');
+const items=st.rounds[st.r];const chain=st.picked.map(s=>{const e=items.find(x=>x.s===s);return `<span class="chip" style="background:#0891b2">${esc(e.s)}${st.roundDone?` (${e.z})`:''}</span>`}).join('');
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ok">النقاط: ${st.score}</span><span class="badge warn">الجولة ${st.r+1}/${st.rounds.length}</span>`)}<div class="question-card"><p style="text-align:center;font-weight:800;margin-bottom:14px">رتّب العناصر من الأصغر إلى الأكبر في العدد الذري</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:44px;margin-bottom:14px">${chain||'<span style="color:var(--mu)">ابدأ بالعنصر الأصغر</span>'}</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">${items.map(e=>{const p=st.picked.includes(e.s);return `<button class="btn ${p?'ok':'ghost'}" style="${st.wrong===e.s?'background:var(--er);color:#fff':''}" ${p||st.roundDone||st.wrong?'disabled':''} onclick="orderPick('${e.s}')"><b style="font-size:18px">${esc(e.s)}</b><small style="font-size:11px">${esc(e.n)}</small></button>`}).join('')}</div>${st.roundDone?`<div style="text-align:center;margin-top:14px"><button class="btn" onclick="orderNext()">${st.r+1>=st.rounds.length?'إنهاء اللعبة':'الجولة التالية'}</button></div>`:''}</div>`;
+}
+function vBalance(){
+const st=balState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('موازنة المعادلات',st.score,'balance');
+const eq=BAL_EQUATIONS[st.idx];const off=eq.left.length;
+const item=(it,k)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--bd);border-radius:14px;padding:10px 12px"><div style="display:flex;gap:6px;align-items:center"><button class="chip" style="background:var(--ac);width:28px;height:28px" onclick="balStep(${k},-1)">−</button><span style="font-size:18px;font-weight:900;color:var(--ac2)">${st.coefs[k]}</span><button class="chip" style="background:var(--ac);width:28px;height:28px" onclick="balStep(${k},1)">+</button></div><span style="direction:ltr;font-size:16px">${esc(it.f)}</span></div>`;
+const msg=st.msg==='ok'?'<div style="background:#d1fae5;color:#065f46;padding:10px;border-radius:12px;text-align:center;font-weight:800;margin-bottom:10px">أحسنت! المعادلة متوازنة</div>':st.msg==='bad'?'<div style="background:#fee2e2;color:#991b1b;padding:10px;border-radius:12px;text-align:center;font-weight:800;margin-bottom:10px">المعادلة غير متوازنة بعد</div>':'';
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ok">النقاط: ${st.score}</span><span class="badge warn">${st.idx+1}/${BAL_EQUATIONS.length}</span>`)}<div class="question-card"><p style="text-align:center;font-weight:800;margin-bottom:14px">عدّل المعاملات حتى تتساوى الذرات</p>${msg}<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:18px 0">${eq.left.map((it,k)=>item(it,k)).join('<span style="font-size:22px;color:var(--mu)">+</span>')}<span style="font-size:22px;color:var(--mu)">→</span>${eq.right.map((it,k)=>item(it,off+k)).join('<span style="font-size:22px;color:var(--mu)">+</span>')}</div><div style="text-align:center"><button class="btn" onclick="balCheck()">تحقق</button></div></div>`;
+}
+function vWho(){
+const st=whoState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('من أنا؟',st.score,'who');
+const r=st.rounds[st.i];const opts=userShuffle([r.answer,...userShuffle(WHO_AM_I.map(x=>x.answer).filter(a=>a!==r.answer),st.i+50).slice(0,3)],st.i+60);
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ok">النقاط: ${st.score}</span><span class="badge warn">${st.i+1}/${st.rounds.length}</span>`)}<div class="question-card"><div style="background:#fef3c7;border:2px solid var(--warn);border-radius:14px;padding:16px;margin-bottom:16px">${r.clues.map(c=>`<div style="font-size:14px;font-weight:800;color:#92400e;margin-bottom:6px">• ${esc(c)}</div>`).join('')}</div><div style="display:flex;flex-direction:column;gap:10px">${opts.map(o=>{const cls=st.picked===null?'':o===r.answer?'ok':o===st.picked?'er':'';return `<button class="opt ${cls?'selected':''}" style="justify-content:center" ${st.picked!==null?'disabled':''} onclick="whoAnswer('${esc(o)}')">${esc(o)}</button>`}).join('')}</div></div>`;
+}
+function vTF(){
+const st=tfState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('صح أم خطأ',st.score,'tf');
+const r=st.rounds[st.i];
+const mk=(val,label)=>{let cls='';if(st.picked!==null){if(val===r.a)cls='ok';else if(val===st.picked)cls='er'}return `<button class="opt ${cls?'selected':''}" style="justify-content:center" ${st.picked!==null?'disabled':''} onclick="tfAnswer(${val})">${label}</button>`};
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ok">النقاط: ${st.score}</span><span class="badge warn">${st.i+1}/${st.rounds.length}</span>`)}<div class="question-card"><div class="q-text" style="text-align:center;font-size:20px;margin-bottom:20px">${esc(r.q)}</div><div style="display:flex;flex-direction:column;gap:10px">${mk(true,'✓ صح')}${mk(false,'✗ خطأ')}</div></div>`;
+}
+function vSpeed(){
+const st=speedState;if(!st)return '<div class="mut">اللعبة موقوفة</div>';
+if(st.done)return resultCard('سرعة البرق',st.score,'speed');
+const r=st.rounds[st.i];const opts=userShuffle([r.a,...userShuffle(SPEED_QUIZ.map(x=>x.a).filter(a=>a!==r.a),st.i+70).slice(0,3)],st.i+80);
+return `${gameTop('gameBack()','الألعاب',`<span class="badge ${st.timeLeft<=10?'er':'ok'}">⏱️ ${st.timeLeft} ث</span><span class="badge warn">${st.i+1}/${st.rounds.length}</span><span class="badge">${st.score} نقطة</span>`)}<div class="question-card"><div class="q-text" style="text-align:center;font-size:26px;direction:ltr;padding:20px;background:var(--surface2);border-radius:14px;margin-bottom:20px">${esc(r.q)}</div><div style="display:flex;flex-direction:column;gap:10px">${opts.map(o=>{const cls=st.picked===null?'':o===r.a?'ok':o===st.picked?'er':'';return `<button class="opt ${cls?'selected':''}" style="justify-content:center" ${st.picked!==null?'disabled':''} onclick="speedAnswer('${esc(o)}')">${esc(o)}</button>`}).join('')}</div></div>`;
+}
+async function vAdminLab(){
+if(!A)return '<div class="mut">غير مصرح.</div>';
+const r=await GTry('users');
+const users=r.ok?(r.val||{}):{};
+adminUsersList=users;
+const scores=Object.entries(arcadeData||{}).map(([uid,d])=>({uid,name:d.name||users[uid]?.name||'طالب',points:d.points||0,best:d.best||{}})).filter(x=>x.points>0).sort((a,b)=>b.points-a.points);
+const quizScores=Object.entries(quizLeaderData||{}).map(([uid,d])=>({uid,name:d.name||users[uid]?.name||'طالب',points:d.points||0})).filter(x=>x.points>0);
+return `<div class="question-card"><h2 style="font-size:18px;margin-bottom:14px">🔬 التحكم في المختبر</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">${LAB_KEYS.map(([k,n])=>`<div style="background:var(--surface2);border:1px solid var(--bd);border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:8px"><b style="font-size:14px">${n}</b><button class="${isLabOn(k)?'ok':'danger'}" style="padding:6px 12px;font-size:12px" onclick="toggleLab('${k}')">${isLabOn(k)?'مفعّل':'موقوف'}</button></div>`).join('')}</div></div>
+<div class="question-card"><h2 style="font-size:18px;margin-bottom:14px">🏆 المتصدرون</h2>${!scores.length?'<div class="mut">لا يوجد متصدرون بعد.</div>':`<div class="tw"><table><thead><tr><th>#</th><th>الطالب</th><th>النقاط</th><th>إجراء</th></tr></thead><tbody>${scores.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.name)}</td><td><b>${s.points}</b></td><td><button class="d" style="padding:4px 10px;font-size:12px" onclick="removeFromLeaderboard('${esc(s.uid)}')">إزالة</button></td></tr>`).join('')}</tbody></table></div>`}</div>
+<div class="question-card"><h2 style="font-size:18px;margin-bottom:14px">🏅 متصدرو الاختبار</h2>${!quizScores.length?'<div class="mut">لا يوجد متصدرون بعد.</div>':`<div class="tw"><table><thead><tr><th>#</th><th>الطالب</th><th>النقاط</th><th>إجراء</th></tr></thead><tbody>${quizScores.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.name)}</td><td><b>${s.points}</b></td><td><button class="d" style="padding:4px 10px;font-size:12px" onclick="removeFromQuizLeader('${esc(s.uid)}')">إزالة</button></td></tr>`).join('')}</tbody></table></div>`}</div>`;
+}
+async function toggleLab(k){if(!A)return toast('غير مصرح');const cur=labEnabled?.[k]!==false;try{await set(R('settings/labEnabled/'+k),!cur);toast(cur?'تم الإيقاف':'تم التفعيل')}catch(e){toast('تعذر التعديل')}}
+async function removeFromLeaderboard(uid){if(!A)return toast('غير مصرح');if(!confirm('إزالة هذا الطالب من المتصدرين؟'))return;try{await remove(R('arcade/'+uid));toast('تمت الإزالة');render()}catch(e){toast('تعذر الإزالة')}}
+async function removeFromQuizLeader(uid){if(!A)return toast('غير مصرح');if(!confirm('إزالة هذا الطالب من متصدري الاختبار؟'))return;try{await remove(R('quizGame/'+uid));toast('تمت الإزالة');render()}catch(e){toast('تعذر الإزالة')}}
+function vAdminAI(){
+const ctx=`<div class="notice" style="margin-bottom:14px;font-size:12px;line-height:1.6">💡 جرّب: "كم عدد الطلاب؟" أو "أنشئ 5 أسئلة على الأكسدة" أو "كيف أحسن المنصة؟"</div>`;
+const msgs=aiChatHistory.length?aiChatHistory.map(m=>`<div class="ai-msg ${m.role}"><b>${m.role==='user'?'👤 أنت':'🤖 المساعد'}</b><span>${esc(m.text)}</span></div>`).join(''):'<div class="mut" style="padding:30px">ابدأ بمحادثة...</div>';
+return `<div class="question-card"><h2 style="font-size:18px;margin-bottom:14px">🤖 المساعد الذكي</h2><p style="color:var(--tx2);line-height:1.7;margin-bottom:14px">مساعد إداري ذكي للإدارة فقط.</p>${ctx}<div class="ai-chat-box" id="aiChatBox">${msgs}</div><textarea id="aiInput" rows="3" placeholder="اكتب رسالتك للمساعد..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI()}"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button onclick="sendAI()" id="aiSendBtn">إرسال</button><button class="s" onclick="aiChatHistory=[];render()">مسح المحادثة</button><button class="s" onclick="aiQuickSummary()">📊 ملخص سريع</button></div></div>`;
+}
+function aiQuickSummary(){
+const users=Object.keys(adminUsersList||{}).length;
+const vids=Object.keys(videos||{}).length;
+const exms=Object.keys(exams||{}).length;
+const bans=Object.keys(bansLiveData?.uid||{}).length;
+const openTickets=Object.values(supportTickets||{}).filter(t=>t.status==='open').length;
+const text=`📊 ملخص المنصة الآن:\n👥 الطلاب: ${users}\n🎬 الفيديوهات: ${vids}\n📝 الامتحانات: ${exms}\n🚫 المحظورون: ${bans}\n📩 الشكاوى المفتوحة: ${openTickets}`;
+aiChatHistory.push({role:'user',text:'أعطني ملخصًا للمنصة'});
+aiChatHistory.push({role:'assistant',text});
+render();
+}
+async function sendAI(){
+const input=$('#aiInput');
+const text=(input?.value||'').trim();
+if(!text)return toast('اكتب رسالتك');
+if(!A)return toast('متاح للإدارة فقط');
+aiChatHistory.push({role:'user',text});
+if(input)input.value='';
+render();
+const btn=document.getElementById('aiSendBtn');
+if(btn){btn.disabled=true;btn.textContent='... جارٍ التفكير'}
+try{
+const context={studentsCount:Object.keys(adminUsersList||{}).length,videosCount:Object.keys(videos||{}).length,examsCount:Object.keys(exams||{}).length,bannedCount:Object.keys(bansLiveData?.uid||{}).length,supportOpen:Object.values(supportTickets||{}).filter(t=>t.status==='open').length,teachers:Object.values(teachers||{}).map(t=>t.name),grades:ALL_GRADES};
+const idToken=await auth.currentUser.getIdToken();
+const AI_URL='https://us-central1-sigma-6f162.cloudfunctions.net/aiAdmin';
+const res=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+idToken},body:JSON.stringify({message:text,history:aiChatHistory.slice(-10),context})});
+if(!res.ok)throw new Error('AI service unavailable');
+const data=await res.json();
+aiChatHistory.push({role:'assistant',text:data.reply||'لم أستطع الرد.'});
+}catch(e){aiChatHistory.push({role:'assistant',text:'⚠️ تعذر الاتصال بالمساعد الذكي. تأكد من إعداد Cloud Function.'})}
+render();
+}
+async function vAdminBans(){
+if(!A)return '<div class="mut">غير مصرح.</div>';
+if(bansLiveUnsub){try{bansLiveUnsub()}catch(e){}bansLiveUnsub=null}
+bansLiveData={uid:{},phone:{}};
+const ru=await GTry('bans'),rp=await GTry('bansByPhone');
+bansLiveData.uid=ru.ok?(ru.val||{}):{};
+bansLiveData.phone=rp.ok?(rp.val||{}):{};
+let lastCount=Object.keys(bansLiveData.uid).length+Object.keys(bansLiveData.phone).length;
+const un1=onValue(R('bans'),snap=>{bansLiveData.uid=snap.val()||{};const c=Object.keys(bansLiveData.uid).length+Object.keys(bansLiveData.phone||{}).length;if(c>lastCount){try{toast('🚨 حظر جديد وصل')}catch(e){}}lastCount=c;if(S.v==='admin'&&S.tab==='bans')renderBansLive()},()=>{});
+const un2=onValue(R('bansByPhone'),snap=>{bansLiveData.phone=snap.val()||{};const c=Object.keys(bansLiveData.uid||{}).length+Object.keys(bansLiveData.phone).length;if(c>lastCount){try{toast('🚨 حظر جديد وصل')}catch(e){}}lastCount=c;if(S.v==='admin'&&S.tab==='bans')renderBansLive()},()=>{});
+bansLiveUnsub=()=>{try{un1()}catch(e){}try{un2()}catch(e){}};
+return `<div id="bansLiveBox">${buildBansHTML()}</div>`;
+}
+function renderBansLive(){const box=document.getElementById('bansLiveBox');if(box)box.innerHTML=buildBansHTML()}
+function buildBansHTML(){
+const map={};
+Object.values(bansLiveData.uid||{}).forEach(b=>{if(!b||!b.uid||isAdminPhone(b.phone||''))return;map[b.uid]={...b,_sources:['uid']}});
+Object.values(bansLiveData.phone||{}).forEach(b=>{if(!b||!b.uid||isAdminPhone(b.phone||''))return;if(map[b.uid])map[b.uid]={...map[b.uid],...b,_sources:[...new Set([...map[b.uid]._sources,'phone'])]};else map[b.uid]={...b,_sources:['phone']}});
+const entries=Object.values(map);
+const note=`<div class="notice"><b>ملاحظة:</b> حسابات الإدارة محمية ولا تُحظر أبداً.<br>هذه الصفحة تتحدث تلقائياً.</div>`;
+if(!entries.length)return note+`<div class="mut">لا يوجد طلاب محظورون.</div>`;
+return note+`<h2>🚫 الطلاب المحظورون (${entries.length})</h2>`+entries.map(b=>`<div class="question-card"><div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">${b.photo?`<img src="${esc(b.photo)}" alt="" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`:''}<div style="flex:1"><b>${esc(b.name||'')}</b><br><small style="color:var(--mu)">${esc(b.email||b.phone||'')}</small></div><span class="b r">محظور</span></div><p style="color:var(--tx2);font-size:13px;line-height:1.8;margin-bottom:12px">السبب: ${esc(b.reason||'قرار إداري')}<br>وقت الحظر: ${fd(b.bannedAt)}<br>الجهاز السابق: <b>${esc(b.oldDeviceLabel||'-')}</b> — الجهاز الجديد: <b>${esc(b.newDeviceLabel||'-')}</b></p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="g" onclick="unban('${esc(b.uid)}')">فك الحظر</button><button class="s" onclick="keepBan()">تركه محظوراً</button></div></div>`).join('');
+}
+async function vAdminAutoBans(){
+if(!A)return '<div class="mut">غير مصرح.</div>';
+const r=await GTry('autoBans');
+if(!r.ok)return `<div class="err-box">تعذر التحميل: ${esc(r.error)}</div>`;
+const data=r.val||{};
+const rows=[];
+Object.entries(data).forEach(([uid,byTime])=>{Object.entries(byTime||{}).forEach(([ts,rec])=>{if(rec)rows.push({...rec,_ts:+ts})})});
+rows.sort((a,b)=>b._ts-a._ts);
+if(!rows.length)return `<div class="notice">لا يوجد حظر تلقائي مسجّل.</div>`;
+return `<div class="notice"><b>ملاحظة:</b> هذه الحسابات حُظرت تلقائياً بسبب تسجيل الدخول من جهاز آخر.</div><h2>⚠️ الحظر التلقائي (${rows.length})</h2>`+rows.map(r=>`<div class="question-card"><div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">${r.photo?`<img src="${esc(r.photo)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">`:''}<div style="flex:1"><b>${esc(r.name||'')}</b><br><small style="color:var(--mu)" dir="ltr">${esc(r.phone||r.email||r.uid)}</small></div><span class="b r">محظور</span></div><p style="color:var(--tx2);font-size:13px;line-height:1.8">الجهاز السابق: <b>${esc(r.oldDeviceLabel||'-')}</b> — الجديد: <b>${esc(r.newDeviceLabel||'-')}</b><br>الوقت: ${fd(r.bannedAt)}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="g" onclick="unban('${esc(r.uid)}')">فك الحظر</button><button class="s" onclick="go('studentProfile','${esc(r.uid)}')">ملف الطالب</button></div></div>`).join('');
+}
+async function unban(uid){
+if(!A)return toast('غير مصرح');
+try{
+const u=await G('users/'+uid);
+const phone=normPhone(u?.phone||'');
+const ops=[remove(R('bans/'+uid)).catch(()=>{}),update(R('users/'+uid),{banned:false}).catch(()=>{}),remove(R('sessions/'+uid)).catch(()=>{})];
+if(phone)ops.push(remove(R('bansByPhone/'+phone)).catch(()=>{}));
+await Promise.all(ops);
+try{const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);await set(R('adminNotifications/'+id),{text:'تم فك الحظر عن: '+(u?.name||uid),created:Date.now(),read:false,userId:uid,views:0,viewedBy:{}})}catch(e){}
+toast('✅ تم فك الحظر');
+if(S.v==='admin'&&S.tab==='bans')renderBansLive();
+}catch(e){toast('تعذر فك الحظر')}
+}
+function keepBan(){toast('بقي محظوراً')}
+function vAdminExams(){
+if(!A&&!IS_SUPERVISOR)return '<div class="mut">غير مصرح.</div>';
+const list=Object.entries(exams).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
+let html=`<div class="question-card" style="margin-bottom:16px"><h2 style="font-size:18px;margin-bottom:14px">إنشاء امتحان جديد</h2><div class="field"><label>عنوان الامتحان</label><input id="exTitle"></div><div class="field"><label>الصف</label><select id="exGrade">${ALL_GRADES.map(g=>`<option>${g}</option>`).join('')}</select></div><div class="field"><label>مدة الامتحان (دقيقة)</label><input id="exDuration" type="number" min="1" max="180" value="30"></div><div class="field"><label>الأسئلة</label></div><div id="questionsBuilder"></div><button class="s" onclick="addQuestion()" style="margin-top:8px">+ إضافة سؤال</button><button class="btn" onclick="createExam()" style="width:100%;margin-top:16px">حفظ الامتحان</button></div><h2>📝 الامتحانات (${list.length})</h2>`;
+if(!list.length){html+=`<div class="mut">لا توجد امتحانات بعد.</div>`}
+else{html+=list.map(([id,e])=>{const attempts=Object.values(allExamAttempts||{}).filter(byExam=>byExam&&byExam[id]).length;return `<div class="question-card"><h3 style="font-size:16px;margin-bottom:10px">${esc(e.title)}</h3><div class="video-meta" style="margin-bottom:14px"><span class="badge">${esc(e.grade)}</span><span class="badge warn">${e.duration} دقيقة</span><span class="badge">${(e.questions||[]).length} سؤال</span><span class="badge ok">${attempts} محاولة</span>${e.disabled?'<span class="badge er">موقوف</span>':''}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="s" style="padding:6px 12px;font-size:12px" onclick="go('exam','${esc(id)}')">عرض النتائج</button><button class="s" style="padding:6px 12px;font-size:12px" onclick="quickEditExam('${esc(id)}')">تعديل</button><button class="s" style="padding:6px 12px;font-size:12px" onclick="toggleExamDisabled('${esc(id)}')">${e.disabled?'تفعيل':'إيقاف'}</button><button class="d" style="padding:6px 12px;font-size:12px" onclick="delExam('${esc(id)}')">حذف</button></div></div>`}).join('')}
+setTimeout(()=>{if(!document.querySelector('.q-builder-item'))addQuestion()},60);
+return html;
+}
+let qBuildCounter=0;
+function addQuestion(){
+const box=document.getElementById('questionsBuilder');if(!box)return;
+qBuildCounter++;
+const n=qBuildCounter;
+const item=document.createElement('div');
+item.className='q-builder-item';
+item.style.cssText='background:var(--surface2);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:10px';
+item.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="color:var(--ac)">سؤال ${n}</b><button class="d" style="padding:4px 10px;font-size:11px" onclick="this.closest('.q-builder-item').remove()">حذف</button></div><label>نوع السؤال</label><select class="q-type" onchange="onQTypeChange(this)"><option value="mcq">اختيار من متعدد</option><option value="tf">صح/خطأ</option><option value="short">إجابة قصيرة</option></select><label>نص السؤال</label><input class="q-text"><label>درجة السؤال</label><input class="q-points" type="number" min="1" max="100" value="1" style="width:120px"><div class="q-options-box"><label>الخيارات</label><div class="q-opts">${[0,1,2,3].map(i=>`<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><input type="radio" name="correct_${n}" value="${i}" style="width:auto;margin:0"><input class="q-opt" placeholder="الخيار ${i+1}" style="margin-bottom:0"></div>`).join('')}</div></div><div class="q-tf-box" style="display:none"><label>الإجابة الصحيحة</label><select class="q-tf-answer"><option value="true">صح</option><option value="false">خطأ</option></select></div><div class="q-short-box" style="display:none"><label>الإجابة النموذجية (اختياري)</label><input class="q-short-answer"></div>`;
+box.appendChild(item);
+}
+function onQTypeChange(sel){
+const item=sel.closest('.q-builder-item');if(!item)return;
+const type=sel.value;
+item.querySelector('.q-options-box').style.display=type==='mcq'?'':'none';
+item.querySelector('.q-tf-box').style.display=type==='tf'?'':'none';
+item.querySelector('.q-short-box').style.display=type==='short'?'':'none';
+}
+Object.assign(window,{
+go,out,inst,redeem,addT,delT,setB,addV,moreCodes,delV,cp,copyFree,toggleVid,exportPDF,exportCodesPDF,
+toggleTheme,unban,keepBan,saveEditT,saveEditV,togglePlay,seekRel,toggleMute,toggleFullscreen,replayYT,
+addLib,delLib,saveEditLib,openNoti,closeNoti,syncGradeOptions,syncEditGradeOptions,openLibraryItem,
+sendAdminNotification,clearAllNotifications,registerPhone,loginPhone,switchPhoneMode,sendSupportTicket,
+setSupportStatus,deleteSupportTicket,reopenStudentExam,replySupportTicket,
+updateProfilePhoto,toggleSupervisor,delUser,addNews,delNews,previewNewsImage,
+filterStudents,delNoti,clearAllMyNotis,enableNotifications,changePassword,setStatsFilter,
+filterTeacherVideos,toggleFav,addQuestion,onQTypeChange,createExam,toggleExamDisabled,delExam,quickEditExam,
+recordAnswer,submitExam,confirmExitExam,setGrade,saveStudentGrade,
+banStudent,unbanStudent,outBan,toggleStudentMenu,delCode,resetStudentProgress,
+openGame,openLabHub,openLab,openFree,gameBack,labBack,labPick,labUndo,labClear,labTool,labRun,labNext,
+freePick,freeTool,freeRun,freeReset,quizStart,quizExit,quizAnswer,memFlip,huntAnswer,orderPick,orderNext,balStep,balCheck,
+whoAnswer,tfAnswer,speedAnswer,reloadStudents,
+vGames,toggleLab,removeFromLeaderboard,removeFromQuizLeader,saveStudentName,
+sendAI,aiQuickSummary,cycleQuality,cycleNativeQuality,toggleAccessType,
+savePlatformMessage,deletePlatformMessage,dismissPlatformMessage,
+startEditNews,cancelEditNews,saveEditedNews,viewNewsWatchers,closeNewsWatchers,
+startEditNoti,cancelEditNoti,saveEditedNoti,viewNotiWatchers,closeNotiWatchers,
+trackNewsView
+});
+window.__bootAfterUnban=async function(){
+try{
+showingBan=false;
+if(U){
+if(!A&&!IS_SUPERVISOR){
+const phoneKey=normPhone(myPhone||'');
+const pb=phoneKey?await G('bansByPhone/'+phoneKey):null;
+const b=await G('bans/'+U.uid);
+if(pb){renderBanned(pb);return}
+if(b){renderBanned(b);return}
+}
+render();
+}else{render()}
+hideOverlay();
+}catch(e){try{render()}catch(_){}}
+};
+window.addEventListener('error',e=>{try{console.warn('Global error caught:',e.message)}catch(_){}});
+window.addEventListener('unhandledrejection',e=>{try{console.warn('Unhandled rejection:',e.reason)}catch(_){}});
+render();
+</script>
+</body>
+  </html>

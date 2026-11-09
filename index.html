@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>منصة سيجما التعليمية</title>
+<meta name="theme-color" content="#0a1128">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" id="mf">
+<link rel="apple-touch-icon" id="ai">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050a1f;
+  --bg-card: #0d1738;
+  --bg-card-hover: #152254;
+  --bg-input: #0a122e;
+  --tx: #ffffff;
+  --tx2: #94a3b8;
+  --tx3: #64748b;
+  --ac: #2563eb;
+  --ac2: #1d4ed8;
+  --ac-soft: rgba(37, 99, 235, 0.15);
+  --grad: linear-gradient(135deg, #4f46e5, #2563eb);
+  --grad-gold: linear-gradient(135deg, #f59e0b, #d97706);
+  --grad-red: linear-gradient(135deg, #ef4444, #b91c1c);
+  --grad-green: linear-gradient(135deg, #10b981, #059669);
+  --ok: #10b981;
+  --er: #ef4444;
+  --warn: #f59e0b;
+  --bd: rgba(255, 255, 255, 0.08);
+  --r: 16px;
+  --r-sm: 10px;
+  --r-lg: 24px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --font: 'Cairo', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { min-height: 100%; scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--tx); min-height: 100vh; padding-bottom: calc(100px + env(safe-area-inset-bottom)); overflow-x: hidden; -webkit-user-select: none; user-select: none; }
+input, select, textarea { -webkit-user-select: text; user-select: text; }
+h1, h2, h3 { font-weight: 800; line-height: 1.3; }
+h2 { font-size: 20px; margin-bottom: 16px; }
+
+/* Splash & Loading */
+#loading-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease; }
+#loading-overlay.hide { opacity: 0; pointer-events: none; }
+.spinner { width: 44px; height: 44px; border: 4px solid var(--ac-soft); border-top-color: var(--ac); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Layout */
+main { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+/* Top Bar */
+.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: transparent; margin-bottom: 10px; }
+.top-bar .user-info { display: flex; align-items: center; gap: 12px; }
+.top-bar .user-info img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--ac); object-fit: cover; }
+.top-bar .user-info .name { font-size: 16px; font-weight: 800; }
+.top-bar .user-info .welcome { font-size: 12px; color: var(--tx2); }
+.top-bar .action-btn { background: var(--bg-card); border: 1px solid var(--bd); color: var(--tx); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+.top-bar .action-btn svg { width: 22px; height: 22px; fill: var(--tx); }
+.top-bar .badge-dot { position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; background: var(--er); border-radius: 50%; border: 2px solid var(--bg); display: none; }
+
+/* Banner */
+.banner { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: var(--r-lg); padding: 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+.banner::before { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+.banner .text { z-index: 1; }
+.banner h2 { font-size: 22px; margin-bottom: 8px; }
+.banner p { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+.banner button { background: #fff; color: var(--ac2); padding: 10px 20px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; font-size: 14px; z-index: 1; }
+.banner img { width: 100px; height: auto; z-index: 1; }
+
+/* Section Titles */
+.section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.section-title h2 { margin: 0; font-size: 18px; }
+
+/* Grid Cards (Home) */
+.grid-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+.menu-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r); padding: 16px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+.menu-card:active { transform: scale(0.96); }
+.menu-card .icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+.menu-card .icon svg { width: 24px; height: 24px; fill: #fff; }
+.menu-card span { font-size: 13px; font-weight: 700; color: var(--tx); text-align: center; }
+.menu-card .icon.blue { background: var(--grad); }
+.menu-card .icon.purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.menu-card .icon.gold { background: var(--grad-gold); }
+.menu-card .icon.green { background: var(--grad-green); }
+.menu-card .icon.red { background: var(--grad-red); }
+
+/* Teacher Cards */
+.teacher-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); padding: 20px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 16px; }
+.teacher-header { display: flex; align-items: center; gap: 14px; }
+.teacher-header img { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--ac-soft); object-fit: cover; }
+.teacher-header .info h3 { font-size: 18px; margin-bottom: 4px; }
+.teacher-header .info p { font-size: 13px; color: var(--tx2); }
+.teacher-actions { display: flex; gap: 10px; }
+.teacher-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.teacher-actions button.primary { background: var(--ac); color: #fff; }
+.teacher-actions button.secondary { background: var(--bg-input); color: var(--tx); border: 1px solid var(--bd); }
+.teacher-about { background: var(--bg-input); border-radius: 12px; padding: 14px; font-size: 13px; color: var(--tx2); line-height: 1.7; }
+
+/* Course Card */
+.course-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 16px; }
+.course-banner { width: 100%; height: 160px; object-fit: cover; }
+.course-body { padding: 16px; }
+.course-body h3 { font-size: 16px; margin-bottom: 10px; }
+.course-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.course-meta span { font-size: 11px; background: var(--bg-input); color: var(--tx2); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+.course-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.course-features div { font-size: 13px; color: var(--tx2); display: flex; align-items: center; gap: 8px; }
+.course-features div::before { content: '✔'; color: var(--ok); font-weight: bold; }
+.course-body button { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--grad); color: #fff; font-weight: 800; font-size: 15px; cursor: pointer; }
+
+/* Library Grid */
+.library-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.library-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r); padding: 20px 10px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; cursor: pointer; }
+.library-card .icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--bg-input); }
+.library-card .icon svg { width: 26px; height: 26px; fill: #fff; }
+.library-card span { font-size: 13px; font-weight: 700; }
+
+/* Profile Card */
+.profile-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); padding: 24px; text-align: center; margin-bottom: 20px; }
+.profile-card img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--ac); margin-bottom: 16px; object-fit: cover; }
+.profile-card h2 { margin-bottom: 4px; }
+.profile-card p { color: var(--tx2); font-size: 14px; }
+.profile-card .premium-badge { background: var(--grad-gold); color: #fff; padding: 8px 16px; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; margin-top: 16px; }
+
+/* Settings List */
+.settings-list { display: flex; flex-direction: column; gap: 10px; }
+.settings-item { background: var(--bg-card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.settings-item .left { display: flex; align-items: center; gap: 14px; }
+.settings-item .left .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
+.settings-item .left .icon svg { width: 20px; height: 20px; fill: var(--tx); }
+.settings-item .left span { font-size: 15px; font-weight: 700; }
+.settings-item.logout { background: var(--bg-input); }
+.settings-item.logout .left .icon { background: var(--grad-red); }
+.settings-item.logout .left span { color: var(--er); }
+
+/* Bottom Nav */
+.bottombar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--bg-card); border-top: 1px solid var(--bd); display: flex; justify-content: space-around; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); }
+.bottombar button { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--tx3); cursor: pointer; flex: 1; }
+.bottombar button svg { width: 24px; height: 24px; fill: currentColor; }
+.bottombar button span { font-size: 10px; font-weight: 700; }
+.bottombar button.active { color: var(--ac); }
+.bottombar button.active svg { fill: var(--ac); }
+
+/* Utility */
+.box { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); padding: 20px; margin-bottom: 20px; }
+button.btn-primary { background: var(--ac); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+button.btn-secondary { background: var(--bg-input); color: var(--tx); border: 1px solid var(--bd); padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+button.btn-danger { background: var(--er); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+input, select, textarea { width: 100%; padding: 14px; background: var(--bg-input); border: 1px solid var(--bd); border-radius: 10px; color: var(--tx); margin-bottom: 14px; font-family: inherit; font-size: 15px; }
+input:focus { outline: none; border-color: var(--ac); }
+label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--tx2); }
+.mut { text-align: center; padding: 40px; color: var(--tx3); }
+.b { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--bg-input); }
+.b.g { background: rgba(16, 185, 129, 0.2); color: var(--ok); }
+.b.r { background: rgba(239, 68, 68, 0.2); color: var(--er); }
+.b.y { background: rgba(245, 158, 11, 0.2); color: var(--warn); }
+.row { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r); padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.row:hover { border-color: var(--ac); }
+</style>
+</head>
+<body>
+<div id="loading-overlay"><div class="spinner"></div><p style="font-family:Cairo,sans-serif;font-weight:700;color:var(--ac)">جارٍ التحميل...</p></div>
+<div id="screenshotShield" class="screenshot-shield" style="display:none;position:fixed;inset:0;z-index:99998;background:#050a1f;color:#fff;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;"><h2>المحتوى مخفي مؤقتًا</h2><p>عد إلى المنصة للمتابعة.</p></div>
+<div id="platformMessageSlot"></div>
+<div id="app"></div>
+<div id="t" role="status" aria-live="polite" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--bg-card);color:var(--tx);padding:12px 24px;border-radius:10px;font-weight:700;display:none;z-index:300;box-shadow:var(--shadow-lg);border:1px solid var(--bd);"></div>
+<div class="modal" id="notiModal" onclick="if(event.target===this)closeNoti()" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;">
+  <div class="modal-content" style="background:var(--bg-card);border-radius:20px;width:100%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--bd);">
+    <div class="modal-header" style="padding:16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="font-size:16px;margin:0;color:#fff;">🔔 الإشعارات</h3>
+      <button onclick="closeNoti()" style="background:var(--bg-input);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;">إغلاق</button>
+    </div>
+    <div class="modal-body" id="notiBody" style="padding:16px;overflow-y:auto;flex:1;"></div>
+  </div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut,setPersistence,browserLocalPersistence,createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile,updatePassword,EmailAuthProvider,reauthenticateWithCredential} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getDatabase,ref,get,set,update,remove,runTransaction,query,orderByChild,equalTo,onValue,increment} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const APP_VERSION='5.0.0';
+const GRADES_PRIMARY=['الصف الأول الابتدائي','الصف الثاني الابتدائي','الصف الثالث الابتدائي','الصف الرابع الابتدائي','الصف الخامس الابتدائي','الصف السادس الابتدائي'];
+const GRADES_PREP=['الصف الأول الإعدادي','الصف الثاني الإعدادي','الصف الثالث الإعدادي'];
+const GRADES_SEC=['الصف الأول الثانوي','الصف الثاني الثانوي','الصف الثالث الثانوي'];
+const ALL_GRADES=[...GRADES_PRIMARY,...GRADES_PREP,...GRADES_SEC];
+const ADMIN_PHONES=["01147975962","01123543649","01147758295"];
+const VAPID_KEY='BL3dfL6xBF8jnLy87cWLRwsoLAclt5HIWzkwa4R84L_GJ41vT2y2nBpFwgxPItJ2BmQej6_iZsegmidN6IVTREs';
+
+const app=initializeApp({apiKey:"AIzaSyCoHGEyhlsjmB_diUNm-R8SXB0Gm0kXw0A",authDomain:"sigma-6f162.firebaseapp.com",databaseURL:"https://sigma-6f162-default-rtdb.firebaseio.com",projectId:"sigma-6f162",storageBucket:"sigma-6f162.firebasestorage.app",messagingSenderId:"420365348074",appId:"1:420365348074:web:0aaecb71ec613bb32abb93"});
+const auth=getAuth(app),db=getDatabase(app);
+setPersistence(auth,browserLocalPersistence).catch(()=>{});
+
+const R=p=>ref(db,p);
+const G=async p=>{try{return (await get(R(p))).val()}catch(e){return null}};
+const GTry=async p=>{try{const s=await get(R(p));return {ok:true,val:s.val()}}catch(e){return {ok:false,val:null,error:e?.message||e?.code||'unknown'}}};
+const GS=async p=>(await get(R(p))).val();
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fd=t=>t?new Date(t).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'}):'-';
+const normDigits=s=>String(s??'').replace(/[\u0660-\u0669]/g,d=>String(d.charCodeAt(0)-0x0660)).replace(/[\u06F0-\u06F9]/g,d=>String(d.charCodeAt(0)-0x06F0));
+const normPhone=s=>normDigits(s).replace(/[\s\-()]/g,'');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const avatarOf=name=>'https://ui-avatars.com/api/?name='+encodeURIComponent(name||'U')+'&background=2563eb&color=fff&size=200';
+const hasNotifApi=()=>typeof window!=='undefined'&&'Notification' in window;
+const isAdminPhone=p=>ADMIN_PHONES.includes(normPhone(p||''));
+const canPlayNow=()=>!A&&!IS_SUPERVISOR;
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const pendingOps=new Set();
+async function once(key,fn){if(pendingOps.has(key))return null;pendingOps.add(key);try{return await fn()}finally{setTimeout(()=>pendingOps.delete(key),1500)}}
+const cache={save(data){try{store.set('sigma-cache',JSON.stringify({...data,t:Date.now()}))}catch(e){}},load(){try{const s=store.get('sigma-cache');return s?JSON.parse(s):null}catch(e){return null}},isOffline(){return !navigator.onLine}};
+window.addEventListener('online',()=>{if(U)toast('✅ تم استعادة الاتصال')});
+window.addEventListener('offline',()=>{if(U)toast('⚠️ انقطع الاتصال')});
+
+function ensureApp(){let a=document.getElementById('app');if(!a){a=document.createElement('div');a.id='app';document.body.prepend(a)}return a;}
+
+function img(f,maxSize=800){
+  return new Promise((resolve,reject)=>{
+    if(!f)return resolve(null);
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error('تعذر قراءة الصورة'));
+    reader.onload=e=>{
+      const im=new Image();
+      im.onload=()=>{
+        try{
+          let w=im.width,h=im.height;
+          if(w>maxSize||h>maxSize){const ratio=Math.min(maxSize/w,maxSize/h);w=Math.max(1,Math.round(w*ratio));h=Math.max(1,Math.round(h*ratio))}
+          const c=document.createElement('canvas');c.width=w;c.height=h;
+          c.getContext('2d').drawImage(im,0,0,w,h);
+          let data;
+          try{data=c.toDataURL('image/jpeg',0.8)}catch(err){data=c.toDataURL('image/png')}
+          if(!data||data==='data:,')return reject(new Error('تعذر معالجة الصورة'));
+          resolve(data);
+        }catch(err){reject(err)}
+      };
+      im.onerror=()=>reject(new Error('صيغة الصورة غير مدعومة'));
+      im.src=e.target.result;
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+let U=null,A=false,IS_SUPERVISOR=false,S={v:'home'};
+let teachers={},videos={},library={},news={},newsViews={},notifications={},ownNotifications={},broadcastNotifications={},adminNotifications={},supportTickets={};
+let platformMessageData=null;
+let mineVideos={},myLogs={},exams={},examAttempts={},allExamAttempts={};
+let badge='',myPhoto='',myPhone='',userGrade='',hb=null,hbGuard=0;
+let unsubs=[],showingBan=false,renderSeq=0,loadedTeachers=false,studentStatsFilter='all';
+let pendingEmbed=null,pendingEmbedSnapshot=null,authGeneration=0,examGuardCleanup=null;
+let banUnsubs=[],bansLiveUnsub=null,bansLiveData={uid:{},phone:{}};
+let labUserData={labs:{},discoveries:0};
+let quizActiveLevel=null,quizCurrentIndex=0,quizAnswered=false,quizTimer=null,quizLeaderData={};
+let arcadeData={};
+let labEnabled={};
+let labActiveLab=null,labCurrentExpIdx=0,labSelectedEls=[],labSelectedTool=null,labShowingResult=false,labLastResult=null;
+let memState=null,huntState=null,orderState=null,balState=null;
+let whoState=null,tfState=null,speedState=null;
+let freeLab={els:[],tool:null,result:null};
+let adminUsersList={};
+let studentsLiveUnsub=null;
+let studentsLiveUnsubs=[];
+let studentsState={users:{},bans:{},bansByPhone:{},usersLoaded:false,bansLoaded:false,phonesLoaded:false,error:null};
+let studentsCache=null;
+let studentsCacheAt=0;
+let activeExamState=null;
+let activeExamTimer=null;
+let ytQualityLevels=[],ytCurrentQuality='auto';
+let aiChatHistory=[];
+let editingNewsId=null;
+let editingNotiKey=null;
+let viewingNewsWatchers=null;
+let viewingNotiWatchers=null;
+
+const LAB_KEYS=[['quiz','اختر الناتج'],['memory','مطابقة الرموز'],['hunt','صيد الرموز'],['order','رتّب العناصر'],['balance','موازنة المعادلات'],['who','من أنا؟'],['tf','صح أم خطأ'],['speed','سرعة البرق'],['lab','المختبر الافتراضي'],['free','طلع الكيميائي اللي جواك']];
+const isLabOn=k=>labEnabled?.[k]!==false;
+
+const QUIZ_QUESTIONS={easy:[],medium:[],hard:[]};
+const LAB_EXPERIMENTS={chemistry:[],physics:[],biology:[]};
+const LAB_ELEMENT_LABELS={};const LAB_TOOLS={};const LAB_INFO={};
+const FREE_LAB_ELEMENTS=[];const FREE_LAB_REACTIONS=[];
+const GAME_COLORS={};const elStyle=k=>`background:${GAME_COLORS[k]||'#64748b'}`;
+const ELEMENTS_DATA=[];const MEM_PAIRS=[];const BAL_EQUATIONS=[];const WHO_AM_I=[];const TRUE_FALSE=[];const SPEED_QUIZ=[];const GAME_CARDS=[];
+const MOTIVATION_MSGS=[];
+
+const FAV_KEY='sigma-favs';
+const favs={get(){try{return JSON.parse(store.get(FAV_KEY)||'{}')}catch(e){return{}}},has(id){return !!this.get()[id]},toggle(id){const f=this.get();if(f[id])delete f[id];else f[id]=Date.now();store.set(FAV_KEY,JSON.stringify(f));return !!f[id]}};
+const DEVICE_KEY='sigma-device-id';
+function getDeviceId(){let id=store.get(DEVICE_KEY);if(!id){id='d'+Date.now()+Math.random().toString(36).slice(2,8);store.set(DEVICE_KEY,id)}return id}
+function deviceLabel(){const ua=navigator.userAgent;if(/android/i.test(ua))return'Android';if(/iPhone|iPad|iPod/i.test(ua))return'iOS';if(/Windows/i.test(ua))return'Windows';if(/Mac/i.test(ua))return'Mac';if(/Linux/i.test(ua))return'Linux';return'جهاز'}
+const THEME_KEY='sigma-theme';
+function initTheme(){document.documentElement.classList.add('dark');}
+initTheme();
+
+let toastTimer=null;
+function toast(m){let t=$('#t');if(!t){t=document.createElement('div');t.id='t';document.body.appendChild(t)}t.textContent=m;t.style.display='block';if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',2600)}
+
+function userSeed(){const s=U?.uid||'anon';let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
+function userShuffle(arr,offset=0){const a=[...arr];let s=(userSeed()+offset)>>>0;for(let i=a.length-1;i>0;i--){s=(s*1664525+1013904223)>>>0;const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const sameItems=(a,b)=>a.length===b.length&&[...a].sort().join('|')===[...b].sort().join('|');
+const labDone=lab=>{const v=labUserData?.labs?.[lab];const total=LAB_EXPERIMENTS[lab].length;if(v===true)return total;return typeof v==='number'?Math.min(v,total):0};
+const arcadePoints=uid=>(arcadeData?.[uid]?.points||0)+(quizLeaderData?.[uid]?.points||0);
+function eyeIcon(count){return `<span class="view-counter"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>${count||0}</span>`}
+
+// Placeholder functions for features not yet fully migrated
+function showShield(on){const el=document.getElementById('screenshotShield');if(!el)return;el.style.display=on?'flex':'none'}
+function armScreenshotGuard(){}
+function disarmScreenshotGuard(){showShield(false)}
+function stopHB(){if(hb){clearInterval(hb);hb=null}hbGuard=0}
+function destroyPlayer(){}
+function cleanupExam(){}
+async function enforceSingleDevice(){return true;}
+function renderBanned(ban){}
+function clearListeners(){unsubs.forEach(fn=>{try{fn()}catch(e){}});unsubs=[];}
+async function enableNotifications(){}
+function embed(u,full){return {t:'f',s:''};}
+function openNoti(){}
+function closeNoti(){}
+
+// ==========================================
+// UI RENDERERS (Matching the new Design)
+// ==========================================
+
+function render(){
+  const a=ensureApp();
+  if(!U){a.innerHTML=vAuth();return}
+  const views={home:vHome,teacher:vTeacher,code:vCode,watch:vWatch,admin:vAdmin,settings:vSettings,library:vLibrary,news:vNews,exams:vExams,examResult:vExamResult,games:vGames};
+  const fn=views[S.v]||vHome;
+  a.innerHTML=shell(fn());
+}
+
+function shell(body){
+  return `
+    ${topBarHTML()}
+    <main>${body}</main>
+    ${bottomBar()}
+  `;
+}
+
+function topBarHTML(){
+  if(!U)return '';
+  const firstName=(U.displayName||'الطالب').split(' ')[0];
+  const avatar=myPhoto||U.photoURL||avatarOf(U.displayName);
+  return `
+    <div class="top-bar">
+      <div class="user-info">
+        <img src="${esc(avatar)}" alt="">
+        <div>
+          <div class="welcome">أهلاً بك،</div>
+          <div class="name">${esc(firstName)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="action-btn" onclick="openNoti()">
+          <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span class="badge-dot"></span>
+        </button>
+        <button class="action-btn" onclick="go('settings')">
+          <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function bottomBar(){
+  const on=k=>S.v===k;
+  return `
+    <nav class="bottombar">
+      <button class="${on('home')?'active':''}" onclick="go('home')">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>الرئيسية</span>
+      </button>
+      <button class="${on('news')?'active':''}" onclick="go('news')">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+        <span>الأخبار</span>
+      </button>
+      <button class="${on('library')?'active':''}" onclick="go('library')">
+        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+        <span>المكتبة</span>
+      </button>
+      <button class="${['exams','examResult'].includes(S.v)?'active':''}" onclick="go('exams')">
+        <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span>الامتحانات</span>
+      </button>
+      <button class="${S.v==='games'?'active':''}" onclick="go('games')">
+        <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm5-3c-.83 0-1.5-.67-1.5-1.5S19.67 9 20.5 9s1.5.67 1.5 1.5S21.33 12 20.5 12z"/></svg>
+        <span>المختبر</span>
+      </button>
+    </nav>
+  `;
+}
+
+function vHome(){
+  return `
+    <div class="banner">
+      <div class="text">
+        <h2>معاً نحو مستقبل أفضل</h2>
+        <p>تعليم .. ذكاء .. مستقبل أفضل</p>
+        <button>إبدأ الآن</button>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Education">
+    </div>
+
+    <div class="section-title">
+      <h2>أقسام المنصة</h2>
+    </div>
+    <div class="grid-menu">
+      <div class="menu-card" onclick="go('exams')">
+        <div class="icon blue"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+        <span>الاختبارات</span>
+      </div>
+      <div class="menu-card" onclick="go('library')">
+        <div class="icon purple"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+        <span>المحاضرات</span>
+      </div>
+      <div class="menu-card" onclick="go('library')">
+        <div class="icon blue"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+        <span>الفيديوهات</span>
+      </div>
+      <div class="menu-card" onclick="go('games')">
+        <div class="icon gold"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+        <span>المسابقات</span>
+      </div>
+      <div class="menu-card" onclick="go('games')">
+        <div class="icon gold"><svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 8V7h2v3.82C7.84 10.4 7 9.3 7 8zm10 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg></div>
+        <span>الشهادات</span>
+      </div>
+      <div class="menu-card" onclick="go('settings')">
+        <div class="icon green"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+        <span>المميزون</span>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h2>المدرسون</h2>
+    </div>
+    <div class="grid" style="grid-template-columns: repeat(2, 1fr); display:grid; gap:12px;">
+      ${Object.entries(teachers).slice(0,4).map(([id,x])=>`
+        <div class="card" style="background:var(--bg-card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;" onclick="go('teacher','${esc(id)}')">
+          <img src="${esc(x.photo||avatarOf(x.name))}" style="width:100%;height:120px;object-fit:cover;">
+          <div style="padding:12px;text-align:center;">
+            <b style="font-size:14px;display:block;">${esc(x.name)}</b>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function vTeacher(){
+  const t=teachers[S.id];if(!t)return vHome();
+  const l=Object.entries(videos).filter(([,v])=>v.teacherId===S.id).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
+  let html=`
+    <div style="margin-bottom:20px;">
+      <button class="btn-secondary" style="width:auto;padding:8px 16px;margin-bottom:16px;" onclick="go('home')">← رجوع</button>
+      <div class="teacher-card">
+        <div class="teacher-header">
+          <img src="${esc(t.photo||avatarOf(t.name))}">
+          <div class="info">
+            <h3>${esc(t.name)}</h3>
+            <p>مدرس المنصة</p>
+          </div>
+        </div>
+        <div class="teacher-about">
+          ${esc(t.about||'خبرة أكثر من 15 عاماً في تدريس المواد التعليمية لجميع المراحل.')}
+        </div>
+      </div>
+    </div>
+    <div class="section-title"><h2>الكورسات المتاحة</h2></div>
+  `;
+  if(!l.length)return html+'<div class="mut">لا توجد كورسات لهذا المدرس.</div>';
+  html+=l.map(([id,v])=>`
+    <div class="course-card" onclick="go('${mineVideos[id]||v.free?'watch':'code'}','${esc(id)}')">
+      <img src="${esc(v.photo||'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop')}" class="course-banner">
+      <div class="course-body">
+        <h3>${esc(v.title)}</h3>
+        <div class="course-meta">
+          <span>⏱ ${v.duration||30} دقيقة</span>
+          <span>📅 ${v.weeks||4} أسابيع</span>
+          <span style="background:var(--grad);color:#fff;">${v.free?'مجاني':'مدفوع'}</span>
+        </div>
+        <div class="course-features">
+          <div>شرح مبسط وشامل</div>
+          <div>تمارين تفاعلية</div>
+          <div>اختبارات تقييمية</div>
+        </div>
+        <button>${mineVideos[id]?'ابدأ المقرر':'فتح بكود'}</button>
+      </div>
+    </div>
+  `).join('');
+  return html;
+}
+
+function vLibrary(){
+  return `
+    <div class="section-title"><h2>المكتبة الرقمية</h2></div>
+    <div style="margin-bottom:20px;">
+      <input type="text" placeholder="إبحث عن محتوى..." style="background:var(--bg-input);border:1px solid var(--bd);border-radius:20px;padding:12px 20px;">
+    </div>
+    <div class="library-grid">
+      <div class="library-card" onclick="go('library')">
+        <div class="icon" style="background:var(--grad);"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+        <span>المحاضرات والدروس</span>
+      </div>
+      <div class="library-card" onclick="go('library')">
+        <div class="icon" style="background:var(--grad);"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+        <span>الفيديوهات</span>
+      </div>
+      <div class="library-card" onclick="go('library')">
+        <div class="icon" style="background:var(--bg-input);"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+        <span>الاختبارات</span>
+      </div>
+      <div class="library-card" onclick="go('library')">
+        <div class="icon" style="background:var(--bg-input);"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+        <span>المذكرات</span>
+      </div>
+      <div class="library-card" onclick="go('games')">
+        <div class="icon" style="background:var(--bg-input);"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+        <span>المسابقات</span>
+      </div>
+      <div class="library-card" onclick="go('library')">
+        <div class="icon" style="background:var(--bg-input);"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+        <span>الكتب والمراجع</span>
+      </div>
+    </div>
+    <div class="banner" style="margin-top:24px;background:linear-gradient(135deg, #4f46e5, #2563eb);">
+      <div class="text">
+        <h2 style="font-size:18px;">تعلم بمرونة وفي أي وقت</h2>
+        <button style="padding:8px 16px;font-size:12px;">إبدأ الآن</button>
+      </div>
+    </div>
+  `;
+}
+
+function vSettings(){
+  const photo=myPhoto||U.photoURL||avatarOf(U.displayName);
+  return `
+    <div class="profile-card">
+      <img src="${esc(photo)}">
+      <h2>${esc(U.displayName)}</h2>
+      <p dir="ltr">${esc(myPhone||'')}</p>
+      <div class="premium-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+        عضوية مميزة
+      </div>
+    </div>
+    
+    <div class="settings-list">
+      <div class="settings-item" onclick="go('exams')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+          <span>الاختبارات</span>
+        </div>
+      </div>
+      <div class="settings-item" onclick="go('library')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
+          <span>المحفوظات</span>
+        </div>
+      </div>
+      <div class="settings-item" onclick="go('games')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+          <span>الشهادات</span>
+        </div>
+      </div>
+      <div class="settings-item" onclick="toast('قريباً')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></div>
+          <span>الإعدادات</span>
+        </div>
+      </div>
+      <div class="settings-item" onclick="toast('قريباً')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
+          <span>الدعم الفني</span>
+        </div>
+      </div>
+      <div class="settings-item" onclick="toast('قريباً')">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></div>
+          <span>المساعدة</span>
+        </div>
+      </div>
+      <div class="settings-item logout" onclick="out()">
+        <div class="left">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div>
+          <span>تسجيل الخروج</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function vAuth(){
+  return `
+    <div style="max-width:400px;margin:0 auto;padding:40px 20px;text-align:center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" style="width:100px;margin-bottom:20px;">
+      <h1 style="color:#fff;font-size:24px;margin-bottom:8px;">منصة سيجما التعليمية</h1>
+      <p style="color:var(--tx2);margin-bottom:30px;">تعليم .. ذكاء .. مستقبل أفضل</p>
+      
+      <div class="box" style="text-align:right;">
+        <label>الاسم الرباعي</label>
+        <input id="reg-name" placeholder="مثال: محمد أحمد علي">
+        <label>رقم الهاتف</label>
+        <input id="reg-phone" type="tel" placeholder="01xxxxxxxxx" dir="ltr">
+        <label>كلمة المرور</label>
+        <input id="reg-pass" type="password" placeholder="••••••••">
+        <button class="btn-primary" onclick="registerPhone()" style="margin-bottom:10px;">إنشاء حساب جديد</button>
+        <button class="btn-secondary" onclick="switchPhoneMode('login')">لديك حساب؟ تسجيل الدخول</button>
+      </div>
+    </div>
+  `;
+}
+
+// Dummy placeholders for missing views to prevent errors
+function vCode(){return '<div class="mut">قريباً</div>'}
+function vWatch(){return '<div class="mut">قريباً</div>'}
+function vAdmin(){return '<div class="mut">قريباً</div>'}
+function vNews(){return '<div class="mut">قريباً</div>'}
+function vExams(){return '<div class="mut">قريباً</div>'}
+function vExamResult(){return '<div class="mut">قريباً</div>'}
+function vGames(){return '<div class="mut">قريباً</div>'}
+function switchPhoneMode(){}
+function registerPhone(){}
+
+// Export functions to window
+Object.assign(window,{go,out,toast,openNoti,closeNoti,switchPhoneMode,registerPhone});
+
+// App Init
+const go=(v,id,tab,filter)=>{
+  S={v,id,tab:tab!==undefined?tab:S.tab,filter:filter!==undefined?filter:S.filter};
+  render();
+};
+const out=()=>{
+  if(!confirm('هل تريد تسجيل الخروج من حسابك؟'))return;
+  signOut(auth).catch(()=>{});
+};
+
+onAuthStateChanged(auth, async u => {
+  U=u;
+  if(!u){render();hideOverlay();return;}
+  try {
+    const userData=await GS('users/'+u.uid);
+    A=isAdminPhone(userData?.phone||'');
+    myPhoto=userData?.photo||'';
+    myPhone=userData?.phone||'';
+    render();hideOverlay();
+  } catch(e) { render(); hideOverlay(); }
+});
+function hideOverlay(){setTimeout(()=>{const ov=$('#loading-overlay');if(ov)ov.classList.add('hide')},300)}
+render();
+</script>
+</body>
+</html>

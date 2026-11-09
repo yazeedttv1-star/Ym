@@ -272,22 +272,12 @@ html.dark .noti-item.unread{background:rgba(37,99,235,.15);border-color:rgba(37,
 .embed-box iframe,.embed-box video{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;border:0}
 .news-text{font-size:15px;line-height:1.7;color:var(--tx);white-space:pre-wrap}
 .news-date{font-size:12px;color:var(--mu);font-weight:700;margin-top:4px}
-.exam-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);padding:18px;margin-bottom:14px;transition:.2s;box-shadow:var(--shadow)}
-.exam-card:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.exam-card h3{font-size:17px;margin-bottom:8px;color:var(--tx)}
-.exam-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:12px}
-.exam-meta .b{font-size:11px}
 .question-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
 .exam-q{background:var(--surface2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px}
 .exam-q .q-text{font-size:15px;font-weight:700;margin-bottom:12px;line-height:1.7;color:var(--tx)}
 .exam-q .q-num{display:inline-block;background:var(--ac);color:#fff;width:26px;height:26px;border-radius:50%;text-align:center;line-height:26px;font-size:12px;font-weight:800;margin-left:8px}
 .q-num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--grad-brand);color:#fff;font-weight:900;font-size:13px;margin-left:8px;vertical-align:middle}
 .q-text{font-size:15px;font-weight:800;line-height:1.7;color:var(--tx);margin-bottom:14px}
-.exam-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:8px;background:var(--surface);border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;transition:.15s}
-.exam-opt:hover{border-color:var(--ac);background:var(--ac-soft)}
-.exam-opt.selected{border-color:var(--ac);background:var(--ac-soft);box-shadow:0 0 0 2px var(--ac-soft)}
-.exam-opt input{margin:0;width:18px;height:18px;cursor:pointer}
-.exam-opt span{font-size:14px;color:var(--tx);flex:1}
 .opt{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:8px;background:var(--surface2);border:2px solid transparent;border-radius:var(--r);cursor:pointer;transition:.15s var(--ease);font-weight:700;font-size:14px}
 .opt:hover{background:var(--ac-soft);border-color:var(--ac-soft)}
 .opt.selected{background:var(--ac-soft);border-color:var(--ac);color:var(--ac2)}
@@ -299,8 +289,6 @@ html.dark .noti-item.unread{background:rgba(37,99,235,.15);border-color:rgba(37,
 .exam-timer.danger{background:linear-gradient(135deg,#ef4444,#dc2626);animation:pulse .6s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
 .exam-timer .time-big{font-size:22px;font-family:'Courier New',monospace;letter-spacing:2px}
-.exam-result{text-align:center;padding:30px 20px}
-.exam-result .score{font-size:60px;font-weight:900;margin:14px 0;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
 .result-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-xl);padding:32px 20px;text-align:center;box-shadow:var(--shadow);margin-bottom:20px;position:relative;overflow:hidden}
 .result-card::before{content:"";position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:120%;height:200%;background:radial-gradient(circle,rgba(59,130,246,.08),transparent 60%);pointer-events:none}
 .score-ring{width:160px;height:160px;margin:0 auto 20px;border-radius:50%;background:conic-gradient(var(--ac) 0turn 0.85turn,var(--surface3) 0.85turn 1turn);display:grid;place-items:center;position:relative;box-shadow:0 8px 30px -8px rgba(37,99,235,.45)}
@@ -327,7 +315,7 @@ html.dark .exam-vio{background:#78350f;color:#fcd34d;border-color:#b45309}
 .game-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .game-sub{font-size:16px;margin:0 0 12px;color:var(--tx)}
 .game-section{font-size:15px;font-weight:800;color:var(--tx2);margin:18px 0 10px}
-.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
 .game-tile{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);padding:20px 16px;text-align:center;cursor:pointer;transition:.2s var(--ease);display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow)}
 .game-tile:hover{transform:translateY(-4px);border-color:var(--ac-soft);box-shadow:var(--shadow-lg)}
 .game-icon{width:60px;height:60px;border-radius:20px;background:var(--grad-brand);display:grid;place-items:center;font-size:28px;margin-bottom:6px;box-shadow:0 8px 30px -8px rgba(37,99,235,.45)}
@@ -336,21 +324,7 @@ html.dark .exam-vio{background:#78350f;color:#fcd34d;border-color:#b45309}
 .game-icon.warm{background:linear-gradient(135deg,#f59e0b,#ef4444)}
 .game-name{font-weight:800;font-size:15px;color:var(--tx)}
 .game-desc{font-size:12px;color:var(--mu);font-weight:600;line-height:1.5}
-.game-card{background:var(--surface);border:2px solid var(--bd);border-radius:var(--r-lg);padding:20px 16px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.2s;color:var(--tx);box-shadow:var(--shadow);font-family:inherit;transform:none;width:100%}
-.game-card:hover{background:var(--surface);border-color:var(--ac);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.game-card .gc-icon{font-size:44px;line-height:1.2}
-.game-card .gc-name{font-size:17px;font-weight:800}
-.game-card .gc-desc{font-size:12px;color:var(--mu);line-height:1.6}
-.game-card .gc-bar{width:100%;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:6px}
-.game-card .gc-bar span{display:block;height:100%;background:var(--grad-brand)}
-.game-card .gc-meta{font-size:12px;font-weight:700;color:var(--ac2)}
-.game-card.special{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#8b5cf6}
-html.dark .game-card.special{background:rgba(76,29,149,.4);border-color:#a78bfa}
-.game-card.disabled{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
 .game-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
-.game-done{text-align:center;padding:24px 16px}
-.gd-icon{font-size:56px}
-.gd-score{font-size:28px;font-weight:900;color:var(--ac);margin:10px 0}
 .mut-inline{color:var(--mu);font-size:13px}
 .leader{list-style:none;padding:0;margin:0}
 .leader li{display:flex;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--bd);font-weight:700}
@@ -475,7 +449,7 @@ h2{font-size:18px}
 <div class="modal" id="notiModal" onclick="if(event.target===this)closeNoti()">
 <div class="modal-sheet">
 <div class="modal-head"><h3>🔔 الإشعارات</h3><button class="modal-close" onclick="closeNoti()">✕</button></div>
-<div class="modal-body" id="notiBody"><div class="muted">لا توجد إشعارات حالياً</div></div>
+<div class="modal-body" id="notiBody"><div class="mut">لا توجد إشعارات حالياً</div></div>
 </div>
 </div>
 <script type="module">
@@ -1698,7 +1672,7 @@ if(!/^https?:\/\//i.test(v.url))return toast('رابط الفيديو يجب أ�
 if(!ALL_GRADES.includes(v.grade))return toast('الصف غير صحيح');
 try{await set(R('videos/v'+Date.now()),v);toast('✅ تم حفظ الفيديو');go('admin','','videos')}catch(e){toast('تعذر الحفظ: '+(e.code||e.message))}
 }
-async function vAdminStudents(){
+function vAdminStudents(){
 if(!A)return '<div class="mut">غير مصرح.</div>';
 if(studentsCache&&Date.now()-studentsCacheAt<30000&&!studentsLiveUnsub){studentsState.users=studentsCache}
 if(!studentsLiveUnsub){
@@ -2304,7 +2278,7 @@ if(S.v==='admin'&&S.tab==='bans')renderBansLive();
 }catch(e){toast('تعذر فك الحظر')}
 }
 function keepBan(){toast('بقي محظوراً')}
-function vAdminExams(){
+async function vAdminExams(){
 if(!A&&!IS_SUPERVISOR)return '<div class="mut">غير مصرح.</div>';
 const list=Object.entries(exams).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
 let html=`<div class="question-card" style="margin-bottom:16px"><h2 style="font-size:18px;margin-bottom:14px">إنشاء امتحان جديد</h2><div class="field"><label>عنوان الامتحان</label><input id="exTitle"></div><div class="field"><label>الصف</label><select id="exGrade">${ALL_GRADES.map(g=>`<option>${g}</option>`).join('')}</select></div><div class="field"><label>مدة الامتحان (دقيقة)</label><input id="exDuration" type="number" min="1" max="180" value="30"></div><div class="field"><label>الأسئلة</label></div><div id="questionsBuilder"></div><button class="s" onclick="addQuestion()" style="margin-top:8px">+ إضافة سؤال</button><button class="btn" onclick="createExam()" style="width:100%;margin-top:16px">حفظ الامتحان</button></div><h2>📝 الامتحانات (${list.length})</h2>`;

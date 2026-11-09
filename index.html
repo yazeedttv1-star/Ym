@@ -4,353 +4,363 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>منصة سيجما التعليمية</title>
-<meta name="theme-color" content="#050a1f">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #050a1f;
-  --bg-card: #0d1738;
-  --bg-input: #0a122e;
-  --tx: #ffffff;
-  --tx2: #94a3b8;
-  --tx3: #64748b;
+  --bg: #f0f4ff;
+  --surface: #ffffff;
+  --surface-blue: #e8f0fe;
+  --tx: #1e293b;
+  --tx2: #64748b;
   --ac: #2563eb;
-  --ac-soft: rgba(37, 99, 235, 0.15);
-  --grad: linear-gradient(135deg, #4f46e5, #2563eb);
-  --grad-gold: linear-gradient(135deg, #f59e0b, #d97706);
-  --grad-red: linear-gradient(135deg, #ef4444, #b91c1c);
-  --ok: #10b981;
-  --er: #ef4444;
-  --bd: rgba(255, 255, 255, 0.08);
-  --r: 16px;
+  --ac-soft: #dbeafe;
+  --grad-blue: linear-gradient(135deg, #2563eb, #1d4ed8);
+  --grad-light: linear-gradient(135deg, #e0e7ff, #dbeafe);
+  --bd: #e2e8f0;
+  --r: 20px;
   --r-lg: 24px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 15px rgba(37, 99, 235, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--tx); min-height: 100vh; padding-bottom: 100px; }
-h1, h2, h3 { font-weight: 800; }
-main { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-/* Loading */
-#loading-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.3s; }
-#loading-overlay.hide { opacity: 0; pointer-events: none; }
-.spinner { width: 40px; height: 40px; border: 4px solid var(--ac-soft); border-top-color: var(--ac); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
-@keyframes spin { to { transform: rotate(360deg); } }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--tx); min-height: 100vh; padding-bottom: 90px; overflow-x: hidden; }
+h1, h2, h3 { font-weight: 800; }
+a { text-decoration: none; color: inherit; }
+main { max-width: 500px; margin: 0 auto; padding: 20px; }
 
 /* Top Bar */
-.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; }
-.top-bar .user-info { display: flex; align-items: center; gap: 12px; }
-.top-bar .user-info img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--ac); object-fit: cover; }
-.top-bar .user-info .name { font-size: 16px; font-weight: 800; }
-.top-bar .user-info .welcome { font-size: 12px; color: var(--tx2); }
-.top-bar .action-btn { background: var(--bg-card); border: 1px solid var(--bd); color: var(--tx); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.top-bar .action-btn svg { width: 22px; height: 22px; fill: var(--tx); }
+.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; margin-bottom: 10px; }
+.top-bar .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); color: var(--tx); cursor: pointer; }
+.top-bar .logo { width: 80px; height: 80px; background: var(--grad-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; font-weight: 900; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
 
-/* Banner */
-.banner { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: var(--r-lg); padding: 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
-.banner h2 { font-size: 22px; margin-bottom: 8px; }
-.banner p { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
-.banner button { background: #fff; color: var(--ac); padding: 10px 20px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; font-size: 14px; }
-.banner img { width: 90px; }
+/* Welcome Text */
+.welcome-text { text-align: center; margin-bottom: 20px; }
+.welcome-text h2 { font-size: 22px; margin-bottom: 5px; }
+.welcome-text p { color: var(--tx2); font-size: 14px; }
 
-/* Menu Grid */
+/* Search Bar */
+.search-bar { background: var(--surface); border-radius: 50px; padding: 12px 20px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
+.search-bar input { border: none; outline: none; background: transparent; flex: 1; font-family: inherit; font-size: 14px; color: var(--tx); }
+.search-bar svg { width: 20px; height: 20px; fill: var(--tx2); }
+
+/* Hero Banner */
+.hero-banner { background: var(--grad-light); border-radius: var(--r-lg); padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; position: relative; overflow: hidden; }
+.hero-banner::before { content: ''; position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.4); border-radius: 50%; }
+.hero-banner .text { z-index: 1; }
+.hero-banner h3 { font-size: 18px; color: var(--ac); margin-bottom: 5px; }
+.hero-banner p { font-size: 12px; color: var(--tx2); margin-bottom: 15px; }
+.hero-banner button { background: var(--surface); border: 1px solid var(--bd); padding: 8px 16px; border-radius: 50px; font-family: inherit; font-weight: 700; font-size: 12px; color: var(--tx); cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.hero-banner img { width: 100px; z-index: 1; }
+
+/* Sections */
+.section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.section-title h2 { font-size: 18px; }
+.section-title a { color: var(--ac); font-size: 13px; font-weight: 700; }
+
+/* Grid Menu */
 .grid-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
-.menu-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r); padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
-.menu-card:active { transform: scale(0.96); }
-.menu-card .icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
-.menu-card .icon svg { width: 24px; height: 24px; fill: #fff; }
-.menu-card span { font-size: 13px; font-weight: 700; text-align: center; }
-.icon.blue { background: var(--grad); }
-.icon.purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-.icon.gold { background: var(--grad-gold); }
-.icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+.menu-card { background: var(--surface); border-radius: var(--r); padding: 15px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); cursor: pointer; }
+.menu-card .icon { width: 45px; height: 45px; border-radius: 14px; background: var(--grad-blue); display: flex; align-items: center; justify-content: center; color: #fff; }
+.menu-card .icon svg { width: 22px; height: 22px; fill: #fff; }
+.menu-card span { font-size: 12px; font-weight: 700; color: var(--tx); }
 
-/* Cards */
-.teacher-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); padding: 20px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 16px; }
-.teacher-header { display: flex; align-items: center; gap: 14px; }
-.teacher-header img { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--ac-soft); object-fit: cover; }
-.teacher-header .info h3 { font-size: 18px; margin-bottom: 4px; }
-.teacher-header .info p { font-size: 13px; color: var(--tx2); }
-.teacher-about { background: var(--bg-input); border-radius: 12px; padding: 14px; font-size: 13px; color: var(--tx2); line-height: 1.7; }
-.teacher-actions { display: flex; gap: 10px; }
-.teacher-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; }
-.btn-primary { background: var(--ac); color: #fff; }
-.btn-secondary { background: var(--bg-input); color: var(--tx); border: 1px solid var(--bd); }
+/* Teacher Cards */
+.teachers-row { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.teachers-row::-webkit-scrollbar { display: none; }
+.teacher-card { min-width: 100px; text-align: center; }
+.teacher-card img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; border: 3px solid var(--surface); box-shadow: var(--shadow-sm); }
+.teacher-card b { display: block; font-size: 13px; margin-bottom: 2px; }
+.teacher-card span { font-size: 11px; color: var(--tx2); }
 
-/* Profile */
-.profile-card { background: var(--bg-card); border: 1px solid var(--bd); border-radius: var(--r-lg); padding: 24px; text-align: center; margin-bottom: 20px; }
-.profile-card img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--ac); margin-bottom: 16px; object-fit: cover; }
-.profile-card h2 { margin-bottom: 4px; }
-.profile-card p { color: var(--tx2); font-size: 14px; }
-.premium-badge { background: var(--grad-gold); color: #fff; padding: 8px 16px; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; margin-top: 16px; }
+/* Library / Courses List */
+.filter-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; scrollbar-width: none; }
+.filter-tabs::-webkit-scrollbar { display: none; }
+.filter-tab { background: var(--surface); border: 1px solid var(--bd); padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--tx2); white-space: nowrap; cursor: pointer; }
+.filter-tab.active { background: var(--ac); color: #fff; border-color: var(--ac); }
 
-/* Settings List */
-.settings-list { display: flex; flex-direction: column; gap: 10px; }
-.settings-item { background: var(--bg-card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-.settings-item .left { display: flex; align-items: center; gap: 14px; }
-.settings-item .left .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
-.settings-item .left .icon svg { width: 20px; height: 20px; fill: var(--tx); }
-.settings-item .left span { font-size: 15px; font-weight: 700; }
-.settings-item.logout { background: var(--bg-input); }
-.settings-item.logout .left .icon { background: var(--grad-red); }
-.settings-item.logout .left span { color: var(--er); }
+.course-card { background: var(--surface); border-radius: var(--r); padding: 12px; display: flex; gap: 12px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+.course-card img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
+.course-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.course-info h3 { font-size: 15px; margin-bottom: 4px; }
+.course-info p { font-size: 12px; color: var(--tx2); margin-bottom: 8px; }
+.course-info .meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--tx2); }
+.course-info .meta span { display: flex; align-items: center; gap: 4px; }
+.course-info .meta svg { width: 14px; height: 14px; fill: var(--ac); }
 
 /* Bottom Nav */
-.bottombar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--bg-card); border-top: 1px solid var(--bd); display: flex; justify-content: space-around; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); }
-.bottombar button { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--tx3); cursor: pointer; flex: 1; }
-.bottombar button svg { width: 24px; height: 24px; fill: currentColor; }
-.bottombar button span { font-size: 10px; font-weight: 700; }
-.bottombar button.active { color: var(--ac); }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--bd); display: flex; justify-content: space-around; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); border-radius: 20px 20px 0 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.03); z-index: 100; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--tx2); cursor: pointer; flex: 1; }
+.nav-item svg { width: 24px; height: 24px; fill: currentColor; }
+.nav-item span { font-size: 10px; font-weight: 700; }
+.nav-item.active { color: var(--ac); }
 
-/* Auth */
-.auth-container { max-width: 400px; margin: 0 auto; padding: 40px 20px; text-align: center; }
-.auth-box { background: var(--bg-card); border-radius: 20px; padding: 24px; text-align: right; border: 1px solid var(--bd); }
-input { width: 100%; padding: 14px; background: var(--bg-input); border: 1px solid var(--bd); border-radius: 10px; color: var(--tx); margin-bottom: 14px; font-family: inherit; font-size: 15px; }
-input:focus { outline: none; border-color: var(--ac); }
-label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--tx2); }
-.mut { text-align: center; padding: 40px; color: var(--tx3); }
+/* Profile Screen */
+.profile-header { text-align: center; margin-bottom: 25px; }
+.profile-header .avatar { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--surface); box-shadow: var(--shadow-sm); object-fit: cover; margin-bottom: 10px; }
+.profile-header h2 { font-size: 20px; margin-bottom: 4px; }
+.profile-header p { color: var(--tx2); font-size: 13px; }
+.premium-card { background: var(--grad-blue); border-radius: var(--r); padding: 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: var(--shadow); }
+.premium-card h3 { font-size: 16px; margin-bottom: 4px; }
+.premium-card p { font-size: 12px; opacity: 0.9; }
+.premium-card .icon { font-size: 36px; }
+
+.profile-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+.profile-menu-item { background: var(--surface); border-radius: var(--r); padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); cursor: pointer; }
+.profile-menu-item .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--surface-blue); display: flex; align-items: center; justify-content: center; color: var(--ac); }
+.profile-menu-item .icon svg { width: 20px; height: 20px; fill: currentColor; }
+.profile-menu-item span { font-size: 12px; font-weight: 700; }
+
+.list-menu { background: var(--surface); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+.list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--bd); cursor: pointer; }
+.list-item:last-child { border-bottom: none; }
+.list-item .left { display: flex; align-items: center; gap: 12px; }
+.list-item .left .icon { width: 35px; height: 35px; border-radius: 10px; background: var(--surface-blue); display: flex; align-items: center; justify-content: center; color: var(--ac); }
+.list-item .left .icon svg { width: 18px; height: 18px; fill: currentColor; }
+.list-item span { font-size: 14px; font-weight: 700; }
+.list-item.logout .left span { color: #ef4444; }
+.list-item.logout .left .icon { background: #fee2e2; color: #ef4444; }
+
+/* Screen container */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
-<div id="loading-overlay"><div class="spinner"></div><p style="font-family:Cairo,sans-serif;font-weight:700;color:var(--ac)">جارٍ التحميل...</p></div>
-<div id="app"></div>
-<div id="t" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--bg-card);color:var(--tx);padding:12px 24px;border-radius:10px;font-weight:700;display:none;z-index:300;border:1px solid var(--bd);"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const app = initializeApp({
-  apiKey: "AIzaSyCoHGEyhlsjmB_diUNm-R8SXB0Gm0kXw0A",
-  authDomain: "sigma-6f162.firebaseapp.com",
-  databaseURL: "https://sigma-6f162-default-rtdb.firebaseio.com",
-  projectId: "sigma-6f162",
-  storageBucket: "sigma-6f162.firebasestorage.app",
-  messagingSenderId: "420365348074",
-  appId: "1:420365348074:web:0aaecb71ec613bb32abb93"
-});
-
-const auth = getAuth(app);
-const db = getDatabase(app);
-const ADMIN_PHONES = ["01147975962", "01123543649", "01147758295"];
-
-let U = null, A = false, S = { v: 'home' };
-let teachers = {}, myPhoto = '';
-
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const avatarOf = name => 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name || 'U') + '&background=2563eb&color=fff&size=200';
-
-function hideOverlay() { setTimeout(() => { const ov = $('#loading-overlay'); if (ov) ov.classList.add('hide'); }, 500); }
-function toast(msg) { const t = $('#t'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
-
-// --- UI RENDERERS ---
-function render() {
-  const app = $('#app');
-  if (!U) { app.innerHTML = vAuth(); return; }
-  
-  const views = { home: vHome, settings: vSettings };
-  const fn = views[S.v] || vHome;
-  
-  app.innerHTML = `
-    ${topBarHTML()}
-    <main>${fn()}</main>
-    ${bottomBar()}
-  `;
-}
-
-function topBarHTML() {
-  if (!U) return '';
-  return `
+<main>
+  <!-- ================= SCREEN: HOME ================= -->
+  <div id="screen-home" class="screen active">
     <div class="top-bar">
-      <div class="user-info">
-        <img src="${esc(myPhoto || avatarOf(U.displayName))}" alt="">
-        <div>
-          <div class="welcome">أهلاً بك،</div>
-          <div class="name">${esc(U.displayName?.split(' ')[0] || 'طالب')}</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;">
-        <button class="action-btn" onclick="toast('الإشعارات قريباً')">
-          <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-function bottomBar() {
-  const on = k => S.v === k;
-  return `
-    <nav class="bottombar">
-      <button class="${on('home')?'active':''}" onclick="go('home')">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>الرئيسية</span>
-      </button>
-      <button onclick="toast('قريباً')">
-        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg><span>الأخبار</span>
-      </button>
-      <button onclick="toast('قريباً')">
-        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg><span>المكتبة</span>
-      </button>
-      <button onclick="toast('قريباً')">
-        <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>الامتحانات</span>
-      </button>
-      <button class="${on('settings')?'active':''}" onclick="go('settings')">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>حسابي</span>
-      </button>
-    </nav>
-  `;
-}
-
-function vHome() {
-  return `
-    <div class="banner">
-      <div>
-        <h2>معاً نحو مستقبل أفضل</h2>
-        <p>تعليم .. ذكاء .. مستقبل أفضل</p>
-        <button>إبدأ الآن</button>
-      </div>
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png">
-    </div>
-
-    <h2 style="margin-bottom:16px;">أقسام المنصة</h2>
-    <div class="grid-menu">
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon blue">📝</div><span>الاختبارات</span></div>
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon purple">🎥</div><span>المحاضرات</span></div>
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon blue">▶️</div><span>الفيديوهات</span></div>
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon gold">🏆</div><span>المسابقات</span></div>
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon gold">🎓</div><span>الشهادات</span></div>
-      <div class="menu-card" onclick="toast('قريباً')"><div class="icon green">⭐</div><span>المميزون</span></div>
-    </div>
-
-    <h2 style="margin-bottom:16px;">المدرسون</h2>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
-      ${Object.entries(teachers).length ? Object.entries(teachers).map(([id, x]) => `
-        <div style="background:var(--bg-card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;text-align:center;">
-          <img src="${esc(x.photo || avatarOf(x.name))}" style="width:100%;height:120px;object-fit:cover;">
-          <div style="padding:12px;"><b style="font-size:14px;">${esc(x.name)}</b></div>
-        </div>
-      `).join('') : '<div class="mut">لا يوجد مدرسون حالياً</div>'}
-    </div>
-  `;
-}
-
-function vSettings() {
-  return `
-    <div class="profile-card">
-      <img src="${esc(myPhoto || avatarOf(U.displayName))}">
-      <h2>${esc(U.displayName)}</h2>
-      <p>${esc(U.email?.split('@')[0] || '')}</p>
-      <div class="premium-badge">👑 عضوية مميزة</div>
+      <div class="icon-btn">🔔</div>
+      <div class="logo">Σ</div>
+      <div class="icon-btn">☰</div>
     </div>
     
-    <div class="settings-list">
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">📝</div><span>الاختبارات</span></div></div>
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">📚</div><span>المحفوظات</span></div></div>
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">🎓</div><span>الشهادات</span></div></div>
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">⚙️</div><span>الإعدادات</span></div></div>
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">🎧</div><span>الدعم الفني</span></div></div>
-      <div class="settings-item" onclick="toast('قريباً')"><div class="left"><div class="icon">❓</div><span>المساعدة</span></div></div>
-      <div class="settings-item logout" onclick="out()"><div class="left"><div class="icon">🚪</div><span>تسجيل الخروج</span></div></div>
+    <div class="welcome-text">
+      <h2>مرحباً بك في منصة سيجما</h2>
+      <p>معاً .. نحقق النجاح</p>
     </div>
-  `;
-}
 
-function vAuth() {
-  return `
-    <div class="auth-container">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" style="width:100px;margin-bottom:20px;">
-      <h1 style="margin-bottom:8px;">منصة سيجما</h1>
-      <p style="color:var(--tx2);margin-bottom:30px;">تعليم .. ذكاء .. مستقبل أفضل</p>
-      
-      <div class="auth-box" id="auth-box">
-        <div id="register-form">
-          <label>الاسم الرباعي</label>
-          <input id="reg-name" placeholder="مثال: محمد أحمد علي">
-          <label>رقم الهاتف</label>
-          <input id="reg-phone" type="tel" placeholder="01xxxxxxxxx" dir="ltr">
-          <label>كلمة المرور</label>
-          <input id="reg-pass" type="password" placeholder="••••••••">
-          <button class="btn-primary" style="width:100%;margin-bottom:10px;" onclick="registerPhone()">إنشاء حساب جديد</button>
-          <button class="btn-secondary" style="width:100%;" onclick="toggleAuth('login')">لديك حساب؟ تسجيل الدخول</button>
-        </div>
-        
-        <div id="login-form" style="display:none;">
-          <label>رقم الهاتف</label>
-          <input id="login-phone" type="tel" placeholder="01xxxxxxxxx" dir="ltr">
-          <label>كلمة المرور</label>
-          <input id="login-pass" type="password" placeholder="••••••••">
-          <button class="btn-primary" style="width:100%;margin-bottom:10px;" onclick="loginPhone()">تسجيل الدخول</button>
-          <button class="btn-secondary" style="width:100%;" onclick="toggleAuth('register')">ليس لديك حساب؟ إنشاء حساب</button>
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" placeholder="ابحث عن دورة أو محاضرة...">
+    </div>
+
+    <div class="hero-banner">
+      <div class="text">
+        <h3>تعلم بذكاء واحقق هدفك</h3>
+        <button>ابدأ الآن <span>←</span></button>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Student">
+    </div>
+
+    <div class="section-title"><h2>أقسام المنصة</h2></div>
+    <div class="grid-menu">
+      <div class="menu-card"><div class="icon">▶️</div><span>الفيديوهات</span></div>
+      <div class="menu-card"><div class="icon">📝</div><span>المحاضرات</span></div>
+      <div class="menu-card"><div class="icon">🎯</div><span>الاختبارات</span></div>
+      <div class="menu-card"><div class="icon">🏆</div><span>الشهادات</span></div>
+      <div class="menu-card"><div class="icon">📚</div><span>المذكرات</span></div>
+      <div class="menu-card"><div class="icon">👨‍🏫</div><span>المدرسون</span></div>
+    </div>
+
+    <div class="section-title">
+      <h2>مدرسونا المتميزون</h2>
+      <a href="#">عرض الكل ←</a>
+    </div>
+    <div class="teachers-row">
+      <div class="teacher-card">
+        <img src="https://ui-avatars.com/api/?name=Ahmed+Gamal&background=random" alt="Teacher">
+        <b>مستر/ أحمد جمال</b>
+        <span>اللغة العربية</span>
+      </div>
+      <div class="teacher-card">
+        <img src="https://ui-avatars.com/api/?name=Mostafa+Adel&background=random" alt="Teacher">
+        <b>مستر/ مصطفى عادل</b>
+        <span>الكيمياء</span>
+      </div>
+      <div class="teacher-card">
+        <img src="https://ui-avatars.com/api/?name=Ahmed+Rabie&background=random" alt="Teacher">
+        <b>مستر/ أحمد ربيع</b>
+        <span>الفيزياء</span>
+      </div>
+      <div class="teacher-card">
+        <img src="https://ui-avatars.com/api/?name=Mohamed+Ali&background=random" alt="Teacher">
+        <b>مستر/ محمد علي</b>
+        <span>الرياضيات</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: LIBRARY ================= -->
+  <div id="screen-library" class="screen">
+    <div class="top-bar" style="justify-content: flex-start; gap: 15px;">
+      <div class="icon-btn" onclick="switchScreen('home')">←</div>
+      <h2 style="font-size: 20px;">المكتبة الرقمية</h2>
+    </div>
+    
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" placeholder="ابحث في المحتوى...">
+    </div>
+
+    <div class="filter-tabs">
+      <div class="filter-tab active">الكل</div>
+      <div class="filter-tab">محاضرات</div>
+      <div class="filter-tab">فيديوهات</div>
+      <div class="filter-tab">مذكرات</div>
+    </div>
+
+    <div class="course-card">
+      <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=200&auto=format&fit=crop" alt="Course">
+      <div class="course-info">
+        <h3>مقدمة في الرياضيات</h3>
+        <p>د. أحمد جمال</p>
+        <div class="meta">
+          <span>⏱ 45:20</span>
+          <span>⬇️ تحميل</span>
         </div>
       </div>
     </div>
-  `;
-}
 
-// --- LOGIC & ACTIONS ---
-const go = (v) => { S.v = v; render(); };
-const out = () => { if (confirm('تسجيل الخروج؟')) signOut(auth); };
-const toggleAuth = (mode) => {
-  $('#register-form').style.display = mode === 'register' ? 'block' : 'none';
-  $('#login-form').style.display = mode === 'login' ? 'block' : 'none';
-};
+    <div class="course-card">
+      <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=200&auto=format&fit=crop" alt="Course">
+      <div class="course-info">
+        <h3>قواعد اللغة العربية</h3>
+        <p>د. محمد عبد العزيز</p>
+        <div class="meta">
+          <span>⏱ 38:15</span>
+          <span>⬇️ تحميل</span>
+        </div>
+      </div>
+    </div>
 
-async function registerPhone() {
-  const name = $('#reg-name').value.trim();
-  const phone = $('#reg-phone').value.trim();
-  const pass = $('#reg-pass').value;
+    <div class="course-card">
+      <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=200&auto=format&fit=crop" alt="Course">
+      <div class="course-info">
+        <h3>الكيمياء ببساطة</h3>
+        <p>د. مصطفى عادل</p>
+        <div class="meta">
+          <span>⏱ 42:30</span>
+          <span>⬇️ تحميل</span>
+        </div>
+      </div>
+    </div>
 
-  if (name.split(' ').length < 4) return toast('اكتب الاسم الرباعي كاملاً');
-  if (!/^01[0-9]{9}$/.test(phone)) return toast('رقم الهاتف غير صحيح');
+    <div class="course-card">
+      <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?q=80&w=200&auto=format&fit=crop" alt="Course">
+      <div class="course-info">
+        <h3>الفيزياء الحديثة</h3>
+        <p>أ. محمود فتحي</p>
+        <div class="meta">
+          <span>⏱ 50:10</span>
+          <span>⬇️ تحميل</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  try {
-    const fakeEmail = `${phone}@sigma.user`;
-    const cred = await createUserWithEmailAndPassword(auth, fakeEmail, pass);
-    await updateProfile(cred.user, { displayName: name });
-    await set(ref(db, 'users/' + cred.user.uid), {
-      name, phone, email: fakeEmail, createdAt: Date.now()
-    });
-    toast('✅ تم إنشاء الحساب بنجاح');
-  } catch (e) {
-    toast('خطأ: ' + (e.message || 'تعذر إنشاء الحساب'));
+  <!-- ================= SCREEN: PROFILE ================= -->
+  <div id="screen-profile" class="screen">
+    <div class="top-bar" style="justify-content: space-between;">
+      <div class="icon-btn" onclick="switchScreen('home')">←</div>
+      <h2 style="font-size: 20px;">حساب الطالب</h2>
+      <div style="width:40px;"></div>
+    </div>
+
+    <div class="profile-header">
+      <img src="https://ui-avatars.com/api/?name=Ahmed+Mohamed&background=random" class="avatar" alt="Profile">
+      <h2>أحمد محمد علي</h2>
+      <p>طالب في منصة سيجما</p>
+    </div>
+
+    <div class="premium-card">
+      <div>
+        <h3>مستواك الحالي</h3>
+        <p>عضوية مميزة</p>
+      </div>
+      <div class="icon">🏅</div>
+    </div>
+
+    <div class="profile-menu">
+      <div class="profile-menu-item">
+        <div class="icon">⚙️</div>
+        <span>إعداداتي</span>
+      </div>
+      <div class="profile-menu-item">
+        <div class="icon">🔖</div>
+        <span>محفوظاتي</span>
+      </div>
+      <div class="profile-menu-item">
+        <div class="icon">🏆</div>
+        <span>شهاداتي</span>
+      </div>
+    </div>
+
+    <div class="list-menu">
+      <div class="list-item">
+        <div class="left">
+          <div class="icon">🎧</div>
+          <span>الدعم الفني</span>
+        </div>
+        <span style="color:var(--tx2);">←</span>
+      </div>
+      <div class="list-item">
+        <div class="left">
+          <div class="icon">✈️</div>
+          <span>تواصل معنا</span>
+        </div>
+        <span style="color:var(--tx2);">←</span>
+      </div>
+      <div class="list-item logout" onclick="switchScreen('home')">
+        <div class="left">
+          <div class="icon">🚪</div>
+          <span>تسجيل الخروج</span>
+        </div>
+        <span style="color:var(--tx2);">←</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= BOTTOM NAV ================= -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="switchScreen('home')">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>الرئيسية</span>
+  </div>
+  <div class="nav-item" id="nav-library" onclick="switchScreen('library')">
+    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+    <span>المكتبة</span>
+  </div>
+  <div class="nav-item" onclick="alert('قريباً')">
+    <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+    <span>المحفوظات</span>
+  </div>
+  <div class="nav-item" id="nav-profile" onclick="switchScreen('profile')">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <span>حسابي</span>
+  </div>
+</div>
+
+<script>
+  function switchScreen(screenId) {
+    // Hide all screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    // Show target screen
+    document.getElementById('screen-' + screenId).classList.add('active');
+    
+    // Update bottom nav active state
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const activeNav = document.getElementById('nav-' + screenId);
+    if(activeNav) activeNav.classList.add('active');
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
   }
-}
-
-async function loginPhone() {
-  const phone = $('#login-phone').value.trim();
-  const pass = $('#login-pass').value;
-
-  try {
-    await signInWithEmailAndPassword(auth, `${phone}@sigma.user`, pass);
-    toast('✅ تم تسجيل الدخول');
-  } catch (e) {
-    toast('خطأ: رقم الهاتف أو كلمة المرور غير صحيحة');
-  }
-}
-
-// --- INIT ---
-onAuthStateChanged(auth, async (user) => {
-  U = user;
-  if (user) {
-    const snap = await get(ref(db, 'users/' + user.uid));
-    const data = snap.val();
-    myPhoto = data?.photo || '';
-    A = ADMIN_PHONES.includes(data?.phone || '');
-  }
-  
-  // Load teachers live
-  onValue(ref(db, 'teachers'), (snap) => {
-    teachers = snap.val() || {};
-    if (U) render();
-  });
-
-  render();
-  hideOverlay();
-});
-
-Object.assign(window, { go, out, toast, registerPhone, loginPhone, toggleAuth });
 </script>
+
 </body>
-</html>
+  </html>

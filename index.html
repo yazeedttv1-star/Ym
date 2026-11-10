@@ -29,7 +29,7 @@
   --grad-brand:linear-gradient(135deg,#2563eb 0%,#3b82f6 50%,#8b5cf6 100%);
   --grad-warm:linear-gradient(135deg,#f59e0b,#ef4444);
   --grad-cool:linear-gradient(135deg,#06b6d4,#3b82f6);
-  --grad-purple:linear-gradient(135deg,#8b5cf6,#ec4899);
+  --grad-purple:linear-gradient(135deg,#8b5cf6,#ec4899);--grad-green:linear-gradient(135deg,#10b981,#059669);--grad-orange:linear-gradient(135deg,#f59e0b,#f97316);
   --ease:cubic-bezier(.4,0,.2,1);
   --ac:#2563eb;--ac2:#1d4ed8;--ac-soft:#dbeafe;
   --surface2:#f1f5f9;--tx2:#475569;
@@ -1042,6 +1042,7 @@ const go=(v,id,tab,filter)=>{
 };
 const out=()=>{
   if(!confirm('هل تريد تسجيل الخروج من حسابك؟'))return;
+  if(U&&!A&&!IS_SUPERVISOR){remove(R('sessions/'+U.uid)).catch(()=>{});}
   stopHB();destroyPlayer();clearListeners();cleanupExam();
   signOut(auth).catch(()=>{});
 };
@@ -1310,7 +1311,7 @@ async function doLogin(){
 
 function render(){
   const a=ensureApp();
-  if(S.v==='takeExam'&&activeExamState&&!activeExamState.submitted&&activeExamState.id===S.id)return;
+  
   const seq=++renderSeq;
   if(!U){a.innerHTML=vAuth();return}
   const views={home:vHome,teacher:vTeacher,code:vCode,watch:vWatch,admin:vAdmin,vid:vVid,edit:vEdit,settings:vSettings,library:vLibrary,editLib:vEditLib,students:vAdminStudents,news:vNews,studentProfile:vStudentProfile,myCodes:vMyCodes,myFavs:vMyFavs,myStats:vMyStats,settingsGrade:vSettingsGrade,settingsPass:vSettingsPass,settingsSupport:vSettingsSupport,exams:vExams,exam:vExamDetail,takeExam:vTakeExam,examResult:vExamResult,games:vGames};
@@ -1598,8 +1599,8 @@ function handleGlobalSearch(query) {
   
   resultsBox.style.display = 'block';
   
-  const matchedTeachers = Object.entries(teachers).filter(([id, t]) => t.name.toLowerCase().includes(q));
-  const matchedVideos = Object.entries(videos).filter(([id, v]) => v.title.toLowerCase().includes(q) || (v.desc && v.desc.toLowerCase().includes(q)));
+  const matchedTeachers = Object.entries(teachers).filter(([id, t]) => (t.name||'').toLowerCase().includes(q));
+  const matchedVideos = Object.entries(videos).filter(([id, v]) => (v.title||'').toLowerCase().includes(q) || (v.desc && v.desc.toLowerCase().includes(q)));
   
   if (matchedTeachers.length === 0 && matchedVideos.length === 0) {
     resultsList.innerHTML = '<div class="mut" style="padding:20px">لا توجد نتائج مطابقة.</div>';
@@ -1826,7 +1827,7 @@ function vExamResult(){
   const correct=att.answers?att.answers.filter(a=>a.correct).length:0;
   const total=(e.questions||[]).length;
   
-  setTimeout(() => launchConfetti(), 100);
+  
 
   const review=(e.questions||[]).map((q,i)=>{
     const a=(att.answers||[]).find(x=>x.q===i)||{};
@@ -1913,7 +1914,7 @@ async function submitExam(force,reason){
   const attempt={studentUid:U.uid,studentName:U.displayName||'',score,earned,totalPoints,answers,timeTaken,violations:st.violations,submittedAt:Date.now(),autoSubmit:!!force,reason:reason||''};
   const examId=st.id;
   try{await set(R('examAttempts/'+U.uid+'/'+examId),attempt)}catch(err){st.submitted=false;submitLock=false;toast('تعذر حفظ الإجابة');return}
-  cleanupExam();submitLock=false;examAttempts[examId]=attempt;go('examResult',examId);
+  cleanupExam();submitLock=false;examAttempts[examId]=attempt;go('examResult',examId);setTimeout(launchConfetti,300);
 }
 function addNews(){return once('news',doAddNews)}
 async function doAddNews(){
@@ -2114,6 +2115,8 @@ async function doAddV(){
   if(!v.teacherId||!v.title||!v.url)return toast('أكمل الحقول');
   if(!/^https?:\/\//i.test(v.url))return toast('رابط الفيديو يجب أن يبدأ بـ https://');
   if(!ALL_GRADES.includes(v.grade))return toast('الصف غير صحيح');
+  const tf=$('#vth')?.files?.[0];
+  if(tf){if(!tf.type.startsWith('image/'))return toast('الصورة المصغرة يجب أن تكون صورة');v.thumb=await img(tf,640)||'';}
   const k='v'+Date.now();
   try{
     await set(R('videos/'+k),v);
@@ -2141,7 +2144,7 @@ function vEdit(){
   const tOpts=Object.entries(teachers).map(([id,x])=>`<option value="${esc(id)}" ${id===data.teacherId?'selected':''}>${esc(x.name)}</option>`).join('');
   const stage=data.stage||(GRADES_SEC.includes(data.grade)?'sec':GRADES_PREP.includes(data.grade)?'prep':'pri');
   const gradeOpts=(stage==='pri'?GRADES_PRIMARY:stage==='prep'?GRADES_PREP:GRADES_SEC).map(g=>`<option ${data.grade===g?'selected':''}>${g}</option>`).join('');
-  return `${backBtn("go('admin','','videos')")}<h2 style="margin-top:14px">تعديل الفيديو</h2><div class="box"><label for="evt">المدرس</label><select id="evt">${tOpts}</select><label for="evs">المرحلة</label><select id="evs" onchange="syncEditGradeOptions()"><option value="pri" ${stage==='pri'?'selected':''}>ابتدائي</option><option value="prep" ${stage==='prep'?'selected':''}>إعدادي</option><option value="sec" ${stage==='sec'?'selected':''}>ثانوي</option></select><label for="evg">الصف</label><select id="evg">${gradeOpts}</select><label for="evn">العنوان</label><input id="evn" value="${esc(data.title)}"><label for="evd">الوصف</label><textarea id="evd" rows="2">${esc(data.desc||'')}</textarea><label for="evu">رابط الفيديو</label><input id="evu" dir="ltr" value="${esc(data.url)}"><label for="evm">مدة الفيديو بالدقائق</label><input id="evm" type="number" min="0" value="${data.duration||0}"><label for="evst">الحالة</label><select id="evst"><option value="0" ${!data.disabled?'selected':''}>نشط</option><option value="1" ${data.disabled?'selected':''}>موقوف</option></select><div style="display:flex;gap:8px;margin-top:8px"><button onclick="saveEditV('${esc(S.id)}')">حفظ</button><button class="s" onclick="go('admin','','videos')">إلغاء</button></div></div>`;
+  return `${backBtn("go('admin','','videos')")}<h2 style="margin-top:14px">تعديل الفيديو</h2><div class="box"><label for="evt">المدرس</label><select id="evt">${tOpts}</select><label for="evs">المرحلة</label><select id="evs" onchange="syncEditGradeOptions()"><option value="pri" ${stage==='pri'?'selected':''}>ابتدائي</option><option value="prep" ${stage==='prep'?'selected':''}>إعدادي</option><option value="sec" ${stage==='sec'?'selected':''}>ثانوي</option></select><label for="evg">الصف</label><select id="evg">${gradeOpts}</select><label for="evn">العنوان</label><input id="evn" value="${esc(data.title)}"><label for="evd">الوصف</label><textarea id="evd" rows="2">${esc(data.desc||'')}</textarea><label for="evu">رابط الفيديو</label><input id="evu" dir="ltr" value="${esc(data.url)}"><label for="evth">الصورة المصغرة (اتركه فارغاً للإبقاء على الحالية)</label><input id="evth" type="file" accept="image/*">${data.thumb?`<img src="${esc(data.thumb)}" alt="" style="width:100%;max-height:140px;object-fit:cover;border-radius:12px;margin-bottom:12px">`:''}<label for="evm">مدة الفيديو بالدقائق</label><input id="evm" type="number" min="0" value="${data.duration||0}"><label for="evst">الحالة</label><select id="evst"><option value="0" ${!data.disabled?'selected':''}>نشط</option><option value="1" ${data.disabled?'selected':''}>موقوف</option></select><div style="display:flex;gap:8px;margin-top:8px"><button onclick="saveEditV('${esc(S.id)}')">حفظ</button><button class="s" onclick="go('admin','','videos')">إلغاء</button></div></div>`;
 }
 function vEditLib(){
   if(!A)return '<div class="mut">غير مصرح.</div>';
@@ -2163,6 +2166,8 @@ async function doSaveEditV(id){
   if(!nv.teacherId||!nv.title||!nv.url)return toast('أكمل الحقول');
   if(!/^https?:\/\//i.test(nv.url))return toast('رابط الفيديو يجب أن يبدأ بـ https://');
   if(!ALL_GRADES.includes(nv.grade))return toast('الصف غير صحيح');
+  const etf=$('#evth')?.files?.[0];
+  if(etf){if(!etf.type.startsWith('image/'))return toast('الصورة المصغرة يجب أن تكون صورة');nv.thumb=await img(etf,640)||'';}else nv.thumb=v.thumb||'';
   try{await update(R('videos/'+id),nv);toast('✅ تم التعديل');go('admin','','videos')}catch(e){toast('تعذر الحفظ: '+(e.code||e.message))}
 }
 function addLib(){return once('addLib',doAddLib)}
@@ -2539,7 +2544,7 @@ async function vAdmin(){
   
   const tb=`<div class="admin-tabs">${allowedTabs.map(([k,n])=>`<button class="${effTab===k?'on':''}" onclick="go('admin','','${k}')">${n}</button>`).join('')}</div>`;
   
-  if(effTab==='dashboard') return tb+vAdminDashboard();
+  if(effTab==='dashboard'){if(!Object.keys(adminUsersList||{}).length)adminUsersList=(await G('users'))||{};return tb+vAdminDashboard();}
   if(effTab==='teachers')return tb+vAdminTeachers();
   if(effTab==='library')return tb+vAdminLibrary();
   if(effTab==='students')return tb+await vAdminStudents();
@@ -2657,7 +2662,7 @@ function vAdminNews(){
 function vAdminVideos(){
   const tOpts=Object.entries(teachers).map(([id,x])=>`<option value="${esc(id)}">${esc(x.name)}</option>`).join('');
   const vidList=Object.entries(videos).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
-  return `<div class="box"><h2>إضافة فيديو</h2><label for="vt">المدرس</label><select id="vt">${tOpts||'<option value="">— أضف مدرساً أولاً —</option>'}</select><label for="vs">المرحلة</label><select id="vs" onchange="syncGradeOptions()"><option value="pri">ابتدائي</option><option value="prep">إعدادي</option><option value="sec">ثانوي</option></select><label for="vg">الصف</label><select id="vg">${GRADES_PRIMARY.map(g=>`<option>${g}</option>`).join('')}</select><label for="vn">العنوان</label><input id="vn"><label for="vd">الوصف</label><textarea id="vd" rows="2"></textarea><label for="vu">رابط الفيديو</label><input id="vu" dir="ltr" placeholder="https://..."><label for="vm">مدة الفيديو بالدقائق</label><input id="vm" type="number" min="0"><label>طريقة الوصول</label><div style="display:flex;gap:10px;margin-bottom:14px"><label style="flex:1;display:flex;align-items:center;gap:8px;padding:12px;background:var(--surface-2);border:2px solid var(--bd);border-radius:12px;cursor:pointer;margin:0;font-weight:600"><input type="radio" name="accessType" value="codes" checked onchange="toggleAccessType()" style="width:auto;margin:0"><span>🔑 بأكواد</span></label><label style="flex:1;display:flex;align-items:center;gap:8px;padding:12px;background:var(--surface-2);border:2px solid var(--bd);border-radius:12px;cursor:pointer;margin:0;font-weight:600"><input type="radio" name="accessType" value="free" onchange="toggleAccessType()" style="width:auto;margin:0"><span>🔓 بدون أكواد</span></label></div><div id="codesCountBox"><label for="vc">عدد الأكواد</label><input id="vc" type="number" min="1" max="500" value="1"></div><button onclick="addV()">حفظ</button></div><h2>الفيديوهات</h2>${vidList.map(([id,v])=>`<div class="row"><div onclick="go('vid','${esc(id)}')" style="cursor:pointer"><b>${esc(v.title)}</b><small>${esc(teachers[v.teacherId]?.name||'-')} | ${esc(v.grade||'-')}${v.free?' — 🔓 بدون أكواد':' — 🔑 بأكواد'}${v.disabled?' — موقوف':''}</small></div><button class="s" onclick="go('edit','${esc(id)}','video')" style="padding:8px 14px;font-size:13px">تعديل</button><button class="s" onclick="go('vid','${esc(id)}')" style="padding:8px 14px;font-size:13px">السجل</button></div>`).join('')||'<div class="mut">لا توجد فيديوهات.</div>'}`;
+  return `<div class="box"><h2>إضافة فيديو</h2><label for="vt">المدرس</label><select id="vt">${tOpts||'<option value="">— أضف مدرساً أولاً —</option>'}</select><label for="vs">المرحلة</label><select id="vs" onchange="syncGradeOptions()"><option value="pri">ابتدائي</option><option value="prep">إعدادي</option><option value="sec">ثانوي</option></select><label for="vg">الصف</label><select id="vg">${GRADES_PRIMARY.map(g=>`<option>${g}</option>`).join('')}</select><label for="vn">العنوان</label><input id="vn"><label for="vd">الوصف</label><textarea id="vd" rows="2"></textarea><label for="vu">رابط الفيديو</label><input id="vu" dir="ltr" placeholder="https://..."><label for="vm">مدة الفيديو بالدقائق</label><input id="vm" type="number" min="0"><label>طريقة الوصول</label><div style="display:flex;gap:10px;margin-bottom:14px"><label style="flex:1;display:flex;align-items:center;gap:8px;padding:12px;background:var(--surface-2);border:2px solid var(--bd);border-radius:12px;cursor:pointer;margin:0;font-weight:600"><input type="radio" name="accessType" value="codes" checked onchange="toggleAccessType()" style="width:auto;margin:0"><span>🔑 بأكواد</span></label><label style="flex:1;display:flex;align-items:center;gap:8px;padding:12px;background:var(--surface-2);border:2px solid var(--bd);border-radius:12px;cursor:pointer;margin:0;font-weight:600"><input type="radio" name="accessType" value="free" onchange="toggleAccessType()" style="width:auto;margin:0"><span>🔓 بدون أكواد</span></label></div><div id="codesCountBox"><label for="vc">عدد الأكواد</label><input id="vc" type="number" min="1" max="500" value="1"></div><label for="vth">الصورة المصغرة (اختياري)</label><input id="vth" type="file" accept="image/*"><button onclick="addV()">حفظ</button></div><h2>الفيديوهات</h2>${vidList.map(([id,v])=>`<div class="row">${v.thumb?`<img src="${esc(v.thumb)}" alt="" style="width:72px;height:48px;object-fit:cover;border-radius:10px;flex:0 0 72px">`:''}<div onclick="go('vid','${esc(id)}')" style="cursor:pointer"><b>${esc(v.title)}</b><small>${esc(teachers[v.teacherId]?.name||'-')} | ${esc(v.grade||'-')}${v.free?' — 🔓 بدون أكواد':' — 🔑 بأكواد'}${v.disabled?' — موقوف':''}</small></div><button class="s" onclick="go('edit','${esc(id)}','video')" style="padding:8px 14px;font-size:13px">تعديل</button><button class="s" onclick="go('vid','${esc(id)}')" style="padding:8px 14px;font-size:13px">السجل</button></div>`).join('')||'<div class="mut">لا توجد فيديوهات.</div>'}`;
 }
 function toggleAccessType(){
   const type=document.querySelector('input[name="accessType"]:checked')?.value||'codes';
@@ -2696,7 +2701,7 @@ async function vAdminBans(){
   bansLiveData={uid:{},phone:{}};
   const ru=await GTry('bans'),rp=await GTry('bansByPhone');
   bansLiveData.uid=ru.ok?(ru.val||{}):{};
-  bansLiveData.phone=rp.ok?(rp.val()):{};
+  bansLiveData.phone=rp.ok?(rp.val||{}):{};
   let lastCount=Object.keys(bansLiveData.uid).length+Object.keys(bansLiveData.phone).length;
   const un1=onValue(R('bans'),snap=>{bansLiveData.uid=snap.val()||{};const c=Object.keys(bansLiveData.uid).length+Object.keys(bansLiveData.phone||{}).length;if(c>lastCount){try{toast('🚨 حظر جديد وصل')}catch(e){}}lastCount=c;if(S.v==='admin'&&S.tab==='bans')renderBansLive()},()=>{});
   const un2=onValue(R('bansByPhone'),snap=>{bansLiveData.phone=snap.val()||{};const c=Object.keys(bansLiveData.uid||{}).length+Object.keys(bansLiveData.phone).length;if(c>lastCount){try{toast('🚨 حظر جديد وصل')}catch(e){}}lastCount=c;if(S.v==='admin'&&S.tab==='bans')renderBansLive()},()=>{});
@@ -2864,7 +2869,7 @@ async function vExams(){
 function vTeacher(){
  const t=teachers[S.id];if(!t)return vHome();
  const list=Object.entries(videos).filter(([,v])=>v.teacherId===S.id&&!v.disabled);
- return `${backBtn("go('home')")}<h2 style="margin-top:14px">${esc(t.name)}</h2><div class="grid">${list.map(([id,v])=>`<div class="card" onclick="go('code','${esc(id)}')"><div class="card-img-wrap" style="display:grid;place-items:center;color:#fff;font-size:42px">▶</div><div class="card-body"><b>${esc(v.title)}</b><small>${esc(v.grade||'')}</small></div></div>`).join('')||'<div class="mut">لا توجد دروس متاحة حالياً.</div>'}</div>`;
+ return `${backBtn("go('home')")}<h2 style="margin-top:14px">${esc(t.name)}</h2><div class="grid">${list.map(([id,v])=>`<div class="card" onclick="go('code','${esc(id)}')"><div class="card-img-wrap" style="display:grid;place-items:center;color:#fff;font-size:42px;background:${v.thumb?'none':'var(--grad-brand)'}">${v.thumb?`<img src="${esc(v.thumb)}" alt="" style="width:100%;height:100%;object-fit:cover">`:'▶'}</div><div class="card-body"><b>${esc(v.title)}</b><small>${esc(v.grade||'')}</small></div></div>`).join('')||'<div class="mut">لا توجد دروس متاحة حالياً.</div>'}</div>`;
 }
 function vCode(){
  const v=videos[S.id];if(!v||v.disabled)return `${backBtn("go('home')")}<div class="mut">هذا الدرس غير متاح حالياً.</div>`;
@@ -2884,11 +2889,18 @@ async function redeem(id){
  }catch(e){toast('تعذر تفعيل الكود: '+(e.message||''))}
 }
 function vWatch(){
- const v=videos[S.id];if(!v)return `${backBtn("go('home')")}<div class="mut">الفيديو غير موجود.</div>`;
+ const v=videos[S.id];
+ if(!v)return `${backBtn("go('home')")}<div class="mut">الفيديو غير موجود.</div>`;
  if(!v.free&&!mineVideos[S.id]&&!A&&!IS_SUPERVISOR)return `${backBtn("go('home')")}<div class="mut">يجب تفعيل كود الدرس أولاً.</div>`;
  const e=embed(v.url,false);pendingEmbed=e;
- const player=e.t==='v'?`<video id="vplayer" playsinline controls controlsList="nodownload" src="${esc(e.s)}"></video>`:e.t==='yt'?`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`:`<iframe id="vplayer" src="${esc(e.s)}" allowfullscreen></iframe>`;
- return `${backBtn("go('teacher','"+esc(v.teacherId)+"')")}<h2 style="margin-top:14px">${esc(v.title)}</h2><p style="color:var(--mu);margin-bottom:12px">${esc(v.desc||'')}</p><div class="player-wrap" id="playerWrap"><div class="pl ${e.t==='yt'?'is-yt':e.t==='f'?'is-embed':''}">${player}</div></div>`;
+ const isNative=e.t==='v',isYT=e.t==='yt',hasCtrl=isNative||isYT;
+ const media=isNative?`<video id="vplayer" playsinline preload="metadata" src="${esc(e.s)}"></video>`
+  :isYT?`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`
+  :`<iframe id="vplayer" src="${esc(e.s)}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+ const overlay=hasCtrl?`<div class="big-play-overlay" id="bigPlayOverlay" style="display:flex"><button class="big-play-btn" onclick="togglePlay()" aria-label="تشغيل"><svg viewBox="0 0 24 24"><path d="${PLAY_PATH}"/></svg></button></div>`:'';
+ const endCover=isYT?`<div class="end-cover" id="endCover"><button onclick="replayYT()">↻ إعادة المشاهدة</button></div>`:'';
+ const ctrl=hasCtrl?`<div class="custom-player-ctrl"><div class="ctrl-left"><button class="icon-btn" onclick="seekRel(-10)" aria-label="10 ثوان للخلف"><span style="font-size:12px;font-weight:800;color:#fff">-10</span></button><button class="icon-btn" onclick="togglePlay()" aria-label="تشغيل/إيقاف"><svg id="playIcon" viewBox="0 0 24 24"><path d="${PLAY_PATH}"/></svg></button><button class="icon-btn" onclick="seekRel(10)" aria-label="10 ثوان للأمام"><span style="font-size:12px;font-weight:800;color:#fff">+10</span></button><button class="icon-btn" onclick="toggleMute()" aria-label="كتم الصوت"><svg id="muteIcon" viewBox="0 0 24 24"><path d="${MUTE_OFF_PATH}"/></svg></button></div><div class="slider-wrap"><div class="slider-fill" id="seekFill"></div><input type="range" id="cSeek" min="0" max="1000" value="0" aria-label="شريط التقدم"></div><div class="ctrl-right"><span class="time" id="cTime">0:00</span><span class="time-sep">/</span><span class="time" id="dTime">0:00</span>${isYT?`<button class="icon-btn" onclick="cycleQuality()" aria-label="الجودة"><span id="qualityLabel" style="font-size:11px;font-weight:800;color:#fff">AUTO</span></button>`:''}<button class="icon-btn" onclick="toggleFullscreen()" aria-label="ملء الشاشة"><svg id="fsIcon" viewBox="0 0 24 24"><path d="${FS_ENTER_PATH}"/></svg></button></div></div>`:'';
+ return `${backBtn("go('teacher','"+esc(v.teacherId)+"')")}<h2 style="margin-top:14px">${esc(v.title)}</h2><p style="color:var(--mu);margin-bottom:12px">${esc(v.desc||'')}</p><div class="player-wrap" id="playerWrap"><div class="pl ${isYT?'is-yt':''}">${media}${overlay}${endCover}</div>${ctrl}</div>`;
 }
 function vLibrary(){
  const items=Object.entries(library).sort((a,b)=>(b[1].created||0)-(a[1].created||0));

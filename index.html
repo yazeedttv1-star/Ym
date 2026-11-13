@@ -1003,12 +1003,56 @@ async function approvePasswordChange(uid){if(!A)return toast('غير مصرح');
 async function rejectPasswordChange(uid){if(!A)return toast('غير مصرح');const reason=prompt('سبب الرفض:','غير محدد');if(reason===null)return;try{await set(R('notifications/'+uid+'/'+'pc'+Date.now().toString(36)),{text:'❌ تم رفض طلب تغيير كلمة المرور. السبب: '+(reason||'غير محدد'),created:Date.now(),read:false,views:0,viewedBy:{}});await update(R('passwordChangeRequests/'+uid),{status:'rejected',rejectedAt:Date.now(),rejectedBy:U.uid,rejectReason:reason});toast('تم الرفض');render(true)}catch(e){toast('تعذر الرفض')}}
 async function vAdminPlatformMessage(){
   if(!A)return vAdmin();
-  const cur=platformMessageData;
-  const viewers=cur?.viewedBy||{};
+  async function vAdminPlatformMessage(){
+  if(!A)return vAdmin();
+  // ✅ جلب البيانات مباشرة من Firebase بدل الاعتماد على platformMessageData
+  let cur=null;
+  try{
+    cur=await G('platformMessage');
+  }catch(e){}
+  // ✅ حماية إضافية: إذا كان platformMessageData محدّثاً، استخدمه
+  if(!cur&&platformMessageData)cur=platformMessageData;
+  
+  // ✅ تحويل viewedBy إلى كائن آمن (ليس Promise)
+  let viewers={};
+  if(cur&&cur.viewedBy&&typeof cur.viewedBy==='object'&&!Array.isArray(cur.viewedBy)){
+    // تأكد أن كل قيمة رقم (timestamp) وليست Promise
+    Object.entries(cur.viewedBy).forEach(([uid,ts])=>{
+      if(typeof ts==='number'&&isFinite(ts))viewers[uid]=ts;
+    });
+  }
   const viewerEntries=Object.entries(viewers).sort((a,b)=>b[1]-a[1]);
-  const viewerHTML=viewerEntries.length?`<div class="viewers-list">${viewerEntries.map(([uid,t])=>{const name=adminUsersList[uid]?.name||('UID:'+uid.slice(0,8));return`<div class="viewer-row"><span>👤 ${esc(name)}</span><span style="color:var(--mu);font-size:11px">${fd(t)}</span></div>`}).join('')}</div>`:'<div class="mut" style="padding:10px">لا مشاهدين بعد</div>';
-  return`<div class="box"><h2>📢 رسالة من منصة سيجما</h2>${cur?`<div class="notice" style="margin-bottom:14px"><b>الرسالة الحالية:</b><br>${esc(cur.text||'')}<br><small style="color:var(--mu)">آخر تحديث: ${fd(cur.updatedAt)}</small><br><b style="color:var(--brand-700)">👁 المشاهدات: ${cur.views||0}</b></div><h3 style="margin:10px 0;font-size:15px;color:var(--brand-700)">👁 من شاهد الرسالة (${viewerEntries.length}):</h3>${viewerHTML}`:''}<label for="pm-text">نص الرسالة</label><textarea id="pm-text" rows="3">${esc(cur?.text||'')}</textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button onclick="savePlatformMessage()">${cur?'تحديث':'نشر'}</button>${cur?`<button class="d" onclick="deletePlatformMessage()">حذف</button>`:''}</div></div>`;
-}
+  // ✅ حماية عدد المشاهدات
+  const viewsCount=(typeof cur?.views==='number'&&isFinite(cur.views))?cur.views:0;
+  // ✅ حماية النص
+  const safeText=String(cur?.text||'');
+  
+  const viewerHTML=viewerEntries.length
+    ? `<div class="viewers-list">${viewerEntries.map(([uid,t])=>{
+        const name=adminUsersList[uid]?.name||('UID:'+String(uid).slice(0,8));
+        return `<div class="viewer-row"><span>👤 ${esc(name)}</span><span style="color:var(--mu);font-size:11px">${fd(t)}</span></div>`;
+      }).join('')}</div>`
+    : '<div class="mut" style="padding:10px">لا مشاهدين بعد</div>';
+  
+  return `<div class="box">
+    <h2>📢 رسالة من منصة سيجما</h2>
+    ${cur?`
+      <div class="notice" style="margin-bottom:14px">
+        <b>الرسالة الحالية:</b><br>${esc(safeText)}<br>
+        <small style="color:var(--mu)">آخر تحديث: ${fd(cur.updatedAt)}</small><br>
+        <b style="color:var(--brand-700)">👁 المشاهدات: ${viewsCount}</b>
+      </div>
+      <h3 style="margin:10px 0;font-size:15px;color:var(--brand-700)">👁 من شاهد الرسالة (${viewerEntries.length}):</h3>
+      ${viewerHTML}
+    `:''}
+    <label for="pm-text">نص الرسالة</label>
+    <textarea id="pm-text" rows="3">${esc(safeText)}</textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="savePlatformMessage()">${cur?'تحديث':'نشر'}</button>
+      ${cur?`<button class="d" onclick="deletePlatformMessage()">حذف</button>`:''}
+    </div>
+  </div>`;
+          }
 async function savePlatformMessage(){if(!A)return toast('غير مصرح');const text=$('#pm-text')?.value.trim();if(!text)return toast('اكتب النص');try{await set(R('platformMessage'),{text,id:'pm'+Date.now(),updatedAt:Date.now(),views:0,viewedBy:{}});toast('✅ تم');store.set('sigma-dismissed-message','');render(true)}catch(e){toast('تعذر')}}
 async function deletePlatformMessage(){if(!A)return;if(!confirm('حذف؟'))return;try{await remove(R('platformMessage'));platformMessageData=null;toast('تم');render(true)}catch(e){}}
 function vAdminTeachers(){return`<div class="box"><h2>إضافة مدرس</h2><label for="tn">الاسم</label><input id="tn"><label for="tp">الصورة</label><input id="tp" type="file" accept="image/*"><button onclick="addT()">إضافة</button></div><div class="grid">${Object.entries(teachers).map(([id,x])=>`<div class="card" style="cursor:default"><div class="card-img-wrap"><img src="${esc(x.photo||avatarOf(x.name))}" alt=""></div><div class="card-body"><b>${esc(x.name)}</b><div style="display:flex;gap:6px;justify-content:center;margin-top:10px"><button class="s" style="padding:6px 10px;font-size:12px" onclick="go('edit','${esc(id)}','teacher')">تعديل</button><button class="d" style="padding:6px 10px;font-size:12px" onclick="delT('${esc(id)}')">حذف</button></div></div></div>`).join('')}</div>`}

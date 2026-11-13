@@ -687,15 +687,35 @@ function refreshNotifications(){const merged={};if(A){Object.entries(adminNotifi
 function hideOverlay(){setTimeout(()=>{const ov=$('#loading-overlay');if(ov)ov.classList.add('hide')},300)}
 
 /* ============ PLATFORM MESSAGE WITH VIEWERS ============ */
-async function renderPlatformMessage(){
-  const slot=document.getElementById('platformMessageSlot');if(!U||!slot)return;
+function renderPlatformMessage(){
+  const slot=document.getElementById('platformMessageSlot');
+  if(!U||!slot)return;
   if(!platformMessageData){slot.innerHTML='';return}
   const dismissed=store.get('sigma-dismissed-message')||'';
   if(platformMessageData.id===dismissed){slot.innerHTML='';return}
-  const viewCount=platformMessageData.views||0;
-  slot.innerHTML=`<div class="platform-message"><div class="pm-icon">📢</div><div class="pm-content"><b>رسالة من منصة سيجما <span class="view-counter" style="background:rgba(255,255,255,.25);color:#fff;margin-right:6px">👁 ${viewCount}</span></b><p>${esc(platformMessageData.text||'')}</p></div><button class="pm-close" onclick="dismissPlatformMessage()" title="إغلاق">×</button></div>`;
-  try{const seen=await G('platformMessage/viewedBy/'+U.uid);if(!seen){await update(R('platformMessage'),{views:increment(1),['viewedBy/'+U.uid]:Date.now()});logActivity('platform_message_view','شاهد رسالة المنصة')}}catch(e){}
+  // ✅ حماية قوية: تحويل أي قيمة إلى رقم آمن
+  const rawViews=platformMessageData.views;
+  const viewCount=(typeof rawViews==='number'&&isFinite(rawViews))?rawViews:0;
+  const msgText=String(platformMessageData.text||'');
+  slot.innerHTML=`<div class="platform-message"><div class="pm-icon">📢</div><div class="pm-content"><b>رسالة من منصة سيجما <span class="view-counter" style="background:rgba(255,255,255,.25);color:#fff;margin-right:6px">👁 ${viewCount}</span></b><p>${esc(msgText)}</p></div><button class="pm-close" onclick="dismissPlatformMessage()" title="إغلاق">×</button></div>`;
+  // ✅ التتبع في الخلفية بدون await
+  trackPlatformMessageView();
 }
+
+function trackPlatformMessageView(){
+  if(!U||!platformMessageData)return;
+  const uid=U.uid;
+  const msgId=platformMessageData.id;
+  G('platformMessage/viewedBy/'+uid).then(seen=>{
+    if(seen)return;
+    update(R('platformMessage'),{
+      views:increment(1),
+      ['viewedBy/'+uid]:Date.now()
+    }).then(()=>{
+      logActivity('platform_message_view','شاهد رسالة المنصة');
+    }).catch(()=>{});
+  }).catch(()=>{});
+         }
 function dismissPlatformMessage(){if(!platformMessageData)return;store.set('sigma-dismissed-message',platformMessageData.id||'');const slot=document.getElementById('platformMessageSlot');if(slot)slot.innerHTML=''}
 function renderGradeGate(){const slot=document.getElementById('gradeGateSlot');if(!slot)return;if(!U||A||IS_SUPERVISOR){slot.innerHTML='';gradeGateActive=false;return}if(userGrade&&ALL_GRADES.includes(userGrade)){slot.innerHTML='';gradeGateActive=false;return}gradeGateActive=true;slot.innerHTML=`<div class="grade-gate-overlay"><div class="grade-gate-card"><h2>🎓 حدد صفك الدراسي</h2><p>يجب تحديد صفك الدراسي أولاً لتتمكن من استخدام المنصة. لن تتمكن من إغلاق هذه النافذة حتى تختار صفك.</p><select id="gradeGateSelect"><option value="">— اختر الصف —</option>${ALL_GRADES.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('')}</select><button onclick="saveGradeGate()">حفظ ومتابعة</button></div></div>`}
 async function saveGradeGate(){if(!U||A||IS_SUPERVISOR)return;const sel=document.getElementById('gradeGateSelect');const g=sel?.value||'';if(!ALL_GRADES.includes(g))return toast('اختر صفاً صحيحاً');try{await update(R('users/'+U.uid),{grade:g});userGrade=g;toast('✅ تم حفظ الصف');renderGradeGate();render(true)}catch(e){toast('تعذر حفظ الصف، حاول مرة أخرى')}}
